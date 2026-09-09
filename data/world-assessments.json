@@ -1,5 +1,24 @@
 [
   {
+    "candidate_id": "13395948a3493792",
+    "ecosystem": "regulatory",
+    "supply_status": "unassessed",
+    "supply_sources_checked": [],
+    "supply_sources_missing": [
+      "web_search"
+    ],
+    "supply_candidate_count": 0,
+    "supply_evidence": [],
+    "supply_coverage": "failed",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results",
+      "google_news_supply: no results"
+    ]
+  },
+  {
     "candidate_id": "a3328f38cb0cc06f",
     "ecosystem": "regulatory",
     "supply_status": "unassessed",
@@ -198,24 +217,17 @@
         "relevance": 4
       },
       {
-        "title": "AfriForum Halts Eskom and Nersa Deal - energynews.africa",
-        "url": "https://energynews.africa/2025/10/09/afriforum-blocks-eskom-nersa-settlement-over-transparency-concerns/",
-        "snippet": "AfriForum secures a temporary halt on Eskom's R54 billion settlement with Nersa. The dispute stems from an alleged lack of public engagement and opaque decision-making. The deal allows Eskom to raise power tariffs by 8.76% and 8.83% in 2026 and 2027.",
-        "source": "energynews.africa",
-        "relevance": 3
-      },
-      {
-        "title": "NERSA Gazettes Eskom's Proposed 8.83% Electricity Tariff Increase for ...",
-        "url": "https://southafricatoday.net/south-africa-news/gauteng/nersa-gazettes-eskoms-proposed-8-83-electricity-tariff-increase-for-2027-28-financial-year/",
-        "snippet": "PRETORIA, Gauteng — The National Energy Regulator of South Africa (NERSA) has officially gazetted Eskom's proposed 8.83% electricity tariff increase for the 2027/28 financial year. Filed under the Eskom Retail Tariff Structural Adjustment application, the approved adjustment will see direct Eskom customers facing the hike from 1 April 2027, while municipal customers will experience an ...",
-        "source": "southafricatoday.net",
-        "relevance": 3
-      },
-      {
         "title": "Inflated electricity prices cannot counteract Eskom's financial risk ...",
         "url": "https://www.artikels.afriforum.co.za/en/inflated-electricity-prices-cannot-counteract-eskoms-financial-risk-warns-afriforum/",
         "snippet": "Morné Mostert (English) AfriForum has submitted written comments to the National Energy Regulator of South Africa (Nersa) warning that Eskom's current tariff and regulatory assumptions risk unfairly transferring the cost of Eskom's historical mismanagement and governance failures onto electricity consumers. These submissions form part of Nersa's new public consultation process…",
         "source": "www.artikels.afriforum.co.za",
+        "relevance": 3
+      },
+      {
+        "title": "AfriForum Halts Eskom and Nersa Deal - energynews.africa",
+        "url": "https://energynews.africa/2025/10/09/afriforum-blocks-eskom-nersa-settlement-over-transparency-concerns/",
+        "snippet": "AfriForum secures a temporary halt on Eskom's R54 billion settlement with Nersa. The dispute stems from an alleged lack of public engagement and opaque decision-making. The deal allows Eskom to raise power tariffs by 8.76% and 8.83% in 2026 and 2027.",
+        "source": "energynews.africa",
         "relevance": 3
       },
       {
