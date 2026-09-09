@@ -30,12 +30,13 @@ STOP = {
     "will", "may", "must", "require", "requires", "required", "rules", "rule", "price",
     "hike", "increase", "shutdown", "service", "platform", "data", "market", "official",
     "announcement", "government", "today", "more", "from", "with", "into", "about", "nbsp",
+    "for", "make", "makes", "mandatory", "late", "preps", "created", "artificial", "intelligence",
 }
 CHANGE_TERMS = {
-    "shutdown_eol": "shutdown sunset discontinued end support official",
-    "price_shock": "pricing price fee subscription official",
-    "api_terms_change": "API terms licensing developer official",
-    "regulatory_shift": "rule regulation requirement mandate official",
+    "shutdown_eol": "shutdown sunset discontinued end support",
+    "price_shock": "pricing price fee subscription",
+    "api_terms_change": "API terms licensing developer",
+    "regulatory_shift": "rule regulation requirement mandate",
 }
 JURISDICTION_RULES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
     (re.compile(r"\bmassachusetts\b", re.I), ("mass.gov",)),
@@ -45,6 +46,12 @@ JURISDICTION_RULES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
     (re.compile(r"\baustralia\b|\baustralian\b", re.I), ("gov.au",)),
     (re.compile(r"\bcanada\b|\bcanadian\b", re.I), ("gc.ca", "gov.ca")),
     (re.compile(r"\bsingapore\b", re.I), ("gov.sg",)),
+)
+# Brand/platform wording in a regulatory-shaped headline usually describes a private
+# platform policy, not public law. This must search the owner, not a government site.
+PRIVATE_POLICY = re.compile(
+    r"\b(apple(?: music| tv)?|samsung|google|youtube|meta|facebook|instagram|microsoft|amazon|spotify|netflix|openai|github|shopify|slack|cloudflare|discord|tiktok)\b",
+    re.I,
 )
 
 
@@ -58,6 +65,7 @@ class OfficialSourceLead:
     search_coverage: str
     errors: list[str]
     queries: list[str] | None = None
+    authority_route: str | None = None
 
 
 def _clean_html(value: str) -> str:
@@ -103,26 +111,22 @@ def _bing(query: str, timeout: float) -> list[dict[str, str]]:
     return rows
 
 
-def _subject_tokens(candidate: GapCandidate) -> list[str]:
-    raw = re.findall(r"[A-Za-z][A-Za-z0-9.-]{2,}", f"{candidate.headline} {candidate.summary}")
-    values: list[str] = []
-    for token in raw:
-        lowered = token.lower().strip(".-")
-        if lowered in STOP or len(lowered) < 3 or lowered in values:
-            continue
-        values.append(lowered)
-    return values[:14]
-
-
-def _headline_tokens(candidate: GapCandidate) -> list[str]:
+def _headline_tokens(candidate: GapCandidate, limit: int = 14) -> list[str]:
     raw = re.findall(r"[A-Za-z][A-Za-z0-9.-]{2,}", candidate.headline)
     values: list[str] = []
     for token in raw:
         lowered = token.lower().strip(".-")
-        if lowered in STOP or len(lowered) < 3 or lowered in values:
+        if lowered in STOP or len(lowered) < 3 or lowered in values or ".com" in lowered or ".co." in lowered:
             continue
         values.append(lowered)
-    return values[:10]
+    return values[:limit]
+
+
+def _subject_tokens(candidate: GapCandidate) -> list[str]:
+    # Search terms come from the headline only. Summaries often contain publisher
+    # domains/bylines and previously polluted official-source queries with Mashable,
+    # MyBroadband, EnergyNow, etc.
+    return _headline_tokens(candidate, 14)
 
 
 def _registrable_hint(host: str) -> str:
@@ -143,6 +147,16 @@ def _jurisdiction_hosts(candidate: GapCandidate) -> tuple[str, ...]:
     return ()
 
 
+def _authority_route(candidate: GapCandidate) -> str:
+    if candidate.change_type == "regulatory_shift":
+        if PRIVATE_POLICY.search(candidate.headline):
+            return "company_owner"
+        if _jurisdiction_hosts(candidate):
+            return "public_regulator"
+        return "public_or_unknown"
+    return "company_owner"
+
+
 def _host_matches_suffix(host: str, suffix: str) -> bool:
     host = host.lower().strip(".")
     suffix = suffix.lower().strip(".")
@@ -161,30 +175,36 @@ def _looks_first_party(url: str, candidate: GapCandidate) -> bool:
     if not host or host in NEWS_HOSTS or any(host.endswith("." + noise) for noise in NEWS_HOSTS):
         return False
     government = any(host.endswith(suffix) for suffix in GOVERNMENT_SUFFIXES)
-    jurisdiction = _jurisdiction_hosts(candidate)
+    route = _authority_route(candidate)
     if government:
-        return _government_host_matches(candidate, host)
-    # A geographically scoped regulatory claim must resolve to the matching public
-    # authority, not a publisher/company domain that merely contains a country token.
-    if candidate.change_type == "regulatory_shift" and jurisdiction:
+        return route != "company_owner" and _government_host_matches(candidate, host)
+    if route == "public_regulator":
         return False
     domain_hint = _registrable_hint(host)
-    # Exact owned-domain identity only. Substring matching caused `india` to match
-    # `indiatimes`, incorrectly promoting a news publisher to Tier-1.
-    return len(domain_hint) >= 4 and domain_hint in _headline_tokens(candidate)[:8]
+    return len(domain_hint) >= 4 and domain_hint in _headline_tokens(candidate, 10)
 
 
 def _query_variants(candidate: GapCandidate) -> list[str]:
     headline = re.sub(r"\s+-\s+[^-]{2,80}$", "", candidate.headline).strip()
     tokens = _subject_tokens(candidate)
-    subject = " ".join(tokens[:6])
-    core = " ".join(tokens[:4])
-    change = CHANGE_TERMS.get(candidate.change_type, "official announcement")
-    variants = [f'"{headline}" official', f"{subject} {change}", f"{core} {change}"]
-    for host in _jurisdiction_hosts(candidate)[:2]:
-        variants.insert(1, f"site:{host} {core} {change}")
-    if candidate.change_type == "regulatory_shift":
-        variants.append(f"{subject} government regulator requirement")
+    subject = " ".join(tokens[:7])
+    core = " ".join(tokens[:5])
+    owner = " ".join(tokens[:2])
+    change = CHANGE_TERMS.get(candidate.change_type, "announcement")
+    route = _authority_route(candidate)
+    variants = [f'"{headline}" official']
+    if route == "public_regulator":
+        for host in _jurisdiction_hosts(candidate)[:2]:
+            variants.append(f"site:{host} {core} {change}")
+        variants.extend([f"{subject} {change} government", f"{core} {change} regulator"])
+    elif route == "company_owner":
+        variants.extend([
+            f"{subject} {change} official",
+            f"{owner} newsroom support changelog {core} {change}",
+            f"{core} {change} official announcement",
+        ])
+    else:
+        variants.extend([f"{subject} {change} official", f"{core} {change} regulator official"])
     unique: list[str] = []
     for query in variants:
         query = " ".join(query.split())
@@ -205,6 +225,7 @@ def _result_relevance(row: dict[str, str], candidate: GapCandidate) -> int:
 
 def find_official_sources(candidate: GapCandidate, *, timeout: float = 10.0) -> OfficialSourceLead:
     queries = _query_variants(candidate)
+    route = _authority_route(candidate)
     rows: list[dict[str, str]] = []
     errors: list[str] = []
     successful_searches = 0
@@ -248,7 +269,7 @@ def find_official_sources(candidate: GapCandidate, *, timeout: float = 10.0) -> 
     else:
         coverage = "adequate"
     status = "first_party_candidates" if urls else ("search_failed" if coverage == "failed" else "not_found")
-    return OfficialSourceLead(candidate.id, status, queries[0] if queries else "", urls, hosts, coverage, errors, queries)
+    return OfficialSourceLead(candidate.id, status, queries[0] if queries else "", urls, hosts, coverage, errors, queries, route)
 
 
 def find_for_candidates(candidates: list[GapCandidate]) -> list[OfficialSourceLead]:
