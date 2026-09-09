@@ -20,6 +20,15 @@ def test_fixture_detector_precision_and_recall_have_minimum_floor():
     assert metrics["recall"] is not None and metrics["recall"] >= 0.75
 
 
+def test_fixture_replays_downstream_reaction_and_supply_evidence():
+    report = run_backtest(FIXTURE, mode="fixture")
+    metrics = report["metrics"]
+    assert metrics["demand_cases_evaluated"] >= 4
+    assert metrics["demand_accuracy"] is not None and metrics["demand_accuracy"] >= 0.75
+    assert metrics["supply_cases_evaluated"] >= 3
+    assert metrics["supply_accuracy"] is not None and metrics["supply_accuracy"] >= 0.66
+
+
 def test_as_of_filters_future_cases_without_changing_ground_truth():
     report = run_backtest(FIXTURE, mode="fixture", as_of=__import__("datetime").date(2022, 12, 31))
     assert all(row["event_date"] <= "2022-12-31" for row in report["results"])
