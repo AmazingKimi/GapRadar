@@ -6,6 +6,7 @@ MARKER = "gapradar-priority-finalize-v3"
 
 STYLE = r'''
 /* gapradar-priority-finalize-v3 */
+/* gapradar-priority-finalize-v2 compatibility marker */
 /* gapradar-priority-finalize-v1 compatibility marker */
 .priority-card h3{margin:88px 0 0!important;max-width:92%!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important}
 .priority-card .bottommeta{max-width:72%!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
@@ -17,12 +18,8 @@ STYLE = r'''
 def patch(path: Path = Path("docs/index.html")) -> None:
     html = path.read_text(encoding="utf-8")
 
-    # Priority cards are rendered from evidence-aware priority-leads.json. The
-    # old browser runtime used to manufacture cards from Global Feed whenever
-    # fewer than three cards existed. Never synthesize filler recommendations.
     html = html.replace("ensureOpportunityCards();", "/* priority cards are server-rendered; no filler recommendations */")
 
-    # Runtime language switching must not overwrite evidence metadata.
     html = html.replace(
         "$$('.bottommeta:not(.discovery-slot .bottommeta)').forEach",
         "$$('.bottommeta').filter(el=>!el.closest('.discovery-slot,.priority-card')).forEach",
@@ -51,8 +48,6 @@ def patch(path: Path = Path("docs/index.html")) -> None:
     for old, new in replacements.items():
         html = html.replace(old, new)
 
-    # Remove older finalize styles when patching an already-rendered page, then
-    # append the current marker once.
     html = html.replace("/* gapradar-priority-finalize-v1 */", "/* gapradar-priority-finalize-legacy */")
     html = html.replace("/* gapradar-priority-finalize-v2 */", "/* gapradar-priority-finalize-legacy-v2 */")
     if MARKER not in html:
