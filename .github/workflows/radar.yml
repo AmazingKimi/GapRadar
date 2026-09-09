@@ -35,6 +35,18 @@ jobs:
       - run: python -m pip install -e .
       - name: Scan world news and industry changes
         run: gapradar world-scan
+      - name: Deep-dive world leads into supply and gap assessments
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from gapradar.worldscan import load_candidates
+          from gapradar.worlddeep import analyze_candidates, save_assessments
+
+          candidates = load_candidates(Path('data/world-gaps.json'))
+          assessments = analyze_candidates(candidates)
+          save_assessments(Path('data/world-assessments.json'), assessments)
+          print(f'Deep-dived {len(assessments)} world lead(s).')
+          PY
       - name: Probe official sources
         run: gapradar doctor
       - name: Scan live first-party sources
@@ -49,13 +61,13 @@ jobs:
         run: gapradar export
       - name: Commit radar state
         run: |
-          if git diff --quiet -- data/world-gaps.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json docs/index.html docs/dossiers; then
+          if git diff --quiet -- data/world-gaps.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json docs/index.html docs/dossiers; then
             echo "No radar changes."
             exit 0
           fi
           git config user.name "gapradar-bot"
           git config user.email "gapradar-bot@users.noreply.github.com"
-          git add data/world-gaps.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json docs/index.html docs/dossiers
+          git add data/world-gaps.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json docs/index.html docs/dossiers
           git commit -m "data: update today's market gap board"
           git pull --rebase origin main
           git push origin HEAD:main
