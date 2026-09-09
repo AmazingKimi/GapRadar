@@ -1,12 +1,10 @@
+from datetime import datetime, timezone
+
 import pytest
 
-from gapradar.models import (
-    Confidence,
-    EventType,
-    EvidenceTier,
-    MarketEvent,
-    SourceEvidence,
-)
+from gapradar.models import Confidence, EventType, EvidenceTier, MarketEvent, SourceEvidence
+
+NOW = datetime(2026, 9, 9, tzinfo=timezone.utc)
 
 
 def official_evidence() -> SourceEvidence:
@@ -23,17 +21,21 @@ def reaction(title: str) -> SourceEvidence:
     return SourceEvidence(
         tier=EvidenceTier.TIER_2_REACTION,
         title=title,
-        url="https://community.example.net/post",
+        url=f"https://community.example.net/{title.lower()}",
         publisher="Community",
+        signal="migration_pain",
+        signal_score=4,
     )
 
 
-def supply() -> SourceEvidence:
+def supply(score: int = 5, suffix: str = "one") -> SourceEvidence:
     return SourceEvidence(
         tier=EvidenceTier.TIER_3_SUPPLY,
-        title="Alternatives",
-        url="https://directory.example.net/alternatives",
+        title="Alternative",
+        url=f"https://directory.example.net/{suffix}",
         publisher="Directory",
+        signal="replacement_supply",
+        signal_score=score,
     )
 
 
@@ -59,23 +61,44 @@ def test_official_only_is_verified_but_weak():
     event = make_event(official_evidence=[official_evidence()]).verify()
     assert event.status == "verified"
     assert event.confidence == Confidence.WEAK
+    assert event.gap_status == "unassessed"
 
 
-def test_reaction_makes_signal_emerging():
+def test_no_demand_never_becomes_gap_even_when_supply_is_empty():
     event = make_event(
         official_evidence=[official_evidence()],
-        reaction_evidence=[reaction("Need an alternative")],
+        reaction_checked_at=NOW,
+        supply_checked_at=NOW,
     ).verify()
-    assert event.confidence == Confidence.EMERGING
+    assert event.demand_status == "no_signal"
+    assert event.supply_status == "no_supply"
+    assert event.gap_status == "no_demand"
 
 
-def test_strong_requires_reaction_and_supply_evidence():
+def test_repeated_demand_plus_thin_supply_becomes_potential_gap():
     event = make_event(
         official_evidence=[official_evidence()],
         reaction_evidence=[reaction("A"), reaction("B"), reaction("C")],
         supply_evidence=[supply()],
+        reaction_checked_at=NOW,
+        supply_checked_at=NOW,
     ).verify()
+    assert event.demand_status == "repeated_signal"
+    assert event.supply_status == "thin_supply"
+    assert event.gap_status == "potential_gap"
     assert event.confidence == Confidence.STRONG
+
+
+def test_strong_replacement_supply_marks_market_likely_served():
+    event = make_event(
+        official_evidence=[official_evidence()],
+        reaction_evidence=[reaction("A"), reaction("B"), reaction("C")],
+        supply_evidence=[supply(8)],
+        reaction_checked_at=NOW,
+        supply_checked_at=NOW,
+    ).verify()
+    assert event.supply_status == "served"
+    assert event.gap_status == "likely_served"
 
 
 def test_non_official_item_cannot_enter_official_evidence():
