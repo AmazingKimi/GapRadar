@@ -1,0 +1,20 @@
+{
+  "event_id": "b54b1a8fc2b4ed89",
+  "vendor": "Shopify",
+  "product": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older",
+  "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
+  "verdict": "PASS",
+  "rationale": "The market change is real, but checked public sources show no qualifying displaced-demand signal.",
+  "what_changed": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
+  "displaced_demand": [],
+  "replacement_supply": [],
+  "unresolved_gap": "No user displacement has been established, so there is no evidence-grounded gap to describe yet.",
+  "next_action": "Do not build from this event now. Revisit only if migration pain appears later.",
+  "evidence_counts": {
+    "tier_1_official": 1,
+    "tier_2_reaction": 0,
+    "tier_3_supply": 0,
+    "reaction_candidates_checked": 0,
+    "supply_candidates_checked": 0
+  }
+}
