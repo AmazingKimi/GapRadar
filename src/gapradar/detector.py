@@ -25,7 +25,7 @@ PATTERNS: dict[EventType, tuple[str, ...]] = {
         r"\bpricing (?:change|update)\b",
         r"\bprice (?:increase|change|update)\b",
         r"\bnew pricing\b",
-        r"\bfree (?:plan|tier).*(?:end|remove|retire|discontinue)\b",
+        r"\bfree (?:plan|tier).*(?:end|remove|retire|discontinue)\w*\b",
     ),
     EventType.API_TERMS: (
         r"\bAPI.*(?:deprecat|sunset|retir|discontinu)\w*\b",
@@ -35,6 +35,14 @@ PATTERNS: dict[EventType, tuple[str, ...]] = {
         r"\bbreaking change\b",
     ),
 }
+
+# Specific contexts must win over generic retirement language. For example,
+# "free tier will be discontinued" is a pricing event, not a product shutdown.
+CLASSIFICATION_ORDER = (
+    EventType.API_TERMS,
+    EventType.PRICE_SHOCK,
+    EventType.SHUTDOWN,
+)
 
 
 @dataclass(frozen=True)
@@ -47,8 +55,8 @@ class OfficialSource:
 
 def classify(text: str) -> EventType | None:
     normalized = " ".join(text.split())
-    for event_type, patterns in PATTERNS.items():
-        for pattern in patterns:
+    for event_type in CLASSIFICATION_ORDER:
+        for pattern in PATTERNS[event_type]:
             if re.search(pattern, normalized, flags=re.IGNORECASE | re.DOTALL):
                 return event_type
     return None
