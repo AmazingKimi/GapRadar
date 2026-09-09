@@ -14,7 +14,7 @@
     "supply_coverage": "partial",
     "gap_assessment": "INSUFFICIENT COVERAGE",
     "final_recommendation": "WATCH",
-    "summary": "Fallback news-index search returned results but no qualifying product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
+    "summary": "Fallback news-index search returned results but no strongly relevant product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]
@@ -34,7 +34,7 @@
     "supply_coverage": "partial",
     "gap_assessment": "INSUFFICIENT COVERAGE",
     "final_recommendation": "WATCH",
-    "summary": "Fallback news-index search returned results but no qualifying product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
+    "summary": "Fallback news-index search returned results but no strongly relevant product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]
@@ -54,7 +54,7 @@
     "supply_coverage": "partial",
     "gap_assessment": "INSUFFICIENT COVERAGE",
     "final_recommendation": "WATCH",
-    "summary": "Fallback news-index search returned results but no qualifying product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
+    "summary": "Fallback news-index search returned results but no strongly relevant product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]
@@ -62,7 +62,7 @@
   {
     "candidate_id": "52f1eb44691af255",
     "ecosystem": "regulatory",
-    "supply_status": "thin_supply_signal",
+    "supply_status": "no_supply_detected",
     "supply_sources_checked": [
       "google_news_supply"
     ],
@@ -70,19 +70,11 @@
       "web_search"
     ],
     "supply_candidate_count": 21,
-    "supply_evidence": [
-      {
-        "title": "Managing the Risks of China’s Access to U.S. Data and Control of Software and Connected Technology - Carnegie Endowment for International Peace",
-        "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPZXZScDZXQXBmTGsyX1RTZ2w3S0NWUkNzQ3ZRSm1ib19zODFFUU9IbnNqUGZDR05hOXNpaU9Ud3RrMTdqV01LQV9yUlB4c0VSWTRVVGh4a09RcjZhcE5MN0RRTzV6M2psTjRYZ1p0MHRlb1c1MEdQZ1QwWTVTQmRST1BUbXlwZmNVaUlKQUhCU25UZnZzZEV3ck1sZmVubjZ3WnU4VGRpUi1EVXFYUVpXOWk5RDVySlFXWTlSbUloYS1lVjFZbDhULVB6aDUwdEZFWi00UldrQjlrdw?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMi2gFBVV95cUxPZXZScDZXQXBmTGsyX1RTZ2w3S0NWUkNzQ3ZRSm1ib19zODFFUU9IbnNqUGZDR05hOXNpaU9Ud3RrMTdqV01LQV9yUlB4c0VSWTRVVGh4a09RcjZhcE5MN0RRTzV6M2psTjRYZ1p0MHRlb1c1MEdQZ1QwWTVTQmRST1BUbXlwZmNVaUlKQUhCU25UZnZzZEV3ck1sZmVubjZ3WnU4VGRpUi1EVXFYUVpXOWk5RDVySlFXWTlSbUloYS1lVjFZbDhULVB6aDUwdEZFWi00UldrQjlrdw?oc=5\" target=\"_blank\">Managing the Risks of China’s Access to U.S. Data and Control of Software and Connected Technology</a>&nbsp;&nbsp;<font color=\"#6f6f6",
-        "source": "Carnegie Endowment for International Peace",
-        "relevance": 3
-      }
-    ],
+    "supply_evidence": [],
     "supply_coverage": "partial",
     "gap_assessment": "INSUFFICIENT COVERAGE",
     "final_recommendation": "WATCH",
-    "summary": "Fallback market search found some product-like supply signals, but news-index coverage is not sufficient to conclude that the market is served or underserved.",
+    "summary": "Fallback news-index search returned results but no strongly relevant product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]
@@ -90,7 +82,7 @@
   {
     "candidate_id": "37ef208f3bd3c3bf",
     "ecosystem": "regulatory",
-    "supply_status": "served_signal",
+    "supply_status": "thin_supply_signal",
     "supply_sources_checked": [
       "google_news_supply"
     ],
@@ -105,26 +97,12 @@
         "snippet": "<a href=\"https://news.google.com/rss/articles/CBMimAFBVV95cUxNRmVMaS0weXYzYnMwQUFfZlZMbDBzMGxNVGpYWHU0OHdjbF9UT2haWGJTZWdSVDV0WHZPa0xWUng4ZGk2NmZXTVFUUWtXS29nbVRnQTJaRGZnR3J3YjZ5eHg4MTVMQ0N2VmlVR3lUd0xGeC1teW96SkxnUm5JZTFORTc5SlhBaFNJUmt6Qnc1TTk4QmNxYWJwMg?oc=5\" target=\"_blank\">EU AI Act Compliance Guide for CISOs & GRC Leaders | Kovrr</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Security Boulevard</font>",
         "source": "Security Boulevard",
         "relevance": 7
-      },
-      {
-        "title": "Specialty AI Insurance Emerges as Key Tool to Tamp Down Risk - Law.com",
-        "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPTlB2WElaZGs2ZnBKRmVGdjNaUE9LMXloQVhSaUo3UmVTdWdaSDlRR0VxSVRLaTRoMzZ6UmdmbWdWS3hwblNYOVFHak9Zb3MxUEFzRVFKOXhKNmhvWUFrZ2pEajZMM1dHbTZtcXV4R2FzNnpEM1lRM20xTVI1UlR4MFlFSngzWm5odFVSYkxHemhpUTJjUWpCcVVQTktjeXJjd3FqWUtXYw?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMipwFBVV95cUxPTlB2WElaZGs2ZnBKRmVGdjNaUE9LMXloQVhSaUo3UmVTdWdaSDlRR0VxSVRLaTRoMzZ6UmdmbWdWS3hwblNYOVFHak9Zb3MxUEFzRVFKOXhKNmhvWUFrZ2pEajZMM1dHbTZtcXV4R2FzNnpEM1lRM20xTVI1UlR4MFlFSngzWm5odFVSYkxHemhpUTJjUWpCcVVQTktjeXJjd3FqWUtXYw?oc=5\" target=\"_blank\">Specialty AI Insurance Emerges as Key Tool to Tamp Down Risk</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Law.com</font>",
-        "source": "Law.com",
-        "relevance": 3
-      },
-      {
-        "title": "Software development industry challenges in 2026 - Netguru",
-        "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5fdWROTHoxeTdrVEZTWmJidlBlYzhJYTlwLUVQdUlwMXh2X2hlYUlxemZ5TWhfSTY1YW40WEQ1a0psQUdaMV9ZZDdoV2NLY2t3Q214VnhLdGhjQUpvUVdJY2xzMmxZdkpVUnBEODlfOWxHNnRrR2xCWg?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMieEFVX3lxTE5fdWROTHoxeTdrVEZTWmJidlBlYzhJYTlwLUVQdUlwMXh2X2hlYUlxemZ5TWhfSTY1YW40WEQ1a0psQUdaMV9ZZDdoV2NLY2t3Q214VnhLdGhjQUpvUVdJY2xzMmxZdkpVUnBEODlfOWxHNnRrR2xCWg?oc=5\" target=\"_blank\">Software development industry challenges in 2026</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Netguru</font>",
-        "source": "Netguru",
-        "relevance": 3
       }
     ],
     "supply_coverage": "partial",
-    "gap_assessment": "LIKELY SERVED",
-    "final_recommendation": "DISMISS",
-    "summary": "Fallback market search found multiple product-like substitute or compliance-solution signals across publishers. Broad supply appears present, but the primary web-search lane is still missing.",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Fallback market search found strong product-like supply signals, but news-index coverage alone is not sufficient to conclude that the market is served or underserved.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]
@@ -132,7 +110,7 @@
   {
     "candidate_id": "86a0955dccc4b9fd",
     "ecosystem": "commercial",
-    "supply_status": "thin_supply_signal",
+    "supply_status": "no_supply_detected",
     "supply_sources_checked": [
       "google_news_supply"
     ],
@@ -140,19 +118,11 @@
       "web_search"
     ],
     "supply_candidate_count": 30,
-    "supply_evidence": [
-      {
-        "title": "Best Music Streaming Service of 2026 - CNET",
-        "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQRUszcFBDdVh5eEpUZjJWc3RCQ3I0YXdvRWF2OWhpY3hNdk51NzBsNUNGYVRZYmNLQ3lvNkk2LURDRmVTYVRibHAzQWtjNkFTc1Vtc1NIbEZNNkdSZGs4ZW01bjh0QzVPdmFfNHVLS285bjVwaVoxZzF3YzBBZjhRdDhYcw?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMigwFBVV95cUxQRUszcFBDdVh5eEpUZjJWc3RCQ3I0YXdvRWF2OWhpY3hNdk51NzBsNUNGYVRZYmNLQ3lvNkk2LURDRmVTYVRibHAzQWtjNkFTc1Vtc1NIbEZNNkdSZGs4ZW01bjh0QzVPdmFfNHVLS285bjVwaVoxZzF3YzBBZjhRdDhYcw?oc=5\" target=\"_blank\">Best Music Streaming Service of 2026</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">CNET</font>",
-        "source": "CNET",
-        "relevance": 3
-      }
-    ],
+    "supply_evidence": [],
     "supply_coverage": "partial",
     "gap_assessment": "INSUFFICIENT COVERAGE",
     "final_recommendation": "WATCH",
-    "summary": "Fallback market search found some product-like supply signals, but news-index coverage is not sufficient to conclude that the market is served or underserved.",
+    "summary": "Fallback news-index search returned results but no strongly relevant product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]
