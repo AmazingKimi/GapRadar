@@ -55,6 +55,8 @@ class MarketEvent(BaseModel):
     reaction_checked_at: datetime | None = None
     reaction_sources_checked: list[str] = Field(default_factory=list)
     reaction_candidate_count: int = 0
+    reaction_queries: list[dict[str, object]] = Field(default_factory=list)
+    reaction_search_quality: Literal["unassessed", "adequate", "degraded", "failed"] = "unassessed"
     demand_status: Literal["unassessed", "no_signal", "early_signal", "repeated_signal"] = "unassessed"
     supply_checked_at: datetime | None = None
     supply_sources_checked: list[str] = Field(default_factory=list)
@@ -102,7 +104,7 @@ class MarketEvent(BaseModel):
         reaction_count = len(self.reaction_evidence)
         supply_count = len(self.supply_evidence)
 
-        if self.reaction_checked_at is None:
+        if self.reaction_checked_at is None or self.reaction_search_quality in {"unassessed", "failed"}:
             self.demand_status = "unassessed"
         elif reaction_count >= 3:
             self.demand_status = "repeated_signal"
