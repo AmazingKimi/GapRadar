@@ -171,7 +171,7 @@ def _parse_iso(value: str | None) -> datetime | None:
 
 
 def search_github_repositories(event: MarketEvent, *, timeout: float = 15.0) -> list[SupplyCandidate]:
-    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.7"}
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.8"}
     token = os.getenv("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
@@ -207,7 +207,7 @@ def search_npm(event: MarketEvent, *, timeout: float = 15.0) -> list[SupplyCandi
     response = httpx.get(
         "https://registry.npmjs.org/-/v1/search",
         params={"text": _query(event), "size": 30},
-        headers={"User-Agent": "GapRadar/0.7"},
+        headers={"User-Agent": "GapRadar/0.8"},
         timeout=timeout,
     )
     response.raise_for_status()
@@ -239,7 +239,8 @@ def search_npm(event: MarketEvent, *, timeout: float = 15.0) -> list[SupplyCandi
 
 
 def validate_event_supply(event: MarketEvent) -> MarketEvent:
-    if event.demand_status not in {"early_signal", "repeated_signal"}:
+    event.verify()
+    if event.status != "verified" or event.demand_hypothesis is None:
         event.supply_evidence = []
         event.supply_candidate_count = 0
         event.supply_sources_checked = []
