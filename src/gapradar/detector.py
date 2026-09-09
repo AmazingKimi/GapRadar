@@ -39,6 +39,18 @@ TITLE_PATTERNS: dict[EventType, tuple[str, ...]] = {
     ),
 }
 
+# Body-only matching is deliberately much stricter. A changelog entry can
+# mention a deprecated field while announcing a completely unrelated feature;
+# that is not a market-change event. We only inspect the body when the title
+# itself clearly frames the post as a migration/transition/removal notice.
+BODY_FALLBACK_TITLE_GATE = (
+    r"\bmigration\b",
+    r"\btransition\b",
+    r"\bremoval\b",
+    r"\bend[- ]of[- ]support\b",
+    r"\bsunset notice\b",
+)
+
 BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
     EventType.PRICE_SHOCK: (
         r"\bfree (?:plan|tier).{0,120}\b(?:will|is|has been).{0,40}\b(?:removed|retired|discontinued|ended)\b",
@@ -100,6 +112,10 @@ def classify_entry(title: str, summary: str) -> EventType | None:
     for event_type in CLASSIFICATION_ORDER:
         if _match(TITLE_PATTERNS[event_type], title):
             return event_type
+
+    if not _match(BODY_FALLBACK_TITLE_GATE, title):
+        return None
+
     for event_type in CLASSIFICATION_ORDER:
         if _match(BODY_PATTERNS[event_type], summary):
             return event_type
@@ -129,7 +145,12 @@ def _clean_html(value: str) -> str:
 
 def _infer_product(source: OfficialSource, title: str) -> str:
     subject = re.sub(r"^(?:upcoming\s+)?(?:deprecation(?: notice)? of\s+)", "", title, flags=re.IGNORECASE)
-    subject = re.sub(r"\b(?:is|are|was|were|will be)?\s*(?:now\s+)?(?:deprecated|retired|retiring|discontinued|decommissioned)\b.*$", "", subject, flags=re.IGNORECASE).strip(" :-–—")
+    subject = re.sub(
+        r"\b(?:is|are|was|were|will be)?\s*(?:now\s+)?(?:deprecated|retired|retiring|discontinued|decommissioned)\b.*$",
+        "",
+        subject,
+        flags=re.IGNORECASE,
+    ).strip(" :-–—")
     if 2 <= len(subject) <= 90:
         return subject
     return source.name
