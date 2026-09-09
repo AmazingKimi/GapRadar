@@ -10,27 +10,56 @@ GapRadar watches first-party software sources for shutdowns, end-of-life notices
 
 ```text
 DETECT → VERIFY → REACTION → SUPPLY → GAP → DOSSIER
+                    ↕
+             HISTORICAL BACKTEST
 ```
 
 A vendor announcement proves a change happened. Community reaction can show whether users are actually displaced. Replacement supply can show whether that displaced demand is already served. The dossier summarizes only the evidence that survived those gates.
 
-## V0.6 — auditable demand search
+## V0.7 — historical backtest
 
-V0.6 fixes the highest-leverage weakness in V0.5: reaction search could be too narrow, and `no_signal` was being presented too much like evidence of no demand.
+V0.7 stops treating architecture quality as evidence of accuracy. GapRadar now has a historical replay harness that can test the detector against known market changes and, where benchmark evidence exists, replay the same reaction and supply scorers against historical documents.
 
-It now:
+It includes:
 
-- runs multiple reaction queries per event instead of one narrow vendor+product query;
-- includes broad product queries plus event-language queries such as deprecation, migration and alternatives;
-- records every query, source, success/failure state and raw candidate count;
-- deduplicates candidates across query variants before scoring migration pain;
-- rejects generic keyword noise unless the affected product/vendor is actually present;
-- marks reaction-search quality as `adequate`, `degraded`, `failed` or `unassessed`;
-- refuses to convert a failed search into `no_signal`;
-- treats `no_signal` as **no detected signal**, not proof that demand is absent;
-- leaves the gap state `unassessed` when no demand signal was detected;
-- keeps the V0.5 demand gate, so supply search still runs only after displaced demand survives;
-- exposes the query audit in each opportunity dossier and the dashboard.
+- a curated corpus of **24 historical cases**: 18 known market-change events plus 6 negative controls;
+- shutdown/EOL, free-tier and pricing shocks, API/platform-policy changes, licensing changes and reversal cases;
+- manually recorded ground-truth event date, event class, displaced-demand label, replacement-supply label and retraction metadata where known;
+- `gapradar backtest --as-of YYYY-MM-DD` so future cases cannot leak into a historical replay;
+- deterministic fixture mode for regression testing;
+- Wayback mode that asks the Internet Archive for the closest first-party snapshot at or before the historical replay date;
+- separate archive coverage reporting: an unavailable snapshot is **not** silently converted into a detector miss;
+- archived reaction evidence scored by the same migration-pain logic used live;
+- archived replacement pages scored by the same supply logic used live;
+- a starter downstream corpus covering Heroku, Docker Free Team, Unity Runtime Fee and Reddit API reactions, plus replacement evidence for Heroku, Docker and Unity;
+- a dedicated `Historical Backtest` GitHub Action that prints and uploads both fixture and Wayback reports.
+
+Historical full-page recall rules are isolated from the live feed scanner. This matters: an early V0.7 experiment broadened body matching enough to incorrectly classify Shopify's **“Oxygen is now available on trial plan stores”** as a price shock because its text mentioned that hosting had previously required a paid plan. The historical rules are now explicitly opt-in, and the live scanner has a regression test preventing that class of false positive.
+
+The event store also revalidates persisted events after a clean source scan, so a false positive that no longer passes current live rules is removed rather than living forever in `data/events.json`. If any live source fails, pruning is disabled for that run so a temporary outage cannot delete valid history.
+
+### Run the benchmark
+
+```bash
+# Deterministic curated benchmark
+gapradar backtest \
+  --mode fixture \
+  --output data/backtest/report-fixture.json
+
+# Replay only history known by a date
+gapradar backtest \
+  --as-of 2023-12-31 \
+  --mode fixture
+
+# Fetch archived first-party/reaction/supply pages
+gapradar backtest \
+  --mode wayback \
+  --output data/backtest/report-wayback.json
+```
+
+The report exposes TP / FP / TN / FN, precision, recall, event-type accuracy and archive coverage. Demand/supply accuracy is shown only for cases that actually have benchmark evidence pages and, in Wayback mode, only when those pages were retrievable. A small downstream sample must not be presented as universal market accuracy.
+
+See `data/backtest/README.md` for benchmark methodology and boundaries.
 
 ## Evidence hierarchy
 
@@ -80,13 +109,13 @@ A `potential_gap` is still not a command to build. It is the first state that ea
 
 GapRadar is explicitly allowed to say **we did not detect demand yet** without pretending that means **there is no demand**.
 
-## Current live sources
+## Current live sources and boundary
 
 First-party events: GitHub, Shopify, Slack, Cloudflare.  
 Reaction: Hacker News and GitHub Issues.  
 Supply: GitHub repositories and npm.
 
-The source set is intentionally narrow while precision and recall are being hardened.
+This is **not an all-web radar**. Its current live event coverage is intentionally narrow while precision and recall are being measured. A change announced only by an unmonitored vendor can be missed completely.
 
 ## Quick start
 
@@ -105,9 +134,10 @@ gapradar validate-supply
 gapradar build-dossiers
 gapradar report
 gapradar export
+gapradar backtest --mode fixture
 ```
 
-The daily GitHub Action runs the full chain and commits refreshed events, source health, dossiers, and dashboard output back to the repository.
+The daily GitHub Action runs the live chain and commits refreshed events, source health, dossiers, and dashboard output. The Historical Backtest workflow is separate so archive availability never blocks the live radar.
 
 ## Guardrails
 
@@ -115,28 +145,36 @@ The daily GitHub Action runs the full chain and commits refreshed events, source
 2. Community reaction can never create a Tier-1 fact.
 3. Popular discussion is not displaced demand unless it contains migration pain tied to the affected product.
 4. A failed search cannot become `no_signal`.
-5. `no_signal` means "not detected by these queries", never "no demand exists".
+5. `no_signal` means “not detected by these queries”, never “no demand exists”.
 6. Popular software is not replacement supply unless it is relevant to the affected product.
 7. Supply analysis is skipped when an event fails the demand gate.
 8. `REVIEW` requires repeated demand that survives the supply check.
 9. Dossiers summarize evidence; they do not fabricate market size, revenue forecasts, opportunity scores, or build windows.
+10. Archive failure is archive failure, not detector failure.
+11. Fixture accuracy is benchmark accuracy, not a claim about the whole market.
+12. Historical recall rules may not silently weaken live precision.
 
 ## Repository layout
 
 ```text
-config/sources.yml          first-party source registry
-src/gapradar/detector.py    hard-event detection and official-domain guardrails
-src/gapradar/reaction.py    multi-query displaced-demand search, audit and filtering
-src/gapradar/supply.py      replacement-supply search and filtering
-src/gapradar/dossier.py     evidence-grounded opportunity dossier builder
-src/gapradar/models.py      evidence, search quality, demand, supply and gap state model
-src/gapradar/cli.py         radar commands
-data/events.json            verified event state + reaction query audit
-data/dossiers.json          generated dossier index
-docs/dossiers/              per-event Markdown + JSON dossiers
-docs/index.html             generated dashboard
-.github/workflows/          CI + daily live radar
-tests/                      precision, recall and false-positive regression tests
+config/sources.yml             first-party live source registry
+src/gapradar/detector.py       live + historical hard-event detection
+src/gapradar/reaction.py       auditable reaction search + archived reaction scorer
+src/gapradar/supply.py         live supply search + archived supply scorer
+src/gapradar/backtest.py       as-of / fixture / Wayback replay engine
+src/gapradar/dossier.py        evidence-grounded opportunity dossier builder
+src/gapradar/models.py         evidence, search quality, demand, supply and gap state
+src/gapradar/store.py          persistence + stale-event revalidation
+src/gapradar/cli.py            radar commands
+data/backtest/events.json      historical event + negative-control corpus
+data/backtest/downstream.json  historical reaction/supply evidence corpus
+data/backtest/README.md        benchmark methodology
+data/events.json               verified live event state + reaction query audit
+data/dossiers.json             generated dossier index
+docs/dossiers/                 per-event Markdown + JSON dossiers
+docs/index.html                generated dashboard
+.github/workflows/             CI + live radar + historical backtest
+tests/                         precision, recall and false-positive regression tests
 ```
 
 ## Roadmap
@@ -146,9 +184,10 @@ tests/                      precision, recall and false-positive regression test
 **V0.3 — Displaced-demand validation** ✅  
 **V0.4 — Supply-gap analysis** ✅  
 **V0.5 — Opportunity dossier** ✅  
-**V0.6 — Auditable demand search** ✅
+**V0.6 — Auditable demand search** ✅  
+**V0.7 — Historical backtest framework** ✅
 
-Next coverage work should add more reaction sources and validate recall against known historical displacement events. It should not add fake intelligence scores.
+The next work should increase **benchmark coverage before product surface area**: more independently verifiable historical reaction/supply evidence, more negative controls, retraction replay, then low-cost Tier-1 coverage expansion such as shared changelog/status platforms. It should not add fake intelligence scores.
 
 ## License
 
