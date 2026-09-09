@@ -15,7 +15,7 @@
     "tier_2_reaction": 0,
     "tier_3_supply": 0,
     "reaction_candidates_checked": 16,
-    "supply_candidates_checked": 0
+    "supply_candidates_checked": 60
   },
   "reaction_search_quality": "degraded",
   "reaction_queries": [

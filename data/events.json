@@ -7,7 +7,7 @@
     "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
     "summary": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
     "event_date": "2026-08-27T16:00:00Z",
-    "detected_at": "2026-09-09T06:20:38.006300Z",
+    "detected_at": "2026-09-09T06:21:29.113505Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -39,8 +39,126 @@
       ]
     },
     "reaction_evidence": [],
-    "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T05:59:31.633793Z",
+    "supply_evidence": [
+      {
+        "tier": "tier_3_supply",
+        "title": "@shopify/theme-check-common",
+        "url": "https://www.npmjs.com/package/@shopify/theme-check-common",
+        "publisher": "npm",
+        "published_at": "2026-08-27T19:42:20.039000Z",
+        "excerpt": "<h1 align=\"center\" style=\"position: relative;\" >   <br>     <img src=\"https://github.com/Shopify/theme-check-vscode/blob/main/images/shopify_glyph.png?raw=true\" alt=\"logo\" width=\"141\" height=\"160\">   <br>   Theme Check </h1>",
+        "is_official": false,
+        "source_kind": "npm_package",
+        "signal": "replacement_supply",
+        "signal_score": 7,
+        "engagement": 1000
+      },
+      {
+        "tier": "tier_3_supply",
+        "title": "@shopify/cli",
+        "url": "https://www.npmjs.com/package/@shopify/cli",
+        "publisher": "npm",
+        "published_at": "2026-09-02T00:09:42.906000Z",
+        "excerpt": "A CLI tool to build for the Shopify platform",
+        "is_official": false,
+        "source_kind": "npm_package",
+        "signal": "replacement_supply",
+        "signal_score": 7,
+        "engagement": 1000
+      },
+      {
+        "tier": "tier_3_supply",
+        "title": "@shopify/theme-language-server-common",
+        "url": "https://www.npmjs.com/package/@shopify/theme-language-server-common",
+        "publisher": "npm",
+        "published_at": "2026-08-27T19:42:19.415000Z",
+        "excerpt": "<h1 align=\"center\" style=\"position: relative;\" >   <br>     <img src=\"https://github.com/Shopify/theme-check-vscode/blob/main/images/shopify_glyph.png?raw=true\" alt=\"logo\" width=\"141\" height=\"160\">   <br>   Theme Language Server </h1>",
+        "is_official": false,
+        "source_kind": "npm_package",
+        "signal": "replacement_supply",
+        "signal_score": 7,
+        "engagement": 1000
+      },
+      {
+        "tier": "tier_3_supply",
+        "title": "@shopify/theme-check-node",
+        "url": "https://www.npmjs.com/package/@shopify/theme-check-node",
+        "publisher": "npm",
+        "published_at": "2026-08-27T19:42:17.660000Z",
+        "excerpt": "This is the Node.js wrapper of the runtime-agnostic [`@shopify/theme-check-common`](https://npm.im/@shopify/theme-check-common) package. It comes with batteries included.",
+        "is_official": false,
+        "source_kind": "npm_package",
+        "signal": "replacement_supply",
+        "signal_score": 7,
+        "engagement": 1000
+      },
+      {
+        "tier": "tier_3_supply",
+        "title": "@shopify/cli-kit",
+        "url": "https://www.npmjs.com/package/@shopify/cli-kit",
+        "publisher": "npm",
+        "published_at": "2026-09-02T00:08:34.242000Z",
+        "excerpt": "A set of utilities, interfaces, and models that are common across all the platform features",
+        "is_official": false,
+        "source_kind": "npm_package",
+        "signal": "replacement_supply",
+        "signal_score": 7,
+        "engagement": 1000
+      },
+      {
+        "tier": "tier_3_supply",
+        "title": "@shopify/theme-language-server-node",
+        "url": "https://www.npmjs.com/package/@shopify/theme-language-server-node",
+        "publisher": "npm",
+        "published_at": "2026-08-27T19:42:17.230000Z",
+        "excerpt": "This is the Node.js wrapper of the runtime-agnostic [`@shopify/theme-language-server-node`](https://npm.im/@shopify/theme-language-server-common) package. It comes with batteries included.",
+        "is_official": false,
+        "source_kind": "npm_package",
+        "signal": "replacement_supply",
+        "signal_score": 7,
+        "engagement": 1000
+      },
+      {
+        "tier": "tier_3_supply",
+        "title": "@shopify/theme-language-server-browser",
+        "url": "https://www.npmjs.com/package/@shopify/theme-language-server-browser",
+        "publisher": "npm",
+        "published_at": "2026-08-27T19:42:17.412000Z",
+        "excerpt": "This is the Browser wrapper of the runtime-agnostic [`@shopify/theme-language-server-common`](https://npm.im/@shopify/theme-language-server-common) package. It does not come with batteries included and assumes you know what you're doing.",
+        "is_official": false,
+        "source_kind": "npm_package",
+        "signal": "replacement_supply",
+        "signal_score": 7,
+        "engagement": 1000
+      },
+      {
+        "tier": "tier_3_supply",
+        "title": "@shopify/theme-graph",
+        "url": "https://www.npmjs.com/package/@shopify/theme-graph",
+        "publisher": "npm",
+        "published_at": "2026-08-27T19:42:18.228000Z",
+        "excerpt": "Shopify Theme Graph as a data structure",
+        "is_official": false,
+        "source_kind": "npm_package",
+        "signal": "replacement_supply",
+        "signal_score": 7,
+        "engagement": 1000
+      },
+      {
+        "tier": "tier_3_supply",
+        "title": "@shopify/cli-hydrogen",
+        "url": "https://www.npmjs.com/package/@shopify/cli-hydrogen",
+        "publisher": "npm",
+        "published_at": "2026-08-14T15:14:39.260000Z",
+        "excerpt": "The Hydrogen extension for the [Shopify CLI](https://shopify.dev/apps/tools/cli). Hydrogen is a set of tools, utilities, and best-in-class examples for building a commerce application with [Remix](https://wwww.remix.run).",
+        "is_official": false,
+        "source_kind": "npm_package",
+        "signal": "replacement_supply",
+        "signal_score": 7,
+        "engagement": 1000
+      }
+    ],
+    "reaction_checked_at": "2026-09-09T06:21:36.569712Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
@@ -170,12 +288,15 @@
     ],
     "reaction_search_quality": "degraded",
     "demand_status": "no_signal",
-    "supply_checked_at": null,
-    "supply_sources_checked": [],
-    "supply_candidate_count": 0,
-    "supply_status": "unassessed",
-    "gap_status": "unassessed",
-    "confidence": "weak",
+    "supply_checked_at": "2026-09-09T06:21:45.930105Z",
+    "supply_sources_checked": [
+      "github_repositories",
+      "npm"
+    ],
+    "supply_candidate_count": 30,
+    "supply_status": "served",
+    "gap_status": "likely_served",
+    "confidence": "emerging",
     "status": "verified",
     "notes": [
       "Reaction coverage gap: preferred ecosystem sources not checked: shopify_community"
@@ -189,7 +310,7 @@
     "headline": "Script tags are deprecated and will stop running on March 1, 2027",
     "summary": "Starting October 1, 2026, the scriptTagCreate and scriptTagUpdate mutations will return an user error, and the ScriptTag REST Admin API resource will reject POST and PUT . The deprecation applies to all API versions, including older ones, so pinning won't defer it. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Storefronts are the last place script tags still run, since they already stopped working on the Order status page . If your app uses a script tag to load JavaScript onto a store, then you need to replace it before then. What's changing A script tag loads JavaScript on a storefront without any changes to theme code. After March 1, 2027, Shopify won't inject",
     "event_date": "2026-08-24T16:00:00Z",
-    "detected_at": "2026-09-09T06:20:38.007056Z",
+    "detected_at": "2026-09-09T06:21:29.114244Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -222,7 +343,7 @@
     },
     "reaction_evidence": [],
     "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T05:59:38.488482Z",
+    "reaction_checked_at": "2026-09-09T06:21:45.010015Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
@@ -304,12 +425,15 @@
     ],
     "reaction_search_quality": "degraded",
     "demand_status": "no_signal",
-    "supply_checked_at": null,
-    "supply_sources_checked": [],
-    "supply_candidate_count": 0,
-    "supply_status": "unassessed",
-    "gap_status": "unassessed",
-    "confidence": "weak",
+    "supply_checked_at": "2026-09-09T06:21:47.259447Z",
+    "supply_sources_checked": [
+      "github_repositories",
+      "npm"
+    ],
+    "supply_candidate_count": 60,
+    "supply_status": "no_supply",
+    "gap_status": "watch",
+    "confidence": "emerging",
     "status": "verified",
     "notes": [
       "Reaction coverage gap: preferred ecosystem sources not checked: shopify_community"
