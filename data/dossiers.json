@@ -4,9 +4,24 @@
     "vendor": "Shopify",
     "product": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older",
     "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
-    "verdict": "NO DETECTED SIGNAL",
-    "rationale": "The checked queries found no qualifying displaced-demand evidence. Checked: hacker_news, github_issues. Preferred-but-unchecked ecosystem sources: shopify_community. This is a coverage-bounded result, not proof that demand is absent.",
+    "verdict": "LIKELY SERVED",
+    "rationale": "The demand hypothesis exists, but credible replacement supply already appears strong.",
     "what_changed": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
+    "demand_hypothesis": {
+      "affected_users": "Users and organizations still relying on Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older.",
+      "job_to_be_done": "Continue the workflow currently handled by Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older after the incumbent removes it.",
+      "disruption": "The incumbent is ending or removing a product, workflow, or supported capability.",
+      "official_successor": "unknown",
+      "basis": [
+        "Shopify: Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated"
+      ],
+      "confidence": "low",
+      "unknowns": [
+        "Actual active user count",
+        "Migration urgency by segment",
+        "Quality of official successor or migration path"
+      ]
+    },
     "displaced_demand": [],
     "replacement_supply": [
       {
@@ -75,7 +90,7 @@
       }
     ],
     "unresolved_gap": "No broad supply gap is established. Any opportunity would need to come from a narrower failure shared across existing substitutes.",
-    "next_action": "Do not infer zero demand. Inspect missing ecosystem sources before downgrading the event commercially.",
+    "next_action": "Do not clone the incumbent. Look only for a narrower job existing substitutes handle badly.",
     "evidence_counts": {
       "tier_1_official": 1,
       "tier_2_reaction": 0,
@@ -232,13 +247,28 @@
     "vendor": "Shopify",
     "product": "Script tags",
     "headline": "Script tags are deprecated and will stop running on March 1, 2027",
-    "verdict": "NO DETECTED SIGNAL",
-    "rationale": "The checked queries found no qualifying displaced-demand evidence. Checked: hacker_news, github_issues. Preferred-but-unchecked ecosystem sources: shopify_community. This is a coverage-bounded result, not proof that demand is absent.",
+    "verdict": "WATCH",
+    "rationale": "The demand hypothesis survived supply analysis, but evidence is not strong enough for REVIEW. Repeated reaction evidence is not present, so confidence remains bounded. Checked: hacker_news, github_issues. Preferred-but-unchecked ecosystem sources: shopify_community.",
     "what_changed": "Starting October 1, 2026, the scriptTagCreate and scriptTagUpdate mutations will return an user error, and the ScriptTag REST Admin API resource will reject POST and PUT . The deprecation applies to all API versions, including older ones, so pinning won't defer it. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Storefronts are the last place script tags still run, since they already stopped working on the Order status page . If your app uses a script tag to load JavaScript onto a store, then you need to replace it before then. What's changing A script tag loads JavaScript on a storefront without any changes to theme code. After March 1, 2027, Shopify won't inject",
+    "demand_hypothesis": {
+      "affected_users": "Users and organizations still relying on Script tags.",
+      "job_to_be_done": "Continue the workflow currently handled by Script tags after the incumbent removes it.",
+      "disruption": "The incumbent is ending or removing a product, workflow, or supported capability.",
+      "official_successor": "unknown",
+      "basis": [
+        "Shopify: Script tags are deprecated and will stop running on March 1, 2027"
+      ],
+      "confidence": "low",
+      "unknowns": [
+        "Actual active user count",
+        "Migration urgency by segment",
+        "Quality of official successor or migration path"
+      ]
+    },
     "displaced_demand": [],
     "replacement_supply": [],
-    "unresolved_gap": "No migration pain was detected in checked sources. Missing preferred ecosystem sources: shopify_community. The evidence chain is incomplete until that coverage gap is understood.",
-    "next_action": "Do not infer zero demand. Inspect missing ecosystem sources before downgrading the event commercially.",
+    "unresolved_gap": "A plausible demand hypothesis remains after supply review, but confidence is still bounded. Missing reaction evidence does not invalidate the hypothesis.",
+    "next_action": "Keep the hypothesis alive, improve reaction coverage where useful, and inspect whether the remaining supply actually satisfies the affected job.",
     "evidence_counts": {
       "tier_1_official": 1,
       "tier_2_reaction": 0,

@@ -3,9 +3,24 @@
   "vendor": "Shopify",
   "product": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older",
   "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
-  "verdict": "NO DETECTED SIGNAL",
-  "rationale": "The checked queries found no qualifying displaced-demand evidence. Checked: hacker_news, github_issues. Preferred-but-unchecked ecosystem sources: shopify_community. This is a coverage-bounded result, not proof that demand is absent.",
+  "verdict": "LIKELY SERVED",
+  "rationale": "The demand hypothesis exists, but credible replacement supply already appears strong.",
   "what_changed": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
+  "demand_hypothesis": {
+    "affected_users": "Users and organizations still relying on Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older.",
+    "job_to_be_done": "Continue the workflow currently handled by Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older after the incumbent removes it.",
+    "disruption": "The incumbent is ending or removing a product, workflow, or supported capability.",
+    "official_successor": "unknown",
+    "basis": [
+      "Shopify: Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated"
+    ],
+    "confidence": "low",
+    "unknowns": [
+      "Actual active user count",
+      "Migration urgency by segment",
+      "Quality of official successor or migration path"
+    ]
+  },
   "displaced_demand": [],
   "replacement_supply": [
     {
@@ -74,7 +89,7 @@
     }
   ],
   "unresolved_gap": "No broad supply gap is established. Any opportunity would need to come from a narrower failure shared across existing substitutes.",
-  "next_action": "Do not infer zero demand. Inspect missing ecosystem sources before downgrading the event commercially.",
+  "next_action": "Do not clone the incumbent. Look only for a narrower job existing substitutes handle badly.",
   "evidence_counts": {
     "tier_1_official": 1,
     "tier_2_reaction": 0,
