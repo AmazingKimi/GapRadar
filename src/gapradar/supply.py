@@ -15,6 +15,7 @@ STOPWORDS = {
     "older", "support", "deprecated", "retired", "retiring", "deprecation", "stop", "stopping", "running",
     "version", "protected", "flows", "flow", "shop", "dev", "app", "apps",
 }
+REPLACEMENT_RE = re.compile(r"\b(alternative|replacement|replace|migration|migrate|compatible|drop[- ]in|successor)\b", re.I)
 
 
 @dataclass(frozen=True)
@@ -30,29 +31,46 @@ class SupplyCandidate:
     quality_hint: float = 0.0
 
 
-def _tokens(event: MarketEvent) -> list[str]:
-    raw = f"{event.product} {event.vendor}"
+def _extract_tokens(text: str) -> list[str]:
     tokens = [
         token.lower()
-        for token in re.findall(r"[A-Za-z0-9][A-Za-z0-9._+-]{2,}", raw)
+        for token in re.findall(r"[A-Za-z0-9][A-Za-z0-9._+-]{2,}", text)
         if token.lower() not in STOPWORDS
     ]
     seen: list[str] = []
     for token in tokens:
         if token not in seen:
             seen.append(token)
-    return seen[:8]
+    return seen
+
+
+def _product_tokens(event: MarketEvent) -> list[str]:
+    return _extract_tokens(event.product)[:8]
+
+
+def _query(event: MarketEvent) -> str:
+    terms = _product_tokens(event)[:5]
+    if not terms:
+        terms = _extract_tokens(event.vendor)[:2]
+    return " ".join(terms) or event.vendor
 
 
 def score_supply(candidate: SupplyCandidate, event: MarketEvent, *, now: datetime | None = None) -> int:
     now = now or datetime.now(timezone.utc)
     text = f"{candidate.title} {candidate.description}".lower()
-    tokens = _tokens(event)
-    hits = sum(1 for token in tokens if re.search(rf"\b{re.escape(token)}\b", text))
-    if not hits:
+    tokens = _product_tokens(event)
+    product_hits = sum(1 for token in tokens if re.search(rf"\b{re.escape(token)}\b", text))
+    explicit_replacement = bool(REPLACEMENT_RE.search(text))
+
+    # Popularity, freshness, or a vendor name cannot turn a generic package into
+    # replacement supply. Require strong product overlap, or explicit replacement
+    # language plus at least one product-specific token.
+    if product_hits < 2 and not (explicit_replacement and product_hits >= 1):
         return 0
 
-    score = min(hits, 3)
+    score = min(product_hits, 3)
+    if explicit_replacement:
+        score += 2
     if candidate.archived:
         score -= 2
     if candidate.updated_at and candidate.updated_at >= now - timedelta(days=365):
@@ -63,8 +81,6 @@ def score_supply(candidate: SupplyCandidate, event: MarketEvent, *, now: datetim
         score += 1
     if candidate.quality_hint >= 0.6:
         score += 1
-    if re.search(r"\b(alternative|replacement|migration|migrate|compatible|drop[- ]in)\b", text):
-        score += 2
     return max(score, 0)
 
 
@@ -76,11 +92,6 @@ def dedupe(items: Iterable[SupplyCandidate]) -> list[SupplyCandidate]:
         if previous is None or item.popularity > previous.popularity:
             best[key] = item
     return list(best.values())
-
-
-def _query(event: MarketEvent) -> str:
-    terms = _tokens(event)
-    return " ".join(terms[:5]) or event.vendor
 
 
 def _parse_iso(value: str | None) -> datetime | None:
