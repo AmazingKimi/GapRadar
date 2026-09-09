@@ -136,25 +136,6 @@
     ]
   },
   {
-    "candidate_id": "065e958f3294f243",
-    "ecosystem": "regulatory",
-    "supply_status": "unassessed",
-    "supply_sources_checked": [],
-    "supply_sources_missing": [
-      "web_search"
-    ],
-    "supply_candidate_count": 0,
-    "supply_evidence": [],
-    "supply_coverage": "failed",
-    "gap_assessment": "INSUFFICIENT COVERAGE",
-    "final_recommendation": "WATCH",
-    "summary": "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed.",
-    "errors": [
-      "web_search: duckduckgo: no parsable results; bing: no parsable results",
-      "google_news_supply: no results"
-    ]
-  },
-  {
     "candidate_id": "7f6f5639be057208",
     "ecosystem": "regulatory",
     "supply_status": "unassessed",
@@ -210,6 +191,13 @@
         "relevance": 5
       },
       {
+        "title": "Afriforum challenges Eskom's 8.83% electricity price increase",
+        "url": "https://mybroadband.co.za/news/energy/666482-afriforum-challenges-eskoms-8-83-electricity-price-increase.html",
+        "snippet": "Civil rights group Afriforum said it would formally oppose Eskom's application to raise South Africa's average electricity tariff by 8.83% for the 2027/28 year.",
+        "source": "mybroadband.co.za",
+        "relevance": 4
+      },
+      {
         "title": "AfriForum Halts Eskom and Nersa Deal - energynews.africa",
         "url": "https://energynews.africa/2025/10/09/afriforum-blocks-eskom-nersa-settlement-over-transparency-concerns/",
         "snippet": "AfriForum secures a temporary halt on Eskom's R54 billion settlement with Nersa. The dispute stems from an alleged lack of public engagement and opaque decision-making. The deal allows Eskom to raise power tariffs by 8.76% and 8.83% in 2026 and 2027.",
@@ -224,17 +212,10 @@
         "relevance": 3
       },
       {
-        "title": "Inflated electricity prices cannot counteract Eskom's financial risk ...",
-        "url": "https://www.politicsweb.co.za/news/inflated-electricity-prices-cannot-counteract-eskoms-financial-risk-afriforum",
-        "snippet": "Inflated electricity prices cannot counteract Eskom's financial risk, warns AfriForum 21 January 2026 AfriForum has submitted written comments to the National Energy Regulator of South Africa (Nersa) warning that Eskom's current tariff and regulatory assumptions risk unfairly transferring the cost of Eskom's historical mismanagement and governance failures onto electricity consumers ...",
-        "source": "www.politicsweb.co.za",
-        "relevance": 3
-      },
-      {
-        "title": "AfriForum intervenes in Eskom-Nersa out-of-court settlement",
-        "url": "https://www.dailymaverick.co.za/article/2025-10-14-afriforum-legally-derails-eskom-nersa-settlement-for-higher-electricity-tariffs-for-now/",
-        "snippet": "AfriForum secures a court order halting Eskom's proposed tariff increase agreement with Nersa, aimed at raising electricity prices significantly over three years.",
-        "source": "www.dailymaverick.co.za",
+        "title": "Public comments for Eskom's proposed 8.83% tariff hike for 2027 open",
+        "url": "https://www.sabcnews.com/sabcnews/public-comments-for-eskoms-proposed-8-83-tariff-hike-for-2027-open/",
+        "snippet": "The National Energy Regulator of South Africa (NERSA) says it is of utmost importance for the public to participate in public consultations, as their input will affect electricity tariff hikes. The Energy Regulator has called for public and stakeholder comments on Eskom's proposed 8.83% electricity tariff structure for 2027.",
+        "source": "www.sabcnews.com",
         "relevance": 3
       }
     ],

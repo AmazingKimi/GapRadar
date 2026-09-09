@@ -1,10 +1,10 @@
 {
-  "scanned_at": "2026-09-09T07:56:55.538898+00:00",
+  "scanned_at": "2026-09-09T08:08:13.586677+00:00",
   "sources_configured": 10,
   "sources_ok": 10,
   "sources_failed": 0,
   "raw_entries": 755,
-  "recent_entries": 79,
-  "structural_matches": 23,
-  "candidates": 22
+  "recent_entries": 78,
+  "structural_matches": 22,
+  "candidates": 21
 }
