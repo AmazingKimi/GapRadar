@@ -1,5 +1,15 @@
 [
   {
+    "candidate_id": "2a28fd05cee20b1e",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
     "candidate_id": "00bcfec360bdcc41",
     "status": "unverified",
     "official_url": null,
@@ -18,10 +28,6 @@
     "excerpt": null,
     "subject_overlap": 0,
     "errors": [
-      "first-party page did not locally confirm the claimed target/outcome: www.mass.gov",
-      "first-party page did not locally confirm the claimed target/outcome: www.mass.gov",
-      "first-party page did not locally confirm the claimed target/outcome: www.mass.gov",
-      "subject overlap too weak for www.mass.gov: 0 < 2",
       "first-party page did not locally confirm the claimed target/outcome: www.mass.gov"
     ]
   },
@@ -35,7 +41,7 @@
     "subject_overlap": 0,
     "errors": [
       "subject overlap too weak for heavyindustries.gov.in: 0 < 2",
-      "first-party page did not locally confirm the claimed target/outcome: www.pib.gov.in"
+      "subject overlap too weak for heavyindustries.gov.in: 0 < 2"
     ]
   },
   {
@@ -46,7 +52,10 @@
     "official_title": null,
     "excerpt": null,
     "subject_overlap": 0,
-    "errors": []
+    "errors": [
+      "first-party page did not explicitly confirm price_shock: tv.apple.com",
+      "first-party page did not explicitly confirm price_shock: www.apple.com"
+    ]
   },
   {
     "candidate_id": "1a9ab0b99d425f58",

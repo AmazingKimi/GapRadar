@@ -1,5 +1,15 @@
 [
   {
+    "candidate_id": "2a28fd05cee20b1e",
+    "status": "unverified",
+    "event_id": null,
+    "official_url": null,
+    "match_score": 1,
+    "reasons": [
+      "date_proximity"
+    ]
+  },
+  {
     "candidate_id": "00bcfec360bdcc41",
     "status": "unverified",
     "event_id": null,
