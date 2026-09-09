@@ -1,23 +1,27 @@
 # GapRadar
 
-**GapRadar watches what changes in the world, verifies which changes are real, then investigates where they may create demand the market has not adequately served.**
+**GapRadar watches structural changes in the world, verifies which changes are real, turns them into explicit demand hypotheses, maps replacement supply, and surfaces only evidence-backed market gaps for human review.**
 
-It does **not** start from complaints. Community reaction is supporting evidence only.
+It is not an “AI startup idea generator”. It is an evidence-first market-intelligence system for people who already make high-stakes decisions: strategy, corporate development, market research, venture investing, and product planning.
 
-## Product model
+## V0.8 architecture
 
 ```text
 WORLD SCAN
-broad + noisy discovery
+broad, noisy discovery across technology, energy, healthcare,
+finance, mobility, industry, consumer and frontier sectors
         ↓
 CANDIDATE EVENT
-not yet a fact
+news / industry signal only; not yet a fact
         ↓
-VERIFY
-Tier-1 / first-party confirmation
+FIRST-PARTY SOURCE FINDER
+find likely official source candidates; still not verified
+        ↓
+TIER-1 VERIFY
+first-party confirmation required
         ↓
 DEMAND HYPOTHESIS
-explicit, reviewable, allowed to be low-confidence
+who is affected / job-to-be-done / disruption / successor / unknowns
         ↓
    ┌───────────────┐
    ↓               ↓
@@ -31,39 +35,64 @@ modifier         assessment
         DOSSIER
 ```
 
-The discovery layer is intentionally broad and noisy. The verification layer remains precision-first. A confidently detected event can still be a bad opportunity.
+## The core rule
 
-## Core architecture rule
+**Reaction evidence never has veto power.**
 
-**Reaction evidence adjusts confidence; it never decides whether a verified demand hypothesis may exist and it never blocks supply analysis.**
+Once an event is Tier-1 verified and has an explicit demand hypothesis, supply analysis is allowed to run immediately. Hacker News, GitHub Issues, Reddit, forums, vendor communities and similar sources can raise or lower confidence, but they cannot decide whether the market-coverage investigation is allowed to exist.
 
-A verified shutdown, price shock, API/platform change, or similar structural event can therefore stay alive as a low-confidence market hypothesis even when Hacker News, GitHub Issues, Reddit, or a vendor community shows no qualifying reaction.
+That matters because some of the most valuable opportunities appear before public discussion becomes obvious.
+
+## Evidence hierarchy
+
+| Tier | Purpose | Examples | Can verify the event? |
+| --- | --- | --- | --- |
+| Tier 1 — Official | Establish the fact | vendor changelog, company announcement, regulator / government page | **Yes** |
+| Tier 2 — Reaction | Adjust demand confidence | HN, GitHub Issues, Reddit, forums, communities | No |
+| Tier 3 — Supply | Assess whether the job is already served | GitHub, npm, products, vendors, solution providers | No |
+
+**No Tier-1 source = no verified event.**
+
+A news article can be useful discovery evidence, but it can never manufacture a verified market gap by itself.
 
 ## Demand hypothesis
 
-Every verified event now records an explicit `DemandHypothesis` instead of jumping directly from “change happened” to “market gap exists”. It contains:
+Every verified event must expose an explicit, falsifiable `DemandHypothesis`:
 
 - affected users;
 - job to be done;
 - disruption created by the change;
 - official successor / migration path when known;
 - evidence basis;
-- confidence: `low`, `medium`, or `high`;
+- confidence: `low`, `medium`, `high`;
 - unresolved unknowns.
 
-The hypothesis is allowed to be wrong. Its purpose is to make the inference visible and falsifiable rather than hiding it inside a score or LLM narrative.
+Supported structural-change classes now include:
 
-Reaction evidence can raise hypothesis confidence:
+- shutdown / end-of-life;
+- price shock / free-tier removal;
+- API / platform / terms / licensing change;
+- regulatory shift creating mandatory work.
 
-- no qualifying reaction / failed search → hypothesis remains `low`;
-- early reaction signal → `medium`;
-- repeated reaction signal → `high`.
+The hypothesis is allowed to be wrong. Hidden inference is not.
 
-Missing reaction never means “no demand”.
+## World verification bridge
+
+`worldscan.py` and the precision-first first-party detector are deliberately separate.
+
+V0.8 adds `worldverify.py`, which bridges broad WORLD SCAN candidates to already verified Tier-1 events. Matching requires subject identity evidence such as vendor/product overlap, event type, headline overlap and date proximity. Matching only on “both are shutdowns” is explicitly rejected.
+
+World candidates that do not clear this bridge are labeled **UNVERIFIED** and are not allowed into gap analysis. The dashboard may still show them as world-change leads, but it must not present them as verified opportunities.
+
+## First-party source candidate finder
+
+`officialfinder.py` searches for conservative first-party source candidates for broad world leads.
+
+It rejects known news/social hosts and only keeps likely company-owned or government/regulator domains. These results are deliberately called **source candidates** rather than facts. They exist to close the gap between WORLD SCAN and Tier-1 verification without quietly lowering the evidence bar.
 
 ## Supply analysis
 
-Supply now runs for any **verified event with an explicit demand hypothesis**. It no longer waits for the event to “survive” a reaction gate.
+Supply runs for every **verified event + explicit demand hypothesis**, even when reaction is absent.
 
 Current supply states:
 
@@ -81,88 +110,88 @@ Current gap states:
 
 Interpretation:
 
-- verified hypothesis + supply unassessed → no gap verdict yet;
-- verified hypothesis + thin/no supply + weak/no reaction → `watch`;
-- verified hypothesis + repeated reaction + thin/no supply → `potential_gap`;
-- strong replacement supply → `likely_served` even when reaction is absent.
+- verified hypothesis + supply unassessed → no gap verdict;
+- thin/no supply + weak/no reaction → `watch`;
+- thin/no supply + repeated reaction → `potential_gap`;
+- strong replacement supply → `likely_served` even if reaction is silent.
 
-## Daily signal funnel
+Silence is valid. A day with zero gaps can be correct.
 
-The dashboard now exposes a funnel instead of forcing a daily winner count:
+## Benchmarks: what they do and do not prove
+
+GapRadar keeps multiple benchmarks because they answer different questions.
+
+### 1. Verification fixture benchmark
+
+Historical official documents are already provided to the detector. This measures classification / verification logic, not open-web discovery.
+
+The previous 24-case benchmark produced roughly 94% precision/recall on the curated fixture. That number must **not** be presented as “GapRadar finds 94% of real opportunities on the internet”.
+
+### 2. Wayback replay
+
+Attempts to retrieve archived first-party pages. Archive failure is reported separately and never converted into a detector miss. Low Wayback coverage is infrastructure evidence, not proof of market recall.
+
+### 3. Blind noisy-stream benchmark
+
+V0.8 adds `blindbacktest.py`. Positive historical cases and negative controls are shuffled into one stream and passed through the WORLD SCAN structural-language/context gate without telling the scanner which rows are positives.
+
+This is stricter than the old verification fixture because discovery logic is actually tested, but it is still an offline historical corpus. It is **not yet proof of all-web retrieval recall**.
+
+The next hard benchmark remains a true archived/live noisy information stream where the correct event URLs are not preselected.
+
+## Current coverage boundary
+
+WORLD SCAN currently watches broad queries across:
+
+- AI & Technology
+- Energy & Climate
+- Healthcare & Biotech
+- Finance & Fintech
+- Mobility
+- Industry & Robotics
+- Consumer & Society
+- Frontier
+
+The precision-first configured official feed detector is still narrower than the discovery layer. That is an explicit engineering boundary, not something the product hides.
+
+## Commercial positioning
+
+The strongest likely customer is not the generic “give me startup ideas” user.
+
+The product is being shaped for teams that already pay for market intelligence and care more about evidence than an AI-generated score:
+
+- corporate strategy / BD;
+- investment and venture diligence;
+- market-research teams;
+- product and competitive-intelligence groups.
+
+For those users, “show the evidence and the unknowns” is a feature. GapRadar deliberately does not invent TAM, revenue forecasts, opportunity scores, or build windows.
+
+The next commercial validation after discovery reliability is good enough is small and concrete: put real dossiers in front of 3–5 professional researchers / investors / strategy people and ask whether receiving this evidence every day is worth paying for.
+
+## Automated live chain
+
+The GitHub Actions radar runs every six hours:
 
 ```text
-world-scan candidates
-        ↓
-Tier-1 verified events
-        ↓
-explicit demand hypotheses
-        ↓
-supply maps completed
-        ↓
-WATCH / REVIEW / LIKELY SERVED
+WORLD SCAN
+→ FIRST-PARTY SOURCE CANDIDATES
+→ OFFICIAL SOURCE HEALTH
+→ LIVE TIER-1 SCAN
+→ WORLD ↔ TIER-1 BRIDGE
+→ DEEP-DIVE VERIFIED WORLD LEADS ONLY
+→ REACTION SUPPORT
+→ SUPPLY MAP (independent of reaction)
+→ DOSSIERS
+→ BLIND DISCOVERY BENCHMARK
+→ DASHBOARD EXPORT
 ```
 
-A day with zero market gaps can be a correct result. The funnel is a health signal, not a quota.
-
-## Discovery vs verification
-
-These are deliberately separate responsibilities:
-
-- `worldscan.py` — broad candidate discovery from news and industry feeds; noisy by design.
-- `detector.py` — precision-first hard-event verification and official-domain guardrails.
-
-Do not weaken `detector.py` just to make the broad scanner produce more candidates.
-
-Current broad discovery includes targeted Google News feeds plus selected technology/industry feeds. Current first-party verification sources include GitHub, Shopify, Slack and Cloudflare.
-
-## Evidence hierarchy
-
-| Tier | Purpose | Examples | Can verify the event? |
-| --- | --- | --- | --- |
-| Tier 1 — Official | Establish the fact | vendor changelog, official blog, developer docs | **Yes** |
-| Tier 2 — Reaction | Adjust demand confidence | HN, GitHub Issues, forums, vendor communities | No |
-| Tier 3 — Supply | Assess whether the job is already served | GitHub repositories, npm, competing products | No |
-
-**No Tier-1 source = no verified event.** Tier-2 and Tier-3 evidence may evaluate a verified event, but neither can manufacture a Tier-1 fact.
-
-## Current verification benchmark
-
-The V0.7 historical fixture benchmark remains useful, but its meaning is deliberately narrow.
-
-Observed in GitHub Actions run `34312896873` on 2026-09-09:
-
-| Metric | Fixture replay | Wayback replay |
-| --- | ---: | ---: |
-| Cases total | 24 | 24 |
-| Cases actually evaluated | 24 | 2 |
-| TP / FP / TN / FN | 17 / 1 / 5 / 1 | 2 / 0 / 0 / 0 |
-| Precision | 0.9444 | 1.0000* |
-| Recall | 0.9444 | 1.0000* |
-| Event-type accuracy | 0.9412 | 1.0000* |
-| Archive coverage | 1.0000 | 0.0833 |
-
-\* Wayback precision/recall is not meaningful evidence because only 2 of 24 official cases were retrievable in that run.
-
-This benchmark primarily measures **classification / verification logic when the historical evidence item is already present**. It must not be presented as proof that WORLD SCAN can discover 94.44% of real market changes from an open information stream.
-
-Known fixture failures remain visible:
-
-- false negative: IFTTT SMS/Phone free-access change;
-- false positive: normal IFTTT Pro guide misclassified as price shock;
-- type mismatch: Chrome Manifest V2 classified as shutdown/EOL instead of API/platform change.
-
-## Current live boundary
-
-Broad discovery: targeted Google News searches plus selected tech / industry RSS feeds.  
-First-party verification: GitHub, Shopify, Slack, Cloudflare.  
-Reaction support: Hacker News and GitHub Issues, with ecosystem routing metadata for missing vendor-community coverage.  
-Supply: GitHub repositories and npm.
-
-This is **not an all-web radar**. Coverage is still narrow and candidate false positives remain an active engineering problem.
+Unverified world leads are intentionally blocked from deep gap analysis.
 
 ## Quick start
 
-Requires Python 3.11+.
+The analysis engine requires Python 3.11+.
 
 ```bash
 python -m venv .venv
@@ -173,55 +202,63 @@ pytest
 gapradar world-scan
 gapradar doctor
 gapradar scan
+gapradar world-verify
 gapradar validate-demand
 gapradar validate-supply
 gapradar build-dossiers
+gapradar blind-backtest
 gapradar export
 python -m http.server 8000 --directory docs
 ```
 
-Then open `http://localhost:8000`.
-
-The Daily Radar workflow runs the same chain automatically and commits refreshed world candidates, verified events, demand hypotheses, evidence, dossiers and dashboard output.
+For simply viewing the generated UI on an older Mac Python install, the static `docs/` dashboard can be served without installing the analysis engine.
 
 ## Guardrails
 
-1. **No official source, no verified event.**
+1. No official source, no verified event.
 2. WORLD SCAN candidates are leads, not facts.
-3. Discovery confidence and opportunity confidence are separate.
-4. Every verified event must expose an explicit demand hypothesis before a market-gap judgment.
-5. Demand hypotheses may be low-confidence; uncertainty must be visible.
-6. Reaction evidence adjusts confidence; it never gates hypothesis creation or supply analysis.
-7. A failed reaction search cannot become `no_signal`.
-8. `no_signal` means “not detected by these queries”, never “no demand exists”.
-9. Popular software is not replacement supply unless it is relevant to the affected job.
-10. Strong replacement supply can mark a hypothesis `likely_served` even when reaction evidence is absent.
-11. `REVIEW` requires stronger evidence than `WATCH`; missing evidence is never silently invented.
-12. Dossiers do not fabricate market size, revenue forecasts, opportunity scores, or build windows.
-13. Archive failure is archive failure, not detector failure.
-14. Fixture accuracy is benchmark accuracy, not market-wide discovery accuracy.
-15. Historical recall rules may not silently weaken live precision.
+3. A “first-party source candidate” is not automatically Tier-1 verified.
+4. Discovery confidence and opportunity confidence are separate.
+5. Every verified event must expose an explicit demand hypothesis before a market-gap judgment.
+6. Demand hypotheses may be low-confidence; uncertainty must stay visible.
+7. Reaction evidence adjusts confidence; it never gates hypothesis creation or supply analysis.
+8. Failed reaction search cannot become proof of no demand.
+9. `no_signal` means “not detected by these queries”, never “no demand exists”.
+10. Popular software is not replacement supply unless it is relevant to the affected job.
+11. Strong replacement supply can mark a hypothesis `likely_served` even with no reaction.
+12. Unverified WORLD SCAN leads may not enter deep gap analysis.
+13. `REVIEW` requires stronger evidence than `WATCH`; missing evidence is never invented.
+14. Dossiers do not fabricate market size, revenue forecasts, opportunity scores, or build windows.
+15. Archive failure is archive failure, not detector failure.
+16. Fixture accuracy is benchmark accuracy, not market-wide discovery accuracy.
+17. Historical benchmark rules may not silently weaken live precision.
 
 ## Repository layout
 
 ```text
 config/world_sources.yml       broad world/news discovery sources
-config/sources.yml             first-party verification sources
-src/gapradar/worldscan.py      broad candidate discovery
-src/gapradar/detector.py       precision-first event verification
+config/sources.yml             configured first-party verification sources
+src/gapradar/worldscan.py      broad noisy world-change discovery
+src/gapradar/officialfinder.py conservative first-party source candidate search
+src/gapradar/worldverify.py    WORLD candidate ↔ Tier-1 event bridge
+src/gapradar/detector.py       precision-first first-party event verification
 src/gapradar/models.py         demand hypothesis + evidence + state machine
-src/gapradar/reaction.py       supporting reaction search
-src/gapradar/supply.py         replacement-supply search, independent of reaction
-src/gapradar/dossier.py        hypothesis-first opportunity dossier
+src/gapradar/reaction.py       supporting reaction evidence
+src/gapradar/supply.py         supply search, independent of reaction
+src/gapradar/worlddeep.py      supply/gap analysis for verified world leads
+src/gapradar/dossier.py        evidence-first opportunity dossier
 src/gapradar/backtest.py       historical verification replay
-src/gapradar/render.py         Today’s Market Gaps dashboard + signal funnel
+src/gapradar/blindbacktest.py  shuffled noisy-stream discovery benchmark
+src/gapradar/discovery.py      downstream historical self-discovery benchmark
+src/gapradar/render.py         dashboard renderer
 src/gapradar/cli.py            radar commands
-data/world-gaps.json           broad candidate state
-data/events.json               verified event state + hypotheses + evidence
-data/dossiers.json             generated dossier index
-docs/index.html                standalone dashboard
-.github/workflows/radar.yml    automated daily discovery/verification pipeline
-tests/                         regression and evidence-state tests
+data/world-gaps.json           broad world candidates
+data/world-official-leads.json first-party source candidates
+data/world-verifications.json  Tier-1 bridge results
+data/world-assessments.json    verified-world-lead deep dives
+data/events.json               verified events + hypotheses + evidence
+data/dossiers.json             dossier index
+.github/workflows/radar.yml    six-hour automated pipeline
 ```
 
 ## Roadmap
@@ -233,9 +270,9 @@ tests/                         regression and evidence-state tests
 **V0.5 — Opportunity dossier** ✅  
 **V0.6 — Auditable evidence search** ✅  
 **V0.7 — Historical verification benchmark** ✅  
-**V0.8 — World-change discovery + explicit demand hypotheses** 🚧
-
-The next benchmark should test the discovery layer itself: give GapRadar a noisy historical information stream without preselecting the event URL and measure whether WORLD SCAN retrieves the known structural events without flooding the pipeline with false positives.
+**V0.8 — World discovery + explicit demand hypotheses + Tier-1 bridge + reaction-independent supply + blind-stream benchmark** 🚧  
+**V0.9 — Automatic first-party verification across materially broader sectors + true archived/live noisy-stream retrieval benchmark**  
+**V1.0 — Reliable Event → Demand → Supply → Gap intelligence loop validated by professional users**
 
 ## License
 
