@@ -7,7 +7,7 @@
     "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
     "summary": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
     "event_date": "2026-08-27T16:00:00Z",
-    "detected_at": "2026-09-09T06:42:29.745095Z",
+    "detected_at": "2026-09-09T06:45:24.594802Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -40,7 +40,7 @@
     },
     "reaction_evidence": [],
     "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T06:42:38.051693Z",
+    "reaction_checked_at": "2026-09-09T06:45:31.846740Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
@@ -170,9 +170,8 @@
     ],
     "reaction_search_quality": "degraded",
     "demand_status": "no_signal",
-    "supply_checked_at": "2026-09-09T06:42:47.053210Z",
+    "supply_checked_at": "2026-09-09T06:45:38.454282Z",
     "supply_sources_checked": [
-      "github_repositories",
       "npm"
     ],
     "supply_candidate_count": 30,
@@ -181,7 +180,8 @@
     "confidence": "emerging",
     "status": "verified",
     "notes": [
-      "Reaction coverage gap: preferred ecosystem sources not checked: shopify_community"
+      "Reaction coverage gap: preferred ecosystem sources not checked: shopify_community",
+      "Supply source failure: github_repositories: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/repositories?q=password+shopify+theme+cli+v3.83.x+in%3Aname%2Cdescription%2Ctopics+archived%3Afalse&sort=stars&order=desc&per_page=30'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
     ]
   },
   {
@@ -192,7 +192,7 @@
     "headline": "Script tags are deprecated and will stop running on March 1, 2027",
     "summary": "Starting October 1, 2026, the scriptTagCreate and scriptTagUpdate mutations will return an user error, and the ScriptTag REST Admin API resource will reject POST and PUT . The deprecation applies to all API versions, including older ones, so pinning won't defer it. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Storefronts are the last place script tags still run, since they already stopped working on the Order status page . If your app uses a script tag to load JavaScript onto a store, then you need to replace it before then. What's changing A script tag loads JavaScript on a storefront without any changes to theme code. After March 1, 2027, Shopify won't inject",
     "event_date": "2026-08-24T16:00:00Z",
-    "detected_at": "2026-09-09T06:42:29.745699Z",
+    "detected_at": "2026-09-09T06:45:24.595548Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -225,12 +225,12 @@
     },
     "reaction_evidence": [],
     "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T06:42:46.267055Z",
+    "reaction_checked_at": "2026-09-09T06:45:37.753690Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
     ],
-    "reaction_candidate_count": 16,
+    "reaction_candidate_count": 13,
     "reaction_queries": [
       {
         "source": "hacker_news",
@@ -295,30 +295,32 @@
       {
         "source": "github_issues",
         "query": "\"Script tags\" alternative created:>=2026-05-12 is:issue",
-        "candidate_count": 40,
-        "ok": true
+        "candidate_count": 0,
+        "ok": false
       },
       {
         "source": "github_issues",
         "query": "\"Script tags\" created:>=2026-05-12 is:issue",
-        "candidate_count": 40,
-        "ok": true
+        "candidate_count": 0,
+        "ok": false
       }
     ],
     "reaction_search_quality": "degraded",
     "demand_status": "no_signal",
-    "supply_checked_at": "2026-09-09T06:42:48.579529Z",
+    "supply_checked_at": "2026-09-09T06:45:38.821423Z",
     "supply_sources_checked": [
-      "github_repositories",
       "npm"
     ],
-    "supply_candidate_count": 60,
+    "supply_candidate_count": 30,
     "supply_status": "no_supply",
     "gap_status": "watch",
     "confidence": "emerging",
     "status": "verified",
     "notes": [
-      "Reaction coverage gap: preferred ecosystem sources not checked: shopify_community"
+      "Reaction source failure: github_issues [\"Script tags\" alternative created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Script+tags%22+alternative+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction source failure: github_issues [\"Script tags\" created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Script+tags%22+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction coverage gap: preferred ecosystem sources not checked: shopify_community",
+      "Supply source failure: github_repositories: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/repositories?q=script+tags+in%3Aname%2Cdescription%2Ctopics+archived%3Afalse&sort=stars&order=desc&per_page=30'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
     ]
   }
 ]
