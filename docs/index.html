@@ -30,11 +30,73 @@ footer { margin-top:34px; color:#657084; font-size:12px; }
 <h1>GapRadar</h1>
 <p class="lede">Verified shutdowns, pricing shocks and API or policy changes. Facts first; opportunity claims only after the evidence chain is strong enough.</p>
 <section class="metrics">
-<div class="metric"><strong>0</strong><span>verified events</span></div>
-<div class="metric"><strong>0</strong><span>shutdown / EOL</span></div>
+<div class="metric"><strong>7</strong><span>verified events</span></div>
+<div class="metric"><strong>3</strong><span>shutdown / EOL</span></div>
 <div class="metric"><strong>0</strong><span>price shocks</span></div>
-<div class="metric"><strong>0</strong><span>API / terms</span></div>
+<div class="metric"><strong>4</strong><span>API / terms</span></div>
 </section>
-<section class="grid"><div class="empty">No verified market-change events yet. That is a valid result: GapRadar prefers silence to weak evidence.</div></section>
+<section class="grid">
+            <article class="card">
+              <div class="row"><span class="badge">shutdown eol</span><span class="badge">weak</span></div>
+              <h2>Variants now support multiple barcodes</h2>
+              <div class="meta">Shopify · Variants now support multiple barcodes · 2026-09-08</div>
+              <p class="summary">Merchants often sell the same variant under more than one identifier: a manufacturer UPC alongside a private-label EAN, a GTIN, a reissued ISBN, or an ASIN for a marketplace listing. Until now a variant held a single barcode value, so the extras ended up in metafields, tags, or outside Shopify entirely. What&#x27;s new You can now read a variant&#x27;s full set from the new barcodes connection on ProductVariant, and write it with the barcodes input on the productSet mutation , productVariantsBulkCreate mutation , and productVariantsBulkUpdate mutation . Each barcode can declare a type: UPC, EAN, ISBN, GTIN, or ASIN. We validate the value against that standard&#x27;s character, length, prefix, and check-dig</p>
+              <div class="evidence"><a href="https://shopify.dev/changelog/product-variant-barcode-is-being-replaced-by-barcodes" target="_blank" rel="noreferrer">official evidence ↗</a><span class="meta">Tier 1: 1 · Reaction: 0 · Supply: 0</span></div>
+            </article>
+            
+
+            <article class="card">
+              <div class="row"><span class="badge">api terms change</span><span class="badge">weak</span></div>
+              <h2>Customer Address APIs now support countryCode</h2>
+              <div class="meta">Shopify · Customer Address APIs now support countryCode · 2026-09-08</div>
+              <p class="summary">Starting with Customer Account API version 2026-10, customer address inputs and objects support countryCode . The existing territoryCode field is deprecated but remains fully supported, so current integrations continue working without interruption. Developers should migrate to countryCode when adopting API version 2026-10. What changed The CustomerAddressInput input object and CustomerAddress object now include countryCode . Use countryCode when creating, updating, or reading a customer address. It uses the CountryCode enum and accepts ISO 3166-1 alpha-2 country codes such as US or CA . The existing territoryCode field is marked as deprecated in API version 2026-10. Note: territoryCode has n</p>
+              <div class="evidence"><a href="https://shopify.dev/changelog/customer-address-apis-now-support-countrycode" target="_blank" rel="noreferrer">official evidence ↗</a><span class="meta">Tier 1: 1 · Reaction: 0 · Supply: 0</span></div>
+            </article>
+            
+
+            <article class="card">
+              <div class="row"><span class="badge">api terms change</span><span class="badge">weak</span></div>
+              <h2>Polaris CDN 1.1 release candidate</h2>
+              <div class="meta">Shopify · Polaris CDN 1.1 release candidate · 2026-08-31</div>
+              <p class="summary">Polaris Web Components loaded from the Shopify CDN are moving to semantic versioning, read more about that change here . You can test out the Polaris CDN 1.1 release candidate by updating the URL you load polaris from to this: &amp;lt;script src=&amp;quot;https://cdn.shopify.com/shopifycloud/polaris-1.1-rc.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt; New components EmptyState . For empty lists, tables, and pages. Inside a TableBody it renders as a full-width message beneath the table headers. Number . Inline numeric text with tabular figures, so columns of numbers line up. New properties fontSize on Heading , Paragraph , and Text . Sets the text size directly. visibleMonths on DatePicker . Show one month, two months</p>
+              <div class="evidence"><a href="https://shopify.dev/changelog/polaris-cdn-1-1-release-candidate" target="_blank" rel="noreferrer">official evidence ↗</a><span class="meta">Tier 1: 1 · Reaction: 0 · Supply: 0</span></div>
+            </article>
+            
+
+            <article class="card">
+              <div class="row"><span class="badge">api terms change</span><span class="badge">weak</span></div>
+              <h2>More resilient refreshes for expiring offline access tokens</h2>
+              <div class="meta">Shopify · More resilient refreshes for expiring offline access tokens · 2026-08-28</div>
+              <p class="summary">Expiring offline access token refreshes now retain the previously used refresh token until an app begins using its replacement. This rollout helps apps recover when a refresh response is lost or isn’t persisted. No migration is required, but apps should continue to store every refreshed token pair atomically. What changed Previously, after an app used a refresh token, it could retry that token for up to 60 minutes. If the app didn’t receive or save the newly returned access token and refresh token, the previously stored refresh token could no longer be used after that window. Now, an app can retry its previously stored refresh token until it starts using the replacement refresh token. This g</p>
+              <div class="evidence"><a href="https://shopify.dev/changelog/more-resilient-refreshes-for-expiring-offline-access-tokens" target="_blank" rel="noreferrer">official evidence ↗</a><span class="meta">Tier 1: 1 · Reaction: 0 · Supply: 0</span></div>
+            </article>
+            
+
+            <article class="card">
+              <div class="row"><span class="badge">shutdown eol</span><span class="badge">weak</span></div>
+              <h2>Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated</h2>
+              <div class="meta">Shopify · Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be · 2026-08-27</div>
+              <p class="summary">Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What&#x27;s changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows</p>
+              <div class="evidence"><a href="https://shopify.dev/changelog/password-protected-shop-dev-flows-on-shopify-theme-cli-v3-83-x-and-older-to-be-deprecated" target="_blank" rel="noreferrer">official evidence ↗</a><span class="meta">Tier 1: 1 · Reaction: 0 · Supply: 0</span></div>
+            </article>
+            
+
+            <article class="card">
+              <div class="row"><span class="badge">api terms change</span><span class="badge">weak</span></div>
+              <h2>Build Shopify apps in PHP and Python with new official packages</h2>
+              <div class="meta">Shopify · Build Shopify apps in PHP and Python with new official packages · 2026-08-26</div>
+              <p class="summary">Shopify releases official PHP and Python app packages Shopify now publishes official, open-source packages for building apps in PHP and Python. shopify/shopify-app-php on Packagist and shopifyapp on PyPI have reached version 1.0 . They provide framework-agnostic primitives for request verification, token exchange, and Admin GraphQL requests. If you build apps in PHP or Python, you can adopt them today. What changed Two new packages are generally available: composer require shopify/shopify-app-php pip install shopifyapp Both expose the same primitives, so you can compose the ones you need instead of adopting a full framework: Request verification for webhooks, App Home and App Bridge requests</p>
+              <div class="evidence"><a href="https://shopify.dev/changelog/build-shopify-apps-in-php-and-python-with-new-official-packages" target="_blank" rel="noreferrer">official evidence ↗</a><span class="meta">Tier 1: 1 · Reaction: 0 · Supply: 0</span></div>
+            </article>
+            
+
+            <article class="card">
+              <div class="row"><span class="badge">shutdown eol</span><span class="badge">weak</span></div>
+              <h2>Script tags are deprecated and will stop running on March 1, 2027</h2>
+              <div class="meta">Shopify · Script tags · 2026-08-24</div>
+              <p class="summary">Starting October 1, 2026, the scriptTagCreate and scriptTagUpdate mutations will return an user error, and the ScriptTag REST Admin API resource will reject POST and PUT . The deprecation applies to all API versions, including older ones, so pinning won&#x27;t defer it. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Storefronts are the last place script tags still run, since they already stopped working on the Order status page . If your app uses a script tag to load JavaScript onto a store, then you need to replace it before then. What&#x27;s changing A script tag loads JavaScript on a storefront without any changes to theme code. After March 1, 2027, Shopify won&#x27;t inject</p>
+              <div class="evidence"><a href="https://shopify.dev/changelog/online-store-script-tags-deprecation" target="_blank" rel="noreferrer">official evidence ↗</a><span class="meta">Tier 1: 1 · Reaction: 0 · Supply: 0</span></div>
+            </article>
+            </section>
 <footer>Generated by GapRadar v0.1 · No official first-party source, no verified event.</footer>
 </main></body></html>

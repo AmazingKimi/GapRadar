@@ -3,33 +3,33 @@
     "vendor": "GitHub",
     "name": "GitHub Changelog",
     "url": "https://github.blog/changelog/feed/",
-    "checked_at": "2026-09-09T03:44:02.142136+00:00",
-    "status": "error",
-    "http_status": null,
-    "entry_count": 0,
-    "official_link_count": 0,
-    "error": "AttributeError: module 'feedparser' has no attribute 'loads'"
+    "checked_at": "2026-09-09T03:44:59.861242+00:00",
+    "status": "ok",
+    "http_status": 200,
+    "entry_count": 10,
+    "official_link_count": 10,
+    "error": null
   },
   {
     "vendor": "Shopify",
     "name": "Shopify Developer Changelog",
     "url": "https://shopify.dev/changelog/feed.xml",
-    "checked_at": "2026-09-09T03:44:02.142136+00:00",
-    "status": "error",
-    "http_status": null,
-    "entry_count": 0,
-    "official_link_count": 0,
-    "error": "AttributeError: module 'feedparser' has no attribute 'loads'"
+    "checked_at": "2026-09-09T03:44:59.861242+00:00",
+    "status": "ok",
+    "http_status": 200,
+    "entry_count": 120,
+    "official_link_count": 120,
+    "error": null
   },
   {
     "vendor": "Cloudflare",
     "name": "Cloudflare Blog",
     "url": "https://blog.cloudflare.com/rss/",
-    "checked_at": "2026-09-09T03:44:02.142136+00:00",
-    "status": "error",
-    "http_status": null,
-    "entry_count": 0,
-    "official_link_count": 0,
-    "error": "AttributeError: module 'feedparser' has no attribute 'loads'"
+    "checked_at": "2026-09-09T03:44:59.861242+00:00",
+    "status": "ok",
+    "http_status": 200,
+    "entry_count": 20,
+    "official_link_count": 20,
+    "error": null
   }
 ]
