@@ -20,7 +20,7 @@ def test_blind_benchmark_reports_precision_and_recall(tmp_path: Path):
                     "id": "negative",
                     "expected_detect": False,
                     "title_hint": "Cloud software product launches new dashboard",
-                    "excerpt_hint": "A normal product update with no shutdown, pricing, API or regulatory change.",
+                    "excerpt_hint": "A routine feature release adds analytics and collaboration controls for customers.",
                 },
             ]
         ),
