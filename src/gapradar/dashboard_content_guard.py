@@ -46,10 +46,14 @@ def _note(candidate, verification) -> tuple[str, str]:
     return zh, en
 
 
-def patch(path: Path = Path("docs/index.html")) -> int:
+def patch(
+    path: Path = Path("docs/index.html"),
+    candidates_path: Path = Path("data/world-gaps.json"),
+    verification_path: Path = Path("data/world-verifications.json"),
+) -> int:
     html = path.read_text(encoding="utf-8")
-    candidates = load_candidates(Path("data/world-gaps.json"))[:10]
-    verifications = load_verifications(Path("data/world-verifications.json"))
+    candidates = load_candidates(candidates_path)[:10]
+    verifications = load_verifications(verification_path)
     index = 0
 
     def repl(match: re.Match[str]) -> str:
