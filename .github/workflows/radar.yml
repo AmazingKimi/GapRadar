@@ -36,7 +36,7 @@ jobs:
           cache: pip
       - run: python -m pip install -e .
       - name: Compile core radar and dashboard modules
-        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/strip_legacy_runtime.py src/gapradar/worldverify.py src/gapradar/officialfinder.py src/gapradar/worldofficial.py src/gapradar/blindbacktest.py src/gapradar/discovery.py
+        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/strip_legacy_runtime.py src/gapradar/worldverify.py src/gapradar/officialfinder.py src/gapradar/worldofficial.py src/gapradar/worlddeep.py src/gapradar/blindbacktest.py src/gapradar/discovery.py
 
       - name: Scan world news and industry changes
         run: python -m gapradar.cli world-scan
@@ -110,7 +110,7 @@ jobs:
           verification = load_verifications(Path('data/world-verifications.json'))
           verified_ids = {cid for cid, row in verification.items() if row.status == 'tier1_verified'}
           verified = [candidate for candidate in candidates if candidate.id in verified_ids]
-          assessments = enrich_failed_assessments(verified, analyze_candidates(verified))
+          assessments = enrich_failed_assessments(verified, analyze_candidates(verified, verification))
           save_assessments(Path('data/world-assessments.json'), assessments)
           print(f'Deep-dived {len(assessments)} Tier-1-verified world lead(s); {len(candidates) - len(verified)} unverified lead(s) were blocked.')
           PY
@@ -156,6 +156,13 @@ jobs:
           blind = json.loads(Path('data/backtest/blind-report.json').read_text())
           assert blind['mode'] == 'blind_noisy_stream_offline'
           assert 'precision' in blind['metrics'] and 'recall' in blind['metrics']
+
+          assessments_path = Path('data/world-assessments.json')
+          if assessments_path.exists():
+            assessments = json.loads(assessments_path.read_text())
+            assert all(row.get('tier1_status') == 'tier1_verified' for row in assessments)
+            assert all(row.get('official_url') for row in assessments)
+            assert all(row.get('demand_hypothesis') for row in assessments)
           PY
           grep -q 'gapradar-runtime-v5' docs/index.html
           grep -q 'Find the next opportunity' docs/index.html
