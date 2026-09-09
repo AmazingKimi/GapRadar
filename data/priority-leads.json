@@ -1,0 +1,56 @@
+[
+  {
+    "candidate_id": "52f1eb44691af255",
+    "status": "INVESTIGATE",
+    "priority_score": 7,
+    "evidence_state": "tier1_verified",
+    "evidence_label": "Tier-1 · mass.gov",
+    "reason": "Tier-1 confirmed on mass.gov. The event creates a plausible surface for new compliance, testing, reporting or implementation work. Supply check searched 21 candidates and found 0 strong match(es); coverage is partial.",
+    "next_check": "Resolve the remaining supply-coverage gaps and test the demand hypothesis with affected users."
+  },
+  {
+    "candidate_id": "a4667ed73e330db1",
+    "status": "INVESTIGATE",
+    "priority_score": 7,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "The report contains a concrete shutdown / end-of-life signal — “shutdown” — and points to potential migration or replacement demand before the affected product disappears. No acceptable first-party source has been located yet.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
+  },
+  {
+    "candidate_id": "14436a2a2ff1f7ea",
+    "status": "INVESTIGATE",
+    "priority_score": 5,
+    "evidence_state": "official_candidate",
+    "evidence_label": "Official lead · heavyindustries.gov.in",
+    "reason": "An official-source candidate was found on heavyindustries.gov.in, but the exact claim is not confirmed yet. This lead is prioritized because it contains a concrete regulatory requirement signal — “Mandatory” — with potential for new compliance, testing, reporting or implementation work.",
+    "next_check": "Confirm the exact claim on the first-party page; do not treat it as a verified event until then."
+  },
+  {
+    "candidate_id": "86a0955dccc4b9fd",
+    "status": "INVESTIGATE",
+    "priority_score": 5,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "The report contains a concrete price shock signal — “price hike” — and points to potential switching demand from customers exposed to the new cost. No acceptable first-party source has been located yet.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
+  },
+  {
+    "candidate_id": "1a9ab0b99d425f58",
+    "status": "WATCH",
+    "priority_score": 4,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "The report contains a concrete price shock signal — “price increase” — and points to potential switching demand from customers exposed to the new cost. No acceptable first-party source has been located yet.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
+  },
+  {
+    "candidate_id": "5b1d4ece4414b40f",
+    "status": "WATCH",
+    "priority_score": 4,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "The report contains a concrete regulatory requirement signal — “mandatory” — and points to potential new compliance, testing, reporting or implementation work. No acceptable first-party source has been located yet.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
+  }
+]

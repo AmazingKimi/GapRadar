@@ -1,12 +1,14 @@
 [
   {
     "candidate_id": "52f1eb44691af255",
-    "status": "unverified",
+    "status": "tier1_verified",
     "event_id": null,
-    "official_url": null,
-    "match_score": 1,
+    "official_url": "https://www.mass.gov/news/governor-healey-halts-data-center-tax-incentive-and-calls-for-strict-guardrails-to-protect-ratepayers-environment-public-health",
+    "match_score": 10,
     "reasons": [
-      "date_proximity"
+      "first_party_page",
+      "subject_overlap",
+      "hard_change_confirmed"
     ]
   },
   {
