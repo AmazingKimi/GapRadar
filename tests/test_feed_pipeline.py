@@ -76,8 +76,12 @@ def test_shutdown_title_extracts_product_subject():
         """
         <item><title>GitHub Classroom deprecated</title><link>https://example.com/classroom</link>
         <pubDate>Tue, 01 Sep 2026 12:00:00 GMT</pubDate><description>The service is decommissioned.</description></item>
+        <item><title>Legacy Theme CLI flows to be deprecated</title><link>https://example.com/theme-cli</link>
+        <pubDate>Tue, 01 Sep 2026 12:00:00 GMT</pubDate><description>Upgrade before October.</description></item>
         """
     )
     rows = parse_feed(feed, SOURCE, now=datetime(2026, 9, 9, tzinfo=timezone.utc))
     assert rows[0].product == "GitHub Classroom"
     assert rows[0].event_type == EventType.SHUTDOWN
+    assert rows[1].product == "Legacy Theme CLI flows"
+    assert rows[1].event_type == EventType.SHUTDOWN
