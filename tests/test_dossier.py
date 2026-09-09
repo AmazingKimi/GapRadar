@@ -48,7 +48,7 @@ def make_event(**kwargs) -> MarketEvent:
     return event.verify()
 
 
-def test_no_detected_demand_is_not_pass():
+def test_no_detected_reaction_does_not_block_supply_check():
     event = make_event()
     event.reaction_checked_at = event.detected_at
     event.reaction_sources_checked = ["hacker_news", "github_issues"]
@@ -56,13 +56,14 @@ def test_no_detected_demand_is_not_pass():
     event.reaction_queries = [{"source": "hacker_news", "query": "Example Product migration", "candidate_count": 0, "ok": True}]
     event.verify()
     dossier = build_dossier(event)
-    assert dossier.verdict == "NO DETECTED SIGNAL"
-    assert "coverage-bounded" in dossier.rationale
+    assert event.demand_hypothesis is not None
+    assert event.demand_status == "no_signal"
+    assert dossier.verdict == "NEEDS SUPPLY CHECK"
     assert dossier.reaction_queries
     assert dossier.reaction_coverage["coverage_complete"] is True
 
 
-def test_shopify_no_signal_exposes_missing_vendor_community():
+def test_shopify_missing_vendor_community_is_visible_but_not_a_veto():
     event = MarketEvent(
         id="shopify-event",
         product="Script tags",
@@ -77,19 +78,34 @@ def test_shopify_no_signal_exposes_missing_vendor_community():
     event.reaction_search_quality = "degraded"
     event.verify()
     dossier = build_dossier(event)
-    assert dossier.verdict == "NO DETECTED SIGNAL"
+    assert dossier.verdict == "NEEDS SUPPLY CHECK"
     assert "shopify_community" in dossier.reaction_coverage["missing_sources"]
     assert dossier.reaction_coverage["coverage_complete"] is False
+    assert event.demand_hypothesis is not None
 
 
-def test_failed_search_is_not_mapped_to_no_signal():
+def test_failed_reaction_search_does_not_block_supply_check():
     event = make_event()
     event.reaction_checked_at = event.detected_at
     event.reaction_search_quality = "failed"
     event.verify()
     dossier = build_dossier(event)
     assert event.demand_status == "unassessed"
-    assert dossier.verdict == "SEARCH FAILED"
+    assert dossier.verdict == "NEEDS SUPPLY CHECK"
+    assert "does not block supply analysis" in dossier.rationale
+
+
+def test_no_reaction_plus_no_supply_becomes_watch_not_no_demand():
+    event = make_event()
+    event.reaction_checked_at = event.detected_at
+    event.reaction_search_quality = "adequate"
+    event.supply_checked_at = event.detected_at
+    event.verify()
+    dossier = build_dossier(event)
+    assert event.demand_status == "no_signal"
+    assert event.supply_status == "no_supply"
+    assert event.gap_status == "watch"
+    assert dossier.verdict == "WATCH"
 
 
 def test_repeated_demand_and_no_supply_becomes_review():
@@ -104,8 +120,8 @@ def test_repeated_demand_and_no_supply_becomes_review():
     assert dossier.evidence_counts["tier_2_reaction"] == 3
 
 
-def test_served_gap_is_not_recommended():
-    event = make_event(reaction_evidence=[reaction(1), reaction(2), reaction(3)], supply_evidence=[supply()])
+def test_served_gap_is_not_recommended_even_without_reaction():
+    event = make_event(supply_evidence=[supply()])
     event.reaction_checked_at = event.detected_at
     event.reaction_search_quality = "adequate"
     event.supply_checked_at = event.detected_at
