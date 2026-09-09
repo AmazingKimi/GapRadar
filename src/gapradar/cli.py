@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from datetime import date, datetime, timezone
 from pathlib import Path
 
@@ -9,6 +10,7 @@ from rich.console import Console
 from rich.table import Table
 
 from .backtest import run_backtest
+from .blindbacktest import run as run_blind_backtest
 from .config import load_sources
 from .detector import probe_source, scan_source
 from .dossier import export_dossiers
@@ -16,7 +18,8 @@ from .reaction import validate_reactions
 from .render import render_dashboard
 from .store import load_events, merge_events, save_events
 from .supply import validate_supply
-from .worldscan import load_candidates, load_scan_stats, save_candidates, save_scan_stats, scan_world_with_stats
+from .worldscan import GapCandidate, load_candidates, load_scan_stats, save_candidates, save_scan_stats, scan_world_with_stats
+from .worldverify import load_verifications, save_verifications, verify_candidates
 
 app = typer.Typer(no_args_is_help=True, help="Evidence-first market gap radar.")
 console = Console()
@@ -67,6 +70,32 @@ def scan(
     merged = merge_events(load_events(output), incoming, revalidate_existing=failures == 0)
     save_events(output, merged)
     console.print(f"\nSources: {len(configured)} · new matches: {len(incoming)} · stored: {len(merged)} · failures: {failures}")
+
+
+@app.command("world-verify")
+def world_verify_command(
+    world_gaps: Path = typer.Option(Path("data/world-gaps.json"), exists=True, readable=True),
+    events: Path = typer.Option(Path("data/events.json"), exists=True, readable=True),
+    output: Path = typer.Option(Path("data/world-verifications.json")),
+) -> None:
+    """Bridge broad world candidates to verified Tier-1 events without manufacturing facts."""
+    candidates = load_candidates(world_gaps)
+    verified_events = [event for event in load_events(events) if event.status == "verified" and event.official_evidence]
+    rows = verify_candidates(candidates, verified_events)
+    save_verifications(output, rows)
+
+    table = Table(title="GapRadar — World Candidate Verification")
+    table.add_column("Status")
+    table.add_column("Score", justify="right")
+    table.add_column("Candidate")
+    table.add_column("Official source")
+    by_id = {candidate.id: candidate for candidate in candidates}
+    for row in rows[:40]:
+        candidate = by_id[row.candidate_id]
+        table.add_row(row.status, str(row.match_score), candidate.headline[:72], row.official_url or "—")
+    verified_count = sum(row.status == "tier1_verified" for row in rows)
+    console.print(table)
+    console.print(f"Tier-1 bridged: {verified_count}/{len(rows)}. Unverified candidates remain discovery leads only.")
 
 
 @app.command("validate-demand")
@@ -134,6 +163,24 @@ def backtest_command(
         table.add_row(key, str(metrics.get(key)))
     console.print(table)
     console.print(f"Report written to {output}. Archive misses are reported separately, never converted into detector misses.")
+
+
+@app.command("blind-backtest")
+def blind_backtest_command(
+    fixture: Path = typer.Option(Path("data/backtest/events.json"), exists=True, readable=True),
+    output: Path = typer.Option(Path("data/backtest/blind-report.json")),
+    seed: int = typer.Option(620),
+) -> None:
+    """Measure WORLD SCAN discovery logic against a shuffled positive/negative historical stream."""
+    report = run_blind_backtest(fixture, output, seed=seed)
+    metrics = report["metrics"]
+    table = Table(title="GapRadar — Blind Noisy-Stream Discovery Benchmark")
+    table.add_column("Metric")
+    table.add_column("Value", justify="right")
+    for key in ("cases_total", "tp", "fp", "tn", "fn", "precision", "recall", "event_type_accuracy"):
+        table.add_row(key, str(metrics.get(key)))
+    console.print(table)
+    console.print("This measures discovery logic on a shuffled historical corpus; it is not an all-web retrieval recall claim.")
 
 
 @app.command("build-dossiers")
@@ -212,19 +259,60 @@ def report(events: Path = typer.Option(Path("data/events.json"), exists=True, re
     console.print(table)
 
 
+def _apply_world_verification(candidates: list[GapCandidate], verification_path: Path) -> list[GapCandidate]:
+    verifications = load_verifications(verification_path)
+    if not verifications:
+        return [
+            replace(
+                candidate,
+                recommendation="WATCH",
+                validation_status="UNVERIFIED",
+                validation_summary="No Tier-1 bridge result is available. This item is a discovery lead only and cannot be presented as a verified market gap.",
+            )
+            for candidate in candidates
+        ]
+
+    rows: list[GapCandidate] = []
+    for candidate in candidates:
+        verification = verifications.get(candidate.id)
+        if verification and verification.status == "tier1_verified":
+            rows.append(
+                replace(
+                    candidate,
+                    validation_status="TIER-1 VERIFIED",
+                    validation_summary=f"Matched to verified first-party event {verification.event_id} with evidence score {verification.match_score}. Official source: {verification.official_url}",
+                )
+            )
+        else:
+            rows.append(
+                replace(
+                    candidate,
+                    recommendation="WATCH",
+                    validation_status="UNVERIFIED",
+                    validation_summary="No sufficiently strong Tier-1 event match. Keep as a world-change lead; do not infer an investable or buildable market gap yet.",
+                )
+            )
+    return rows
+
+
 @app.command("export")
 def export_dashboard(
     events: Path = typer.Option(Path("data/events.json")),
     world_gaps: Path = typer.Option(Path("data/world-gaps.json")),
     world_stats: Path = typer.Option(Path("data/world-scan-stats.json")),
+    world_verifications: Path = typer.Option(Path("data/world-verifications.json")),
     output: Path = typer.Option(Path("docs/index.html")),
 ) -> None:
-    """Export the standalone Today Opportunity Board."""
+    """Export the standalone opportunity board with Tier-1 verification guardrails."""
     rows = load_events(events)
-    candidates = load_candidates(world_gaps)
+    candidates = _apply_world_verification(load_candidates(world_gaps), world_verifications)
     stats = load_scan_stats(world_stats)
     render_dashboard(rows, output, candidates, stats)
-    console.print(f"Opportunity board exported to {output} with {len(candidates)} world candidate(s) and {len(rows)} verified event(s).")
+    verified_world = sum(candidate.validation_status == "TIER-1 VERIFIED" for candidate in candidates)
+    console.print(
+        f"Opportunity board exported to {output} with {len(candidates)} world candidate(s), "
+        f"{verified_world} Tier-1 bridged world lead(s), and {len(rows)} verified event(s)."
+    )
 
 
 if __name__ == "__main__":
