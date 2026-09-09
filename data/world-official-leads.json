@@ -1,5 +1,53 @@
 [
   {
+    "candidate_id": "d7a3f51b503bedd3",
+    "status": "not_found",
+    "query": "\"iPhone 18 Pro's $100 Price Increase is Actually $300 If You Want 1TB Storage\" official",
+    "candidate_urls": [],
+    "candidate_hosts": [],
+    "search_coverage": "adequate",
+    "errors": [],
+    "queries": [
+      "\"iPhone 18 Pro's $100 Price Increase is Actually $300 If You Want 1TB Storage\" official",
+      "iphone pro actually you want storage pricing price fee subscription official",
+      "iphone pro newsroom support changelog iphone pro actually you want pricing price fee subscription",
+      "iphone pro actually you want pricing price fee subscription official announcement"
+    ],
+    "authority_route": "company_owner"
+  },
+  {
+    "candidate_id": "cb0a06e46d5a75d2",
+    "status": "not_found",
+    "query": "\"iPhone 18 Pro Launch: New 2TB Storage Option and $100 Price Increase\" official",
+    "candidate_urls": [],
+    "candidate_hosts": [],
+    "search_coverage": "adequate",
+    "errors": [],
+    "queries": [
+      "\"iPhone 18 Pro Launch: New 2TB Storage Option and $100 Price Increase\" official",
+      "iphone pro launch storage option and pricing price fee subscription official",
+      "iphone pro newsroom support changelog iphone pro launch storage option pricing price fee subscription",
+      "iphone pro launch storage option pricing price fee subscription official announcement"
+    ],
+    "authority_route": "company_owner"
+  },
+  {
+    "candidate_id": "7ad26c8529bcc2cc",
+    "status": "not_found",
+    "query": "\"Bord Gáis Customers Hit With Energy Price Increase From October\" official",
+    "candidate_urls": [],
+    "candidate_hosts": [],
+    "search_coverage": "adequate",
+    "errors": [],
+    "queries": [
+      "\"Bord Gáis Customers Hit With Energy Price Increase From October\" official",
+      "bord customers hit energy october pricing price fee subscription official",
+      "bord customers newsroom support changelog bord customers hit energy october pricing price fee subscription",
+      "bord customers hit energy october pricing price fee subscription official announcement"
+    ],
+    "authority_route": "company_owner"
+  },
+  {
     "candidate_id": "677324124c8639f6",
     "status": "not_found",
     "query": "\"Bord Gais Energy Announces Price Increase\" official",
@@ -47,14 +95,10 @@
   },
   {
     "candidate_id": "52f1eb44691af255",
-    "status": "first_party_candidates",
+    "status": "not_found",
     "query": "\"Massachusetts Will Require New Data Centers to Use Clean Energy\" official",
-    "candidate_urls": [
-      "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval"
-    ],
-    "candidate_hosts": [
-      "www.mass.gov"
-    ],
+    "candidate_urls": [],
+    "candidate_hosts": [],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
@@ -67,14 +111,10 @@
   },
   {
     "candidate_id": "14436a2a2ff1f7ea",
-    "status": "first_party_candidates",
+    "status": "not_found",
     "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
-    "candidate_urls": [
-      "https://heavyindustries.gov.in/sites/default/files/2026-07/lsauq_452.pdf"
-    ],
-    "candidate_hosts": [
-      "heavyindustries.gov.in"
-    ],
+    "candidate_urls": [],
+    "candidate_hosts": [],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
@@ -87,48 +127,11 @@
     "authority_route": "public_regulator"
   },
   {
-    "candidate_id": "86a0955dccc4b9fd",
-    "status": "first_party_candidates",
-    "query": "site:apple.com apple streaming pricing price fee subscription",
-    "candidate_urls": [
-      "https://tv.apple.com/us/offer/tvs.sbd.4000",
-      "https://www.apple.com/apple-tv",
-      "https://tv.apple.com"
-    ],
-    "candidate_hosts": [
-      "tv.apple.com",
-      "www.apple.com",
-      "tv.apple.com"
-    ],
-    "search_coverage": "adequate",
-    "errors": [],
-    "queries": [
-      "site:apple.com apple streaming pricing price fee subscription",
-      "\"The latest Apple price hike: Apple TV streaming service\" official",
-      "apple streaming pricing price fee subscription official",
-      "apple streaming newsroom support changelog apple streaming pricing price fee subscription",
-      "apple streaming pricing price fee subscription official announcement"
-    ],
-    "authority_route": "company_owner"
-  },
-  {
     "candidate_id": "a4667ed73e330db1",
-    "status": "first_party_candidates",
+    "status": "not_found",
     "query": "site:samsung.com samsung two apps shutdown sunset discontinued end support",
-    "candidate_urls": [
-      "https://r2.community.samsung.com/t5/Galaxy-S/BIG-NEWS-Samsung-Messages-App-is-Being-Discontinued/td-p/22483984",
-      "https://r2.community.samsung.com/t5/Galaxy-S/SAMAUNG-Members-App-Shut-Down-Notice/td-p/19618912",
-      "https://r1.community.samsung.com/t5/galaxy-s/samsung-phones-that-will-no-longer-received-app-updates-and-new/td-p/28143670",
-      "https://r1.community.samsung.com/t5/galaxy-s/samsung-ends-software-support-for-two-phones-from-the-august/td-p/38973250",
-      "https://www.samsung.com/us/apps/samsung-messages"
-    ],
-    "candidate_hosts": [
-      "r2.community.samsung.com",
-      "r2.community.samsung.com",
-      "r1.community.samsung.com",
-      "r1.community.samsung.com",
-      "www.samsung.com"
-    ],
+    "candidate_urls": [],
+    "candidate_hosts": [],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [

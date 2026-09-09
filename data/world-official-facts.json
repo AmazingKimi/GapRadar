@@ -1,5 +1,35 @@
 [
   {
+    "candidate_id": "d7a3f51b503bedd3",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "cb0a06e46d5a75d2",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "7ad26c8529bcc2cc",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
     "candidate_id": "677324124c8639f6",
     "status": "unverified",
     "official_url": null,
@@ -31,12 +61,12 @@
   },
   {
     "candidate_id": "52f1eb44691af255",
-    "status": "tier1_verified",
-    "official_url": "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
-    "official_host": "www.mass.gov",
-    "official_title": "Press Release Governor Healey: No Data Centers Without Local Approval",
-    "excerpt": "Governor Healey: No Data Centers Without Local Approval | Mass.gov An official website of the Commonwealth of Massachusetts Here's how you know Official websites use .mass.gov A .mass.gov website belongs to an official government organization in Massachusetts. Secure websites use HTTPS certificate A lock icon ( ) or https:// means you've safely connected to the official website. Share sensitive information only on official, secure websites. Skip to main content Mass.gov Menu Close menu Access to search Language Select language Afrikaans Albanian - Shqip Amharic - አማርኛ Arabic - العربية Armenian - Հայերեն Chinese (Simplified) - 简体中文 Chinese (Traditional) - 繁體中文 English Filipino French - Français German - Deutsch Greek - Ελληνικά Gujarati - ગુજરાતી Haitian Creole - Kreyòl Ayisyen Hebrew - עברית Hindi - हिन्दी Hmong - Hmoob Italian - Italiano Japanese - 日本語 Khmer - ភាសាខ្មែរ Kinyarwanda Korean - 한국어 Lao - ລາວ Malayalam - മലയാളം Myanmar (Burmese) - မြန်မာ Nepali - नेपाली Pashto - پښتو Persian - فارسی Polish - Polski Portuguese (Brazil) - Português Romanian - Română Russian - Русский Somali - Soomaali Spanish - Español Swahili - Kiswahili Tamil - தமிழ் Telugu - తెలుగు Thai - ไทย Tigrinya",
-    "subject_overlap": 4,
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
     "errors": []
   },
   {
@@ -47,23 +77,7 @@
     "official_title": null,
     "excerpt": null,
     "subject_overlap": 0,
-    "errors": [
-      "subject overlap too weak for heavyindustries.gov.in: 0 < 2"
-    ]
-  },
-  {
-    "candidate_id": "86a0955dccc4b9fd",
-    "status": "unverified",
-    "official_url": null,
-    "official_host": null,
-    "official_title": null,
-    "excerpt": null,
-    "subject_overlap": 0,
-    "errors": [
-      "first-party page did not explicitly confirm price_shock: tv.apple.com",
-      "first-party page did not explicitly confirm price_shock: www.apple.com",
-      "first-party page did not explicitly confirm price_shock: tv.apple.com"
-    ]
+    "errors": []
   },
   {
     "candidate_id": "a4667ed73e330db1",
@@ -73,13 +87,7 @@
     "official_title": null,
     "excerpt": null,
     "subject_overlap": 0,
-    "errors": [
-      "https://r2.community.samsung.com/t5/Galaxy-S/BIG-NEWS-Samsung-Messages-App-is-Being-Discontinued/td-p/22483984: HTTPStatusError: Client error '403 Forbidden' for url 'https://r2.community.samsung.com/t5/Galaxy-S/BIG-NEWS-Samsung-Messages-App-is-Being-Discontinued/td-p/22483984'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
-      "https://r2.community.samsung.com/t5/Galaxy-S/SAMAUNG-Members-App-Shut-Down-Notice/td-p/19618912: HTTPStatusError: Client error '403 Forbidden' for url 'https://r2.community.samsung.com/t5/Galaxy-S/SAMAUNG-Members-App-Shut-Down-Notice/td-p/19618912'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
-      "https://r1.community.samsung.com/t5/galaxy-s/samsung-phones-that-will-no-longer-received-app-updates-and-new/td-p/28143670: HTTPStatusError: Client error '403 Forbidden' for url 'https://r1.community.samsung.com/t5/galaxy-s/samsung-phones-that-will-no-longer-received-app-updates-and-new/td-p/28143670'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
-      "https://r1.community.samsung.com/t5/galaxy-s/samsung-ends-software-support-for-two-phones-from-the-august/td-p/38973250: HTTPStatusError: Client error '403 Forbidden' for url 'https://r1.community.samsung.com/t5/galaxy-s/samsung-ends-software-support-for-two-phones-from-the-august/td-p/38973250'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
-      "first-party page did not explicitly confirm shutdown_eol: www.samsung.com"
-    ]
+    "errors": []
   },
   {
     "candidate_id": "eb46fb2b8863a40b",

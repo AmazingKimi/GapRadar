@@ -1,39 +1,30 @@
 [
   {
-    "candidate_id": "52f1eb44691af255",
-    "status": "INVESTIGATE",
-    "priority_score": 12,
-    "evidence_state": "tier1_verified",
-    "evidence_label": "Tier-1 · mass.gov",
-    "reason": "mass.gov confirms the underlying change behind “Massachusetts Will Require New Data Centers to Use Clean Energy”. The event is an actionable regulatory requirement affecting the demand surface “new compliance, testing, reporting or implementation work”. Supply research checked 21 candidate(s), found 0 strong match(es), with partial coverage.",
-    "next_check": "Close remaining supply-coverage gaps and test the explicit demand hypothesis with affected users before promoting this to REVIEW."
-  },
-  {
     "candidate_id": "a4667ed73e330db1",
     "status": "INVESTIGATE",
-    "priority_score": 12,
-    "evidence_state": "official_candidate",
-    "evidence_label": "Official lead · r2.community.samsung.com",
-    "reason": "Android Central reports “Samsung preps the shutdown of two more apps late in 2026”. GapRadar found a plausible authority page on r2.community.samsung.com, but that page has not yet confirmed the exact “shutdown” claim. If confirmed, investigate migration or replacement demand before the affected product disappears.",
-    "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
+    "priority_score": 10,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "Android Central reports “Samsung preps the shutdown of two more apps late in 2026” and the detector matched “shutdown” as a shutdown / end-of-life signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect migration or replacement demand before the affected product disappears.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {
     "candidate_id": "14436a2a2ff1f7ea",
     "status": "INVESTIGATE",
-    "priority_score": 9,
-    "evidence_state": "official_candidate",
-    "evidence_label": "Official lead · heavyindustries.gov.in",
-    "reason": "Autocar Professional reports “EV BMS Cybersecurity Testing Now Mandatory in India”. GapRadar found a plausible authority page on heavyindustries.gov.in, but that page has not yet confirmed the exact “Mandatory” claim. If confirmed, investigate new compliance, testing, reporting or implementation work.",
-    "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
+    "priority_score": 7,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "Autocar Professional reports “EV BMS Cybersecurity Testing Now Mandatory in India” and the detector matched “Mandatory” as a regulatory requirement signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect new compliance, testing, reporting or implementation work.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {
-    "candidate_id": "86a0955dccc4b9fd",
+    "candidate_id": "52f1eb44691af255",
     "status": "INVESTIGATE",
     "priority_score": 7,
-    "evidence_state": "official_candidate",
-    "evidence_label": "Official lead · tv.apple.com",
-    "reason": "Mashable reports “The latest Apple price hike: Apple TV streaming service”. GapRadar found a plausible authority page on tv.apple.com, but that page has not yet confirmed the exact “price hike” claim. If confirmed, investigate switching demand from customers exposed to the new cost.",
-    "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "EnergyNow.com reports “Massachusetts Will Require New Data Centers to Use Clean Energy” and the detector matched “Will Require New Data Centers to Use Clean Energy - EnergyNow.com Mass” as a regulatory requirement signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect new compliance, testing, reporting or implementation work.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {
     "candidate_id": "5b1d4ece4414b40f",
@@ -42,6 +33,15 @@
     "evidence_state": "news_only",
     "evidence_label": "Tier-1 pending",
     "reason": "The Apple Post reports “Apple Music to make AI labels mandatory for music created with artificial intelligence” and the detector matched “mandatory” as a regulatory requirement signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect new compliance, testing, reporting or implementation work.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
+  },
+  {
+    "candidate_id": "7ad26c8529bcc2cc",
+    "status": "WATCH",
+    "priority_score": 4,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "Nova.ie reports “Bord Gáis Customers Hit With Energy Price Increase From October” and the detector matched “Price Increase” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
     "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {
@@ -69,6 +69,24 @@
     "evidence_state": "news_only",
     "evidence_label": "Tier-1 pending",
     "reason": "Today FM reports “Bord Gais Energy Announces Price Increase” and the detector matched “Price Increase” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
+  },
+  {
+    "candidate_id": "cb0a06e46d5a75d2",
+    "status": "WATCH",
+    "priority_score": 2,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "freeyork reports “iPhone 18 Pro Launch: New 2TB Storage Option and $100 Price Increase” and the detector matched “Price Increase” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
+  },
+  {
+    "candidate_id": "d7a3f51b503bedd3",
+    "status": "WATCH",
+    "priority_score": 2,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "MacRumors reports “iPhone 18 Pro's $100 Price Increase is Actually $300 If You Want 1TB Storage” and the detector matched “Price Increase” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
     "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {

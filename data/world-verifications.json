@@ -1,5 +1,35 @@
 [
   {
+    "candidate_id": "d7a3f51b503bedd3",
+    "status": "unverified",
+    "event_id": null,
+    "official_url": null,
+    "match_score": 1,
+    "reasons": [
+      "date_proximity"
+    ]
+  },
+  {
+    "candidate_id": "cb0a06e46d5a75d2",
+    "status": "unverified",
+    "event_id": null,
+    "official_url": null,
+    "match_score": 1,
+    "reasons": [
+      "date_proximity"
+    ]
+  },
+  {
+    "candidate_id": "7ad26c8529bcc2cc",
+    "status": "unverified",
+    "event_id": null,
+    "official_url": null,
+    "match_score": 1,
+    "reasons": [
+      "date_proximity"
+    ]
+  },
+  {
     "candidate_id": "677324124c8639f6",
     "status": "unverified",
     "event_id": null,
@@ -31,18 +61,6 @@
   },
   {
     "candidate_id": "52f1eb44691af255",
-    "status": "tier1_verified",
-    "event_id": null,
-    "official_url": "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
-    "match_score": 10,
-    "reasons": [
-      "first_party_page",
-      "subject_overlap",
-      "hard_change_confirmed"
-    ]
-  },
-  {
-    "candidate_id": "14436a2a2ff1f7ea",
     "status": "unverified",
     "event_id": null,
     "official_url": null,
@@ -52,7 +70,7 @@
     ]
   },
   {
-    "candidate_id": "86a0955dccc4b9fd",
+    "candidate_id": "14436a2a2ff1f7ea",
     "status": "unverified",
     "event_id": null,
     "official_url": null,

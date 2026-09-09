@@ -1,16 +1,16 @@
 {
-  "updated_at": "2026-09-09T17:11:13.532839+00:00",
+  "updated_at": "2026-09-09T21:44:23.162672+00:00",
   "current": {
-    "Energy & Climate": 3,
+    "Energy & Climate": 6,
     "Mobility": 2,
-    "AI & Technology": 3,
-    "Consumer & Society": 1
+    "Consumer & Society": 1,
+    "AI & Technology": 2
   },
   "sectors": {
     "AI & Technology": {
-      "count": 3,
+      "count": 2,
       "previous": 3,
-      "delta": 0,
+      "delta": -1,
       "dominant_change_type": "price_shock"
     },
     "Consumer & Society": {
@@ -20,10 +20,10 @@
       "dominant_change_type": "shutdown_eol"
     },
     "Energy & Climate": {
-      "count": 3,
+      "count": 6,
       "previous": 3,
-      "delta": 0,
-      "dominant_change_type": "regulatory_shift"
+      "delta": 3,
+      "dominant_change_type": "price_shock"
     },
     "Mobility": {
       "count": 2,
