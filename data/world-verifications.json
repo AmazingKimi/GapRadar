@@ -40,6 +40,28 @@
     ]
   },
   {
+    "candidate_id": "9ca59f0103294ea8",
+    "status": "unverified",
+    "event_id": null,
+    "official_url": null,
+    "match_score": 4,
+    "reasons": [
+      "event_type",
+      "date_proximity"
+    ]
+  },
+  {
+    "candidate_id": "9bfa78df8d49ae2a",
+    "status": "unverified",
+    "event_id": null,
+    "official_url": null,
+    "match_score": 4,
+    "reasons": [
+      "event_type",
+      "date_proximity"
+    ]
+  },
+  {
     "candidate_id": "cd6e87e93d6ec8e6",
     "status": "unverified",
     "event_id": null,
@@ -156,6 +178,17 @@
     "official_url": null,
     "match_score": 1,
     "reasons": [
+      "date_proximity"
+    ]
+  },
+  {
+    "candidate_id": "5a6d31c87ca2276d",
+    "status": "unverified",
+    "event_id": null,
+    "official_url": null,
+    "match_score": 4,
+    "reasons": [
+      "event_type",
       "date_proximity"
     ]
   },

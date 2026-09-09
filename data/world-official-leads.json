@@ -36,6 +36,24 @@
     "errors": []
   },
   {
+    "candidate_id": "9ca59f0103294ea8",
+    "status": "not_found",
+    "query": "\"Ossiomo Power shutdown weakens businesses, SMEs, others in Edo\" official announcement",
+    "candidate_urls": [],
+    "candidate_hosts": [],
+    "search_coverage": "adequate",
+    "errors": []
+  },
+  {
+    "candidate_id": "9bfa78df8d49ae2a",
+    "status": "not_found",
+    "query": "\"From Shutdown to Showcase: Holtec's IPO Puts Palisades at Center of Nuclear Industry's Future\" official announcement",
+    "candidate_urls": [],
+    "candidate_hosts": [],
+    "search_coverage": "adequate",
+    "errors": []
+  },
+  {
     "candidate_id": "cd6e87e93d6ec8e6",
     "status": "not_found",
     "query": "\"Brookfield wins $1 billion mandate from UK’s Nuclear Liabilities Fund\" official announcement",
@@ -138,6 +156,15 @@
     "candidate_id": "64f6975ef71e8dce",
     "status": "not_found",
     "query": "\"Brookfield Wins $1 Billion Mandate From British Nuclear Fund\" official announcement",
+    "candidate_urls": [],
+    "candidate_hosts": [],
+    "search_coverage": "adequate",
+    "errors": []
+  },
+  {
+    "candidate_id": "5a6d31c87ca2276d",
+    "status": "not_found",
+    "query": "\"3 Red Line stations reopen Monday after 2-month shutdown for major construction\" official announcement",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
