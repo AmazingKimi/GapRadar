@@ -51,13 +51,35 @@ def make_event(**kwargs) -> MarketEvent:
 def test_no_detected_demand_is_not_pass():
     event = make_event()
     event.reaction_checked_at = event.detected_at
+    event.reaction_sources_checked = ["hacker_news", "github_issues"]
     event.reaction_search_quality = "adequate"
-    event.reaction_queries = [{"source": "forum", "query": "Example Product migration", "candidate_count": 0, "ok": True}]
+    event.reaction_queries = [{"source": "hacker_news", "query": "Example Product migration", "candidate_count": 0, "ok": True}]
     event.verify()
     dossier = build_dossier(event)
     assert dossier.verdict == "NO DETECTED SIGNAL"
-    assert "not that demand does not exist" in dossier.rationale
+    assert "coverage-bounded" in dossier.rationale
     assert dossier.reaction_queries
+    assert dossier.reaction_coverage["coverage_complete"] is True
+
+
+def test_shopify_no_signal_exposes_missing_vendor_community():
+    event = MarketEvent(
+        id="shopify-event",
+        product="Script tags",
+        vendor="Shopify",
+        event_type=EventType.SHUTDOWN,
+        headline="Script tags are deprecated",
+        summary="Script tags will stop running.",
+        official_evidence=[official()],
+    ).verify()
+    event.reaction_checked_at = event.detected_at
+    event.reaction_sources_checked = ["hacker_news", "github_issues"]
+    event.reaction_search_quality = "degraded"
+    event.verify()
+    dossier = build_dossier(event)
+    assert dossier.verdict == "NO DETECTED SIGNAL"
+    assert "shopify_community" in dossier.reaction_coverage["missing_sources"]
+    assert dossier.reaction_coverage["coverage_complete"] is False
 
 
 def test_failed_search_is_not_mapped_to_no_signal():
