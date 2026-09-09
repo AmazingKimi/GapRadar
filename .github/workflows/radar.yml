@@ -35,7 +35,7 @@ jobs:
           cache: pip
       - run: python -m pip install -e .
       - name: Compile dashboard renderer and runtime
-        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py
+        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/strip_legacy_runtime.py
       - name: Scan world news and industry changes
         run: python -m gapradar.cli world-scan
       - name: Deep-dive world leads into supply and gap assessments
@@ -63,6 +63,7 @@ jobs:
       - name: Export live opportunity board from current source
         run: |
           python -m gapradar.cli export
+          python -m gapradar.strip_legacy_runtime
           python -m gapradar.dashboard_runtime
       - name: Verify functional dashboard contract
         run: |
