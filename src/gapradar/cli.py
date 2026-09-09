@@ -16,7 +16,7 @@ from .reaction import validate_reactions
 from .render import render_dashboard
 from .store import load_events, merge_events, save_events
 from .supply import validate_supply
-from .worldscan import load_candidates, save_candidates, scan_world
+from .worldscan import load_candidates, load_scan_stats, save_candidates, save_scan_stats, scan_world_with_stats
 
 app = typer.Typer(no_args_is_help=True, help="Evidence-first market gap radar.")
 console = Console()
@@ -26,10 +26,12 @@ console = Console()
 def world_scan_command(
     sources: Path = typer.Option(Path("config/world_sources.yml"), exists=True, readable=True),
     output: Path = typer.Option(Path("data/world-gaps.json")),
+    stats_output: Path = typer.Option(Path("data/world-scan-stats.json")),
 ) -> None:
     """Scan broad news/industry feeds for structural changes that may create market gaps."""
-    candidates = scan_world(sources)
+    candidates, stats = scan_world_with_stats(sources)
     save_candidates(output, candidates)
+    save_scan_stats(stats_output, stats)
     table = Table(title="GapRadar — World Change Scan")
     table.add_column("Recommendation")
     table.add_column("Type")
@@ -38,7 +40,10 @@ def world_scan_command(
     for row in candidates[:30]:
         table.add_row(row.recommendation, row.change_type, row.source, row.headline)
     console.print(table)
-    console.print(f"World-gap candidates: {len(candidates)} · output: {output}")
+    console.print(
+        f"Raw entries: {stats.raw_entries} · recent: {stats.recent_entries} · structural matches: {stats.structural_matches} · "
+        f"deduped candidates: {stats.candidates} · sources ok/failed: {stats.sources_ok}/{stats.sources_failed}"
+    )
 
 
 @app.command()
@@ -84,7 +89,7 @@ def validate_demand(events: Path = typer.Option(Path("data/events.json"), exists
 
 @app.command("validate-supply")
 def validate_supply_command(events: Path = typer.Option(Path("data/events.json"), exists=True, readable=True)) -> None:
-    """Search replacement supply for verified first-party events."""
+    """Search replacement supply for every verified event with a demand hypothesis."""
     rows = load_events(events)
     validated = validate_supply(rows)
     save_events(events, validated)
@@ -211,12 +216,14 @@ def report(events: Path = typer.Option(Path("data/events.json"), exists=True, re
 def export_dashboard(
     events: Path = typer.Option(Path("data/events.json")),
     world_gaps: Path = typer.Option(Path("data/world-gaps.json")),
+    world_stats: Path = typer.Option(Path("data/world-scan-stats.json")),
     output: Path = typer.Option(Path("docs/index.html")),
 ) -> None:
     """Export the standalone Today Opportunity Board."""
     rows = load_events(events)
     candidates = load_candidates(world_gaps)
-    render_dashboard(rows, output, candidates)
+    stats = load_scan_stats(world_stats)
+    render_dashboard(rows, output, candidates, stats)
     console.print(f"Opportunity board exported to {output} with {len(candidates)} world candidate(s) and {len(rows)} verified event(s).")
 
 
