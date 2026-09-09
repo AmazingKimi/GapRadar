@@ -36,7 +36,7 @@ CHANGE_PATTERNS: dict[str, tuple[str, ...]] = {
 }
 
 TECH_TERMS = re.compile(
-    r"\b(software|saas|app|platform|api|cloud|developer|ai|ecommerce|e-commerce|payment|cyber|security|data|hosting|crm|automation|browser|mobile|marketplace|fintech|subscription|service|tool)\b",
+    r"\b(software|saas|app|apps|platform|api|cloud|developer|ai|ecommerce|e-commerce|payment|cyber|security|data|hosting|crm|automation|browser|mobile|marketplace|fintech|subscription|service|tool|streaming)\b",
     re.IGNORECASE,
 )
 
@@ -91,7 +91,9 @@ def classify_change(text: str) -> tuple[str, str] | None:
 def _forced_gate(change_type: str, text: str) -> bool:
     t = text.lower()
     if change_type == "shutdown_eol":
-        return bool(re.search(r"\b(shut(?:ting)? down|shutdown|sunset|discontinu|retir|end[- ]of[- ]life|end(?:ing)? support|closing|goes away)\b", t))
+        change = bool(re.search(r"\b(shut(?:ting)? down|shutdown|sunset|discontinu|retir|end[- ]of[- ]life|end(?:ing)? support|closing|goes away)\b", t))
+        target = bool(re.search(r"\b(software|saas|app|apps|platform|api|cloud|service|tool|subscription|streaming|developer tool|product)\b", t))
+        return change and target
     if change_type == "price_shock":
         return bool(
             re.search(r"\b(price|pricing|fee|subscription|cost)\b", t)
@@ -103,17 +105,20 @@ def _forced_gate(change_type: str, text: str) -> bool:
         )
         return api_context and bool(re.search(r"\b(deprecat|terms|policy|rate limit|pricing|license|licensing|access change|restriction)\b", t))
     if change_type == "regulatory_shift":
-        if re.search(r"\b(protest|concern|calls? for regulation|opinion|commentary|debate)\b", t):
+        if re.search(r"\b(protest|rally|march|concern|calls? for regulation|opinion|commentary|debate|podcast|thought for the week|mocks?|warns?|priority|talks? about|could influence|should take center stage)\b", t):
             return False
         if re.search(r"\b(launches?|unveils?|introduces?)\b.{0,40}\b(solution|product|tool)\b", t):
             return False
-        action = bool(re.search(r"\b(will require|requires?|required|mandate|mandatory|law|rules?|regulator|regulation|policy|compliance deadline|takes effect|plan for|set up)\b", t))
+        action = bool(re.search(
+            r"\b(will require|requires?|required|mandate|mandatory|law takes effect|new law|new rules?|adopts?|adopted|approved|passes?|passed|regulator.{0,40}(set up|created|established|requires?)|compliance deadline|rules? take effect|policy takes effect|plan for ai regulation|set up ai regulator)\b",
+            t,
+        ))
         return action and bool(TECH_TERMS.search(t))
     return False
 
 
 def _candidate_gate(change_type: str, text: str) -> bool:
-    if change_type in {"api_terms_change", "regulatory_shift"}:
+    if change_type in {"shutdown_eol", "api_terms_change", "regulatory_shift"}:
         return _forced_gate(change_type, text)
     return True
 
