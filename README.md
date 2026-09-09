@@ -38,6 +38,37 @@ Historical full-page recall rules are isolated from the live feed scanner. This 
 
 The event store also revalidates persisted events after a clean source scan, so a false positive that no longer passes current live rules is removed rather than living forever in `data/events.json`. If any live source fails, pruning is disabled for that run so a temporary outage cannot delete valid history.
 
+### Current benchmark snapshot
+
+Observed in GitHub Actions run **34312896873** on 2026-09-09:
+
+| Metric | Fixture replay | Wayback replay |
+| --- | ---: | ---: |
+| Cases total | 24 | 24 |
+| Cases actually evaluated | 24 | 2 |
+| TP / FP / TN / FN | 17 / 1 / 5 / 1 | 2 / 0 / 0 / 0 |
+| Precision | **0.9444** | 1.0000* |
+| Recall | **0.9444** | 1.0000* |
+| Event-type accuracy | **0.9412** | 1.0000* |
+| Archive coverage | 1.0000 | **0.0833** |
+| Demand cases evaluated | 4 | 1 |
+| Demand accuracy | 1.0000** | 0.0000** |
+| Supply cases evaluated | 3 | 0 |
+| Supply accuracy | 1.0000** | n/a |
+
+\* The Wayback precision/recall numbers are **not meaningful evidence of 100% accuracy** because only 2 of 24 official cases were retrievable and evaluable in that run. The important Wayback result is the 8.33% archive coverage and the visible timeout/missing-snapshot failures.
+
+\** Downstream demand/supply samples are currently tiny and hand curated. Their accuracy numbers are regression checks for those fixtures, not claims about market-wide performance.
+
+The fixture benchmark intentionally keeps known misses visible instead of tuning them away:
+
+- **False negative:** IFTTT SMS/Phone free-access change (2023) was missed.
+- **False positive:** a normal IFTTT Pro guide was incorrectly classified as a price shock.
+- **Type error:** Chrome Manifest V2 was detected, but classified as `shutdown_eol` instead of the expected `api_terms_change`.
+- In Wayback replay, most failures were archive availability/network problems (`archive_missing`, read/connect timeouts, connection refused), and one retrievable Docker reaction page did not qualify as migration pain under the current scorer.
+
+These failures are part of the benchmark result, not hidden test debris.
+
 ### Run the benchmark
 
 ```bash
