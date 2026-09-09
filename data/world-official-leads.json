@@ -1,5 +1,21 @@
 [
   {
+    "candidate_id": "677324124c8639f6",
+    "status": "not_found",
+    "query": "\"Bord Gais Energy Announces Price Increase\" official",
+    "candidate_urls": [],
+    "candidate_hosts": [],
+    "search_coverage": "adequate",
+    "errors": [],
+    "queries": [
+      "\"Bord Gais Energy Announces Price Increase\" official",
+      "bord gais energy announces pricing price fee subscription official",
+      "bord gais newsroom support changelog bord gais energy announces pricing price fee subscription",
+      "bord gais energy announces pricing price fee subscription official announcement"
+    ],
+    "authority_route": "company_owner"
+  },
+  {
     "candidate_id": "2a28fd05cee20b1e",
     "status": "not_found",
     "query": "\"The 2040 Energy Mandate Most Mainers Have Never Heard About\" official",
@@ -72,10 +88,18 @@
   },
   {
     "candidate_id": "86a0955dccc4b9fd",
-    "status": "not_found",
+    "status": "first_party_candidates",
     "query": "site:apple.com apple streaming pricing price fee subscription",
-    "candidate_urls": [],
-    "candidate_hosts": [],
+    "candidate_urls": [
+      "https://tv.apple.com/us/offer/tvs.sbd.4000",
+      "https://www.apple.com/apple-tv",
+      "https://tv.apple.com"
+    ],
+    "candidate_hosts": [
+      "tv.apple.com",
+      "www.apple.com",
+      "tv.apple.com"
+    ],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
@@ -88,27 +112,23 @@
     "authority_route": "company_owner"
   },
   {
-    "candidate_id": "1a9ab0b99d425f58",
-    "status": "not_found",
-    "query": "\"Afriforum challenges Eskom’s 8.83% electricity price increase\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": [],
-    "queries": [
-      "\"Afriforum challenges Eskom’s 8.83% electricity price increase\" official",
-      "afriforum challenges eskom electricity pricing price fee subscription official",
-      "afriforum challenges newsroom support changelog afriforum challenges eskom electricity pricing price fee subscription",
-      "afriforum challenges eskom electricity pricing price fee subscription official announcement"
-    ],
-    "authority_route": "company_owner"
-  },
-  {
     "candidate_id": "a4667ed73e330db1",
-    "status": "not_found",
+    "status": "first_party_candidates",
     "query": "site:samsung.com samsung two apps shutdown sunset discontinued end support",
-    "candidate_urls": [],
-    "candidate_hosts": [],
+    "candidate_urls": [
+      "https://r2.community.samsung.com/t5/Galaxy-S/BIG-NEWS-Samsung-Messages-App-is-Being-Discontinued/td-p/22483984",
+      "https://r2.community.samsung.com/t5/Galaxy-S/SAMAUNG-Members-App-Shut-Down-Notice/td-p/19618912",
+      "https://r1.community.samsung.com/t5/galaxy-s/samsung-phones-that-will-no-longer-received-app-updates-and-new/td-p/28143670",
+      "https://r1.community.samsung.com/t5/galaxy-s/samsung-ends-software-support-for-two-phones-from-the-august/td-p/38973250",
+      "https://www.samsung.com/us/apps/samsung-messages"
+    ],
+    "candidate_hosts": [
+      "r2.community.samsung.com",
+      "r2.community.samsung.com",
+      "r1.community.samsung.com",
+      "r1.community.samsung.com",
+      "www.samsung.com"
+    ],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [

@@ -9,6 +9,15 @@
     "next_check": "Close remaining supply-coverage gaps and test the explicit demand hypothesis with affected users before promoting this to REVIEW."
   },
   {
+    "candidate_id": "a4667ed73e330db1",
+    "status": "INVESTIGATE",
+    "priority_score": 12,
+    "evidence_state": "official_candidate",
+    "evidence_label": "Official lead · r2.community.samsung.com",
+    "reason": "Android Central reports “Samsung preps the shutdown of two more apps late in 2026”. GapRadar found a plausible authority page on r2.community.samsung.com, but that page has not yet confirmed the exact “shutdown” claim. If confirmed, investigate migration or replacement demand before the affected product disappears.",
+    "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
+  },
+  {
     "candidate_id": "14436a2a2ff1f7ea",
     "status": "INVESTIGATE",
     "priority_score": 9,
@@ -18,13 +27,13 @@
     "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
   },
   {
-    "candidate_id": "a4667ed73e330db1",
+    "candidate_id": "86a0955dccc4b9fd",
     "status": "INVESTIGATE",
-    "priority_score": 10,
-    "evidence_state": "news_only",
-    "evidence_label": "Tier-1 pending",
-    "reason": "Android Central reports “Samsung preps the shutdown of two more apps late in 2026” and the detector matched “shutdown” as a shutdown / end-of-life signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect migration or replacement demand before the affected product disappears.",
-    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
+    "priority_score": 7,
+    "evidence_state": "official_candidate",
+    "evidence_label": "Official lead · tv.apple.com",
+    "reason": "Mashable reports “The latest Apple price hike: Apple TV streaming service”. GapRadar found a plausible authority page on tv.apple.com, but that page has not yet confirmed the exact “price hike” claim. If confirmed, investigate switching demand from customers exposed to the new cost.",
+    "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
   },
   {
     "candidate_id": "5b1d4ece4414b40f",
@@ -33,15 +42,6 @@
     "evidence_state": "news_only",
     "evidence_label": "Tier-1 pending",
     "reason": "The Apple Post reports “Apple Music to make AI labels mandatory for music created with artificial intelligence” and the detector matched “mandatory” as a regulatory requirement signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect new compliance, testing, reporting or implementation work.",
-    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
-  },
-  {
-    "candidate_id": "86a0955dccc4b9fd",
-    "status": "WATCH",
-    "priority_score": 5,
-    "evidence_state": "news_only",
-    "evidence_label": "Tier-1 pending",
-    "reason": "mashable.com reports “The latest Apple price hike: Apple TV streaming service” and the detector matched “price hike” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
     "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {
@@ -54,21 +54,21 @@
     "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {
-    "candidate_id": "1a9ab0b99d425f58",
-    "status": "WATCH",
-    "priority_score": 2,
-    "evidence_state": "news_only",
-    "evidence_label": "Tier-1 pending",
-    "reason": "MyBroadband reports “Afriforum challenges Eskom’s 8.83% electricity price increase” and the detector matched “price increase” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
-    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
-  },
-  {
     "candidate_id": "2a28fd05cee20b1e",
     "status": "WATCH",
     "priority_score": 2,
     "evidence_state": "news_only",
     "evidence_label": "Tier-1 pending",
     "reason": "Maine Policy Institute reports “The 2040 Energy Mandate Most Mainers Have Never Heard About” and the detector matched “Mandate” as a regulatory requirement signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect new compliance, testing, reporting or implementation work.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
+  },
+  {
+    "candidate_id": "677324124c8639f6",
+    "status": "WATCH",
+    "priority_score": 2,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "Today FM reports “Bord Gais Energy Announces Price Increase” and the detector matched “Price Increase” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
     "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {

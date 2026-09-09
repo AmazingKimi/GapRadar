@@ -2,10 +2,10 @@
   "days": [
     {
       "date": "2026-09-09",
-      "runs": 22,
+      "runs": 23,
       "raw_entries": 756,
       "kept_candidates": 9,
-      "official_candidates": 3,
+      "official_candidates": 4,
       "tier1_verified": 3,
       "deep_analyses": 3,
       "priority_leads": 4,

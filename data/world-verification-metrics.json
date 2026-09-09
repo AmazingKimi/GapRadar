@@ -2,12 +2,12 @@
   "tracked_candidates": 9,
   "tier1_verified": 1,
   "awaiting_tier1": 8,
-  "average_awaiting_hours": 4.7,
-  "oldest_awaiting_hours": 5.9,
-  "first_party_candidate_found": 2,
-  "no_first_party_candidate": 7,
+  "average_awaiting_hours": 4.9,
+  "oldest_awaiting_hours": 7.0,
+  "first_party_candidate_found": 4,
+  "no_first_party_candidate": 5,
   "search_failed": 0,
-  "verification_failed": 1,
-  "first_party_candidate_yield": 0.222,
+  "verification_failed": 3,
+  "first_party_candidate_yield": 0.444,
   "tier1_verification_yield": 0.111
 }

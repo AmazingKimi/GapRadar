@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09T16:08:09.853654+00:00",
+  "updated_at": "2026-09-09T17:11:13.532839+00:00",
   "current": {
     "Energy & Climate": 3,
     "Mobility": 2,
@@ -9,26 +9,26 @@
   "sectors": {
     "AI & Technology": {
       "count": 3,
-      "previous": null,
-      "delta": null,
+      "previous": 3,
+      "delta": 0,
       "dominant_change_type": "price_shock"
     },
     "Consumer & Society": {
       "count": 1,
-      "previous": null,
-      "delta": null,
+      "previous": 1,
+      "delta": 0,
       "dominant_change_type": "shutdown_eol"
     },
     "Energy & Climate": {
       "count": 3,
-      "previous": null,
-      "delta": null,
+      "previous": 3,
+      "delta": 0,
       "dominant_change_type": "regulatory_shift"
     },
     "Mobility": {
       "count": 2,
-      "previous": null,
-      "delta": null,
+      "previous": 2,
+      "delta": 0,
       "dominant_change_type": "regulatory_shift"
     }
   }

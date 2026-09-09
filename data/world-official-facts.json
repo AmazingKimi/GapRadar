@@ -1,5 +1,15 @@
 [
   {
+    "candidate_id": "677324124c8639f6",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
     "candidate_id": "2a28fd05cee20b1e",
     "status": "unverified",
     "official_url": null,
@@ -49,17 +59,11 @@
     "official_title": null,
     "excerpt": null,
     "subject_overlap": 0,
-    "errors": []
-  },
-  {
-    "candidate_id": "1a9ab0b99d425f58",
-    "status": "unverified",
-    "official_url": null,
-    "official_host": null,
-    "official_title": null,
-    "excerpt": null,
-    "subject_overlap": 0,
-    "errors": []
+    "errors": [
+      "first-party page did not explicitly confirm price_shock: tv.apple.com",
+      "first-party page did not explicitly confirm price_shock: www.apple.com",
+      "first-party page did not explicitly confirm price_shock: tv.apple.com"
+    ]
   },
   {
     "candidate_id": "a4667ed73e330db1",
@@ -69,7 +73,13 @@
     "official_title": null,
     "excerpt": null,
     "subject_overlap": 0,
-    "errors": []
+    "errors": [
+      "https://r2.community.samsung.com/t5/Galaxy-S/BIG-NEWS-Samsung-Messages-App-is-Being-Discontinued/td-p/22483984: HTTPStatusError: Client error '403 Forbidden' for url 'https://r2.community.samsung.com/t5/Galaxy-S/BIG-NEWS-Samsung-Messages-App-is-Being-Discontinued/td-p/22483984'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "https://r2.community.samsung.com/t5/Galaxy-S/SAMAUNG-Members-App-Shut-Down-Notice/td-p/19618912: HTTPStatusError: Client error '403 Forbidden' for url 'https://r2.community.samsung.com/t5/Galaxy-S/SAMAUNG-Members-App-Shut-Down-Notice/td-p/19618912'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "https://r1.community.samsung.com/t5/galaxy-s/samsung-phones-that-will-no-longer-received-app-updates-and-new/td-p/28143670: HTTPStatusError: Client error '403 Forbidden' for url 'https://r1.community.samsung.com/t5/galaxy-s/samsung-phones-that-will-no-longer-received-app-updates-and-new/td-p/28143670'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "https://r1.community.samsung.com/t5/galaxy-s/samsung-ends-software-support-for-two-phones-from-the-august/td-p/38973250: HTTPStatusError: Client error '403 Forbidden' for url 'https://r1.community.samsung.com/t5/galaxy-s/samsung-ends-software-support-for-two-phones-from-the-august/td-p/38973250'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "first-party page did not explicitly confirm shutdown_eol: www.samsung.com"
+    ]
   },
   {
     "candidate_id": "eb46fb2b8863a40b",

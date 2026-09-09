@@ -1,7 +1,24 @@
 [
   {
+    "id": "677324124c8639f6",
+    "discovered_at": "2026-09-09T17:11:08.347748+00:00",
+    "published_at": "2026-09-09T16:25:26+00:00",
+    "source": "Google News · energy climate structural change",
+    "headline": "Bord Gais Energy Announces Price Increase",
+    "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNU2VIN0piZTRTdksySDFHN2REVkdWR1lWSHNzNnRLdTZBMjVkako3UFk5NTRwUVVZM0dzT2pTM2tZeE9rdFkwNGktQi0ydzVjQUd3cFl6dGFKWUhRcUtZQUkwV2diTEZ4ZlkycGZSZkpvalBsMVZ1bXB4cTBnb3BFYmtQVGY?oc=5",
+    "summary": "Bord Gais Energy Announces Price Increase &nbsp;&nbsp; Today FM",
+    "change_type": "price_shock",
+    "matched_signal": "Price Increase",
+    "recommendation": "WATCH",
+    "why_now": "Automatically discovered structural-change lead; event type remains provisional until the evidence chain confirms context.",
+    "gap_hypothesis": "No market-opportunity conclusion is allowed before Tier-1 first-party verification and downstream demand/supply analysis.",
+    "validation_status": "STRUCTURAL SIGNAL",
+    "validation_summary": "GapRadar found this price shock candidate in Google News · energy climate structural change. An explicit structural-change phrase was present in the item and the context gate passed. It is a market-change lead, not proof that replacement supply is weak or that the opportunity is profitable. Context quality guard passed. This remains a discovery lead until Tier-1 first-party evidence verifies the underlying event.",
+    "sector": "Energy & Climate"
+  },
+  {
     "id": "2a28fd05cee20b1e",
-    "discovered_at": "2026-09-09T16:08:04.984778+00:00",
+    "discovered_at": "2026-09-09T17:11:08.347748+00:00",
     "published_at": "2026-09-09T14:34:34+00:00",
     "source": "Google News · energy climate structural change",
     "headline": "The 2040 Energy Mandate Most Mainers Have Never Heard About",
@@ -18,7 +35,7 @@
   },
   {
     "id": "00bcfec360bdcc41",
-    "discovered_at": "2026-09-09T16:08:04.984778+00:00",
+    "discovered_at": "2026-09-09T17:11:08.347748+00:00",
     "published_at": "2026-09-09T11:07:34+00:00",
     "source": "Google News · mobility robotics industry change",
     "headline": "GREEN: Say hello to Carney’s new de facto EV sales mandate",
@@ -35,7 +52,7 @@
   },
   {
     "id": "52f1eb44691af255",
-    "discovered_at": "2026-09-09T16:08:04.984778+00:00",
+    "discovered_at": "2026-09-09T17:11:08.347748+00:00",
     "published_at": "2026-09-08T22:38:27+00:00",
     "source": "Google News · energy climate structural change",
     "headline": "Massachusetts Will Require New Data Centers to Use Clean Energy",
@@ -52,7 +69,7 @@
   },
   {
     "id": "14436a2a2ff1f7ea",
-    "discovered_at": "2026-09-09T16:08:04.984778+00:00",
+    "discovered_at": "2026-09-09T17:11:08.347748+00:00",
     "published_at": "2026-09-08T15:17:01+00:00",
     "source": "Google News · AI and data regulation",
     "headline": "EV BMS Cybersecurity Testing Now Mandatory in India",
@@ -69,12 +86,12 @@
   },
   {
     "id": "86a0955dccc4b9fd",
-    "discovered_at": "2026-09-09T16:08:04.984778+00:00",
+    "discovered_at": "2026-09-09T17:11:08.347748+00:00",
     "published_at": "2026-09-08T15:09:01+00:00",
     "source": "Google News · SaaS pricing shocks",
     "headline": "The latest Apple price hike: Apple TV streaming service",
     "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE92aUtBYVl0WGZWdVpiS3RfNlc1UFhIZDdsdXlmVzg5LTJIVnBNSzNaTVJUR3pDRWJlY043TWFBcXRwck8weFRwcEtSRHRidzNmUFlhcDZNOEhOLWZPUzAxRWQ0YUNhWGFqMWI5OQ?oc=5",
-    "summary": "The latest Apple price hike: Apple TV streaming service &nbsp;&nbsp; mashable.com",
+    "summary": "The latest Apple price hike: Apple TV streaming service &nbsp;&nbsp; Mashable",
     "change_type": "price_shock",
     "matched_signal": "price hike",
     "recommendation": "WATCH",
@@ -85,25 +102,8 @@
     "sector": "AI & Technology"
   },
   {
-    "id": "1a9ab0b99d425f58",
-    "discovered_at": "2026-09-09T16:08:04.984778+00:00",
-    "published_at": "2026-09-08T08:20:58+00:00",
-    "source": "Google News · energy climate structural change",
-    "headline": "Afriforum challenges Eskom’s 8.83% electricity price increase",
-    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNRWJRaUotOXJsMmVZd19TamVqUFk3V2RPOXdwN2tvNzJybEprY1diTWtERWNYd3poWUlXajZCbVFKVUF3eXFKT1Q2QXNHWnNNWmJ2OGhyU1NXdDdoRU4yb1FKd0l2MHJVRzlFdE9LZVZhQ2Z6c09KTXNwQlJJZHNnN3dTNWdhZUxfX3o1b1ZEUmxDQjlNTndhRERtQzJnMFUwX1F2MndONWxfWVUxU3c?oc=5",
-    "summary": "Afriforum challenges Eskom’s 8.83% electricity price increase &nbsp;&nbsp; MyBroadband",
-    "change_type": "price_shock",
-    "matched_signal": "price increase",
-    "recommendation": "WATCH",
-    "why_now": "Automatically discovered structural-change lead; event type remains provisional until the evidence chain confirms context.",
-    "gap_hypothesis": "No market-opportunity conclusion is allowed before Tier-1 first-party verification and downstream demand/supply analysis.",
-    "validation_status": "STRUCTURAL SIGNAL",
-    "validation_summary": "GapRadar found this price shock candidate in Google News · energy climate structural change. An explicit structural-change phrase was present in the item and the context gate passed. It is a market-change lead, not proof that replacement supply is weak or that the opportunity is profitable. Context quality guard passed. This remains a discovery lead until Tier-1 first-party evidence verifies the underlying event.",
-    "sector": "Energy & Climate"
-  },
-  {
     "id": "a4667ed73e330db1",
-    "discovered_at": "2026-09-09T16:08:04.984778+00:00",
+    "discovered_at": "2026-09-09T17:11:08.347748+00:00",
     "published_at": "2026-09-07T18:14:00+00:00",
     "source": "Google News · software shutdowns",
     "headline": "Samsung preps the shutdown of two more apps late in 2026",
@@ -120,7 +120,7 @@
   },
   {
     "id": "eb46fb2b8863a40b",
-    "discovered_at": "2026-09-09T16:08:04.984778+00:00",
+    "discovered_at": "2026-09-09T17:11:08.347748+00:00",
     "published_at": "2026-09-07T07:06:13+00:00",
     "source": "Google News · SaaS pricing shocks",
     "headline": "Nvidia Server Price Increase Could Raise Indian AI Infrastructure Costs by 8–12%",
@@ -137,7 +137,7 @@
   },
   {
     "id": "5b1d4ece4414b40f",
-    "discovered_at": "2026-09-09T16:08:04.984778+00:00",
+    "discovered_at": "2026-09-09T17:11:08.347748+00:00",
     "published_at": "2026-09-06T19:44:12+00:00",
     "source": "Google News · AI and data regulation",
     "headline": "Apple Music to make AI labels mandatory for music created with artificial intelligence",
