@@ -7,6 +7,9 @@ on:
     paths:
       - 'src/gapradar/backtest.py'
       - 'src/gapradar/detector.py'
+      - 'src/gapradar/reaction.py'
+      - 'src/gapradar/supply.py'
+      - 'src/gapradar/cli.py'
       - 'data/backtest/**'
       - 'tests/test_backtest.py'
       - '.github/workflows/backtest.yml'
@@ -28,7 +31,18 @@ jobs:
         run: gapradar backtest --mode fixture --output data/backtest/report-fixture.json
       - name: Wayback replay
         run: gapradar backtest --mode wayback --output data/backtest/report-wayback.json
+      - name: Print reports
+        if: always()
+        run: |
+          for f in data/backtest/report-*.json; do
+            if [ -f "$f" ]; then
+              echo "===== $f ====="
+              cat "$f"
+            fi
+          done
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: historical-backtest-reports
           path: data/backtest/report-*.json
+          if-no-files-found: warn
