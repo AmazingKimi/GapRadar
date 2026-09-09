@@ -21,6 +21,8 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,6 +36,8 @@ jobs:
         run: gapradar doctor
       - name: Scan live first-party sources
         run: gapradar scan
+      - name: Validate displaced demand
+        run: gapradar validate-demand
       - name: Export dashboard
         run: gapradar export
       - name: Commit radar state
