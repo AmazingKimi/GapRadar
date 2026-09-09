@@ -15,5 +15,17 @@ jobs:
           cache: pip
       - run: python -m pip install -e '.[dev]'
       - name: Compile dashboard renderer
-        run: python -m py_compile src/gapradar/render.py
+        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/strip_legacy_runtime.py
       - run: pytest
+      - name: Verify Mac UI launcher syntax
+        run: bash -n 'Launch GapRadar.command'
+      - name: Smoke-test zero-install static UI launcher
+        env:
+          GAPRADAR_NO_OPEN: '1'
+          GAPRADAR_PORT: '8765'
+        run: |
+          bash 'Launch GapRadar.command'
+          curl -fsS http://127.0.0.1:8765/ | grep -q '<title>GapRadar</title>'
+          curl -fsS http://127.0.0.1:8765/ | grep -q 'langToggle'
+          curl -fsS http://127.0.0.1:8765/ | grep -q 'themeToggle'
+          kill $(lsof -tiTCP:8765 -sTCP:LISTEN) 2>/dev/null || true
