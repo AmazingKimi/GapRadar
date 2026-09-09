@@ -81,7 +81,12 @@ def _card(candidate: GapCandidate, row: PriorityLead) -> str:
     zh_sector = SECTOR_ZH.get(sector, sector)
     cls = "review" if row.status == "REVIEW" else "watch"
     return (
-        '<article class="opp priority-card" data-priority-status="' + escape(row.status) + '">'
+        '<article class="opp priority-card" data-priority-status="' + escape(row.status) + '"'
+        ' data-evidence="' + escape(row.evidence_label) + '"'
+        ' data-reason="' + escape(row.reason) + '"'
+        ' data-next-check="' + escape(row.next_check) + '"'
+        ' data-score="' + str(row.priority_score) + '"'
+        ' data-url="' + escape(candidate.url) + '">'
         '<div class="oppArt">' + _art(candidate.change_type) + '</div>'
         '<span class="badge"><span class="lang-zh">' + escape(zh_sector) + '</span><span class="lang-en">' + escape(sector) + '</span></span>'
         '<span class="badge status ' + cls + '"><span class="lang-zh">' + escape(_status_zh(row.status)) + '</span><span class="lang-en">' + escape(row.status.title()) + '</span></span>'
@@ -89,6 +94,7 @@ def _card(candidate: GapCandidate, row: PriorityLead) -> str:
         '<h3>' + escape(candidate.headline) + '</h3>'
         '<p class="news-intro"><span class="lang-zh">' + escape(_news_intro_zh(candidate)) + '</span><span class="lang-en">' + escape(_news_intro_en(candidate)) + '</span></p>'
         '</div>'
+        '<div class="card-cta"><span class="lang-zh">查看证据链</span><span class="lang-en">View evidence</span></div>'
         '<a class="arrow" href="' + escape(candidate.url) + '" target="_blank" rel="noopener noreferrer">→</a>'
         '</article>'
     )
