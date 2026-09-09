@@ -5,8 +5,8 @@
   "kept_candidates": 7,
   "rejection_reasons": {
     "speculative_or_proposed_regulation": 6,
-    "commercial_mandate_not_regulation": 9,
     "negated_mandate": 1,
+    "commercial_mandate_not_regulation": 9,
     "physical_shutdown_not_product_eol": 1,
     "rhetorical_or_completed_shutdown_context": 2
   }

@@ -11,14 +11,12 @@
   },
   {
     "candidate_id": "52f1eb44691af255",
-    "status": "tier1_verified",
+    "status": "unverified",
     "event_id": null,
-    "official_url": "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
-    "match_score": 10,
+    "official_url": null,
+    "match_score": 1,
     "reasons": [
-      "first_party_page",
-      "subject_overlap",
-      "hard_change_confirmed"
+      "date_proximity"
     ]
   },
   {

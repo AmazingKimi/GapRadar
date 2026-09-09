@@ -20,10 +20,10 @@
     "query": "\"Massachusetts Will Require New Data Centers to Use Clean Energy\" official",
     "candidate_urls": [
       "https://www.mass.gov/info-details/healey-driscoll-administration-statement-of-expectations-for-responsible-data-center-development-and-operations-in-massachusetts",
-      "https://www.mass.gov/doc/efsb-25-10-decision-opening/download",
+      "https://www.mass.gov/news/governor-healey-halts-data-center-tax-incentive-and-calls-for-strict-guardrails-to-protect-ratepayers-environment-public-health",
       "https://www.mass.gov/info-details/massachusetts-clean-energy-and-climate-plan-for-2025-and-2030",
-      "https://www.mass.gov/executive-orders/no-658-establishing-requirements-for-responsible-data-center-development-and-operations-in-massachusetts-to-protect-and-support-ratepayers-communities-and-the-environment",
-      "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval"
+      "https://www.mass.gov/doc/efsb-25-10-decision-opening/download",
+      "https://www.mass.gov/executive-orders/no-658-establishing-requirements-for-responsible-data-center-development-and-operations-in-massachusetts-to-protect-and-support-ratepayers-communities-and-the-environment"
     ],
     "candidate_hosts": [
       "www.mass.gov",
@@ -47,10 +47,12 @@
     "status": "first_party_candidates",
     "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
     "candidate_urls": [
-      "https://heavyindustries.gov.in/sites/default/files/2026-07/lsauq_452.pdf"
+      "https://heavyindustries.gov.in/sites/default/files/2026-07/lsauq_452.pdf",
+      "https://pib.gov.in/PressReleasePage.aspx?PRID=2287127&reg=3&lang=1"
     ],
     "candidate_hosts": [
-      "heavyindustries.gov.in"
+      "heavyindustries.gov.in",
+      "pib.gov.in"
     ],
     "search_coverage": "adequate",
     "errors": [],
