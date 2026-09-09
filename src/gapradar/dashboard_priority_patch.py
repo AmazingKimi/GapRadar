@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-import json
 import re
 from html import escape
 from pathlib import Path
-from urllib.parse import urlparse
 
-from .priority import PriorityLead, load_priority_leads
-from .worlddeep import load_assessments
+from .priority import PriorityLead, _publisher, load_priority_leads
 from .worldscan import GapCandidate, load_candidates
 
 SECTOR_ZH = {
@@ -21,12 +18,14 @@ SECTOR_ZH = {
     "Frontier": "太空 / 前沿",
 }
 
+IMPACT_ZH = {
+    "shutdown_eol": "迁移、替代产品和数据转移需求",
+    "price_shock": "价格敏感用户的替换、降本和切换需求",
+    "api_terms_change": "兼容、集成改造和依赖替换需求",
+    "regulatory_shift": "合规、检测、报告和实施服务需求",
+}
+
 GRID_RE = re.compile(r'(<div class="opps">).*?(</div></section><section class="section" id="feed">)', re.S)
-STATS_RE = re.compile(r'(<div class="stats">.*?<div><b>)(\d+)(</b><span>[^<]*</span></div></div>)', re.S)
-
-
-def _host(url: str | None) -> str:
-    return (urlparse(url or "").hostname or "").removeprefix("www.")
 
 
 def _art(kind: str) -> str:
@@ -40,14 +39,19 @@ def _art(kind: str) -> str:
 
 
 def _zh_reason(candidate: GapCandidate, row: PriorityLead) -> str:
-    signal = (candidate.matched_signal or candidate.change_type).strip().rstrip(".")[:72]
+    publisher = _publisher(candidate)
+    signal = (candidate.matched_signal or candidate.change_type).strip().rstrip(".")[:58]
+    impact = IMPACT_ZH.get(candidate.change_type, "新的商业需求")
+    headline = candidate.headline.strip().rstrip(".")
     if row.evidence_state == "tier1_verified":
         host = row.evidence_label.split("·", 1)[-1].strip()
-        return f"{host} 已完成 Tier-1 一手确认。当前优先验证这次变化是否真正释放新需求，以及现有供给是否足够覆盖。"
+        # The English rationale carries exact supply counts; keep the Chinese card
+        # concise but tied to this exact event and the verified host.
+        return f"{host} 已确认“{headline}”背后的变化。当前值得优先查的是：这是否真的释放{impact}，以及现有供给是否已经覆盖。"
     if row.evidence_state == "official_candidate":
         host = row.evidence_label.split("·", 1)[-1].strip()
-        return f"已找到 {host} 的官方候选页面，但尚未确认标题中的具体主张；因出现明确“{signal}”信号，列入优先调查。"
-    return f"新闻中出现明确“{signal}”结构变化信号，但尚未找到可接受的一手来源；先列为优先调查，不视为已验证机会。"
+        return f"{publisher} 报道“{headline}”。已在 {host} 找到相关官方页面，但它还没确认“{signal}”这个具体主张；若确认，重点看{impact}。"
+    return f"{publisher} 报道“{headline}”，命中明确的“{signal}”变化信号；目前还没有可接受的一手确认。若属实，重点调查{impact}。"
 
 
 def _status_zh(status: str) -> str:
@@ -62,16 +66,13 @@ def _card(candidate: GapCandidate, row: PriorityLead) -> str:
     sector = candidate.sector or "Other"
     zh_sector = SECTOR_ZH.get(sector, sector)
     cls = "review" if row.status == "REVIEW" else "watch"
-    title = escape(candidate.headline)
-    en_reason = escape(row.reason)
-    zh_reason = escape(_zh_reason(candidate, row))
     return (
         '<article class="opp priority-card" data-priority-status="' + escape(row.status) + '">'
         '<div class="oppArt">' + _art(candidate.change_type) + '</div>'
         '<span class="badge"><span class="lang-zh">' + escape(zh_sector) + '</span><span class="lang-en">' + escape(sector) + '</span></span>'
         '<span class="badge status ' + cls + '"><span class="lang-zh">' + escape(_status_zh(row.status)) + '</span><span class="lang-en">' + escape(row.status.title()) + '</span></span>'
-        '<h3>' + title + '</h3>'
-        '<p><span class="lang-zh">' + zh_reason + '</span><span class="lang-en">' + en_reason + '</span></p>'
+        '<h3>' + escape(candidate.headline) + '</h3>'
+        '<p><span class="lang-zh">' + escape(_zh_reason(candidate, row)) + '</span><span class="lang-en">' + escape(row.reason) + '</span></p>'
         '<div class="bottommeta"><span class="lang-zh">' + escape(_evidence_zh(row.evidence_state)) + '</span><span class="lang-en">' + escape(row.evidence_label) + '</span></div>'
         '<a class="arrow" href="' + escape(candidate.url) + '" target="_blank" rel="noopener noreferrer">→</a>'
         '</article>'
@@ -102,8 +103,6 @@ def patch(
 
     html, count = GRID_RE.subn(r'\1' + cards + r'\2', html, count=1)
 
-    # The fourth overview stat is now a research-attention recommendation count,
-    # not a claim that all of these are verified market gaps.
     priority_count = sum(row.status in {"REVIEW", "INVESTIGATE"} for row in priority)
     stats = list(re.finditer(r'<div><b>\d+</b><span>[^<]*</span></div>', html))
     if len(stats) >= 4:
