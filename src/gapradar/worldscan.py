@@ -21,7 +21,8 @@ CHANGE_PATTERNS: dict[str, tuple[str, ...]] = {
     ),
     "price_shock": (
         r"\bprice increase\b", r"\bprice hike\b", r"\braises? prices?\b", r"\bpricing changes?\b",
-        r"\bprices? (?:are )?going up\b", r"\bfree tier\b.{0,70}\bend", r"\bcharging for\b", r"\bsubscription price\b",
+        r"\bprices? (?:are )?going up\b", r"\bfree tier\b.{0,70}\b(?:end|ending|remove|removed|cut|limit)",
+        r"\bcharging for\b", r"\bsubscription price\b",
     ),
     "api_terms_change": (
         r"\bapi\b.{0,80}\bdeprecat", r"\bapi\b.{0,80}\bpricing\b", r"\bapi access\b.{0,80}\bchange",
@@ -29,8 +30,8 @@ CHANGE_PATTERNS: dict[str, tuple[str, ...]] = {
         r"\brate limits?\b.{0,50}\bchange", r"\bdeprecat(?:e|ed|ing|ion)\b.{0,80}\bapi\b",
     ),
     "regulatory_shift": (
-        r"\bnew regulation\b", r"\bnew rules?\b", r"\bcompliance deadline\b",
-        r"\bmandat(?:e|ed|ory)\b", r"\blaw takes effect\b", r"\bregulator\b.{0,80}\brequir",
+        r"\bnew regulation\b", r"\bcompliance deadline\b", r"\bmandat(?:e|ed|ory)\b",
+        r"\blaw takes effect\b", r"\bregulator\b.{0,80}\brequir", r"\bwill require\b.{0,120}\b(data|software|ai|cyber|platform)",
     ),
 }
 
@@ -81,6 +82,28 @@ def classify_change(text: str) -> tuple[str, str] | None:
             if match:
                 return change_type, _clean(match.group(0))[:120]
     return None
+
+
+def _forced_gate(change_type: str, text: str) -> bool:
+    t = text.lower()
+    if change_type == "shutdown_eol":
+        return bool(re.search(r"\b(shut(?:ting)? down|shutdown|sunset|discontinu|retir|end[- ]of[- ]life|end(?:ing)? support|closing|goes away)\b", t))
+    if change_type == "price_shock":
+        return bool(
+            re.search(r"\b(price|pricing|fee|subscription|cost)\b", t)
+            and re.search(r"\b(increase|hike|raise|raised|rising|change|changes|higher|up|charge|charging)\b", t)
+        ) or bool(re.search(r"\bfree tier\b.{0,80}\b(end|ending|remove|removed|cut|limit|limited)\b", t))
+    if change_type == "api_terms_change":
+        return bool(
+            re.search(r"\b(api|developer|platform)\b", t)
+            and re.search(r"\b(deprecat|terms|policy|rate limit|pricing|license|licensing|access change|restriction)\b", t)
+        )
+    if change_type == "regulatory_shift":
+        return bool(
+            re.search(r"\b(regulation|regulator|law|compliance|mandate|mandatory|require|required|requiring|government|policy)\b", t)
+            and TECH_TERMS.search(t)
+        )
+    return False
 
 
 def _gap_hypothesis(change_type: str) -> tuple[str, str, str]:
@@ -159,8 +182,8 @@ def scan_world(
             classified = classify_change(text)
             if classified:
                 change_type, matched_signal = classified
-            elif forced_type:
-                change_type, matched_signal = forced_type, "query-matched structural change"
+            elif forced_type and _forced_gate(forced_type, text):
+                change_type, matched_signal = forced_type, "query-filtered structural change"
             else:
                 continue
             if not prefiltered and not TECH_TERMS.search(text):
@@ -183,7 +206,7 @@ def scan_world(
                 validation_status=status,
                 validation_summary=(
                     f"GapRadar found this {change_type.replace('_', ' ')} candidate in {name}. "
-                    + ("The feed itself is a targeted structural-change search, so this remains a discovery lead until a first-party source or independent confirmation is attached. " if status == "NEWS SIGNAL" else "An explicit structural-change phrase was present in the item. ")
+                    + ("The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. " if status == "NEWS SIGNAL" else "An explicit structural-change phrase was present in the item. ")
                     + "It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
                 ),
             )
