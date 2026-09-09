@@ -19,11 +19,11 @@ DIGITAL_TARGET = re.compile(
     re.I,
 )
 PHYSICAL_SHUTDOWN = re.compile(
-    r"\b(power|power station|plant|factory|mine|refinery|reactor|nuclear plant|airport|road|school|store|restaurant|facility|operations?)\b.{0,40}\bshutdown\b|\bshutdown\b.{0,40}\b(power|plant|factory|mine|refinery|reactor|nuclear|facility|operations?)\b",
+    r"\b(power|power station|plant|factory|mine|refinery|reactor|nuclear plant|airport|road|school|store|restaurant|facility|operations?|station|stations|rail|line)\b.{0,60}\bshutdown\b|\bshutdown\b.{0,60}\b(power|plant|factory|mine|refinery|reactor|nuclear|facility|operations?|station|stations|rail|line)\b",
     re.I,
 )
 RHETORICAL_SHUTDOWN = re.compile(
-    r"\bfrom\s+(?:the\s+)?shutdown\s+to\b|\bafter\s+(?:the\s+)?shutdown\b.{0,80}\b(reopen|restart|reviv|return|showcase|ipo)\b",
+    r"\bfrom\s+(?:the\s+)?shutdown\s+to\b|\bafter\s+(?:the\s+)?shutdown\b.{0,80}\b(reopen|restart|reviv|return|showcase|ipo)\b|\b(reopen|reopens?|reopened|restart|restarts?|resumes?)\b.{0,100}\bshutdown\b",
     re.I,
 )
 NEGATED_MANDATE = re.compile(
@@ -34,17 +34,14 @@ BUSINESS_MANDATE = re.compile(
     r"\b(wins?|won|selected|awarded|secures?|lands?|gets?)\b.{0,80}\bmandate\b|\b(investment|asset management|fund|pension|portfolio)\s+mandate\b|\bmandate\s+from\b.{0,80}\b(fund|pension|client|investor)\b",
     re.I,
 )
-# World Scan is a discovery layer, but the Tier-1 pipeline should not spend most of
-# its capacity trying to verify stories that explicitly say a rule is only proposed,
-# promised, sought, challenged, or merely possible. Those belong in a future-policy
-# watchlist, not the hard structural-change funnel.
 SPECULATIVE_REGULATION = re.compile(
     r"\b(may|might|could|would)\s+(?:soon\s+)?(?:require|mandate|ban|force|introduce)\b"
     r"|\b(promises?|pledges?|proposes?|proposal|seeks?|calls? for|urges?|pushes? for)\b.{0,80}\b(rule|rules|regulation|mandate|requirement|ban)\b"
     r"|\b(bid|attempt|plan)\s+to\s+(?:revoke|change|introduce|impose)\b"
     r"|\bmandate\s+(?:looms?|possible|proposed|planned)\b"
     r"|\bneared\b.{0,50}\bmandate\b.{0,50}\b(fell short|missed)\b"
-    r"|\bchallenges?\b.{0,80}\b(price increase|rule|regulation|mandate)\b",
+    r"|\bchallenges?\b.{0,80}\b(price increase|rule|regulation|mandate)\b"
+    r"|\b(trade war|trade tactics?)\b.{0,100}\bmandate\b",
     re.I,
 )
 TOKEN_STOP = {
@@ -67,7 +64,7 @@ def rejection_reason(candidate: GapCandidate) -> str | None:
 
     if candidate.change_type == "shutdown_eol":
         if RHETORICAL_SHUTDOWN.search(text):
-            return "rhetorical_shutdown_context"
+            return "rhetorical_or_completed_shutdown_context"
         if PHYSICAL_SHUTDOWN.search(text) and not DIGITAL_TARGET.search(text):
             return "physical_shutdown_not_product_eol"
 
@@ -117,7 +114,6 @@ def _event_similarity(left: GapCandidate, right: GapCandidate) -> float:
 
 
 def _prefer(left: GapCandidate, right: GapCandidate) -> GapCandidate:
-    """Keep the richer/newer representation when two rows describe one event."""
     left_score = (len(left.summary or ""), left.published_at or "", len(left.headline))
     right_score = (len(right.summary or ""), right.published_at or "", len(right.headline))
     return left if left_score >= right_score else right
@@ -159,26 +155,14 @@ def save_report(path: Path, report: WorldQualityReport) -> None:
     path.write_text(json.dumps(asdict(report), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def run(
-    path: Path = Path("data/world-gaps.json"),
-    report_path: Path = Path("data/world-quality-report.json"),
-) -> tuple[int, int, int]:
+def run(path: Path = Path("data/world-gaps.json"), report_path: Path = Path("data/world-quality-report.json")) -> tuple[int, int, int]:
     candidates = load_candidates(path)
     kept, rejected, collapsed = refine_candidates(candidates)
     save_candidates(path, kept)
     reasons: dict[str, int] = {}
     for _, reason in rejected:
         reasons[reason] = reasons.get(reason, 0) + 1
-    save_report(
-        report_path,
-        WorldQualityReport(
-            input_candidates=len(candidates),
-            context_rejected=len(rejected),
-            duplicate_collapsed=collapsed,
-            kept_candidates=len(kept),
-            rejection_reasons=reasons,
-        ),
-    )
+    save_report(report_path, WorldQualityReport(len(candidates), len(rejected), collapsed, len(kept), reasons))
     print(
         f"World quality guard: {len(candidates)} input → {len(kept)} kept; "
         f"rejected {len(rejected)} contextual false positive(s), collapsed {collapsed} duplicate event(s)."
