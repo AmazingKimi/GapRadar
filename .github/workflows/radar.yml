@@ -24,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PYTHONPATH: src
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,7 +35,7 @@ jobs:
           cache: pip
       - run: python -m pip install -e .
       - name: Scan world news and industry changes
-        run: gapradar world-scan
+        run: python -m gapradar.cli world-scan
       - name: Deep-dive world leads into supply and gap assessments
         run: |
           python - <<'PY'
@@ -48,17 +49,31 @@ jobs:
           print(f'Deep-dived {len(assessments)} world lead(s).')
           PY
       - name: Probe official sources
-        run: gapradar doctor
+        run: python -m gapradar.cli doctor
       - name: Scan live first-party sources
-        run: gapradar scan
+        run: python -m gapradar.cli scan
       - name: Collect supporting reaction evidence
-        run: gapradar validate-demand
+        run: python -m gapradar.cli validate-demand
       - name: Map replacement supply independently of reaction
-        run: gapradar validate-supply
+        run: python -m gapradar.cli validate-supply
       - name: Build verified-event dossiers
-        run: gapradar build-dossiers
-      - name: Export live opportunity board
-        run: gapradar export
+        run: python -m gapradar.cli build-dossiers
+      - name: Export live opportunity board from current source
+        run: |
+          python - <<'PY'
+          import gapradar.render
+          print('render module:', gapradar.render.__file__)
+          PY
+          python -m gapradar.cli export
+      - name: Verify new dashboard shell
+        run: |
+          grep -q '从世界的变化' docs/index.html
+          grep -q 'class="sidebar"' docs/index.html
+          grep -q '行业雷达' docs/index.html
+          if grep -q "Today's Market Gaps" docs/index.html; then
+            echo 'Old dashboard detected after export.'
+            exit 1
+          fi
       - name: Commit radar state
         run: |
           if git diff --quiet -- data/world-gaps.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json docs/index.html docs/dossiers; then
