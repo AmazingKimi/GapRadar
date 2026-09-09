@@ -50,7 +50,7 @@ def _phrase_tokens(value: str) -> list[str]:
         "will", "new", "the", "and", "for", "with", "from", "into", "that", "this", "use", "using",
         "require", "requires", "required", "must", "mandatory", "mandate", "rule", "rules", "regulation",
         "massachusetts", "india", "united", "kingdom", "britain", "british", "european", "union", "australia",
-        "canada", "singapore",
+        "canada", "singapore", "now",
     }
     return [
         token for token in re.findall(r"[a-z0-9][a-z0-9+-]{2,}", value.lower())
@@ -58,23 +58,32 @@ def _phrase_tokens(value: str) -> list[str]:
     ]
 
 
-def _phrase_present(tokens: list[str], text: str) -> bool:
-    if not tokens:
-        return True
-    normalized = " ".join(re.findall(r"[a-z0-9+]+", text.lower()))
-    if len(tokens) == 1:
-        return bool(re.search(rf"\b{re.escape(tokens[0])}\b", normalized))
-    phrase = r"\b" + r"\s+".join(re.escape(token) for token in tokens) + r"\b"
-    return bool(re.search(phrase, normalized))
+def _normalized(value: str) -> str:
+    return " ".join(re.findall(r"[a-z0-9+]+", value.lower()))
+
+
+def _phrase_regex(tokens: list[str]) -> str:
+    return r"\b" + r"\s+".join(re.escape(token) for token in tokens) + r"\b"
+
+
+def _windows(text: str, needle_pattern: str, radius: int = 320) -> list[str]:
+    normalized = _normalized(text)
+    result: list[str] = []
+    for match in re.finditer(needle_pattern, normalized):
+        result.append(normalized[max(0, match.start() - radius): min(len(normalized), match.end() + radius)])
+    return result
+
+
+def _hard_regulatory_language(text: str) -> bool:
+    return bool(re.search(r"\b(will require|requires?|required|must|mandatory|shall|compliance deadline|takes effect|effective from)\b", text, re.I))
 
 
 def _claim_target_alignment(candidate: GapCandidate, text: str) -> bool:
-    """Require an official page to confirm the specific object of a regulatory claim.
+    """Require the claimed target and mandatory action to co-occur locally.
 
-    Generic regulator pages often contain broad words such as `require`, `clean`, and
-    `energy`. A headline like `will require data centers to use clean energy` therefore
-    cannot be verified by loose token overlap. Both the regulated target phrase and the
-    required outcome phrase must be present on the first-party page.
+    A long government page can contain `data centers`, `clean energy`, and `required`
+    in unrelated sections. Tier-1 verification therefore uses a local evidence window,
+    not page-wide token soup.
     """
     if candidate.change_type != "regulatory_shift":
         return True
@@ -83,14 +92,25 @@ def _claim_target_alignment(candidate: GapCandidate, text: str) -> bool:
     if match:
         target = _phrase_tokens(match.group(1))
         outcome = _phrase_tokens(match.group(2))
-        return _phrase_present(target, text) and _phrase_present(outcome, text)
+        if not target or not outcome:
+            return False
+        target_pattern = _phrase_regex(target)
+        outcome_pattern = _phrase_regex(outcome)
+        for window in _windows(text, target_pattern, radius=420):
+            if re.search(outcome_pattern, window) and _hard_regulatory_language(window):
+                return True
+        return False
 
     distinctive = _phrase_tokens(candidate.headline)
-    if not distinctive:
-        return True
-    lowered = text.lower()
-    hits = sum(bool(re.search(rf"\b{re.escape(token)}\b", lowered)) for token in distinctive)
-    return hits >= min(2, len(distinctive))
+    if len(distinctive) < 2:
+        return False
+    normalized = _normalized(text)
+    for token in distinctive:
+        for window in _windows(normalized, rf"\b{re.escape(token)}\b", radius=280):
+            hits = sum(bool(re.search(rf"\b{re.escape(other)}\b", window)) for other in distinctive)
+            if hits >= min(2, len(distinctive)) and _hard_regulatory_language(window):
+                return True
+    return False
 
 
 def _explicit_change_confirmation(candidate: GapCandidate, text: str) -> bool:
@@ -104,11 +124,7 @@ def _explicit_change_confirmation(candidate: GapCandidate, text: str) -> bool:
         )
         return bool(delta)
     if candidate.change_type == "regulatory_shift":
-        hard = re.search(
-            r"\b(will require|requires?|required|must\b|mandatory|mandate|shall\b|takes? effect|effective from|compliance deadline|new rule|new rules|regulation)\b",
-            t,
-        )
-        return bool(hard)
+        return _hard_regulatory_language(t)
     return _forced_gate(candidate.change_type, t)
 
 
@@ -131,26 +147,16 @@ def verify_official_lead(candidate: GapCandidate, lead: OfficialSourceLead, *, t
             text = f"{title} {body}"
             overlap = _overlap(candidate, text)
             host = (urlparse(final_url).hostname or "").lower()
-            min_overlap = 2
-            if overlap < min_overlap:
-                errors.append(f"subject overlap too weak for {host}: {overlap} < {min_overlap}")
+            if overlap < 2:
+                errors.append(f"subject overlap too weak for {host}: {overlap} < 2")
                 continue
             if not _claim_target_alignment(candidate, text):
-                errors.append(f"first-party page did not align with the claimed target/outcome: {host}")
+                errors.append(f"first-party page did not locally confirm the claimed target/outcome: {host}")
                 continue
             if not _explicit_change_confirmation(candidate, text):
                 errors.append(f"first-party page did not explicitly confirm {candidate.change_type}: {host}")
                 continue
-            return WorldOfficialFact(
-                candidate_id=candidate.id,
-                status="tier1_verified",
-                official_url=final_url,
-                official_host=host,
-                official_title=title or candidate.headline,
-                excerpt=body[:1200],
-                subject_overlap=overlap,
-                errors=errors,
-            )
+            return WorldOfficialFact(candidate.id, "tier1_verified", final_url, host, title or candidate.headline, body[:1200], overlap, errors)
         except Exception as exc:
             errors.append(f"{url}: {type(exc).__name__}: {exc}")
 
