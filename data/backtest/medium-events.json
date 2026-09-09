@@ -1,0 +1,37 @@
+[
+  {
+    "id": "shopify-script-tags-2026",
+    "cohort": "medium",
+    "vendor": "Shopify",
+    "product": "Script tags",
+    "event_date": "2026-08-24",
+    "replay_as_of": "2026-09-09",
+    "event_type": "shutdown_eol",
+    "official_url": "https://shopify.dev/changelog/online-store-script-tags-deprecation",
+    "expected_detect": true,
+    "title_hint": "Script tags are deprecated and will stop running on March 1, 2027",
+    "excerpt_hint": "Starting October 1, 2026, scriptTagCreate and scriptTagUpdate mutations will return an error. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Apps using script tags need to replace them before then.",
+    "ground_truth_demand": "yes",
+    "ground_truth_supply": "unknown",
+    "label_confidence": "medium",
+    "label_basis": "Public Shopify Community discussions explicitly ask how to replace deprecated ScriptTags and describe migration constraints.",
+    "retracted": false
+  },
+  {
+    "id": "shopify-theme-cli-password-flow-2026",
+    "cohort": "medium",
+    "vendor": "Shopify",
+    "product": "Shopify Theme CLI",
+    "event_date": "2026-08-27",
+    "replay_as_of": "2026-09-09",
+    "event_type": "shutdown_eol",
+    "official_url": "https://shopify.dev/changelog/password-protected-shop-dev-flows-on-shopify-theme-cli-v3-83-x-and-older-to-be-deprecated",
+    "expected_detect": true,
+    "title_hint": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
+    "excerpt_hint": "Starting October 1, 2026, Theme commands on password protected storefronts require Shopify CLI 3.84.0 or later. Versions 3.83.x and earlier will no longer be supported for these development workflows.",
+    "ground_truth_demand": "unknown",
+    "ground_truth_supply": "unknown",
+    "label_confidence": "low",
+    "retracted": false
+  }
+]
