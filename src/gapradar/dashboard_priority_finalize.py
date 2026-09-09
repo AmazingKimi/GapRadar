@@ -2,13 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-MARKER = "gapradar-priority-finalize-v2"
+MARKER = "gapradar-priority-finalize-v3"
 
 STYLE = r'''
-/* gapradar-priority-finalize-v2 */
+/* gapradar-priority-finalize-v3 */
 /* gapradar-priority-finalize-v1 compatibility marker */
-.priority-card h3{margin:62px 0 8px!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important}
-.priority-card p{margin:0!important;max-width:92%!important;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden!important;line-height:1.42!important}
+.priority-card h3{margin:88px 0 0!important;max-width:92%!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important}
 .priority-card .bottommeta{max-width:72%!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
 .priority-card[data-priority-status="INVESTIGATE"] .status{background:#5b4420!important;border-color:#a77a2d!important;color:#ffe0a2!important}
 .priority-card[data-priority-status="REVIEW"] .status{background:#7b432f!important;border-color:#b96e4f!important;color:#ffd8c7!important}
@@ -20,21 +19,15 @@ def patch(path: Path = Path("docs/index.html")) -> None:
 
     # Priority cards are rendered from evidence-aware priority-leads.json. The
     # old browser runtime used to manufacture cards from Global Feed whenever
-    # fewer than three cards existed. That made the dashboard look productive
-    # even when the ranking system had no recommendation. Never synthesize
-    # filler recommendations in the browser.
+    # fewer than three cards existed. Never synthesize filler recommendations.
     html = html.replace("ensureOpportunityCards();", "/* priority cards are server-rendered; no filler recommendations */")
 
-    # Runtime language switching used to overwrite evidence metadata with the
-    # generic "Business market / Watch" string. Keep evidence-specific copy.
+    # Runtime language switching must not overwrite evidence metadata.
     html = html.replace(
         "$$('.bottommeta:not(.discovery-slot .bottommeta)').forEach",
         "$$('.bottommeta').filter(el=>!el.closest('.discovery-slot,.priority-card')).forEach",
     )
 
-    # The product's daily useful output is a research queue. REVIEW remains a
-    # stricter downstream market-gap verdict and must not be conflated with the
-    # cards users should inspect today.
     replacements = {
         "今日推荐机会": "今日优先线索",
         "基于最新变化，我们认为以下机会最值得关注。": "从今天的全球变化中，以下线索最值得你现在投入调查时间；只有 REVIEW 才代表市场缺口证据链完成。",
@@ -59,9 +52,9 @@ def patch(path: Path = Path("docs/index.html")) -> None:
         html = html.replace(old, new)
 
     # Remove older finalize styles when patching an already-rendered page, then
-    # append the current marker once. Preserve the workflow's v1 grep through
-    # the compatibility marker inside STYLE.
+    # append the current marker once.
     html = html.replace("/* gapradar-priority-finalize-v1 */", "/* gapradar-priority-finalize-legacy */")
+    html = html.replace("/* gapradar-priority-finalize-v2 */", "/* gapradar-priority-finalize-legacy-v2 */")
     if MARKER not in html:
         html = html.replace("</head>", f"<style>{STYLE}</style></head>", 1)
 
@@ -70,4 +63,4 @@ def patch(path: Path = Path("docs/index.html")) -> None:
 
 if __name__ == "__main__":
     patch()
-    print("Dashboard priority finalize v2: research queue semantics enforced; filler cards disabled.")
+    print("Dashboard priority finalize v3: description-free priority cards enforced.")
