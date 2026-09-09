@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from gapradar.dashboard_runtime import SCRIPT, STYLE, patch_dashboard
+from gapradar.strip_legacy_runtime import strip
 
 
 def test_runtime_covers_complete_bilingual_controls() -> None:
@@ -27,14 +28,15 @@ def test_runtime_has_mobile_breakpoints() -> None:
     assert "@media(max-width:420px)" in STYLE
 
 
-def test_patch_removes_legacy_controller_and_injects_single_runtime(tmp_path: Path) -> None:
+def test_export_sequence_removes_legacy_controller_and_injects_single_runtime(tmp_path: Path) -> None:
     html = tmp_path / "index.html"
     html.write_text(
-        '<!doctype html><html><body><button id="langToggle"></button>'
-        '<script>(function(){var r=document.documentElement,l=document.getElementById("langToggle");})();</script>'
+        '<!doctype html><html><body><button id="langToggle"></button><button id="themeToggle"></button>'
+        '<script>(function(){var r=document.documentElement,l=document.getElementById("langToggle"),t=document.getElementById("themeToggle");l.onclick=function(){};t.onclick=function(){};})();</script>'
         '</body></html>',
         encoding="utf-8",
     )
+    strip(html)
     patch_dashboard(html)
     text = html.read_text(encoding="utf-8")
     assert "gapradar-runtime-v5" in text
