@@ -7,7 +7,7 @@
     "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
     "summary": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
     "event_date": "2026-08-27T16:00:00Z",
-    "detected_at": "2026-09-09T04:07:48.974798Z",
+    "detected_at": "2026-09-09T04:08:58.429851Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -143,14 +143,14 @@
         "engagement": 1000
       }
     ],
-    "reaction_checked_at": "2026-09-09T04:07:50.144165Z",
+    "reaction_checked_at": "2026-09-09T04:08:59.825529Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
     ],
     "reaction_candidate_count": 0,
     "demand_status": "no_signal",
-    "supply_checked_at": "2026-09-09T04:07:52.009455Z",
+    "supply_checked_at": "2026-09-09T04:09:02.466600Z",
     "supply_sources_checked": [
       "github_repositories",
       "npm"
@@ -170,7 +170,7 @@
     "headline": "Script tags are deprecated and will stop running on March 1, 2027",
     "summary": "Starting October 1, 2026, the scriptTagCreate and scriptTagUpdate mutations will return an user error, and the ScriptTag REST Admin API resource will reject POST and PUT . The deprecation applies to all API versions, including older ones, so pinning won't defer it. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Storefronts are the last place script tags still run, since they already stopped working on the Order status page . If your app uses a script tag to load JavaScript onto a store, then you need to replace it before then. What's changing A script tag loads JavaScript on a storefront without any changes to theme code. After March 1, 2027, Shopify won't inject",
     "event_date": "2026-08-24T16:00:00Z",
-    "detected_at": "2026-09-09T04:07:48.975356Z",
+    "detected_at": "2026-09-09T04:08:58.430257Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -187,87 +187,21 @@
       }
     ],
     "reaction_evidence": [],
-    "supply_evidence": [
-      {
-        "tier": "tier_3_supply",
-        "title": "docusaurus-plugin-script-tags",
-        "url": "https://www.npmjs.com/package/docusaurus-plugin-script-tags",
-        "publisher": "npm",
-        "published_at": "2021-09-26T00:19:14.777000Z",
-        "excerpt": "Docusaurus Plugin for injecting script tags",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "@mapbox/eslint-plugin-script-tags",
-        "url": "https://www.npmjs.com/package/@mapbox/eslint-plugin-script-tags",
-        "publisher": "npm",
-        "published_at": "2021-04-01T13:58:56.983000Z",
-        "excerpt": "Lint the content of <script> tags in arbitrary text",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "script-tags",
-        "url": "https://www.npmjs.com/package/script-tags",
-        "publisher": "npm",
-        "published_at": "2016-01-05T17:45:58.044000Z",
-        "excerpt": "Parse HTML script tags into JSON.",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "grunt-script-link-tags",
-        "url": "https://www.npmjs.com/package/grunt-script-link-tags",
-        "publisher": "npm",
-        "published_at": "2014-10-17T14:06:34.181000Z",
-        "excerpt": "Automatically generate script tags and link tags for your HTML",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "webpack-script-tags-plugin",
-        "url": "https://www.npmjs.com/package/webpack-script-tags-plugin",
-        "publisher": "npm",
-        "published_at": "2020-07-13T11:45:18.979000Z",
-        "excerpt": "A webpack plugin to add script tags to multiple .html/.jsp files",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      }
-    ],
-    "reaction_checked_at": "2026-09-09T04:07:51.380036Z",
+    "supply_evidence": [],
+    "reaction_checked_at": "2026-09-09T04:09:01.596981Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
     ],
     "reaction_candidate_count": 40,
     "demand_status": "no_signal",
-    "supply_checked_at": "2026-09-09T04:07:52.849954Z",
+    "supply_checked_at": "2026-09-09T04:09:03.929523Z",
     "supply_sources_checked": [
       "github_repositories",
       "npm"
     ],
     "supply_candidate_count": 60,
-    "supply_status": "served",
+    "supply_status": "no_supply",
     "gap_status": "no_demand",
     "confidence": "weak",
     "status": "verified",
