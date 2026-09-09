@@ -124,16 +124,6 @@ def patch(
 
     html, count = GRID_RE.subn(r'\1' + cards + r'\2', html, count=1)
 
-    priority_count = sum(row.status in {"REVIEW", "INVESTIGATE"} for row in priority)
-    stats = list(re.finditer(r'<div><b>\d+</b><span>[^<]*</span></div>', html))
-    if len(stats) >= 4:
-        target = stats[3]
-        old = target.group(0)
-        label = '<span><span class="lang-zh">优先调查线索</span><span class="lang-en">Priority leads</span></span>'
-        new = re.sub(r'<b>\d+</b>', f'<b>{priority_count}</b>', old)
-        new = re.sub(r'<span>[^<]*</span>', label, new, count=1)
-        html = html[:target.start()] + new + html[target.end():]
-
     path.write_text(html, encoding="utf-8")
     return count
 

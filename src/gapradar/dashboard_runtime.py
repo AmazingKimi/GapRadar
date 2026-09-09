@@ -37,6 +37,18 @@ html[data-theme="light"] body{background:#eef5fb!important;color:#0d1b28!importa
 .drawer .d-next{font-size:13px;line-height:1.6;color:var(--muted);padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel2)}
 .drawer .d-cta{display:inline-block;margin-top:22px;padding:10px 18px;border-radius:999px;background:var(--text);color:var(--bg);text-decoration:none;font-size:13px;font-weight:700}
 html[data-theme="light"] .drawer-mask{background:rgba(20,40,60,.45)}
+.cadence-note{margin-top:12px;font-size:11px;color:var(--muted)}
+.cadence-note b{color:var(--text)}
+.cadence-note b.ok{color:var(--green)}
+.hamburger{display:none;position:fixed;top:12px;left:12px;z-index:102;width:42px;height:42px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);cursor:pointer;font-size:20px;line-height:1}
+@media(max-width:860px){
+ .sidebar{position:fixed;top:0;left:0;bottom:0;width:260px;transform:translateX(-100%);transition:transform .26s ease;z-index:103!important}
+ .sidebar.open{transform:translateX(0)}
+ .hamburger{display:grid;place-items:center}
+ .nav-mask{position:fixed;inset:0;background:rgba(2,8,16,.55);z-index:102;opacity:0;pointer-events:none;transition:opacity .22s}
+ .nav-mask.open{opacity:1;pointer-events:auto}
+ .content{padding-top:64px!important}
+}
 '''
 
 SCRIPT = r'''
@@ -45,8 +57,8 @@ SCRIPT = r'''
  const root=document.documentElement;
  const $=(s)=>document.querySelector(s), $$=(s)=>Array.from(document.querySelectorAll(s));
  const COPY={
-  zh:{hero1:'从世界的变化',hero2:'发现下一个机会',heroP:'我们持续扫描全球的政策、公司动态、技术进展和市场变化，帮你发现可能被忽视的市场缺口。',today:'查看今日机会　→',browse:'浏览行业雷达',changing:'全球正在发生变化',changingP:'我们为你持续监测，并寻找值得关注的机会。',sector:'行业雷达',sectorP:'哪些领域今天变化最活跃？',opp:'今日推荐机会',oppP:'基于最新变化，我们认为以下机会最值得关注。',feed:'全球重要变化',feedP:'今天发现的其他值得了解的变化。',allSector:'查看全部行业　→',allOpp:'查看全部机会　→',stats:['今日扫描资讯','关键变化事件','深入分析','值得关注机会'],filters:['全部','科技','能源','监管','消费'],footer:'每 6 小时自动扫描一次 · 推荐代表研究价值，不构成投资建议。',updated:'最后更新',next:'下次更新',market:'企业市场',watch:'持续观察',early:'早期机会',unverified:'待一手证据',lead:'发现线索',leadNote:'发现了结构性变化，但尚未通过 Tier-1 一手来源验证，因此暂不判定为市场机会。'},
-  en:{hero1:'See what is changing',hero2:'Find the next opportunity',heroP:'We continuously scan policy, company, technology and market shifts worldwide to uncover market gaps others may miss.',today:'View today’s opportunities　→',browse:'Browse sector radar',changing:'The world is changing',changingP:'We continuously monitor those changes and look for opportunities worth your attention.',sector:'Sector Radar',sectorP:'Which sectors are moving most today?',opp:'Today’s Opportunities',oppP:'The opportunities most worth watching based on the latest changes.',feed:'Important Global Changes',feedP:'Other changes worth knowing about today.',allSector:'View all sectors　→',allOpp:'View all opportunities　→',stats:['Items scanned today','Key change events','Deep analyses','Opportunities to watch'],filters:['All','Tech','Energy','Regulation','Consumer'],footer:'Automatic scan every 6 hours · Recommendations indicate research value, not investment advice.',updated:'Last updated',next:'Next update',market:'Business market',watch:'Watch',early:'Early opportunity',unverified:'Awaiting Tier-1',lead:'Discovery lead',leadNote:'A structural change was detected, but Tier-1 first-party evidence is not verified yet, so this is not promoted to a market opportunity.'}
+  zh:{hero1:'从世界的变化',hero2:'发现下一个机会',heroP:'我们持续扫描全球的政策、公司动态、技术进展和市场变化，帮你发现可能被忽视的市场缺口。',today:'查看今日机会　→',browse:'浏览行业雷达',changing:'全球正在发生变化',changingP:'我们为你持续监测，并寻找值得关注的机会。',sector:'行业雷达',sectorP:'哪些领域今天变化最活跃？',opp:'今日推荐机会',oppP:'基于最新变化，我们认为以下机会最值得关注。',feed:'全球重要变化',feedP:'今天发现的其他值得了解的变化。',allSector:'查看全部行业　→',allOpp:'查看全部机会　→',stats:['今日扫描资讯','关键变化事件','深入分析','已验证缺口'],filters:['全部','科技','能源','监管','消费'],footer:'每 6 小时自动扫描一次 · 推荐代表研究价值，不构成投资建议。',updated:'最后更新',next:'下次更新',market:'企业市场',watch:'持续观察',early:'早期机会',unverified:'待一手证据',lead:'发现线索',leadNote:'发现了结构性变化，但尚未通过 Tier-1 一手来源验证，因此暂不判定为市场机会。'},
+  en:{hero1:'See what is changing',hero2:'Find the next opportunity',heroP:'We continuously scan policy, company, technology and market shifts worldwide to uncover market gaps others may miss.',today:'View today’s opportunities　→',browse:'Browse sector radar',changing:'The world is changing',changingP:'We continuously monitor those changes and look for opportunities worth your attention.',sector:'Sector Radar',sectorP:'Which sectors are moving most today?',opp:'Today’s Opportunities',oppP:'The opportunities most worth watching based on the latest changes.',feed:'Important Global Changes',feedP:'Other changes worth knowing about today.',allSector:'View all sectors　→',allOpp:'View all opportunities　→',stats:['Items scanned today','Key change events','Deep analyses','Verified gaps'],filters:['All','Tech','Energy','Regulation','Consumer'],footer:'Automatic scan every 6 hours · Recommendations indicate research value, not investment advice.',updated:'Last updated',next:'Next update',market:'Business market',watch:'Watch',early:'Early opportunity',unverified:'Awaiting Tier-1',lead:'Discovery lead',leadNote:'A structural change was detected, but Tier-1 first-party evidence is not verified yet, so this is not promoted to a market opportunity.'}
  };
  function text(el,v){if(el&&v!=null)el.textContent=v}
  function esc(v){return String(v||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
@@ -119,6 +131,15 @@ SCRIPT = r'''
     var link=$('#dLink');link.setAttribute('href',card.getAttribute('data-url')||'#');
     dr.classList.add('open');mask.classList.add('open');
   }});
+  // Mobile hamburger menu
+  var bar=document.createElement('button');bar.className='hamburger';bar.setAttribute('aria-label','Menu');bar.textContent='☰';
+  var nm=document.createElement('div');nm.className='nav-mask';
+  document.body.appendChild(bar);document.body.appendChild(nm);
+  var side=$('.sidebar');
+  function closeNav(){if(side)side.classList.remove('open');nm.classList.remove('open')}
+  bar.onclick=function(){if(side.classList.contains('open')){closeNav()}else{side.classList.add('open');nm.classList.add('open')}};
+  nm.onclick=closeNav;
+  $$('.nav a').forEach(a=>a.addEventListener('click',closeNav));
  }
  root.dataset.theme=localStorage.getItem('gapradar-theme')==='light'?'light':'dark';ensureOpportunityCards();world();wire();applyLanguage(localStorage.getItem('gapradar-lang')==='en'?'en':'zh');applyTheme(root.dataset.theme);
 })();
