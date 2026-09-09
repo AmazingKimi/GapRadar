@@ -49,12 +49,12 @@ def _subject(candidate: GapCandidate) -> str:
 def _route(candidate: GapCandidate) -> tuple[str, tuple[str, ...], str]:
     text = f"{candidate.headline} {candidate.summary}".lower()
     if candidate.change_type == "api_terms_change" or re.search(r"\b(api|sdk|developer|cli|github|npm)\b", text):
-        return "developer", ("github_repositories", "npm"), "developer alternatives and migration tooling"
+        return "developer", ("github_repositories", "npm"), "developer alternatives migration tooling"
     if candidate.change_type == "regulatory_shift":
-        return "regulatory", ("web_search",), "compliance software reporting evidence workflow tools"
+        return "regulatory", ("web_search",), "compliance software reporting governance tools"
     if candidate.change_type == "shutdown_eol":
-        return "replacement", ("web_search",), "replacement products migration services alternatives"
-    return "commercial", ("web_search",), "lower cost substitutes competing products alternatives"
+        return "replacement", ("web_search",), "replacement products migration alternatives"
+    return "commercial", ("web_search",), "lower cost substitutes competitors alternatives"
 
 
 def _decode_ddg_url(value: str) -> str:
@@ -71,32 +71,76 @@ def _decode_ddg_url(value: str) -> str:
     return value
 
 
+def _clean_html(value: str) -> str:
+    return " ".join(re.sub(r"<[^>]+>", " ", unescape(value or "")).split())
+
+
+def _ddg_search(query: str, *, timeout: float) -> list[dict[str, str]]:
+    response = httpx.get(
+        "https://html.duckduckgo.com/html/",
+        params={"q": query},
+        headers={"User-Agent": "Mozilla/5.0 GapRadar/0.9"},
+        timeout=timeout,
+        follow_redirects=True,
+    )
+    response.raise_for_status()
+    links = re.findall(r'class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>', response.text, flags=re.I | re.S)
+    snippets = re.findall(r'class="result__snippet"[^>]*>(.*?)</(?:a|div)>', response.text, flags=re.I | re.S)
+    rows: list[dict[str, str]] = []
+    for i, (href, title_html) in enumerate(links[:20]):
+        url = _decode_ddg_url(href)
+        host = urlparse(url).netloc.lower()
+        if not url.startswith("http") or host in NOISE_HOSTS:
+            continue
+        rows.append({
+            "title": _clean_html(title_html)[:240],
+            "url": url,
+            "snippet": _clean_html(snippets[i] if i < len(snippets) else "")[:500],
+            "source": host or "web",
+        })
+    return rows
+
+
+def _bing_search(query: str, *, timeout: float) -> list[dict[str, str]]:
+    response = httpx.get(
+        "https://www.bing.com/search",
+        params={"q": query, "count": 20},
+        headers={"User-Agent": "Mozilla/5.0 GapRadar/0.9"},
+        timeout=timeout,
+        follow_redirects=True,
+    )
+    response.raise_for_status()
+    blocks = re.findall(r'<li class="b_algo".*?</li>', response.text, flags=re.I | re.S)
+    rows: list[dict[str, str]] = []
+    for block in blocks[:20]:
+        match = re.search(r'<h2>\s*<a[^>]*href="([^"]+)"[^>]*>(.*?)</a>', block, flags=re.I | re.S)
+        if not match:
+            continue
+        url, title_html = match.groups()
+        host = urlparse(url).netloc.lower()
+        if not url.startswith("http") or host in NOISE_HOSTS:
+            continue
+        snippet_match = re.search(r'<p[^>]*>(.*?)</p>', block, flags=re.I | re.S)
+        rows.append({
+            "title": _clean_html(title_html)[:240],
+            "url": url,
+            "snippet": _clean_html(snippet_match.group(1) if snippet_match else "")[:500],
+            "source": host or "web",
+        })
+    return rows
+
+
 def _web_search(query: str, *, timeout: float = 12.0) -> tuple[list[dict[str, str]], bool, str | None]:
-    try:
-        response = httpx.get(
-            "https://html.duckduckgo.com/html/",
-            params={"q": query},
-            headers={"User-Agent": "Mozilla/5.0 GapRadar/0.9"},
-            timeout=timeout,
-            follow_redirects=True,
-        )
-        response.raise_for_status()
-        html = response.text
-        links = re.findall(r'class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>', html, flags=re.I | re.S)
-        snippets = re.findall(r'class="result__snippet"[^>]*>(.*?)</(?:a|div)>', html, flags=re.I | re.S)
-        rows: list[dict[str, str]] = []
-        for i, (href, title_html) in enumerate(links[:20]):
-            url = _decode_ddg_url(href)
-            host = urlparse(url).netloc.lower()
-            if not url.startswith("http") or host in NOISE_HOSTS:
-                continue
-            title = re.sub(r"<[^>]+>", " ", unescape(title_html))
-            snippet_html = snippets[i] if i < len(snippets) else ""
-            snippet = re.sub(r"<[^>]+>", " ", unescape(snippet_html))
-            rows.append({"title": " ".join(title.split())[:240], "url": url, "snippet": " ".join(snippet.split())[:500], "source": host or "web"})
-        return rows, True, None
-    except Exception as exc:
-        return [], False, f"{type(exc).__name__}: {exc}"
+    errors: list[str] = []
+    for name, searcher in (("duckduckgo", _ddg_search), ("bing", _bing_search)):
+        try:
+            rows = searcher(query, timeout=timeout)
+            if rows:
+                return rows, True, None
+            errors.append(f"{name}: no parsable results")
+        except Exception as exc:
+            errors.append(f"{name}: {type(exc).__name__}: {exc}")
+    return [], False, "; ".join(errors)
 
 
 def _github_search(query: str, *, timeout: float = 12.0) -> tuple[list[dict[str, str]], bool, str | None]:
@@ -146,7 +190,7 @@ def _relevance(row: dict[str, str], candidate: GapCandidate) -> int:
 def analyze_candidate(candidate: GapCandidate) -> WorldLeadAssessment:
     ecosystem, planned_sources, intent = _route(candidate)
     subject = _subject(candidate)
-    query = f'"{subject}" {intent}'
+    query = f"{subject} {intent}"
     rows: list[dict[str, str]] = []
     checked: list[str] = []
     errors: list[str] = []
@@ -176,7 +220,7 @@ def analyze_candidate(candidate: GapCandidate) -> WorldLeadAssessment:
 
     if coverage == "failed":
         supply_status, assessment, recommendation = "unassessed", "INSUFFICIENT COVERAGE", "WATCH"
-        summary = "Supply investigation failed across the planned sources; no market-gap conclusion is allowed."
+        summary = "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed."
     elif len(evidence) >= 3:
         supply_status, assessment, recommendation = "served", "LIKELY SERVED", "DISMISS"
         summary = "Several relevant substitutes or solution providers were found in the checked supply sources. A broad gap is not established; only narrower unmet jobs remain worth investigating."
@@ -185,9 +229,9 @@ def analyze_candidate(candidate: GapCandidate) -> WorldLeadAssessment:
         summary = "Some relevant supply exists, but the checked market appears thin enough to justify human review of the exact unmet job."
     else:
         supply_status = "no_supply_detected"
-        assessment = "POTENTIAL GAP" if coverage == "adequate" else "INSUFFICIENT COVERAGE"
-        recommendation = "REVIEW" if coverage == "adequate" else "WATCH"
-        summary = "No qualifying replacement supply was detected in the checked sources. This is coverage-bounded and is not proof that no alternatives exist."
+        assessment = "POTENTIAL GAP" if coverage == "adequate" and len(unique) >= 5 else "INSUFFICIENT COVERAGE"
+        recommendation = "REVIEW" if assessment == "POTENTIAL GAP" else "WATCH"
+        summary = "No qualifying replacement supply was detected among the returned candidates. This remains coverage-bounded and is not proof that no alternatives exist."
 
     return WorldLeadAssessment(
         candidate_id=candidate.id,
