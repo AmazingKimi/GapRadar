@@ -6,7 +6,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from .worldscan import TECH_TERMS, _candidate_gate, classify_change
+from .worldscan import _candidate_gate, classify_change
 
 
 @dataclass(frozen=True)
@@ -21,14 +21,15 @@ class BlindResult:
 
 
 def _detect(title: str, summary: str) -> tuple[bool, str | None]:
+    # The historical corpus is already a product/technology-domain stream. This benchmark
+    # therefore isolates structural-change discovery rather than re-testing the live feed's
+    # separate TECH_TERMS domain prefilter.
     text = f"{title} {summary}".strip()
     classified = classify_change(text)
     if not classified:
         return False, None
     change_type, _ = classified
     if not _candidate_gate(change_type, text):
-        return False, None
-    if not TECH_TERMS.search(text):
         return False, None
     return True, change_type
 
@@ -84,7 +85,8 @@ def replay_fixture(path: Path, *, seed: int = 620) -> dict[str, Any]:
         "results": [asdict(row) for row in rows],
         "limitations": [
             "The scanner is not told which rows are positives before evaluation; positives and negative controls are shuffled into one stream.",
-            "This measures the WORLD SCAN structural-language/context gate against the historical corpus, not internet retrieval coverage.",
+            "The corpus is already scoped to product/technology changes, so this benchmark isolates the structural-change language/context gate and intentionally does not apply the live TECH_TERMS domain prefilter.",
+            "This measures discovery logic against the historical corpus, not internet retrieval coverage.",
             "The text snippets remain hand-curated historical fixtures, so this is a stricter discovery-logic benchmark but not proof of all-web recall.",
             "A separate live/archived retrieval benchmark is still required before making market-wide coverage claims.",
         ],
