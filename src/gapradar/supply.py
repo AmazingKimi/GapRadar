@@ -109,6 +109,48 @@ def score_supply(candidate: SupplyCandidate, event: MarketEvent, *, now: datetim
     return max(score, 0)
 
 
+def archived_supply_evidence(
+    event: MarketEvent,
+    *,
+    title: str,
+    body: str,
+    url: str,
+    publisher: str = "Archived supply",
+    observed_at: datetime | None = None,
+    popularity: int = 0,
+    archived: bool = False,
+    quality_hint: float = 0.0,
+) -> SourceEvidence | None:
+    """Apply the live supply scorer to an archived historical replacement page."""
+    candidate = SupplyCandidate(
+        title=title[:240],
+        url=url,
+        publisher=publisher,
+        source_kind="archived_supply",
+        description=body[:1200],
+        updated_at=observed_at,
+        popularity=popularity,
+        archived=archived,
+        quality_hint=quality_hint,
+    )
+    score = score_supply(candidate, event, now=observed_at or datetime.now(timezone.utc))
+    if score < 4:
+        return None
+    return SourceEvidence(
+        tier=EvidenceTier.TIER_3_SUPPLY,
+        title=candidate.title,
+        url=url,
+        publisher=publisher,
+        published_at=observed_at,
+        excerpt=candidate.description,
+        is_official=False,
+        source_kind="archived_supply",
+        signal="replacement_supply",
+        signal_score=score,
+        engagement=popularity,
+    )
+
+
 def dedupe(items: Iterable[SupplyCandidate]) -> list[SupplyCandidate]:
     best: dict[str, SupplyCandidate] = {}
     for item in items:
@@ -129,7 +171,7 @@ def _parse_iso(value: str | None) -> datetime | None:
 
 
 def search_github_repositories(event: MarketEvent, *, timeout: float = 15.0) -> list[SupplyCandidate]:
-    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.4"}
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.7"}
     token = os.getenv("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
@@ -165,7 +207,7 @@ def search_npm(event: MarketEvent, *, timeout: float = 15.0) -> list[SupplyCandi
     response = httpx.get(
         "https://registry.npmjs.org/-/v1/search",
         params={"text": _query(event), "size": 30},
-        headers={"User-Agent": "GapRadar/0.4"},
+        headers={"User-Agent": "GapRadar/0.7"},
         timeout=timeout,
     )
     response.raise_for_status()
@@ -197,9 +239,6 @@ def search_npm(event: MarketEvent, *, timeout: float = 15.0) -> list[SupplyCandi
 
 
 def validate_event_supply(event: MarketEvent) -> MarketEvent:
-    # Supply is downstream of displaced demand. If demand validation found no
-    # qualifying signal, searching for substitutes adds cost and false confidence
-    # without changing the decision: there is no gap to investigate yet.
     if event.demand_status not in {"early_signal", "repeated_signal"}:
         event.supply_evidence = []
         event.supply_candidate_count = 0
