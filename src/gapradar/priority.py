@@ -46,8 +46,20 @@ CONCRETE_CHANGE = re.compile(
     r"\b(mandatory|must\b|will require|required|shutdown|shut down|sunset|retire|deprecated|deprecation|price hike|price increase|raises? prices?|fee|no longer supported|end of support)\b",
     re.I,
 )
+FORCED_ACTION = re.compile(
+    r"\b(mandatory|must\b|will require|required|no longer supported|end of support|sunset|retire|deprecated|deprecation|shut down|shutdown)\b",
+    re.I,
+)
 BUSINESS_TARGET = re.compile(
-    r"\b(data centers?|developers?|businesses?|enterprises?|manufacturers?|operators?|customers?|users?|apps?|services?|platforms?|vehicles?|bms|api|software|saas)\b",
+    r"\b(data centers?|developers?|businesses?|enterprises?|manufacturers?|operators?|customers?|users?|apps?|services?|platforms?|vehicles?|bms|api|software|saas|integrations?|workflows?)\b",
+    re.I,
+)
+WEAK_OR_SPECULATIVE = re.compile(
+    r"\b(may|might|could|considering|reportedly|rumou?r|expected to|plans? to|proposal|proposed)\b",
+    re.I,
+)
+CONSUMER_ONLY = re.compile(
+    r"\b(streaming|music subscription|tv subscription|consumer subscription|individual plan|family plan)\b",
     re.I,
 )
 NUMBER = re.compile(r"(?:[$€£]\s?\d|\b\d+(?:\.\d+)?%|\b20\d{2}\b)")
@@ -59,7 +71,6 @@ def _host(url: str | None) -> str:
 
 def _publisher(candidate: GapCandidate) -> str:
     summary = unescape(candidate.summary or "").replace("\xa0", " ")
-    # Google News RSS summaries normally end with the publisher after repeated nbsp.
     tail = re.split(r"\s{2,}", summary.strip())
     if len(tail) > 1 and 2 <= len(tail[-1]) <= 80:
         return tail[-1].strip()
@@ -85,25 +96,52 @@ def score_candidate(
     assessment: WorldLeadAssessment | None,
     official_lead: OfficialSourceLead | None,
 ) -> int:
-    score = {"shutdown_eol": 3, "api_terms_change": 3, "price_shock": 2, "regulatory_shift": 2}.get(candidate.change_type, 1)
+    """Rank scarce research attention; this is deliberately not an opportunity score."""
     text = f"{candidate.headline} {candidate.summary}"
+    concrete = bool(CONCRETE_CHANGE.search(text))
+    forced = bool(FORCED_ACTION.search(text))
+    business_target = bool(BUSINESS_TARGET.search(text))
+
+    # Structural actionability. Shutdown/API changes are often more immediately
+    # actionable than generic pricing or regulatory headlines.
+    score = {"shutdown_eol": 3, "api_terms_change": 3, "regulatory_shift": 2, "price_shock": 1}.get(candidate.change_type, 0)
+
+    # Evidence is the strongest ranking input. A famous company name must never
+    # outrank a less-famous event with better first-party support.
     if verification and verification.status == "tier1_verified" and verification.official_url:
-        score += 3
+        score += 5
     elif official_lead and official_lead.candidate_urls:
+        score += 2
+
+    if concrete:
         score += 1
-    if CONCRETE_CHANGE.search(text):
+    if forced:
+        score += 2
+    if business_target:
+        score += 2
+    if NUMBER.search(text) and (forced or business_target):
         score += 1
-    if BUSINESS_TARGET.search(text):
+
+    # Brand prominence is only a weak tie-breaker after there is an actionable
+    # business target. It is not evidence of a market gap.
+    if MAJOR_ENTITY.search(text) and business_target and concrete:
         score += 1
-    if NUMBER.search(text):
-        score += 1
-    if MAJOR_ENTITY.search(text):
-        score += 1
+
+    # Penalize headlines that are still hypothetical, and consumer-only price
+    # changes that have no clear business workflow or switching surface.
+    if WEAK_OR_SPECULATIVE.search(candidate.headline) and not (verification and verification.status == "tier1_verified"):
+        score -= 2
+    if candidate.change_type == "price_shock" and CONSUMER_ONLY.search(text) and not business_target:
+        score -= 2
+
     if assessment:
         if assessment.final_recommendation == "REVIEW":
-            score += 3
+            score += 4
         elif assessment.final_recommendation == "DISMISS":
-            score -= 4
+            score -= 6
+        elif assessment.supply_coverage == "adequate" and assessment.supply_evidence:
+            score -= 1
+
     return max(score, 0)
 
 
@@ -125,14 +163,15 @@ def _reason(
             strong = len(assessment.supply_evidence)
             reason = (
                 f"{host} confirms the underlying change behind “{headline}”. "
-                f"Replacement-supply research checked {assessment.supply_candidate_count} candidates, found {strong} strong match(es), "
-                f"and coverage is {assessment.supply_coverage}. That makes {impact} worth investigating now."
+                f"The event is an actionable {label} affecting the demand surface “{impact}”. "
+                f"Supply research checked {assessment.supply_candidate_count} candidate(s), found {strong} strong match(es), "
+                f"with {assessment.supply_coverage} coverage."
             )
-            next_check = "Close the remaining supply-coverage gaps, then test the demand hypothesis with affected users before calling this a validated market gap."
+            next_check = "Close remaining supply-coverage gaps and test the explicit demand hypothesis with affected users before promoting this to REVIEW."
         else:
             reason = (
                 f"{host} confirms the underlying change behind “{headline}”. "
-                f"The next question is whether it creates enough {impact} to matter commercially."
+                f"Because the matched signal is “{signal[:70]}”, the immediate research question is whether it creates material {impact}."
             )
             next_check = "Run demand and replacement-supply analysis before making a market-gap claim."
         return "tier1_verified", f"Tier-1 · {host}", reason, next_check
@@ -140,17 +179,19 @@ def _reason(
     if official_lead and official_lead.candidate_urls:
         host = _host(official_lead.candidate_urls[0]) or "official candidate"
         reason = (
-            f"{publisher} reports “{headline}”. A related first-party page was found on {host}, "
-            f"but it has not yet confirmed the exact “{signal[:70]}” claim. Investigate the claim first; if confirmed, the likely demand surface is {impact}."
+            f"{publisher} reports “{headline}”. GapRadar found a plausible authority page on {host}, "
+            f"but that page has not yet confirmed the exact “{signal[:70]}” claim. "
+            f"If confirmed, investigate {impact}."
         )
-        next_check = "Verify the exact claim on the first-party page; only then spend deeper research effort on demand and supply."
+        next_check = "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
         return "official_candidate", f"Official lead · {host}", reason, next_check
 
     reason = (
-        f"{publisher} reports “{headline}”, with a concrete {label} signal (“{signal[:70]}”). "
-        f"No acceptable first-party source has been located yet. If the report is confirmed, the likely demand surface is {impact}."
+        f"{publisher} reports “{headline}” and the detector matched “{signal[:70]}” as a {label} signal. "
+        f"No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. "
+        f"If verified, inspect {impact}."
     )
-    next_check = "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
+    next_check = "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
     return "news_only", "Tier-1 pending", reason, next_check
 
 
@@ -175,16 +216,17 @@ def build_priority_leads(
             status = "REVIEW"
         elif assessment and assessment.final_recommendation == "DISMISS":
             status = "DISMISS"
-        elif score >= 5:
-            # INVESTIGATE means spend scarce research attention now. It is not a
-            # claim that an underserved market gap is already proven.
+        elif score >= 7:
+            # INVESTIGATE = spend scarce research attention now. It is not a
+            # statement that an underserved market gap has been proven.
             status = "INVESTIGATE"
         else:
             status = "WATCH"
         rows.append(PriorityLead(candidate.id, status, score, evidence_state, evidence_label, reason, next_check))
 
     rank = {"REVIEW": 0, "INVESTIGATE": 1, "WATCH": 2, "DISMISS": 3}
-    rows.sort(key=lambda row: (rank[row.status], -row.priority_score, row.candidate_id))
+    evidence_rank = {"tier1_verified": 0, "official_candidate": 1, "news_only": 2}
+    rows.sort(key=lambda row: (rank[row.status], evidence_rank.get(row.evidence_state, 9), -row.priority_score, row.candidate_id))
     return rows
 
 
