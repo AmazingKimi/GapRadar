@@ -24,11 +24,18 @@ def merge_events(existing: list[MarketEvent], incoming: list[MarketEvent]) -> li
     for event in incoming:
         previous = by_id.get(event.id)
         if previous is not None:
+            # Preserve prior downstream observations long enough for the same run
+            # to refresh them. This avoids losing context between scan and the
+            # demand/supply validators, while each validator still overwrites its
+            # own evidence with the newly computed result.
             event.reaction_evidence = previous.reaction_evidence
-            event.supply_evidence = previous.supply_evidence
             event.reaction_checked_at = previous.reaction_checked_at
             event.reaction_sources_checked = previous.reaction_sources_checked
             event.reaction_candidate_count = previous.reaction_candidate_count
+            event.supply_evidence = previous.supply_evidence
+            event.supply_checked_at = previous.supply_checked_at
+            event.supply_sources_checked = previous.supply_sources_checked
+            event.supply_candidate_count = previous.supply_candidate_count
             event.notes.extend(note for note in previous.notes if note not in event.notes)
             event.verify()
         by_id[event.id] = event
