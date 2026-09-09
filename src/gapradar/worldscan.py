@@ -26,7 +26,7 @@ CHANGE_PATTERNS: dict[str, tuple[str, ...]] = {
     ),
     "api_terms_change": (
         r"\bapi\b.{0,80}\bdeprecat", r"\bapi\b.{0,80}\bpricing\b", r"\bapi access\b.{0,80}\bchange",
-        r"\bdeveloper policy\b", r"\bterms of service\b.{0,60}\bchange", r"\blicen[cs](?:e|ing) change\b",
+        r"\bterms of service\b.{0,60}\bchange", r"\blicen[cs](?:e|ing) change\b",
         r"\brate limits?\b.{0,50}\bchange", r"\bdeprecat(?:e|ed|ing|ion)\b.{0,80}\bapi\b",
     ),
     "regulatory_shift": (
@@ -103,13 +103,19 @@ def _forced_gate(change_type: str, text: str) -> bool:
         )
         return api_context and bool(re.search(r"\b(deprecat|terms|policy|rate limit|pricing|license|licensing|access change|restriction)\b", t))
     if change_type == "regulatory_shift":
+        if re.search(r"\b(protest|concern|calls? for regulation|opinion|commentary|debate)\b", t):
+            return False
         if re.search(r"\b(launches?|unveils?|introduces?)\b.{0,40}\b(solution|product|tool)\b", t):
             return False
-        return bool(
-            re.search(r"\b(regulation|regulator|law|mandate|mandatory|require|required|requiring|government|policy)\b", t)
-            and TECH_TERMS.search(t)
-        )
+        action = bool(re.search(r"\b(will require|requires?|required|mandate|mandatory|law|rules?|regulator|regulation|policy|compliance deadline|takes effect|plan for|set up)\b", t))
+        return action and bool(TECH_TERMS.search(t))
     return False
+
+
+def _candidate_gate(change_type: str, text: str) -> bool:
+    if change_type in {"api_terms_change", "regulatory_shift"}:
+        return _forced_gate(change_type, text)
+    return True
 
 
 def _gap_hypothesis(change_type: str) -> tuple[str, str, str]:
@@ -191,6 +197,8 @@ def scan_world(
                 change_type, matched_signal = classified
                 if forced_type and change_type != forced_type and not _forced_gate(forced_type, text):
                     continue
+                if not _candidate_gate(change_type, text):
+                    continue
             elif forced_type and _forced_gate(forced_type, text):
                 change_type, matched_signal = forced_type, "query-filtered structural change"
             else:
@@ -215,7 +223,7 @@ def scan_world(
                 validation_status=status,
                 validation_summary=(
                     f"GapRadar found this {change_type.replace('_', ' ')} candidate in {name}. "
-                    + ("The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. " if status == "NEWS SIGNAL" else "An explicit structural-change phrase was present in the item. ")
+                    + ("The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. " if status == "NEWS SIGNAL" else "An explicit structural-change phrase was present in the item and the context gate passed. ")
                     + "It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
                 ),
             )
