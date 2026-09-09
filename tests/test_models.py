@@ -74,16 +74,15 @@ def test_failed_reaction_search_stays_unassessed():
     assert event.gap_status == "unassessed"
 
 
-def test_no_detected_demand_never_becomes_gap_even_when_supply_is_empty():
+def test_no_detected_demand_is_not_promoted_to_gap_conclusion():
     event = make_event(
         official_evidence=[official_evidence()],
         reaction_checked_at=NOW,
         reaction_search_quality="adequate",
-        supply_checked_at=NOW,
     ).verify()
     assert event.demand_status == "no_signal"
-    assert event.supply_status == "no_supply"
-    assert event.gap_status == "no_demand"
+    assert event.supply_status == "unassessed"
+    assert event.gap_status == "unassessed"
 
 
 def test_repeated_demand_plus_thin_supply_becomes_potential_gap():
