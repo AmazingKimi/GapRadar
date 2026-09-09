@@ -1,16 +1,16 @@
-from gapradar.worldquality import PROVISIONAL_GAP, PROVISIONAL_WHY, refine_candidate, rejection_reason
+from gapradar.worldquality import PROVISIONAL_GAP, PROVISIONAL_WHY, collapse_duplicate_events, refine_candidate, rejection_reason
 from gapradar.worldscan import GapCandidate
 
 
-def candidate(headline: str, change_type: str, summary: str = "") -> GapCandidate:
+def candidate(headline: str, change_type: str, summary: str = "", source: str = "test") -> GapCandidate:
     return GapCandidate(
-        id="x",
+        id=(headline + source)[:16],
         discovered_at="2026-09-09T00:00:00+00:00",
         published_at="2026-09-09T00:00:00+00:00",
-        source="test",
+        source=source,
         headline=headline,
-        url="https://example.com",
-        summary=summary,
+        url=f"https://example.com/{source}",
+        summary=summary or headline,
         change_type=change_type,
         matched_signal="test",
         recommendation="REVIEW",
@@ -58,3 +58,27 @@ def test_keeps_real_regulatory_requirement_but_does_not_promote_it_to_opportunit
 def test_keeps_product_shutdown():
     row = candidate("Podcast app will shut down next month", "shutdown_eol")
     assert refine_candidate(row) is not None
+
+
+def test_semantic_dedup_collapses_same_event_from_different_feeds():
+    left = candidate(
+        "Labour promises new rules for data centre electricity use and coordinated AI policy",
+        "regulatory_shift",
+        source="feed-a",
+    )
+    right = candidate(
+        "Labour promises coordinated AI policy and new rules for data centre electricity use",
+        "regulatory_shift",
+        source="feed-b",
+    )
+    rows, collapsed = collapse_duplicate_events([left, right])
+    assert len(rows) == 1
+    assert collapsed == 1
+
+
+def test_semantic_dedup_keeps_distinct_events():
+    left = candidate("Massachusetts requires new data centers to use clean energy", "regulatory_shift")
+    right = candidate("India makes EV BMS cybersecurity testing mandatory", "regulatory_shift")
+    rows, collapsed = collapse_duplicate_events([left, right])
+    assert len(rows) == 2
+    assert collapsed == 0
