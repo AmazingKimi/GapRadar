@@ -1,23 +1,7 @@
 [
   {
-    "id": "4502c9902619e866",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
-    "published_at": "2026-09-09T03:32:49+00:00",
-    "source": "Google News · API breaking and access changes",
-    "headline": "MUD OKs line project, pushes developer policy forward",
-    "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPN0lCaUx0a3hXaEo5UC1ZZ3BWQmlMQ0hsQXlIVTFQRm1xZnQwX2JqakdsV1F3c29TSFVha1VzQVp2bDhLUDZqd2NkSXhyZF9XSDRQQ0REbm91ZmtiQ0hxS0ZRYnBaRjJOSVZBeWlyUm5HTlFYcktpWEFwSXZUQWczRmZjd0REbnBGNWc?oc=5",
-    "summary": "MUD OKs line project, pushes developer policy forward &nbsp;&nbsp; Moore County Observer",
-    "change_type": "api_terms_change",
-    "matched_signal": "developer policy",
-    "recommendation": "REVIEW",
-    "why_now": "Developers and businesses may need to rewrite integrations, replace data access, or absorb new platform constraints.",
-    "gap_hypothesis": "Look for compatibility layers, migration tooling, alternative data/API providers, or workflow products that reduce dependence on the changed platform.",
-    "validation_status": "STRUCTURAL SIGNAL",
-    "validation_summary": "GapRadar found this api terms change candidate in Google News · API breaking and access changes. An explicit structural-change phrase was present in the item. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
-  },
-  {
     "id": "35f3623855c133e9",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-09T01:54:47+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "WATCH: Labour releases plan for AI regulation if elected",
@@ -33,7 +17,7 @@
   },
   {
     "id": "6ff8157b3810d5fd",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-09T01:51:38+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Labour promises to set up AI regulator, copyright rules if elected",
@@ -49,7 +33,7 @@
   },
   {
     "id": "bc658468240f8785",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T23:30:00+00:00",
     "source": "Google News · regulation creates software work",
     "headline": "Labour promises new rules for data centre electricity use, coordinated AI policy across government",
@@ -64,24 +48,8 @@
     "validation_summary": "GapRadar found this regulatory shift candidate in Google News · regulation creates software work. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
-    "id": "e4279a7fab322272",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
-    "published_at": "2026-09-08T23:02:39+00:00",
-    "source": "Google News · AI and data compliance",
-    "headline": "Robots Protest in Poland over AI Regulation Concerns",
-    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPZzN1RlpUM2xMR2VkbVJlLTBkWDlqcnhHcjZHTldLVk9pV1Znb0tzdTdObTZ2VW1lRzRrVXFleTBIaE51UUlGOTJHWmJfMEdzSWM0anFtNlJQclAxSGFpcTc3bFA4TDd6UldSOVRUNGdnUUZZeElEd3ZoblVVWjhxUWZqSUR3Q2VKSTNfMV9jXzllTVVjV0RJaGRTMndnemVJbUdhbVJoMXU3c001?oc=5",
-    "summary": "Robots Protest in Poland over AI Regulation Concerns &nbsp;&nbsp; Nigeria Communications Week",
-    "change_type": "regulatory_shift",
-    "matched_signal": "query-filtered structural change",
-    "recommendation": "WATCH",
-    "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
-    "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
-    "validation_status": "NEWS SIGNAL",
-    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
-  },
-  {
     "id": "52f1eb44691af255",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T22:27:45+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Massachusetts Will Require New Data Centers to Use Clean Energy",
@@ -93,27 +61,11 @@
     "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
     "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
     "validation_status": "STRUCTURAL SIGNAL",
-    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. An explicit structural-change phrase was present in the item. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
-  },
-  {
-    "id": "871c4a639eae6dc1",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
-    "published_at": "2026-09-08T22:21:00+00:00",
-    "source": "Google News · AI and data compliance",
-    "headline": "Texas Tech chancellor addresses AI partnership, calls for regulation",
-    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQR1gyeXRRbTNVbTc1dXRXazJjb21YT1dzeEdCUGwzNmxMeWNvVlIxc1YtckVwOTVuV0JBZ1RhQXVzcHBYOG9POXJOaG83YlFzR1puQTNjbGZfb2Y3cl96ZnB6UEhqRDNzV2d2MksxZEhiUWo0clI0dTMzUG1MSXJiR25oQlRzSHZOcHRZZ201Wk5wcVJOUkVQMHF3ZGjSAbABQVVfeXFMTkdhbTBQRFA1WWM4dkpVeGp2SjU5QU14VEF6bFBTOUFQeDhidU82bFJRdUpnWFVObHM0VEQtRUFoOXBLMFVBQ0V0cmhLSkQwbG1qSXpHN0o0SWdWMXU3bE9UblV6X21SS0dGSlE5dFF3LU5FbWs4dHNqTTA1LTRaY3Y3RmZjZTk1QzFXWHBSRnlXTUxHakhSMlJDbXRLeV9PWS1venJkX3ZLTm5BSkE0bmc?oc=5",
-    "summary": "Texas Tech chancellor addresses AI partnership, calls for regulation &nbsp;&nbsp; kcbd.com",
-    "change_type": "regulatory_shift",
-    "matched_signal": "query-filtered structural change",
-    "recommendation": "WATCH",
-    "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
-    "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
-    "validation_status": "NEWS SIGNAL",
-    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
+    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. An explicit structural-change phrase was present in the item and the context gate passed. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
     "id": "b0ed273efbe0846e",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T21:14:34+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Kennedy talks Ascension’s industrial boom, flood protection and AI regulation",
@@ -129,7 +81,7 @@
   },
   {
     "id": "cd7776455be114a4",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T20:02:27+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Data protection: “New stage” of AI regulation",
@@ -145,7 +97,7 @@
   },
   {
     "id": "f607d582f6071586",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T18:24:10+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "US data centre regulation expands through local moratoriums and zoning rules",
@@ -161,7 +113,7 @@
   },
   {
     "id": "caad7689fc5b21b6",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T16:42:35+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Out, damned spot! Precautionary regulation could threaten the future of wearable AI",
@@ -176,8 +128,24 @@
     "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
+    "id": "378005d24a35ccf6",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
+    "published_at": "2026-09-08T16:00:00+00:00",
+    "source": "Google News · regulation creates software work",
+    "headline": "More Data Centres are coming...so are the new rules",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNQ01kUEM0Mkg3c2RmUHlJRUVNT1NFZVBud0NaWjVxSVYtUVBWS2RXRjgxS1hLTFNRU2ViWXh3bWRMSzJNR2dKdlJCU0xCRUZHVk0xV3RndnVYOTR4LWZVZTNidE5CVW9rQnlYSWwta2FBdEliNG5MV19JNnh3OTBjREZRMDg5SVB6RXdHZHFvalk2c1k?oc=5",
+    "summary": "More Data Centres are coming...so are the new rules &nbsp;&nbsp; The Kenyan Wallstreet",
+    "change_type": "regulatory_shift",
+    "matched_signal": "query-filtered structural change",
+    "recommendation": "WATCH",
+    "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
+    "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
+    "validation_status": "NEWS SIGNAL",
+    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · regulation creates software work. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
+  },
+  {
     "id": "8ebb69f0f4776d29",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T15:50:33+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Thought for the week: How Pope Leo's encyclical letter could influence emerging global AI regulation",
@@ -193,7 +161,7 @@
   },
   {
     "id": "5204f48c33a4c6b5",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T15:42:43+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "PM Modi sets fintech agenda: Top-notch cybersecurity, ethical data protection, strong regulation",
@@ -209,7 +177,7 @@
   },
   {
     "id": "37ef208f3bd3c3bf",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T15:19:00+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "EU AI Act Article 50: New Guidance Expands Enterprise AI Compliance Obligations",
@@ -224,24 +192,8 @@
     "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
-    "id": "14436a2a2ff1f7ea",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
-    "published_at": "2026-09-08T15:17:01+00:00",
-    "source": "Google News · AI and data compliance",
-    "headline": "EV BMS Cybersecurity Testing Now Mandatory in India",
-    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOOUo0alZEQWhtNGhhSUV0TEJkU0c2VFdlMlJzRnF6WTh2dE9DeFNWeFFyWE84QXUzMHdSUnRjNEZ4MnZhYWdXNko4RVVDNjRaX3FaenlSZjNzMVg3b1lsUENmQkZjR0d2SHQ1RVJuaThTcGZWSEQwRE9XRkdsQWkwdzVScGd2Uk5QYzBhUW5oYUNPYlnSAZsBQVVfeXFMTzdMaUF0TEFwM3BDZkhHQUJuTTV0dl9KTVNVTWdxOGJkd2Q1d2txelZPdG13M0NCNUpaMlh6V3J0X21tVnJzQUFyN21LZzNrYkx3R3ZDUW85eG5PY2cyWlVoZENHZGFiSmdiSTBaRE9OdzU1NmhuZmUyVWlyZllXaEpSWGc4VUhmRlRfbGt5NEg1YkJ5X1ZpZDlTeUU?oc=5",
-    "summary": "EV BMS Cybersecurity Testing Now Mandatory in India &nbsp;&nbsp; Autocar Professional",
-    "change_type": "regulatory_shift",
-    "matched_signal": "Mandatory",
-    "recommendation": "WATCH",
-    "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
-    "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
-    "validation_status": "STRUCTURAL SIGNAL",
-    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. An explicit structural-change phrase was present in the item. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
-  },
-  {
     "id": "86a0955dccc4b9fd",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T15:09:01+00:00",
     "source": "Google News · SaaS pricing shocks",
     "headline": "The latest Apple price hike: Apple TV streaming service",
@@ -253,11 +205,11 @@
     "why_now": "A pricing discontinuity can release budget-sensitive users who were previously locked into the incumbent.",
     "gap_hypothesis": "Look for a simpler lower-cost substitute, usage-based alternative, migration service, or vertical product that removes features customers no longer want to pay for.",
     "validation_status": "STRUCTURAL SIGNAL",
-    "validation_summary": "GapRadar found this price shock candidate in Google News · SaaS pricing shocks. An explicit structural-change phrase was present in the item. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
+    "validation_summary": "GapRadar found this price shock candidate in Google News · SaaS pricing shocks. An explicit structural-change phrase was present in the item and the context gate passed. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
     "id": "b68a1df28bd7af24",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T14:18:42+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Merkel calls for AI regulation - but hopes robots can do the housework",
@@ -272,8 +224,24 @@
     "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
+    "id": "e1c1baac5258078a",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
+    "published_at": "2026-09-08T14:00:00+00:00",
+    "source": "Google News · regulation creates software work",
+    "headline": "AI and the new rules of digital trust: Watermarks",
+    "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQLUdnR3hxRnN6M3VpT2VQY21id1BoMW5BbG5pV2dBbEpwcjJiLUJqaXZRTkhYaUppcTVmTlpXY0RiM19EamtOekNaeE1RSGdEUUVtcVdhWF9Xc3Z3cHBRM0FpdFNyTHhBTU9Lc3RrWmlELVhkSTItZUR4X3BEZ0NDa0NoTkN5a3YyNVdEdlNzR0RvQzFNLUFvMjJfeWFOdXpETHRXTTZCM243WVA2Z3JDd0RVdGdBXzRjRWJGVlF5MUxCVVJaQkFkOFFoUEs?oc=5",
+    "summary": "AI and the new rules of digital trust: Watermarks &nbsp;&nbsp; Route Fifty",
+    "change_type": "regulatory_shift",
+    "matched_signal": "query-filtered structural change",
+    "recommendation": "WATCH",
+    "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
+    "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
+    "validation_status": "NEWS SIGNAL",
+    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · regulation creates software work. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
+  },
+  {
     "id": "e822b6524bfedea2",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T13:11:45+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Robots join rally in Warsaw calling for AI regulation",
@@ -289,7 +257,7 @@
   },
   {
     "id": "aab77b46a612cfef",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T11:34:58+00:00",
     "source": "Google News · ending support and closures",
     "headline": "Developer To Close Section Of Chubb Road In Lyon Township",
@@ -301,11 +269,11 @@
     "why_now": "Users, workflows or integrations must move before the old product disappears.",
     "gap_hypothesis": "Look for a replacement that preserves the abandoned workflow with lower migration cost, better compatibility, or a narrower vertical focus.",
     "validation_status": "STRUCTURAL SIGNAL",
-    "validation_summary": "GapRadar found this shutdown eol candidate in Google News · ending support and closures. An explicit structural-change phrase was present in the item. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
+    "validation_summary": "GapRadar found this shutdown eol candidate in Google News · ending support and closures. An explicit structural-change phrase was present in the item and the context gate passed. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
     "id": "f024979054118fbd",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T11:00:00+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "ChainIT Answered Who Authorized the AI Agent. Now It Answers: Do Current Compliance Evidence and Policy Permit It to Act?",
@@ -321,7 +289,7 @@
   },
   {
     "id": "5fb675db5e2e4f22",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T09:33:05+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Robots march in Warsaw to call for improved AI regulation",
@@ -337,7 +305,7 @@
   },
   {
     "id": "2158767cb4ba2a5a",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T08:45:00+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "The House Democrat who’s making AI regulation her No. 1 priority",
@@ -352,8 +320,24 @@
     "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
+    "id": "7128a548e7e321e5",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
+    "published_at": "2026-09-08T08:34:22+00:00",
+    "source": "Google News · regulation creates software work",
+    "headline": "What Happens When AI Listens to PR? M+C Saatchi Talk on the New Rules of Brand Discovery",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNcDhadXhIU285LXp0d0NZdDlDQ1BMaGVHTExaWDN0TzZWRHN1VWk1YnhNVXdvbEVjd21HRGR1YXhubkRQbVRobkRYTFdaSE9adGQ3Q2tXREdSODJIbzZkd2xwMnVCZFhCNmQ2RW01a2ZnZmlKWVRNeHJweXVsQTFvRXQtcUtyTDVSM1FJT0F2MUxzZ1BVeUxja2hfbW9lYkVfMEU2Y0JxVlljMGZNbVVZSWFLVQ?oc=5",
+    "summary": "What Happens When AI Listens to PR? M+C Saatchi Talk on the New Rules of Brand Discovery &nbsp;&nbsp; Little Black Book | LBBOnline",
+    "change_type": "regulatory_shift",
+    "matched_signal": "query-filtered structural change",
+    "recommendation": "WATCH",
+    "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
+    "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
+    "validation_status": "NEWS SIGNAL",
+    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · regulation creates software work. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
+  },
+  {
     "id": "878d2e0b431ea850",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T08:07:02+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Podcast: Demystifying AI regulation & innovation with Colin Payne",
@@ -368,8 +352,24 @@
     "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
+    "id": "aa7cb156e8fd7f24",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
+    "published_at": "2026-09-08T07:41:44+00:00",
+    "source": "Google News · regulation creates software work",
+    "headline": "When AI Chooses for Your Customer: Accenture Song on the New Rules of CX",
+    "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNSGxYeHVONTJ2WE9FRW5LOUFHWVBFX0xKbmZCaUFyalMwalVtdFNnQjZYLTF5cG1QYXgyNDhZRi1mNHhYQTlYeThMSWVBSEk5dmhNbDg0VHJDOGJEMVdqZWJ2bWNTMld2SC01TldJVEJRVW96RWhhSVVHSXMzQmxsb3Q1aDgyUUpuZkJlZmRkbGc?oc=5",
+    "summary": "When AI Chooses for Your Customer: Accenture Song on the New Rules of CX &nbsp;&nbsp; Techsauce",
+    "change_type": "regulatory_shift",
+    "matched_signal": "query-filtered structural change",
+    "recommendation": "WATCH",
+    "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
+    "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
+    "validation_status": "NEWS SIGNAL",
+    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · regulation creates software work. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
+  },
+  {
     "id": "6544a95c822cb824",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T07:14:59+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Robots have started protesting, want AI regulation ASAP",
@@ -385,7 +385,7 @@
   },
   {
     "id": "5782178543254a05",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-08T03:12:31+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "Robots Marched On Poland's Digital Ministry To Demand AI Regulation",
@@ -400,24 +400,24 @@
     "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
-    "id": "68125bb8f941af03",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
-    "published_at": "2026-09-08T01:02:36+00:00",
-    "source": "Google News · AI and data compliance",
-    "headline": "Street protest demanding tougher regulation of AI is staged by robots",
-    "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPQXhMQkFqSXgwTlotUTEyMDFXTTZEQWU3Z1BRRTkxdE5aQjhUUmQ3b2dsdEZvcDdYZGJZR3lyTlMzZ0pUV09xR3ByQXhzMkxiU3RfaEYyZzZjTFNYM3l1X3BTalQyRkxVdnUzU2tjX08wbDBFOVNtenNqQXlWWXcwaHdXb0tNNTQ4Z2x6dTJJc2dKZzZhU3F3RFVmb3RIQ25TRENyX1BWU3lvZEhQOWdVaVhzTFRCM2gzbmNQWTFKODhnYzJzWHA2VldVbFo?oc=5",
-    "summary": "Street protest demanding tougher regulation of AI is staged by robots &nbsp;&nbsp; NZ Herald",
+    "id": "162867d9e883eab5",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
+    "published_at": "2026-09-07T23:49:14+00:00",
+    "source": "Google News · regulation creates software work",
+    "headline": "New rules likely to unlock cross-border data flows",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOSDlyZWRBdlNnSkhDRXhEeG51dHJtQnRMR1o0cXlrSDRQQ2E2RkJZUTBBbHNtUXdzaHIyUHRQZnhQUVgtZkZrZnBzSW5DLVdPUl96aEtnbGRTMlVLcjBwUU5aR01nQ21XeGVZTjFvOUtqMFZPbU9pYTM2TGVRUU50UGZzb3NNTkhfQS1DWU9XaXRucjM0X2w0Q2VwRS1JZkJOOGc?oc=5",
+    "summary": "New rules likely to unlock cross-border data flows &nbsp;&nbsp; KLSE Screener",
     "change_type": "regulatory_shift",
     "matched_signal": "query-filtered structural change",
     "recommendation": "WATCH",
     "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
     "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
     "validation_status": "NEWS SIGNAL",
-    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
+    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · regulation creates software work. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
     "id": "60ed3388a641d4ee",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-07T21:18:16+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "This Labor Day, AI regulation should take center stage",
@@ -432,24 +432,8 @@
     "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
-    "id": "cbc7a2ad8385e723",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
-    "published_at": "2026-09-07T20:21:28+00:00",
-    "source": "Google News · AI and data compliance",
-    "headline": "Robots protest in Warsaw to call for improved AI regulation Around 30 robots march, wave flags and chant slogans outside Poland's digital affairs ministry in Warsaw as part of a demonstration organized by the \"Democratism\" initiative. The group says it wants t",
-    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNMFJ0TFZ5TWUyb2RnVV9GeG5ndFppVk45UHJJZWFzdWYycWdieWpRZkg3MDFOMzFtSEk1VXBtMFZQRzMwR09ycEtCcExhNzZibjBQRlMwd1JROUExbllNYktnRW5fVmp6VGZUbDliVldFSXBCQVVxOHM2WTVHN09ZWVV4WFU1OXVCTThDUm93UnloZW9rM0c1Z2wtaUFTdE8xSjVmQmdHUVA4bVlKdjhxWTdENVRSNjhRQ0NFdU5RZDVhX21DQ1E?oc=5",
-    "summary": "Robots protest in Warsaw to call for improved AI regulation Around 30 robots march, wave flags and chant slogans outside Poland's digital affairs ministry in Warsaw as part of a demonstration organized by the \"Democratism\" initiative. The group says it wants t &nbsp;&nbsp; LinkedIn",
-    "change_type": "regulatory_shift",
-    "matched_signal": "query-filtered structural change",
-    "recommendation": "WATCH",
-    "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
-    "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
-    "validation_status": "NEWS SIGNAL",
-    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
-  },
-  {
     "id": "a4667ed73e330db1",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-07T18:14:00+00:00",
     "source": "Google News · software shutdowns",
     "headline": "Samsung preps the shutdown of two more apps late in 2026",
@@ -461,11 +445,11 @@
     "why_now": "Users, workflows or integrations must move before the old product disappears.",
     "gap_hypothesis": "Look for a replacement that preserves the abandoned workflow with lower migration cost, better compatibility, or a narrower vertical focus.",
     "validation_status": "STRUCTURAL SIGNAL",
-    "validation_summary": "GapRadar found this shutdown eol candidate in Google News · software shutdowns. An explicit structural-change phrase was present in the item. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
+    "validation_summary": "GapRadar found this shutdown eol candidate in Google News · software shutdowns. An explicit structural-change phrase was present in the item and the context gate passed. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
     "id": "cf1d0615e46c5ab1",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-07T16:44:10+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "OpenAI hires Jessica Schumer to lead government outreach amid rising AI regulation talks.",
@@ -480,24 +464,8 @@
     "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
-    "id": "7251a7a89a515f1c",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
-    "published_at": "2026-09-07T16:08:44+00:00",
-    "source": "Google News · AI and data compliance",
-    "headline": "30 Robots ‘Protest’ For AI Regulation In Poland",
-    "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQaEZoM2g0RVRFTmVSdS1mSENTRlYwMDJFbkRRVTI5aGpXclNNeEs0SkVEd3ZScUJ1QzJZdWhWdERTRWdRMUxWZS1abVAxYlZkVENTalNjWVMyd0VkMVkwSWg0STBlNHFxZHR1RHpLUjM1YVBSUTc2X2l2dEktcndxcERVdzZWa0VkektrUA?oc=5",
-    "summary": "30 Robots ‘Protest’ For AI Regulation In Poland &nbsp;&nbsp; Channels Television",
-    "change_type": "regulatory_shift",
-    "matched_signal": "query-filtered structural change",
-    "recommendation": "WATCH",
-    "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
-    "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
-    "validation_status": "NEWS SIGNAL",
-    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
-  },
-  {
     "id": "f620fc26b4c3044f",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-07T15:10:07+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "UN Warns of 'Existential' AI Risk: Finance Impact & Regulation",
@@ -512,24 +480,8 @@
     "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
   },
   {
-    "id": "eeab813f19ed58eb",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
-    "published_at": "2026-09-07T10:50:48+00:00",
-    "source": "Google News · AI and data compliance",
-    "headline": "Amazon Expands Its AI Bet: Zoox Moves Into Las Vegas Airport as Anthropic Enters the AI Regulation Debate",
-    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxQZWk2elN1TmJDYUlzZVVGbmZNRXp5Sk4zNUJIVXUwblFzM01nZnF3MzlzTWJra3N2cGc4a2gxWkZMY2cwYURrV2lFc2EwU2tNekMyWkdnUXluVjVUeU9BdEdoNmtTc05XWHVWU3RKSk9TTGFCWTB3ZThtWmtOMmhzYy05SlltMHVrOWd1eE8tdnJ3ZVhpaldlaDkyWFFLRGF2MU1jbUtjX0hyY3NIcExfdmJkSkdhUXFFQXdMeFE4RUpqaDFpcGdJOXo1TlpibmlVVjN3?oc=5",
-    "summary": "Amazon Expands Its AI Bet: Zoox Moves Into Las Vegas Airport as Anthropic Enters the AI Regulation Debate &nbsp;&nbsp; entarabi.com",
-    "change_type": "regulatory_shift",
-    "matched_signal": "query-filtered structural change",
-    "recommendation": "WATCH",
-    "why_now": "A rule or compliance change can create new mandatory work that did not exist before.",
-    "gap_hypothesis": "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement.",
-    "validation_status": "NEWS SIGNAL",
-    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · AI and data compliance. The targeted feed and a hard change-language gate both matched, so this is a discovery lead awaiting first-party or independent confirmation. It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
-  },
-  {
     "id": "72db83280df32f83",
-    "discovered_at": "2026-09-09T06:06:45.971585+00:00",
+    "discovered_at": "2026-09-09T06:09:04.717981+00:00",
     "published_at": "2026-09-05T08:24:39+00:00",
     "source": "Google News · AI and data compliance",
     "headline": "George Clooney Mocks Lawmakers Over AI Regulation — ‘These Are Not the People You Want to Entrust the Hol",
