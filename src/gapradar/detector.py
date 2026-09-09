@@ -61,6 +61,7 @@ BODY_FALLBACK_TITLE_GATE = (
     r"\bnext phase\b",
     r"\binvesting in\b",
     r"\bsaying goodbye\b",
+    r"\bend of\b",
 )
 
 BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
@@ -70,6 +71,8 @@ BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
         r"\b(?:billing|pricing).{0,100}\b(?:will|is).{0,50}\b(?:change|changing)\b",
         r"\b(?:free|existing).{0,120}\b(?:plan|tier|users?).{0,120}\b(?:paid|subscription|pro)\b",
         r"\b(?:fee|charge).{0,120}\b(?:introduc|cancel|remov)\w*\b",
+        r"\b(?:sunset|end|retire|limit|deactivat)\w*.{0,120}\bfree.{0,80}\b(?:plans?|tier|users?)\b",
+        r"\bfree.{0,100}\b(?:plans?|tier|users?).{0,140}\b(?:sunset|end|retire|limit|deactivat|paid|subscription|pro)\w*\b",
     ),
     EventType.API_TERMS: (
         r"\b(?:API|SDK|endpoint|REST|GraphQL|webhook).{0,220}\b(?:will|is|has been).{0,70}\b(?:deprecated|removed|retired|sunset|discontinued|changed)\b",
@@ -87,6 +90,29 @@ BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
         r"\bis now retired\b",
         r"\b(?:begin|beginning|start|starting).{0,80}\b(?:wind|shut|sunset|phase)\w*.{0,80}\b(?:down|out)\b",
         r"\bwill be discontinued\b",
+        r"\bshuts down\b",
+        r"\bwill wind down\b",
+    ),
+}
+
+# These phrases are strong enough to classify a first-party announcement even
+# when the page title is generic (for example a terms/services summary). They
+# deliberately require explicit future removal, licensing, or paid-tier language.
+STRONG_BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
+    EventType.PRICE_SHOCK: (
+        r"\b(?:sunset|end|retire|limit|deactivat)\w*.{0,140}\bfree.{0,100}\b(?:plans?|tier|users?)\b",
+        r"\bfree.{0,120}\b(?:plans?|tier|users?).{0,180}\b(?:paid|subscription|pro|sunset|end|retire|limit|deactivat)\w*\b",
+        r"\b(?:introduc|new).{0,80}\b(?:runtime )?(?:fee|pricing|charge)\b",
+    ),
+    EventType.API_TERMS: (
+        r"\b(?:adopt|adopted|switch|switched).{0,120}\b(?:business source )?(?:license|licence)\b",
+        r"\b(?:data )?API.{0,180}\b(?:access|terms).{0,180}\b(?:change|commercial|pricing|paid)\w*\b",
+    ),
+    EventType.SHUTDOWN: (
+        r"\b(?:we|service|product|app|application|platform|device|devices|core).{0,200}\b(?:will|have|has|begin|began|start|started).{0,100}\b(?:shut down|wind down|sunset|phase out|discontinue|retire|decommission)\w*\b",
+        r"\bwill be discontinued on\b",
+        r"\bwill reach (?:its )?(?:end[- ]of[- ]life|EOL)\b",
+        r"\bwill no longer be supported\b",
         r"\bshuts down\b",
     ),
 }
@@ -133,11 +159,13 @@ def classify_entry(title: str, summary: str) -> EventType | None:
         if _match(TITLE_PATTERNS[event_type], title):
             return event_type
 
-    if not _match(BODY_FALLBACK_TITLE_GATE, title):
-        return None
+    if _match(BODY_FALLBACK_TITLE_GATE, title):
+        for event_type in CLASSIFICATION_ORDER:
+            if _match(BODY_PATTERNS[event_type], summary):
+                return event_type
 
     for event_type in CLASSIFICATION_ORDER:
-        if _match(BODY_PATTERNS[event_type], summary):
+        if _match(STRONG_BODY_PATTERNS[event_type], summary):
             return event_type
     return None
 
