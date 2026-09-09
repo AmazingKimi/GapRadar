@@ -45,6 +45,43 @@ def _overlap(candidate: GapCandidate, text: str) -> int:
     return sum(1 for token in _subject_tokens(candidate)[:10] if len(token) >= 4 and token in lowered)
 
 
+def _meaningful_tokens(value: str) -> set[str]:
+    stop = {
+        "will", "new", "the", "and", "for", "with", "from", "into", "that", "this", "use", "using",
+        "require", "requires", "required", "must", "mandatory", "mandate", "rule", "rules", "regulation",
+        "massachusetts", "india", "united", "kingdom", "britain", "british", "european", "union", "australia",
+        "canada", "singapore", "clean", "energy",
+    }
+    return {
+        token for token in re.findall(r"[a-z0-9][a-z0-9+-]{2,}", value.lower())
+        if token not in stop and len(token) >= 4
+    }
+
+
+def _claim_target_alignment(candidate: GapCandidate, text: str) -> bool:
+    """Require the official page to discuss the actual object of the claimed change.
+
+    Generic regulator pages can contain words like `require`, `clean`, and `energy` and
+    otherwise look relevant. For a headline of the form `will require X to Y`, both the
+    regulated target (X) and the required outcome (Y) must be represented on the page.
+    """
+    if candidate.change_type != "regulatory_shift":
+        return True
+    lowered = text.lower()
+    match = re.search(r"\bwill\s+require\s+(.{3,90}?)\s+to\s+(.{3,110})$", candidate.headline, re.I)
+    if match:
+        target = _meaningful_tokens(match.group(1))
+        outcome = _meaningful_tokens(match.group(2))
+        target_hit = not target or any(token in lowered for token in target)
+        outcome_hit = not outcome or any(token in lowered for token in outcome)
+        return target_hit and outcome_hit
+
+    # For other regulatory headlines, at least one distinctive non-generic headline
+    # token must occur on the page in addition to the broad overlap check.
+    distinctive = _meaningful_tokens(candidate.headline)
+    return not distinctive or any(token in lowered for token in distinctive)
+
+
 def _explicit_change_confirmation(candidate: GapCandidate, text: str) -> bool:
     """Tier-1 verification is intentionally stricter than discovery classification."""
     t = " ".join(text.lower().split())
@@ -83,9 +120,12 @@ def verify_official_lead(candidate: GapCandidate, lead: OfficialSourceLead, *, t
             text = f"{title} {body}"
             overlap = _overlap(candidate, text)
             host = (urlparse(final_url).hostname or "").lower()
-            min_overlap = 2 if _host_is_government(host) else 2
+            min_overlap = 2
             if overlap < min_overlap:
                 errors.append(f"subject overlap too weak for {host}: {overlap} < {min_overlap}")
+                continue
+            if not _claim_target_alignment(candidate, text):
+                errors.append(f"first-party page did not align with the claimed target/outcome: {host}")
                 continue
             if not _explicit_change_confirmation(candidate, text):
                 errors.append(f"first-party page did not explicitly confirm {candidate.change_type}: {host}")
