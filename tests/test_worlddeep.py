@@ -63,10 +63,22 @@ def test_multiple_relevant_suppliers_downgrade_broad_gap(monkeypatch):
     assert result.final_recommendation == "DISMISS"
 
 
-def test_no_supply_with_complete_coverage_is_only_potential_gap(monkeypatch):
+def test_empty_web_result_set_does_not_create_gap(monkeypatch):
     monkeypatch.setattr("gapradar.worlddeep._web_search", lambda *a, **k: ([], True, None))
     result = analyze_candidate(commercial_price_lead())
-    assert result.supply_coverage == "adequate"
+    assert result.supply_status == "no_supply_detected"
+    assert result.gap_assessment == "INSUFFICIENT COVERAGE"
+    assert result.final_recommendation == "WATCH"
+
+
+def test_broad_checked_result_set_without_relevant_supply_can_be_reviewed(monkeypatch):
+    rows = [
+        {"title": f"General market result {i}", "url": f"https://site{i}.example", "snippet": "market overview", "source": f"site{i}.example"}
+        for i in range(6)
+    ]
+    monkeypatch.setattr("gapradar.worlddeep._web_search", lambda *a, **k: (rows, True, None))
+    result = analyze_candidate(commercial_price_lead())
+    assert result.supply_candidate_count == 6
     assert result.supply_status == "no_supply_detected"
     assert result.gap_assessment == "POTENTIAL GAP"
     assert result.final_recommendation == "REVIEW"
