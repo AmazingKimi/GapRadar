@@ -48,18 +48,32 @@ def make_event(**kwargs) -> MarketEvent:
     return event.verify()
 
 
-def test_no_demand_becomes_pass():
+def test_no_detected_demand_is_not_pass():
     event = make_event()
     event.reaction_checked_at = event.detected_at
+    event.reaction_search_quality = "adequate"
+    event.reaction_queries = [{"source": "forum", "query": "Example Product migration", "candidate_count": 0, "ok": True}]
     event.verify()
     dossier = build_dossier(event)
-    assert dossier.verdict == "PASS"
-    assert "Do not build" in dossier.next_action
+    assert dossier.verdict == "NO DETECTED SIGNAL"
+    assert "not that demand does not exist" in dossier.rationale
+    assert dossier.reaction_queries
+
+
+def test_failed_search_is_not_mapped_to_no_signal():
+    event = make_event()
+    event.reaction_checked_at = event.detected_at
+    event.reaction_search_quality = "failed"
+    event.verify()
+    dossier = build_dossier(event)
+    assert event.demand_status == "unassessed"
+    assert dossier.verdict == "SEARCH FAILED"
 
 
 def test_repeated_demand_and_no_supply_becomes_review():
     event = make_event(reaction_evidence=[reaction(1), reaction(2), reaction(3)])
     event.reaction_checked_at = event.detected_at
+    event.reaction_search_quality = "adequate"
     event.supply_checked_at = event.detected_at
     event.verify()
     dossier = build_dossier(event)
@@ -71,6 +85,7 @@ def test_repeated_demand_and_no_supply_becomes_review():
 def test_served_gap_is_not_recommended():
     event = make_event(reaction_evidence=[reaction(1), reaction(2), reaction(3)], supply_evidence=[supply()])
     event.reaction_checked_at = event.detected_at
+    event.reaction_search_quality = "adequate"
     event.supply_checked_at = event.detected_at
     event.verify()
     dossier = build_dossier(event)
