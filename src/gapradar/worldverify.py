@@ -5,9 +5,10 @@ import re
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Mapping
 
 from .models import MarketEvent
+from .worldofficial import WorldOfficialFact
 from .worldscan import GapCandidate
 
 STOPWORDS = {
@@ -96,7 +97,23 @@ def score_match(candidate: GapCandidate, event: MarketEvent) -> tuple[int, list[
     return score, reasons
 
 
-def verify_candidate(candidate: GapCandidate, events: Iterable[MarketEvent]) -> WorldVerification:
+def verify_candidate(
+    candidate: GapCandidate,
+    events: Iterable[MarketEvent],
+    official_fact: WorldOfficialFact | None = None,
+) -> WorldVerification:
+    # A directly fetched first-party page that passed host, subject-overlap and hard-change
+    # checks is stronger than a fuzzy bridge to the configured feed corpus.
+    if official_fact and official_fact.status == "tier1_verified" and official_fact.official_url:
+        return WorldVerification(
+            candidate_id=candidate.id,
+            status="tier1_verified",
+            event_id=None,
+            official_url=official_fact.official_url,
+            match_score=10,
+            reasons=["first_party_page", "subject_overlap", "hard_change_confirmed"],
+        )
+
     best_event: MarketEvent | None = None
     best_score = -1
     best_reasons: list[str] = []
@@ -122,9 +139,14 @@ def verify_candidate(candidate: GapCandidate, events: Iterable[MarketEvent]) -> 
     )
 
 
-def verify_candidates(candidates: Iterable[GapCandidate], events: Iterable[MarketEvent]) -> list[WorldVerification]:
+def verify_candidates(
+    candidates: Iterable[GapCandidate],
+    events: Iterable[MarketEvent],
+    official_facts: Mapping[str, WorldOfficialFact] | None = None,
+) -> list[WorldVerification]:
     event_rows = list(events)
-    return [verify_candidate(candidate, event_rows) for candidate in candidates]
+    facts = official_facts or {}
+    return [verify_candidate(candidate, event_rows, facts.get(candidate.id)) for candidate in candidates]
 
 
 def save_verifications(path: Path, rows: Iterable[WorldVerification]) -> None:
