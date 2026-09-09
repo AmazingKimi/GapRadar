@@ -7,7 +7,7 @@
     "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
     "summary": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
     "event_date": "2026-08-27T16:00:00Z",
-    "detected_at": "2026-09-09T04:17:27.177182Z",
+    "detected_at": "2026-09-09T04:28:41.720860Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -25,12 +25,87 @@
     ],
     "reaction_evidence": [],
     "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T04:17:28.614897Z",
+    "reaction_checked_at": "2026-09-09T04:28:46.493346Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
     ],
     "reaction_candidate_count": 0,
+    "reaction_queries": [
+      {
+        "source": "hacker_news",
+        "query": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "hacker_news",
+        "query": "Shopify Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "hacker_news",
+        "query": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older deprecated",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "hacker_news",
+        "query": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older sunset",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "hacker_news",
+        "query": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older migration",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "hacker_news",
+        "query": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older alternative",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" Shopify created:>=2026-05-12 is:issue",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" created:>=2026-05-12 is:issue",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" deprecated created:>=2026-05-12 is:issue",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" sunset created:>=2026-05-12 is:issue",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" migration created:>=2026-05-12 is:issue",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" alternative created:>=2026-05-12 is:issue",
+        "candidate_count": 0,
+        "ok": true
+      }
+    ],
+    "reaction_search_quality": "adequate",
     "demand_status": "no_signal",
     "supply_checked_at": null,
     "supply_sources_checked": [],
@@ -49,7 +124,7 @@
     "headline": "Script tags are deprecated and will stop running on March 1, 2027",
     "summary": "Starting October 1, 2026, the scriptTagCreate and scriptTagUpdate mutations will return an user error, and the ScriptTag REST Admin API resource will reject POST and PUT . The deprecation applies to all API versions, including older ones, so pinning won't defer it. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Storefronts are the last place script tags still run, since they already stopped working on the Order status page . If your app uses a script tag to load JavaScript onto a store, then you need to replace it before then. What's changing A script tag loads JavaScript on a storefront without any changes to theme code. After March 1, 2027, Shopify won't inject",
     "event_date": "2026-08-24T16:00:00Z",
-    "detected_at": "2026-09-09T04:17:27.177695Z",
+    "detected_at": "2026-09-09T04:28:41.721373Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -65,21 +140,113 @@
         "engagement": 0
       }
     ],
-    "reaction_evidence": [],
+    "reaction_evidence": [
+      {
+        "tier": "tier_2_reaction",
+        "title": "Tracking: replace Create React App with Vite",
+        "url": "https://github.com/apache/answer/issues/1578",
+        "publisher": "GitHub Issues",
+        "published_at": "2026-08-22T06:46:09Z",
+        "excerpt": "This is the tracking issue for replacing `react-scripts` and `react-app-rewired` with Vite in `ui/`, opened at maintainer request as the follow-up to #1567. It records scope and constraints only. The work itself lands as three child pull requests, each of which keeps `dev` buildable on its own. **Why.** `react-scripts` is unmaintained and officially sunset. It sits behind most of the `ui/` audit findings and blocks dependency upgrades, and staying on it is the riskier default. #1567 has the full write-up, the regression matrix results, and the measurements. **The series.** Each child has its own issue and its own PR against `dev`. Order matters: 2 depends on 1, 3 depends on 2. - [ ] Step 1, Go HTML and asset contract: #1579. `GetStyle()` reads the script and stylesheet tags out of the buil",
+        "is_official": false,
+        "source_kind": "github_issue",
+        "signal": "migration_pain",
+        "signal_score": 3,
+        "engagement": 0
+      }
+    ],
     "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T04:17:29.979143Z",
+    "reaction_checked_at": "2026-09-09T04:28:54.594192Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
     ],
-    "reaction_candidate_count": 40,
-    "demand_status": "no_signal",
-    "supply_checked_at": null,
-    "supply_sources_checked": [],
-    "supply_candidate_count": 0,
-    "supply_status": "unassessed",
-    "gap_status": "no_demand",
-    "confidence": "weak",
+    "reaction_candidate_count": 117,
+    "reaction_queries": [
+      {
+        "source": "hacker_news",
+        "query": "Script tags",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "hacker_news",
+        "query": "Shopify Script tags",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "hacker_news",
+        "query": "Script tags deprecated",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "hacker_news",
+        "query": "Script tags sunset",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "hacker_news",
+        "query": "Script tags migration",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "hacker_news",
+        "query": "Script tags alternative",
+        "candidate_count": 0,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Script tags\" Shopify created:>=2026-05-12 is:issue",
+        "candidate_count": 26,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Script tags\" created:>=2026-05-12 is:issue",
+        "candidate_count": 40,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Script tags\" deprecated created:>=2026-05-12 is:issue",
+        "candidate_count": 40,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Script tags\" sunset created:>=2026-05-12 is:issue",
+        "candidate_count": 15,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Script tags\" migration created:>=2026-05-12 is:issue",
+        "candidate_count": 40,
+        "ok": true
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Script tags\" alternative created:>=2026-05-12 is:issue",
+        "candidate_count": 40,
+        "ok": true
+      }
+    ],
+    "reaction_search_quality": "adequate",
+    "demand_status": "early_signal",
+    "supply_checked_at": "2026-09-09T04:28:56.118134Z",
+    "supply_sources_checked": [
+      "github_repositories",
+      "npm"
+    ],
+    "supply_candidate_count": 60,
+    "supply_status": "no_supply",
+    "gap_status": "watch",
+    "confidence": "emerging",
     "status": "verified",
     "notes": []
   }
