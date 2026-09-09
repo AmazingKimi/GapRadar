@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gapradar"
-version = "0.1.0"
+version = "0.2.0"
 description = "Detect verified market-change events that may create displaced demand."
 readme = "README.md"
 requires-python = ">=3.11"
