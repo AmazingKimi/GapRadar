@@ -253,7 +253,9 @@ def discover_github_supply(event: MarketEvent, *, as_of: date, timeout: float = 
 
 
 def apply_discovered_supply(event: MarketEvent, candidates: list[SupplyCandidate], audit: DiscoveryAudit, *, as_of: date) -> None:
-    if event.demand_status not in {"early_signal", "repeated_signal"}:
+    # Supply is allowed for every verified event with an explicit demand hypothesis.
+    # Reaction changes confidence only; it can never veto market-coverage work.
+    if event.status != "verified" or event.demand_hypothesis is None:
         return
     accepted: list[SourceEvidence] = []
     for candidate in candidates:
@@ -304,7 +306,7 @@ def run_case(case: dict[str, Any]) -> dict[str, Any]:
     apply_discovered_reaction(event, hn + gh, audits, as_of=as_of)
 
     supply_audit: DiscoveryAudit | None = None
-    if event.demand_status in {"early_signal", "repeated_signal"}:
+    if event.status == "verified" and event.demand_hypothesis is not None:
         supply, supply_audit = discover_github_supply(event, as_of=as_of)
         apply_discovered_supply(event, supply, supply_audit, as_of=as_of)
 
@@ -374,6 +376,7 @@ def run(fixture: Path, output: Path, *, as_of: date | None = None) -> dict[str, 
             "The official event document is still fixture-provided; this benchmark isolates downstream discovery rather than Tier-1 event discovery.",
             "Reaction candidates are restricted to the event-to-as-of window to avoid counting unrelated pre-event discussions as displacement evidence.",
             "Preferred ecosystem sources that are not implemented are reported as coverage gaps and downgrade search quality.",
+            "Supply runs for every verified event with a demand hypothesis, regardless of whether reaction evidence was found.",
             "GitHub supply candidates are filtered to repositories created by the historical as-of date, but repository metadata is current. Current star counts are deliberately ignored.",
             "No detected signal is not proof of no demand; failed or incomplete source coverage remains visible.",
         ],
