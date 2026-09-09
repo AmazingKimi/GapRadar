@@ -55,20 +55,32 @@ def _query(event: MarketEvent) -> str:
     return " ".join(terms) or event.vendor
 
 
+def _hits(tokens: list[str], text: str) -> int:
+    return sum(1 for token in tokens if re.search(rf"\b{re.escape(token)}\b", text, flags=re.I))
+
+
 def score_supply(candidate: SupplyCandidate, event: MarketEvent, *, now: datetime | None = None) -> int:
     now = now or datetime.now(timezone.utc)
-    text = f"{candidate.title} {candidate.description}".lower()
+    title = candidate.title.lower()
+    body = candidate.description.lower()
+    combined = f"{title} {body}"
     tokens = _product_tokens(event)
-    product_hits = sum(1 for token in tokens if re.search(rf"\b{re.escape(token)}\b", text))
-    explicit_replacement = bool(REPLACEMENT_RE.search(text))
+    title_hits = _hits(tokens, title)
+    total_hits = _hits(tokens, combined)
+    explicit_replacement = bool(REPLACEMENT_RE.search(combined))
 
-    # Popularity, freshness, or a vendor name cannot turn a generic package into
-    # replacement supply. Require strong product overlap, or explicit replacement
-    # language plus at least one product-specific token.
-    if product_hits < 2 and not (explicit_replacement and product_hits >= 1):
+    # Generic ecosystem packages often repeat words such as "theme", "script",
+    # or "CLI" in their descriptions. They are not substitutes. A candidate must
+    # either self-identify as a replacement/migration path, or name at least two
+    # product-specific concepts in its own title.
+    if not explicit_replacement and title_hits < 2:
+        return 0
+    if explicit_replacement and total_hits < 1:
         return 0
 
-    score = min(product_hits, 3)
+    score = min(total_hits, 3)
+    if title_hits >= 2:
+        score += 1
     if explicit_replacement:
         score += 2
     if candidate.archived:
