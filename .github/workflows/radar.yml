@@ -34,8 +34,8 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: python -m pip install -e .
-      - name: Compile dashboard renderer
-        run: python -m py_compile src/gapradar/render.py
+      - name: Compile dashboard renderer and runtime
+        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py
       - name: Scan world news and industry changes
         run: python -m gapradar.cli world-scan
       - name: Deep-dive world leads into supply and gap assessments
@@ -62,12 +62,9 @@ jobs:
         run: python -m gapradar.cli build-dossiers
       - name: Export live opportunity board from current source
         run: |
-          python - <<'PY'
-          import gapradar.render
-          print('render module:', gapradar.render.__file__)
-          PY
           python -m gapradar.cli export
-      - name: Verify approved dashboard shell
+          python -m gapradar.dashboard_runtime
+      - name: Verify functional dashboard contract
         run: |
           grep -q '从世界的变化' docs/index.html
           grep -q 'class="sidebar"' docs/index.html
@@ -75,8 +72,11 @@ jobs:
           grep -q 'class="globe"' docs/index.html
           grep -q 'id="langToggle"' docs/index.html
           grep -q 'id="themeToggle"' docs/index.html
-          grep -q '行业雷达' docs/index.html
-          grep -q 'Sector Radar' docs/index.html
+          grep -q 'gapradar-runtime-v2' docs/index.html
+          grep -q 'Find the next opportunity' docs/index.html
+          grep -q 'localStorage.setItem' docs/index.html
+          grep -q 'width:calc(100% - 230px)' docs/index.html
+          grep -q 'M96 104l27-32' docs/index.html
           if grep -q "Today's Market Gaps" docs/index.html; then
             echo 'Old dashboard detected after export.'
             exit 1
