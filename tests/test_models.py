@@ -64,10 +64,21 @@ def test_official_only_is_verified_but_weak():
     assert event.gap_status == "unassessed"
 
 
-def test_no_demand_never_becomes_gap_even_when_supply_is_empty():
+def test_failed_reaction_search_stays_unassessed():
     event = make_event(
         official_evidence=[official_evidence()],
         reaction_checked_at=NOW,
+        reaction_search_quality="failed",
+    ).verify()
+    assert event.demand_status == "unassessed"
+    assert event.gap_status == "unassessed"
+
+
+def test_no_detected_demand_never_becomes_gap_even_when_supply_is_empty():
+    event = make_event(
+        official_evidence=[official_evidence()],
+        reaction_checked_at=NOW,
+        reaction_search_quality="adequate",
         supply_checked_at=NOW,
     ).verify()
     assert event.demand_status == "no_signal"
@@ -79,8 +90,9 @@ def test_repeated_demand_plus_thin_supply_becomes_potential_gap():
     event = make_event(
         official_evidence=[official_evidence()],
         reaction_evidence=[reaction("A"), reaction("B"), reaction("C")],
-        supply_evidence=[supply()],
         reaction_checked_at=NOW,
+        reaction_search_quality="adequate",
+        supply_evidence=[supply()],
         supply_checked_at=NOW,
     ).verify()
     assert event.demand_status == "repeated_signal"
@@ -93,8 +105,9 @@ def test_strong_replacement_supply_marks_market_likely_served():
     event = make_event(
         official_evidence=[official_evidence()],
         reaction_evidence=[reaction("A"), reaction("B"), reaction("C")],
-        supply_evidence=[supply(8)],
         reaction_checked_at=NOW,
+        reaction_search_quality="adequate",
+        supply_evidence=[supply(8)],
         supply_checked_at=NOW,
     ).verify()
     assert event.supply_status == "served"
