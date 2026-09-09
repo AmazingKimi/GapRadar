@@ -7,7 +7,7 @@
     "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
     "summary": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
     "event_date": "2026-08-27T16:00:00Z",
-    "detected_at": "2026-09-09T04:06:25.600902Z",
+    "detected_at": "2026-09-09T04:07:48.974798Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -35,7 +35,7 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 6,
+        "signal_score": 7,
         "engagement": 1000
       },
       {
@@ -48,7 +48,7 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 6,
+        "signal_score": 7,
         "engagement": 1000
       },
       {
@@ -61,7 +61,7 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 6,
+        "signal_score": 7,
         "engagement": 1000
       },
       {
@@ -74,7 +74,7 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 6,
+        "signal_score": 7,
         "engagement": 1000
       },
       {
@@ -87,7 +87,7 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 6,
+        "signal_score": 7,
         "engagement": 1000
       },
       {
@@ -100,33 +100,7 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "@shopify/create-app",
-        "url": "https://www.npmjs.com/package/@shopify/create-app",
-        "publisher": "npm",
-        "published_at": "2026-09-02T00:13:13.293000Z",
-        "excerpt": "A CLI tool to create a new Shopify app.",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "shopify",
-        "url": "https://www.npmjs.com/package/shopify",
-        "publisher": "npm",
-        "published_at": "2026-09-02T00:09:45.745000Z",
-        "excerpt": "A CLI tool to build for the Shopify platform",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
+        "signal_score": 7,
         "engagement": 1000
       },
       {
@@ -139,7 +113,7 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 6,
+        "signal_score": 7,
         "engagement": 1000
       },
       {
@@ -152,20 +126,7 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "themelab",
-        "url": "https://www.npmjs.com/package/themelab",
-        "publisher": "npm",
-        "published_at": "2021-06-28T21:05:16.056000Z",
-        "excerpt": "Shopify Theme Lab CLI",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
+        "signal_score": 7,
         "engagement": 1000
       },
       {
@@ -178,18 +139,18 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 6,
+        "signal_score": 7,
         "engagement": 1000
       }
     ],
-    "reaction_checked_at": "2026-09-09T04:06:26.728946Z",
+    "reaction_checked_at": "2026-09-09T04:07:50.144165Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
     ],
     "reaction_candidate_count": 0,
     "demand_status": "no_signal",
-    "supply_checked_at": "2026-09-09T04:06:28.765925Z",
+    "supply_checked_at": "2026-09-09T04:07:52.009455Z",
     "supply_sources_checked": [
       "github_repositories",
       "npm"
@@ -209,7 +170,7 @@
     "headline": "Script tags are deprecated and will stop running on March 1, 2027",
     "summary": "Starting October 1, 2026, the scriptTagCreate and scriptTagUpdate mutations will return an user error, and the ScriptTag REST Admin API resource will reject POST and PUT . The deprecation applies to all API versions, including older ones, so pinning won't defer it. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Storefronts are the last place script tags still run, since they already stopped working on the Order status page . If your app uses a script tag to load JavaScript onto a store, then you need to replace it before then. What's changing A script tag loads JavaScript on a storefront without any changes to theme code. After March 1, 2027, Shopify won't inject",
     "event_date": "2026-08-24T16:00:00Z",
-    "detected_at": "2026-09-09T04:06:25.601424Z",
+    "detected_at": "2026-09-09T04:07:48.975356Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -229,71 +190,6 @@
     "supply_evidence": [
       {
         "tier": "tier_3_supply",
-        "title": "scittle",
-        "url": "https://www.npmjs.com/package/scittle",
-        "publisher": "npm",
-        "published_at": "2026-08-18T19:34:15.867000Z",
-        "excerpt": "The [Small Clojure Interpreter](https://github.com/babashka/sci) exposed for usage in script tags.",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "@theneo/vanilla",
-        "url": "https://www.npmjs.com/package/@theneo/vanilla",
-        "publisher": "npm",
-        "published_at": "2026-09-01T14:12:34.847000Z",
-        "excerpt": "Standalone Theneo API Reference bundle for script tags and static hosting",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "@tirs/react",
-        "url": "https://www.npmjs.com/package/@tirs/react",
-        "publisher": "npm",
-        "published_at": "2026-08-13T22:07:47.189000Z",
-        "excerpt": "React bindings for the Tirs Care SDK: <TirsProvider>, useTirs(), and SSR-safe script tags for Next.js.",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "vite-plugin-inject-scripts",
-        "url": "https://www.npmjs.com/package/vite-plugin-inject-scripts",
-        "publisher": "npm",
-        "published_at": "2026-09-01T18:04:14.196000Z",
-        "excerpt": "A Vite plugin that injects `<script>` tags into the generated HTML files",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "json-from-script",
-        "url": "https://www.npmjs.com/package/json-from-script",
-        "publisher": "npm",
-        "published_at": "2025-09-18T11:14:53.541000Z",
-        "excerpt": "Tiny JSON parser for your CSP aware script tags",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 6,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
         "title": "docusaurus-plugin-script-tags",
         "url": "https://www.npmjs.com/package/docusaurus-plugin-script-tags",
         "publisher": "npm",
@@ -302,20 +198,7 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 5,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "@mattkrick/sanitize-svg",
-        "url": "https://www.npmjs.com/package/@mattkrick/sanitize-svg",
-        "publisher": "npm",
-        "published_at": "2025-04-23T20:47:19.911000Z",
-        "excerpt": "a small script to remove script tags from SVGs",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 5,
+        "signal_score": 6,
         "engagement": 1000
       },
       {
@@ -328,7 +211,7 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 5,
+        "signal_score": 6,
         "engagement": 1000
       },
       {
@@ -341,57 +224,44 @@
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 5,
+        "signal_score": 6,
         "engagement": 1000
       },
       {
         "tier": "tier_3_supply",
-        "title": "react-safe-json-ld",
-        "url": "https://www.npmjs.com/package/react-safe-json-ld",
+        "title": "grunt-script-link-tags",
+        "url": "https://www.npmjs.com/package/grunt-script-link-tags",
         "publisher": "npm",
-        "published_at": "2024-12-06T19:10:02.857000Z",
-        "excerpt": "Render safe JSON-LD script tags using React",
+        "published_at": "2014-10-17T14:06:34.181000Z",
+        "excerpt": "Automatically generate script tags and link tags for your HTML",
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 5,
+        "signal_score": 6,
         "engagement": 1000
       },
       {
         "tier": "tier_3_supply",
-        "title": "html-inject-script",
-        "url": "https://www.npmjs.com/package/html-inject-script",
+        "title": "webpack-script-tags-plugin",
+        "url": "https://www.npmjs.com/package/webpack-script-tags-plugin",
         "publisher": "npm",
-        "published_at": "2017-04-21T18:55:57.848000Z",
-        "excerpt": "Transform stream for injecting script tags into html.",
+        "published_at": "2020-07-13T11:45:18.979000Z",
+        "excerpt": "A webpack plugin to add script tags to multiple .html/.jsp files",
         "is_official": false,
         "source_kind": "npm_package",
         "signal": "replacement_supply",
-        "signal_score": 5,
-        "engagement": 1000
-      },
-      {
-        "tier": "tier_3_supply",
-        "title": "load-js",
-        "url": "https://www.npmjs.com/package/load-js",
-        "publisher": "npm",
-        "published_at": "2023-01-03T14:15:43.041000Z",
-        "excerpt": "Promise based script loader for the browser using script tags",
-        "is_official": false,
-        "source_kind": "npm_package",
-        "signal": "replacement_supply",
-        "signal_score": 5,
+        "signal_score": 6,
         "engagement": 1000
       }
     ],
-    "reaction_checked_at": "2026-09-09T04:06:28.161535Z",
+    "reaction_checked_at": "2026-09-09T04:07:51.380036Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
     ],
     "reaction_candidate_count": 40,
     "demand_status": "no_signal",
-    "supply_checked_at": "2026-09-09T04:06:30.100470Z",
+    "supply_checked_at": "2026-09-09T04:07:52.849954Z",
     "supply_sources_checked": [
       "github_repositories",
       "npm"
