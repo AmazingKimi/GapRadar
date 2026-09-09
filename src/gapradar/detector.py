@@ -19,11 +19,14 @@ TITLE_PATTERNS: dict[EventType, tuple[str, ...]] = {
         r"\bnew pricing\b",
         r"\bfree (?:plan|tier).*(?:end|ending|remove|removed|retire|retired|discontinue|discontinued)\w*\b",
         r"\bbilling (?:change|changes|update|updates)\b",
+        r"\b(?:cancel|canceling|cancelling|remove|removing).{0,40}\b(?:fee|pricing|charge)\b",
     ),
     EventType.API_TERMS: (
         r"\b(?:API|APIs|SDK|endpoint|endpoints|REST|GraphQL|webhook|webhooks).*(?:deprecat|sunset|retir|remov|discontinu)\w*\b",
         r"\b(?:deprecat|sunset|retir|remov|discontinu)\w*.*(?:API|APIs|SDK|endpoint|endpoints|REST|GraphQL|webhook|webhooks)\b",
         r"\bterms of service.*(?:change|changes|update|updates)\b",
+        r"\blicens(?:e|ing).*(?:change|changes|update|updates|adopt)\b",
+        r"\b(?:adopt|switch).{0,50}\b(?:license|licence)\b",
         r"\bpolicy (?:change|changes|update|updates)\b",
         r"\bbreaking change\b",
     ),
@@ -36,38 +39,55 @@ TITLE_PATTERNS: dict[EventType, tuple[str, ...]] = {
         r"\bdeprecated\b",
         r"\bdiscontinu(?:e|ed|ing)\b",
         r"\bno longer available\b",
+        r"\bsunset(?:ting)?\b",
+        r"\bgoing away\b",
+        r"\bwind(?:ing)? down\b",
     ),
 }
 
-# Body-only matching is deliberately much stricter. A changelog entry can
-# mention a deprecated field while announcing a completely unrelated feature;
-# that is not a market-change event. We only inspect the body when the title
-# itself clearly frames the post as a migration/transition/removal notice.
 BODY_FALLBACK_TITLE_GATE = (
     r"\bmigration\b",
     r"\btransition\b",
     r"\bremoval\b",
     r"\bend[- ]of[- ]support\b",
     r"\bsunset notice\b",
+    r"\bnext chapter\b",
+    r"\bmessage about\b",
+    r"\bwhat(?:'s| is) changing\b",
+    r"\bimportant changes\b",
+    r"\bupdates? to\b",
+    r"\bpricing updates?\b",
+    r"\bhealthy ecosystem\b",
+    r"\bnext phase\b",
+    r"\binvesting in\b",
+    r"\bsaying goodbye\b",
 )
 
 BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
     EventType.PRICE_SHOCK: (
-        r"\bfree (?:plan|tier).{0,120}\b(?:will|is|has been).{0,40}\b(?:removed|retired|discontinued|ended)\b",
-        r"\bprice.{0,80}\b(?:will|is).{0,30}\b(?:increase|increasing|changing)\b",
-        r"\b(?:billing|pricing).{0,80}\b(?:will|is).{0,30}\b(?:change|changing)\b",
+        r"\bfree (?:plan|tier).{0,180}\b(?:will|is|has been).{0,60}\b(?:removed|retired|discontinued|ended|limited|deactivated)\b",
+        r"\bprice.{0,100}\b(?:will|is).{0,50}\b(?:increase|increasing|changing)\b",
+        r"\b(?:billing|pricing).{0,100}\b(?:will|is).{0,50}\b(?:change|changing)\b",
+        r"\b(?:free|existing).{0,120}\b(?:plan|tier|users?).{0,120}\b(?:paid|subscription|pro)\b",
+        r"\b(?:fee|charge).{0,120}\b(?:introduc|cancel|remov)\w*\b",
     ),
     EventType.API_TERMS: (
-        r"\b(?:API|SDK|endpoint|REST|GraphQL|webhook).{0,180}\b(?:will|is|has been).{0,50}\b(?:deprecated|removed|retired|sunset|discontinued)\b",
-        r"\b(?:deprecated|removed|retired|sunset|discontinued).{0,180}\b(?:API|SDK|endpoint|REST|GraphQL|webhook)\b",
-        r"\bterms of service.{0,100}\b(?:will|have|has).{0,30}\b(?:change|changed|updated)\b",
+        r"\b(?:API|SDK|endpoint|REST|GraphQL|webhook).{0,220}\b(?:will|is|has been).{0,70}\b(?:deprecated|removed|retired|sunset|discontinued|changed)\b",
+        r"\b(?:deprecated|removed|retired|sunset|discontinued).{0,220}\b(?:API|SDK|endpoint|REST|GraphQL|webhook)\b",
+        r"\bterms of service.{0,140}\b(?:will|have|has).{0,50}\b(?:change|changed|updated)\b",
+        r"\b(?:license|licensing).{0,160}\b(?:change|changed|adopt|adopted|switch|switched)\w*\b",
+        r"\b(?:data )?API access.{0,180}\b(?:change|update|commercial|terms)\w*\b",
     ),
     EventType.SHUTDOWN: (
-        r"\b(?:product|service|app|application|platform|feature|model).{0,160}\b(?:will|is|has been).{0,50}\b(?:retired|shutdown|shut down|decommissioned|discontinued|deprecated)\b",
+        r"\b(?:product|service|app|application|platform|feature|model|plans?|dynos?|devices?).{0,200}\b(?:will|is|has been).{0,70}\b(?:retired|shutdown|shut down|decommissioned|discontinued|deprecated|wound down|sunset)\b",
         r"\bwill no longer be available\b",
+        r"\bwill no longer run\b",
         r"\bfully retired\b",
         r"\bhas been decommissioned\b",
         r"\bis now retired\b",
+        r"\b(?:begin|beginning|start|starting).{0,80}\b(?:wind|shut|sunset|phase)\w*.{0,80}\b(?:down|out)\b",
+        r"\bwill be discontinued\b",
+        r"\bshuts down\b",
     ),
 }
 
@@ -132,6 +152,41 @@ def make_event_id(vendor: str, product: str, headline: str) -> str:
     return hashlib.sha256(raw).hexdigest()[:16]
 
 
+def event_from_document(
+    *,
+    vendor: str,
+    product: str,
+    title: str,
+    summary: str,
+    url: str,
+    published_at: datetime | None = None,
+) -> MarketEvent | None:
+    """Classify a first-party document, including an archived Wayback snapshot."""
+    event_type = classify_entry(title, summary)
+    if event_type is None:
+        return None
+    evidence = SourceEvidence(
+        tier=EvidenceTier.TIER_1_OFFICIAL,
+        title=title,
+        url=url,
+        publisher=vendor,
+        published_at=published_at,
+        excerpt=_clean_html(summary)[:700],
+        is_official=True,
+    )
+    event = MarketEvent(
+        id=make_event_id(vendor, product, title),
+        product=product,
+        vendor=vendor,
+        event_type=event_type,
+        headline=title,
+        summary=evidence.excerpt or title,
+        event_date=published_at,
+        official_evidence=[evidence],
+    )
+    return event.verify()
+
+
 def _published(entry: dict) -> datetime | None:
     parsed = entry.get("published_parsed") or entry.get("updated_parsed")
     if not parsed:
@@ -175,33 +230,17 @@ def parse_feed(feed_text: str, source: OfficialSource, *, now: datetime | None =
         if not is_allowed_official_url(link, source.allowed_domains):
             continue
 
-        event_type = classify_entry(title, summary)
-        if not event_type:
-            continue
-
-        clean_summary = _clean_html(summary)
         product = _infer_product(source, title)
-        evidence = SourceEvidence(
-            tier=EvidenceTier.TIER_1_OFFICIAL,
-            title=title,
-            url=link,
-            publisher=source.vendor,
-            published_at=published_at,
-            excerpt=clean_summary[:700],
-            is_official=True,
-        )
-        event = MarketEvent(
-            id=make_event_id(source.vendor, product, title),
-            product=product,
+        event = event_from_document(
             vendor=source.vendor,
-            event_type=event_type,
-            headline=title,
-            summary=evidence.excerpt or title,
-            event_date=published_at,
-            official_evidence=[evidence],
+            product=product,
+            title=title,
+            summary=summary,
+            url=link,
+            published_at=published_at,
         )
-        event.verify()
-        events.append(event)
+        if event is not None:
+            events.append(event)
 
     return events
 
@@ -210,7 +249,7 @@ def _get(source: OfficialSource, timeout: float) -> httpx.Response:
     with httpx.Client(
         timeout=timeout,
         follow_redirects=True,
-        headers={"User-Agent": "GapRadar/0.2 (+https://github.com/AmazingKimi/GapRadar)"},
+        headers={"User-Agent": "GapRadar/0.7 (+https://github.com/AmazingKimi/GapRadar)"},
     ) as client:
         response = client.get(source.url)
         response.raise_for_status()
