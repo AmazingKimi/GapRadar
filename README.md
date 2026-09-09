@@ -4,37 +4,6 @@
 
 It is not an “AI startup idea generator”. It is an evidence-first market-intelligence system for people who already make high-stakes decisions: strategy, corporate development, market research, venture investing, and product planning.
 
-## V0.8 architecture
-
-```text
-WORLD SCAN
-broad, noisy discovery across technology, energy, healthcare,
-finance, mobility, industry, consumer and frontier sectors
-        ↓
-CANDIDATE EVENT
-news / industry signal only; not yet a fact
-        ↓
-FIRST-PARTY SOURCE FINDER
-find likely official source candidates; still not verified
-        ↓
-TIER-1 VERIFY
-first-party confirmation required
-        ↓
-DEMAND HYPOTHESIS
-who is affected / job-to-be-done / disruption / successor / unknowns
-        ↓
-   ┌───────────────┐
-   ↓               ↓
-REACTION         SUPPLY
-confidence       market coverage
-modifier         assessment
-   └───────┬───────┘
-           ↓
-      GAP JUDGMENT
-           ↓
-        DOSSIER
-```
-
 ## The core rule
 
 **Reaction evidence never has veto power.**
