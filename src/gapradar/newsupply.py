@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from dataclasses import replace
 from urllib.parse import quote_plus
 
@@ -8,6 +9,15 @@ import httpx
 
 from .worlddeep import WorldLeadAssessment, _relevance, _route, _subject
 from .worldscan import GapCandidate
+
+PRODUCT_SIGNAL = re.compile(
+    r"\b(software|tool|platform|solution|suite|service|provider|vendor|startup|product|automation|alternative|replacement|competitor|migration tool|grc)\b",
+    re.I,
+)
+POLICY_ONLY = re.compile(
+    r"\b(guidance|law|act|regulation|rule|rules|requirement|requirements|proposal|proposed|agenda|policy|obligation|obligations|deadline)\b",
+    re.I,
+)
 
 
 def _google_news_supply(candidate: GapCandidate, *, timeout: float = 12.0) -> tuple[list[dict[str, str]], str | None]:
@@ -33,6 +43,27 @@ def _google_news_supply(candidate: GapCandidate, *, timeout: float = 12.0) -> tu
         return [], f"{type(exc).__name__}: {exc}"
 
 
+def _looks_like_supply(row: dict[str, str], candidate: GapCandidate) -> bool:
+    title = str(row.get("title") or "")
+    text = f"{title} {row.get('snippet','')}"
+    subject = _subject(candidate).lower()
+    normalized_title = re.sub(r"[^a-z0-9]+", " ", title.lower()).strip()
+    normalized_subject = re.sub(r"[^a-z0-9]+", " ", subject).strip()
+    # The event article itself, or a near-repeat of it, is not replacement supply.
+    if normalized_subject and (normalized_subject in normalized_title or normalized_title in normalized_subject):
+        return False
+    if not PRODUCT_SIGNAL.search(text):
+        return False
+    # Regulatory reporting is especially noisy: a policy article mentioning
+    # "compliance" is not a compliance product. Require product semantics in title.
+    if candidate.change_type == "regulatory_shift":
+        if not PRODUCT_SIGNAL.search(title):
+            return False
+        if POLICY_ONLY.search(title) and not re.search(r"\b(tool|software|platform|solution|suite|service|provider|vendor|startup|product|automation|grc)\b", title, re.I):
+            return False
+    return True
+
+
 def enrich_failed_assessment(candidate: GapCandidate, assessment: WorldLeadAssessment) -> WorldLeadAssessment:
     if assessment.supply_coverage != "failed":
         return assessment
@@ -42,7 +73,8 @@ def enrich_failed_assessment(candidate: GapCandidate, assessment: WorldLeadAsses
         errors.append(f"google_news_supply: {error or 'no results'}")
         return replace(assessment, errors=errors)
 
-    scored = [(row, _relevance(row, candidate)) for row in rows]
+    supply_like = [row for row in rows if _looks_like_supply(row, candidate)]
+    scored = [(row, _relevance(row, candidate)) for row in supply_like]
     evidence = [dict(row, relevance=score) for row, score in sorted(scored, key=lambda pair: pair[1], reverse=True) if score >= 3][:8]
     publishers = {str(row.get("source") or "") for row in evidence}
 
@@ -50,17 +82,17 @@ def enrich_failed_assessment(candidate: GapCandidate, assessment: WorldLeadAsses
         supply_status = "served_signal"
         gap_assessment = "LIKELY SERVED"
         recommendation = "DISMISS"
-        summary = "Fallback market search found several relevant substitute/compliance-solution signals across multiple publishers. Broad supply appears present; a narrower unmet job would be required before treating this as a gap."
+        summary = "Fallback market search found multiple product-like substitute or compliance-solution signals across publishers. Broad supply appears present, but the primary web-search lane is still missing."
     elif evidence:
         supply_status = "thin_supply_signal"
         gap_assessment = "INSUFFICIENT COVERAGE"
         recommendation = "WATCH"
-        summary = "Fallback market search found some relevant supply signals, but news-index coverage is not sufficient to conclude that the market is served or underserved."
+        summary = "Fallback market search found some product-like supply signals, but news-index coverage is not sufficient to conclude that the market is served or underserved."
     else:
         supply_status = "no_supply_detected"
         gap_assessment = "INSUFFICIENT COVERAGE"
         recommendation = "WATCH"
-        summary = "Fallback news-index search returned a usable result set but no qualifying supply evidence. News coverage alone is insufficient to promote this to a market gap."
+        summary = "Fallback news-index search returned results but no qualifying product-like supply evidence. News coverage alone is insufficient to promote this to a market gap."
 
     return replace(
         assessment,
