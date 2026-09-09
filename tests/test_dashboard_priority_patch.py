@@ -4,7 +4,7 @@ from pathlib import Path
 from gapradar.dashboard_priority_patch import patch
 
 
-def test_priority_patch_renders_specific_reason_and_research_status(tmp_path: Path):
+def test_priority_patch_renders_status_without_description_copy(tmp_path: Path):
     html = tmp_path / "index.html"
     priorities = tmp_path / "priority-leads.json"
     candidates = tmp_path / "world-gaps.json"
@@ -37,7 +37,7 @@ def test_priority_patch_renders_specific_reason_and_research_status(tmp_path: Pa
         "priority_score": 6,
         "evidence_state": "news_only",
         "evidence_label": "Tier-1 pending",
-        "reason": "Apple TV has a concrete 20% price shock; switching demand should be investigated while Tier-1 remains pending.",
+        "reason": "THIS DESCRIPTION MUST NOT RENDER ON THE HOMEPAGE CARD.",
         "next_check": "Find Apple's first-party pricing page."
     }]), encoding="utf-8")
 
@@ -45,7 +45,8 @@ def test_priority_patch_renders_specific_reason_and_research_status(tmp_path: Pa
     text = html.read_text(encoding="utf-8")
     assert "old filler" not in text
     assert 'data-priority-status="INVESTIGATE"' in text
-    assert "Apple TV has a concrete 20% price shock" in text
-    assert "price hike" in text
+    assert "Apple TV service price hike reaches 20%" in text
+    assert "THIS DESCRIPTION MUST NOT RENDER" not in text
+    assert "Tier-1 pending" in text
     assert "优先调查线索" in text
     assert ">1</b>" in text
