@@ -1,5 +1,5 @@
 from gapradar.officialfinder import OfficialSourceLead
-from gapradar.worldofficial import verify_official_lead
+from gapradar.worldofficial import _claim_target_alignment, verify_official_lead
 from gapradar.worldscan import GapCandidate
 
 
@@ -43,3 +43,11 @@ def test_news_url_cannot_become_tier1_even_if_supplied():
     )
     fact = verify_official_lead(_candidate(), lead)
     assert fact.status == "unverified"
+
+
+def test_regulatory_claim_requires_target_and_outcome_phrases():
+    candidate = _candidate()
+    generic = "Massachusetts clean energy regulation requires utilities to comply with clean energy standards."
+    specific = "Massachusetts will require data centers to use clean energy under the new regulation."
+    assert _claim_target_alignment(candidate, generic) is False
+    assert _claim_target_alignment(candidate, specific) is True
