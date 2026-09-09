@@ -67,14 +67,23 @@ jobs:
           python -m gapradar.dashboard_runtime
       - name: Verify functional dashboard contract
         run: |
-          grep -q 'gapradar-runtime-v4' docs/index.html
+          grep -q 'gapradar-runtime-v5' docs/index.html
           grep -q 'Find the next opportunity' docs/index.html
+          grep -q 'View today’s opportunities' docs/index.html
+          grep -q 'Browse sector radar' docs/index.html
+          grep -q 'Important Global Changes' docs/index.html
+          grep -q 'Items scanned today' docs/index.html
+          grep -q 'Regulation' docs/index.html
+          grep -q 'Consumer' docs/index.html
           grep -q '中文 ✓  |  EN' docs/index.html
           grep -q 'Dark ✓  |  Light' docs/index.html
           grep -q 'width:calc(100vw - 230px)' docs/index.html
+          grep -q '@media(max-width:640px)' docs/index.html
+          grep -q '.actions{display:grid' docs/index.html
+          grep -q '.stats{grid-template-columns:repeat(2' docs/index.html
+          grep -q '.filters{width:100%' docs/index.html
           grep -q 'Automatic scan every 6 hours' docs/index.html
-          grep -q 'Important Global Changes' docs/index.html
-          if grep -q 'gapradar-runtime-v3' docs/index.html || grep -q 'gapradar-runtime-v2' docs/index.html; then
+          if grep -q 'gapradar-runtime-v4' docs/index.html || grep -q 'gapradar-runtime-v3' docs/index.html || grep -q 'gapradar-runtime-v2' docs/index.html; then
             echo 'Stale runtime detected after export.'
             exit 1
           fi
