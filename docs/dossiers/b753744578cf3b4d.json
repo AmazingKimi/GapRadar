@@ -29,7 +29,7 @@
     "tier_1_official": 1,
     "tier_2_reaction": 0,
     "tier_3_supply": 0,
-    "reaction_candidates_checked": 4,
+    "reaction_candidates_checked": 13,
     "supply_candidates_checked": 30
   },
   "reaction_search_quality": "degraded",
@@ -85,14 +85,14 @@
     {
       "source": "github_issues",
       "query": "\"Script tags\" sunset created:>=2026-05-12 is:issue",
-      "candidate_count": 0,
-      "ok": false
+      "candidate_count": 15,
+      "ok": true
     },
     {
       "source": "github_issues",
       "query": "\"Script tags\" migration created:>=2026-05-12 is:issue",
-      "candidate_count": 0,
-      "ok": false
+      "candidate_count": 40,
+      "ok": true
     },
     {
       "source": "github_issues",
