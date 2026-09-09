@@ -49,13 +49,10 @@ def _looks_like_supply(row: dict[str, str], candidate: GapCandidate) -> bool:
     subject = _subject(candidate).lower()
     normalized_title = re.sub(r"[^a-z0-9]+", " ", title.lower()).strip()
     normalized_subject = re.sub(r"[^a-z0-9]+", " ", subject).strip()
-    # The event article itself, or a near-repeat of it, is not replacement supply.
     if normalized_subject and (normalized_subject in normalized_title or normalized_title in normalized_subject):
         return False
     if not PRODUCT_SIGNAL.search(text):
         return False
-    # Regulatory reporting is especially noisy: a policy article mentioning
-    # "compliance" is not a compliance product. Require product semantics in title.
     if candidate.change_type == "regulatory_shift":
         if not PRODUCT_SIGNAL.search(title):
             return False
@@ -75,24 +72,26 @@ def enrich_failed_assessment(candidate: GapCandidate, assessment: WorldLeadAsses
 
     supply_like = [row for row in rows if _looks_like_supply(row, candidate)]
     scored = [(row, _relevance(row, candidate)) for row in supply_like]
-    evidence = [dict(row, relevance=score) for row, score in sorted(scored, key=lambda pair: pair[1], reverse=True) if score >= 3][:8]
+    # News-index results are noisy. Only high-relevance rows can count as supply
+    # evidence; generic policy/editorial items must never dismiss a gap.
+    evidence = [dict(row, relevance=score) for row, score in sorted(scored, key=lambda pair: pair[1], reverse=True) if score >= 5][:8]
     publishers = {str(row.get("source") or "") for row in evidence}
 
-    if len(evidence) >= 3 and len(publishers) >= 2:
+    if len(evidence) >= 3 and len(publishers) >= 3:
         supply_status = "served_signal"
         gap_assessment = "LIKELY SERVED"
         recommendation = "DISMISS"
-        summary = "Fallback market search found multiple product-like substitute or compliance-solution signals across publishers. Broad supply appears present, but the primary web-search lane is still missing."
+        summary = "Fallback market search found at least three strongly relevant product-like supply signals across independent publishers. Broad supply appears present, but the primary web-search lane is still missing."
     elif evidence:
         supply_status = "thin_supply_signal"
         gap_assessment = "INSUFFICIENT COVERAGE"
         recommendation = "WATCH"
-        summary = "Fallback market search found some product-like supply signals, but news-index coverage is not sufficient to conclude that the market is served or underserved."
+        summary = "Fallback market search found strong product-like supply signals, but news-index coverage alone is not sufficient to conclude that the market is served or underserved."
     else:
         supply_status = "no_supply_detected"
         gap_assessment = "INSUFFICIENT COVERAGE"
         recommendation = "WATCH"
-        summary = "Fallback news-index search returned results but no qualifying product-like supply evidence. News coverage alone is insufficient to promote this to a market gap."
+        summary = "Fallback news-index search returned results but no strongly relevant product-like supply evidence. News coverage alone is insufficient to promote this to a market gap."
 
     return replace(
         assessment,
