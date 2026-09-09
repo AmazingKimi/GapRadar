@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gapradar"
-version = "0.6.0"
-description = "Detect verified market changes, validate displaced demand and supply gaps, and build auditable opportunity dossiers."
+version = "0.7.0"
+description = "Detect verified market changes, validate displaced demand and supply gaps, build auditable dossiers, and backtest historical recall."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
