@@ -10,6 +10,7 @@ on:
       - 'src/gapradar/**'
       - 'config/sources.yml'
       - 'config/world_sources.yml'
+      - 'data/backtest/events.json'
       - '.github/workflows/radar.yml'
 
 permissions:
@@ -34,39 +35,72 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: python -m pip install -e .
-      - name: Compile dashboard renderer and runtime
-        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/strip_legacy_runtime.py
+      - name: Compile core radar and dashboard modules
+        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/strip_legacy_runtime.py src/gapradar/worldverify.py src/gapradar/blindbacktest.py src/gapradar/discovery.py
+
       - name: Scan world news and industry changes
         run: python -m gapradar.cli world-scan
-      - name: Deep-dive world leads into supply and gap assessments
+
+      - name: Probe configured first-party sources
+        run: python -m gapradar.cli doctor
+
+      - name: Scan live first-party sources
+        run: python -m gapradar.cli scan
+
+      - name: Bridge world candidates to Tier-1 verified events
+        run: python -m gapradar.cli world-verify
+
+      - name: Deep-dive only Tier-1-bridged world leads
         run: |
           python - <<'PY'
           from pathlib import Path
           from gapradar.worldscan import load_candidates
+          from gapradar.worldverify import load_verifications
           from gapradar.worlddeep import analyze_candidates, save_assessments
           from gapradar.newsupply import enrich_failed_assessments
+
           candidates = load_candidates(Path('data/world-gaps.json'))
-          assessments = enrich_failed_assessments(candidates, analyze_candidates(candidates))
+          verification = load_verifications(Path('data/world-verifications.json'))
+          verified_ids = {cid for cid, row in verification.items() if row.status == 'tier1_verified'}
+          verified = [candidate for candidate in candidates if candidate.id in verified_ids]
+          assessments = enrich_failed_assessments(verified, analyze_candidates(verified))
           save_assessments(Path('data/world-assessments.json'), assessments)
-          print(f'Deep-dived {len(assessments)} world lead(s).')
+          print(f'Deep-dived {len(assessments)} Tier-1-verified world lead(s); {len(candidates) - len(verified)} unverified lead(s) were not allowed into gap analysis.')
           PY
-      - name: Probe official sources
-        run: python -m gapradar.cli doctor
-      - name: Scan live first-party sources
-        run: python -m gapradar.cli scan
+
       - name: Collect supporting reaction evidence
         run: python -m gapradar.cli validate-demand
+
       - name: Map replacement supply independently of reaction
         run: python -m gapradar.cli validate-supply
+
       - name: Build verified-event dossiers
         run: python -m gapradar.cli build-dossiers
-      - name: Export live opportunity board from current source
+
+      - name: Run blind noisy-stream discovery benchmark
+        run: python -m gapradar.cli blind-backtest
+
+      - name: Export live opportunity board with verification guardrails
         run: |
           python -m gapradar.cli export
           python -m gapradar.strip_legacy_runtime
           python -m gapradar.dashboard_runtime
-      - name: Verify functional dashboard contract
+
+      - name: Verify architecture and dashboard contracts
         run: |
+          test -f data/world-verifications.json
+          test -f data/backtest/blind-report.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          verifications = json.loads(Path('data/world-verifications.json').read_text())
+          assert all(row['status'] in {'tier1_verified', 'unverified'} for row in verifications)
+
+          blind = json.loads(Path('data/backtest/blind-report.json').read_text())
+          assert blind['mode'] == 'blind_noisy_stream_offline'
+          assert 'precision' in blind['metrics'] and 'recall' in blind['metrics']
+          PY
           grep -q 'gapradar-runtime-v5' docs/index.html
           grep -q 'Find the next opportunity' docs/index.html
           grep -q 'View today’s opportunities' docs/index.html
@@ -91,15 +125,16 @@ jobs:
             echo 'Legacy inline controller still present; double-toggle bug would return.'
             exit 1
           fi
+
       - name: Commit radar state
         run: |
-          if git diff --quiet -- data/world-gaps.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json docs/index.html docs/dossiers; then
+          if git diff --quiet -- data/world-gaps.json data/world-verifications.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json data/backtest/blind-report.json docs/index.html docs/dossiers; then
             echo "No radar changes."
             exit 0
           fi
           git config user.name "gapradar-bot"
           git config user.email "gapradar-bot@users.noreply.github.com"
-          git add data/world-gaps.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json docs/index.html docs/dossiers
+          git add data/world-gaps.json data/world-verifications.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json data/backtest/blind-report.json docs/index.html docs/dossiers
           git commit -m "data: refresh continuous market radar"
           git pull --rebase origin main
           git push origin HEAD:main
