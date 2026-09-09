@@ -5,15 +5,15 @@
     "query": "\"Massachusetts Will Require New Data Centers to Use Clean Energy\" official",
     "candidate_urls": [
       "https://www.mass.gov/doc/efsb-25-10-decision-opening/download",
-      "https://www.mass.gov/doc/2024-climate-act-draft-regulations-eversource-national-grid-07-28-2025/download",
-      "https://www.mass.gov/executive-orders/no-658-establishing-requirements-for-responsible-data-center-development-and-operations-in-massachusetts-to-protect-and-support-ratepayers-communities-and-the-environment",
+      "https://www.mass.gov/doc/updated-siting-and-permitting-process-for-clean-energy-infrastructure-in-massachusetts/download",
+      "https://budget.digital.mass.gov/govbudget/fy24/budbriefpdf/fy24_bb09_climate_action.pdf",
       "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
       "https://www.mass.gov/info-details/efsb-permitting-dashboard"
     ],
     "candidate_hosts": [
       "www.mass.gov",
       "www.mass.gov",
-      "www.mass.gov",
+      "budget.digital.mass.gov",
       "www.mass.gov",
       "www.mass.gov"
     ],
@@ -32,9 +32,11 @@
     "status": "first_party_candidates",
     "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
     "candidate_urls": [
+      "https://heavyindustries.gov.in/sites/default/files/2026-07/lsauq_452_0.pdf",
       "https://heavyindustries.gov.in/sites/default/files/2026-07/lsauq_452.pdf"
     ],
     "candidate_hosts": [
+      "heavyindustries.gov.in",
       "heavyindustries.gov.in"
     ],
     "search_coverage": "adequate",
