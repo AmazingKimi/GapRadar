@@ -4,9 +4,19 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '17 1 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'src/gapradar/**'
+      - 'config/sources.yml'
+      - '.github/workflows/radar.yml'
 
 permissions:
   contents: write
+
+concurrency:
+  group: gapradar-live-scan
+  cancel-in-progress: false
 
 jobs:
   scan:
@@ -18,8 +28,10 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: python -m pip install -e .
-      - run: gapradar scan
-      - run: gapradar export
+      - name: Scan live first-party sources
+        run: gapradar scan
+      - name: Export dashboard
+        run: gapradar export
       - name: Commit radar state
         run: |
           if git diff --quiet -- data/events.json docs/index.html; then
