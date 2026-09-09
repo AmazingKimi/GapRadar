@@ -36,7 +36,7 @@ def _priority(cid: str, evidence: str = "Tier-1 pending"):
     }
 
 
-def test_priority_patch_renders_distinct_story_intros_without_generic_reason(tmp_path: Path):
+def test_priority_patch_renders_distinct_story_intros_without_overlay_metadata(tmp_path: Path):
     html = tmp_path / "index.html"
     priorities = tmp_path / "priority-leads.json"
     candidates = tmp_path / "world-gaps.json"
@@ -48,16 +48,23 @@ def test_priority_patch_renders_distinct_story_intros_without_generic_reason(tmp
     )
     candidates.write_text(json.dumps([
         _candidate("ev", "EV BMS Cybersecurity Testing Now Mandatory in India", "Autocar Professional", "Mobility", "regulatory_shift"),
+        _candidate("mass", "Massachusetts Will Require New Data Centers to Use Clean Energy", "EnergyNow.com", "Energy & Climate", "regulatory_shift"),
         _candidate("samsung", "Samsung preps the shutdown of two more apps late in 2026", "Android Central", "Consumer & Society", "shutdown_eol"),
     ]), encoding="utf-8")
-    priorities.write_text(json.dumps([_priority("ev"), _priority("samsung")]), encoding="utf-8")
+    priorities.write_text(json.dumps([
+        _priority("ev", "Official lead · heavyindustries.gov.in"),
+        _priority("mass", "Official lead · mass.gov"),
+        _priority("samsung"),
+    ]), encoding="utf-8")
 
     assert patch(html, priorities, candidates) == 1
     text = html.read_text(encoding="utf-8")
     assert "old filler" not in text
-    assert text.count('class="news-intro"') == 2
-    assert "Autocar Professional reports: EV BMS Cybersecurity Testing Now Mandatory in India." in text
-    assert "Android Central reports: Samsung preps the shutdown of two more apps late in 2026." in text
+    assert text.count('class="news-intro"') == 3
+    assert "Autocar Professional reports that EV BMS Cybersecurity Testing is now mandatory in India." in text
+    assert "EnergyNow.com reports that Massachusetts will require New Data Centers to Use Clean Energy." in text
+    assert "Android Central reports that Samsung is preparing to shut down two more apps late in 2026." in text
     assert "THIS GENERIC ANALYSIS MUST NOT RENDER" not in text
-    assert text.count("Tier-1 pending") == 2
-    assert ">2</b>" in text
+    assert "bottommeta" not in text
+    assert "Official lead · mass.gov" not in text
+    assert ">3</b>" in text
