@@ -95,9 +95,9 @@ BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
     ),
 }
 
-# These phrases are strong enough to classify a first-party announcement even
-# when the page title is generic (for example a terms/services summary). They
-# deliberately require explicit future removal, licensing, or paid-tier language.
+# Backtests may inspect full archived pages whose titles are generic. These
+# broader body rules are deliberately opt-in so they can improve historical
+# recall without weakening the live feed scanner's precision-first contract.
 STRONG_BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
     EventType.PRICE_SHOCK: (
         r"\b(?:sunset|end|retire|limit|deactivat)\w*.{0,140}\bfree.{0,100}\b(?:plans?|tier|users?)\b",
@@ -154,7 +154,7 @@ def classify(text: str) -> EventType | None:
     return None
 
 
-def classify_entry(title: str, summary: str) -> EventType | None:
+def classify_entry(title: str, summary: str, *, allow_strong_body: bool = False) -> EventType | None:
     for event_type in CLASSIFICATION_ORDER:
         if _match(TITLE_PATTERNS[event_type], title):
             return event_type
@@ -164,9 +164,10 @@ def classify_entry(title: str, summary: str) -> EventType | None:
             if _match(BODY_PATTERNS[event_type], summary):
                 return event_type
 
-    for event_type in CLASSIFICATION_ORDER:
-        if _match(STRONG_BODY_PATTERNS[event_type], summary):
-            return event_type
+    if allow_strong_body:
+        for event_type in CLASSIFICATION_ORDER:
+            if _match(STRONG_BODY_PATTERNS[event_type], summary):
+                return event_type
     return None
 
 
@@ -188,9 +189,10 @@ def event_from_document(
     summary: str,
     url: str,
     published_at: datetime | None = None,
+    historical: bool = False,
 ) -> MarketEvent | None:
-    """Classify a first-party document, including an archived Wayback snapshot."""
-    event_type = classify_entry(title, summary)
+    """Classify a first-party document; historical mode may inspect full-page body signals."""
+    event_type = classify_entry(title, summary, allow_strong_body=historical)
     if event_type is None:
         return None
     evidence = SourceEvidence(
@@ -266,6 +268,7 @@ def parse_feed(feed_text: str, source: OfficialSource, *, now: datetime | None =
             summary=summary,
             url=link,
             published_at=published_at,
+            historical=False,
         )
         if event is not None:
             events.append(event)
