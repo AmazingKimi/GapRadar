@@ -36,10 +36,13 @@ jobs:
           cache: pip
       - run: python -m pip install -e .
       - name: Compile core radar and dashboard modules
-        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/strip_legacy_runtime.py src/gapradar/worldverify.py src/gapradar/officialfinder.py src/gapradar/worldofficial.py src/gapradar/worlddeep.py src/gapradar/blindbacktest.py src/gapradar/discovery.py
+        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/dashboard_content_guard.py src/gapradar/strip_legacy_runtime.py src/gapradar/worldquality.py src/gapradar/worldverify.py src/gapradar/officialfinder.py src/gapradar/worldofficial.py src/gapradar/worlddeep.py src/gapradar/blindbacktest.py src/gapradar/discovery.py
 
       - name: Scan world news and industry changes
         run: python -m gapradar.cli world-scan
+
+      - name: Apply contextual quality guard
+        run: python -m gapradar.worldquality
 
       - name: Find conservative first-party source candidates
         run: |
@@ -130,6 +133,7 @@ jobs:
       - name: Export live opportunity board with verification guardrails
         run: |
           python -m gapradar.cli export
+          python -m gapradar.dashboard_content_guard
           python -m gapradar.strip_legacy_runtime
           python -m gapradar.dashboard_runtime
 
@@ -142,6 +146,11 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
+
+          candidates = json.loads(Path('data/world-gaps.json').read_text())
+          assert all(row['recommendation'] == 'WATCH' for row in candidates), 'Unverified world leads must not be promoted before Tier-1 verification.'
+          forbidden = ('From Shutdown to Showcase:', "Isn’t an EV Mandate", "wins $1 billion mandate from UK's Nuclear Liabilities Fund")
+          assert not any(any(token in row['headline'] for token in forbidden) for row in candidates), 'Known contextual false-positive pattern survived world quality guard.'
 
           official_leads = json.loads(Path('data/world-official-leads.json').read_text())
           assert all(row['status'] in {'first_party_candidates', 'not_found', 'search_failed'} for row in official_leads)
@@ -172,6 +181,8 @@ jobs:
           grep -q 'Items scanned today' docs/index.html
           grep -q 'Awaiting Tier-1' docs/index.html
           grep -q 'Discovery lead' docs/index.html
+          grep -q 'Automatically discovered structural-change lead' docs/index.html
+          grep -q '自动发现的结构性变化线索' docs/index.html
           grep -q 'Regulation' docs/index.html
           grep -q 'Consumer' docs/index.html
           grep -q '中文 ✓  |  EN' docs/index.html
@@ -182,6 +193,10 @@ jobs:
           grep -q '.stats{grid-template-columns:repeat(2' docs/index.html
           grep -q '.filters{width:100%' docs/index.html
           grep -q 'Automatic scan every 6 hours' docs/index.html
+          if grep -q 'Users, workflows or integrations must move before the old product disappears.' docs/index.html; then
+            echo 'Legacy template assertion leaked into the Global Feed.'
+            exit 1
+          fi
           if grep -q 'gapradar-runtime-v5' docs/index.html || grep -q 'gapradar-runtime-v4' docs/index.html || grep -q 'gapradar-runtime-v3' docs/index.html || grep -q 'gapradar-runtime-v2' docs/index.html; then
             echo 'Stale runtime detected after export.'
             exit 1
