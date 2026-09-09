@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 import typer
 from rich.console import Console
 from rich.table import Table
 
+from .backtest import run_backtest
 from .config import load_sources
 from .detector import probe_source, scan_source
 from .dossier import export_dossiers
@@ -78,6 +79,30 @@ def validate_supply_command(events: Path = typer.Option(Path("data/events.json")
     for event in validated:
         table.add_row(f"{event.vendor} / {event.product}", str(event.supply_candidate_count), str(len(event.supply_evidence)), event.supply_status, event.gap_status, ", ".join(event.supply_sources_checked) or "none")
     console.print(table)
+
+
+@app.command("backtest")
+def backtest_command(
+    fixture: Path = typer.Option(Path("data/backtest/events.json"), exists=True, readable=True),
+    as_of: date | None = typer.Option(None, "--as-of", formats=["%Y-%m-%d"], help="Replay only events known on or before YYYY-MM-DD."),
+    mode: str = typer.Option("fixture", help="fixture = deterministic benchmark; wayback = fetch archived first-party snapshots."),
+    output: Path = typer.Option(Path("data/backtest/report.json")),
+) -> None:
+    """Replay curated historical events and calculate detector precision/recall."""
+    if mode not in {"fixture", "wayback"}:
+        raise typer.BadParameter("mode must be 'fixture' or 'wayback'")
+    report = run_backtest(fixture, as_of=as_of, mode=mode)  # type: ignore[arg-type]
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    metrics = report["metrics"]
+    table = Table(title=f"GapRadar — Historical Backtest ({mode})")
+    table.add_column("Metric")
+    table.add_column("Value", justify="right")
+    for key in ("cases_total", "cases_evaluated", "archive_unavailable", "tp", "fp", "tn", "fn", "precision", "recall", "event_type_accuracy", "archive_coverage"):
+        table.add_row(key, str(metrics.get(key)))
+    console.print(table)
+    console.print(f"Report written to {output}. Archive misses are reported separately, never converted into detector misses.")
 
 
 @app.command("build-dossiers")
