@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from .detector import classify_entry
 from .models import MarketEvent
 
 
@@ -19,7 +20,27 @@ def save_events(path: Path, events: list[MarketEvent]) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def merge_events(existing: list[MarketEvent], incoming: list[MarketEvent]) -> list[MarketEvent]:
+def _still_matches_live_detector(event: MarketEvent) -> bool:
+    if not event.official_evidence:
+        return False
+    official = event.official_evidence[0]
+    observed = classify_entry(official.title, official.excerpt, allow_strong_body=False)
+    return observed == event.event_type
+
+
+def merge_events(
+    existing: list[MarketEvent],
+    incoming: list[MarketEvent],
+    *,
+    revalidate_existing: bool = False,
+) -> list[MarketEvent]:
+    incoming_ids = {event.id for event in incoming}
+    if revalidate_existing:
+        existing = [
+            event for event in existing
+            if event.id in incoming_ids or _still_matches_live_detector(event)
+        ]
+
     by_id = {event.id: event for event in existing}
     for event in incoming:
         previous = by_id.get(event.id)
