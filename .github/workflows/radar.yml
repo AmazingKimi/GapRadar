@@ -164,12 +164,14 @@ jobs:
             assert all(row.get('official_url') for row in assessments)
             assert all(row.get('demand_hypothesis') for row in assessments)
           PY
-          grep -q 'gapradar-runtime-v5' docs/index.html
+          grep -q 'gapradar-runtime-v6' docs/index.html
           grep -q 'Find the next opportunity' docs/index.html
           grep -q 'View today’s opportunities' docs/index.html
           grep -q 'Browse sector radar' docs/index.html
           grep -q 'Important Global Changes' docs/index.html
           grep -q 'Items scanned today' docs/index.html
+          grep -q 'Awaiting Tier-1' docs/index.html
+          grep -q 'Discovery lead' docs/index.html
           grep -q 'Regulation' docs/index.html
           grep -q 'Consumer' docs/index.html
           grep -q '中文 ✓  |  EN' docs/index.html
@@ -180,7 +182,7 @@ jobs:
           grep -q '.stats{grid-template-columns:repeat(2' docs/index.html
           grep -q '.filters{width:100%' docs/index.html
           grep -q 'Automatic scan every 6 hours' docs/index.html
-          if grep -q 'gapradar-runtime-v4' docs/index.html || grep -q 'gapradar-runtime-v3' docs/index.html || grep -q 'gapradar-runtime-v2' docs/index.html; then
+          if grep -q 'gapradar-runtime-v5' docs/index.html || grep -q 'gapradar-runtime-v4' docs/index.html || grep -q 'gapradar-runtime-v3' docs/index.html || grep -q 'gapradar-runtime-v2' docs/index.html; then
             echo 'Stale runtime detected after export.'
             exit 1
           fi
