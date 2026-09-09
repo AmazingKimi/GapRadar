@@ -15,27 +15,27 @@ import yaml
 
 CHANGE_PATTERNS: dict[str, tuple[str, ...]] = {
     "shutdown_eol": (
-        r"\bshut(?:ting)? down\b", r"\bsunset(?:ting)?\b", r"\bdiscontinu(?:e|ed|ing|ation)\b",
-        r"\bretir(?:e|ed|ing|ement)\b", r"\bend[- ]of[- ]life\b", r"\bend of support\b",
-        r"\bwill close\b", r"\bis closing\b", r"\bkills?\b",
+        r"\bshut(?:ting)? down\b", r"\bshutdown\b", r"\bsunset(?:ting)?\b", r"\bdiscontinu(?:e|ed|ing|ation)\b",
+        r"\bretir(?:e|ed|ing|ement)\b", r"\bend[- ]of[- ]life\b", r"\bend of support\b", r"\bending support\b",
+        r"\bwill close\b", r"\bis closing\b", r"\bcloses?\b", r"\bkills?\b", r"\bgoes away\b",
     ),
     "price_shock": (
         r"\bprice increase\b", r"\bprice hike\b", r"\braises? prices?\b", r"\bpricing changes?\b",
-        r"\bfree tier\b.{0,70}\bend", r"\bcharging for\b", r"\bsubscription price\b",
+        r"\bprices? (?:are )?going up\b", r"\bfree tier\b.{0,70}\bend", r"\bcharging for\b", r"\bsubscription price\b",
     ),
     "api_terms_change": (
         r"\bapi\b.{0,80}\bdeprecat", r"\bapi\b.{0,80}\bpricing\b", r"\bapi access\b.{0,80}\bchange",
         r"\bdeveloper policy\b", r"\bterms of service\b.{0,60}\bchange", r"\blicen[cs](?:e|ing) change\b",
-        r"\brate limits?\b.{0,50}\bchange",
+        r"\brate limits?\b.{0,50}\bchange", r"\bdeprecat(?:e|ed|ing|ion)\b.{0,80}\bapi\b",
     ),
     "regulatory_shift": (
-        r"\bnew regulation\b", r"\bnew rules?\b.{0,80}\bsoftware\b", r"\bcompliance deadline\b",
-        r"\bmandat(?:e|ed|ory)\b.{0,80}\bsoftware\b", r"\blaw takes effect\b", r"\bregulator\b.{0,80}\brequir",
+        r"\bnew regulation\b", r"\bnew rules?\b", r"\bcompliance deadline\b",
+        r"\bmandat(?:e|ed|ory)\b", r"\blaw takes effect\b", r"\bregulator\b.{0,80}\brequir",
     ),
 }
 
 TECH_TERMS = re.compile(
-    r"\b(software|saas|app|platform|api|cloud|developer|ai|ecommerce|e-commerce|payment|cyber|security|data|hosting|crm|automation|browser|mobile|marketplace|fintech)\b",
+    r"\b(software|saas|app|platform|api|cloud|developer|ai|ecommerce|e-commerce|payment|cyber|security|data|hosting|crm|automation|browser|mobile|marketplace|fintech|subscription|service|tool)\b",
     re.IGNORECASE,
 )
 
@@ -137,6 +137,8 @@ def scan_world(
             continue
         lookback_hours = int(source.get("lookback_hours") or 72)
         max_entries = int(source.get("max_entries") or 80)
+        forced_type = str(source.get("change_type") or "").strip() or None
+        prefiltered = bool(source.get("prefiltered", False))
         try:
             response = httpx.get(url, timeout=timeout, headers=headers, follow_redirects=True)
             response.raise_for_status()
@@ -151,14 +153,20 @@ def scan_world(
             headline = _clean(str(getattr(entry, "title", "")))
             summary = _clean(str(getattr(entry, "summary", "") or getattr(entry, "description", "")))
             link = str(getattr(entry, "link", "")).strip()
+            if not headline or not link:
+                continue
             text = f"{headline} {summary}"
             classified = classify_change(text)
-            if not classified:
+            if classified:
+                change_type, matched_signal = classified
+            elif forced_type:
+                change_type, matched_signal = forced_type, "query-matched structural change"
+            else:
                 continue
-            if not TECH_TERMS.search(text):
+            if not prefiltered and not TECH_TERMS.search(text):
                 continue
-            change_type, matched_signal = classified
             recommendation, why_now, gap_hypothesis = _gap_hypothesis(change_type)
+            status = "NEWS SIGNAL" if forced_type and not classified else "STRUCTURAL SIGNAL"
             candidate = GapCandidate(
                 id=_fingerprint(headline, change_type),
                 discovered_at=now.isoformat(),
@@ -172,10 +180,11 @@ def scan_world(
                 recommendation=recommendation,
                 why_now=why_now,
                 gap_hypothesis=gap_hypothesis,
-                validation_status="STRUCTURAL SIGNAL",
+                validation_status=status,
                 validation_summary=(
-                    f"GapRadar detected an explicit {change_type.replace('_', ' ')} signal in {name}. "
-                    "This validates that a potentially gap-creating market change is being reported; it does not yet prove that replacement supply is weak or that the opportunity is profitable."
+                    f"GapRadar found this {change_type.replace('_', ' ')} candidate in {name}. "
+                    + ("The feed itself is a targeted structural-change search, so this remains a discovery lead until a first-party source or independent confirmation is attached. " if status == "NEWS SIGNAL" else "An explicit structural-change phrase was present in the item. ")
+                    + "It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
                 ),
             )
             rows.setdefault(candidate.id, candidate)
