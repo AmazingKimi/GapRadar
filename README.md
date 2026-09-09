@@ -1,152 +1,164 @@
 # GapRadar
 
-**Detect verified market changes before they become obvious opportunities.**
+**GapRadar watches what changes in the world, verifies which changes are real, then investigates where they may create demand the market has not adequately served.**
 
-GapRadar watches first-party software sources for shutdowns, end-of-life notices, pricing shocks, API deprecations, and major platform-policy changes. It then validates displaced demand, checks replacement supply, and produces an evidence-grounded opportunity dossier instead of a generic startup idea.
+It does **not** start from complaints. Community reaction is supporting evidence only.
 
-> Market changes can create displaced demand. GapRadar detects the change first, then earns the right to investigate the gap.
-
-## The model
+## Product model
 
 ```text
-DETECT → VERIFY → REACTION → SUPPLY → GAP → DOSSIER
-                    ↕
-             HISTORICAL BACKTEST
+WORLD SCAN
+broad + noisy discovery
+        ↓
+CANDIDATE EVENT
+not yet a fact
+        ↓
+VERIFY
+Tier-1 / first-party confirmation
+        ↓
+DEMAND HYPOTHESIS
+explicit, reviewable, allowed to be low-confidence
+        ↓
+   ┌───────────────┐
+   ↓               ↓
+REACTION         SUPPLY
+confidence       market coverage
+modifier         assessment
+   └───────┬───────┘
+           ↓
+      GAP JUDGMENT
+           ↓
+        DOSSIER
 ```
 
-A vendor announcement proves a change happened. Community reaction can show whether users are actually displaced. Replacement supply can show whether that displaced demand is already served. The dossier summarizes only the evidence that survived those gates.
+The discovery layer is intentionally broad and noisy. The verification layer remains precision-first. A confidently detected event can still be a bad opportunity.
 
-## V0.7 — historical backtest
+## Core architecture rule
 
-V0.7 stops treating architecture quality as evidence of accuracy. GapRadar now has a historical replay harness that can test the detector against known market changes and, where benchmark evidence exists, replay the same reaction and supply scorers against historical documents.
+**Reaction evidence adjusts confidence; it never decides whether a verified demand hypothesis may exist and it never blocks supply analysis.**
 
-It includes:
+A verified shutdown, price shock, API/platform change, or similar structural event can therefore stay alive as a low-confidence market hypothesis even when Hacker News, GitHub Issues, Reddit, or a vendor community shows no qualifying reaction.
 
-- a curated corpus of **24 historical cases**: 18 known market-change events plus 6 negative controls;
-- shutdown/EOL, free-tier and pricing shocks, API/platform-policy changes, licensing changes and reversal cases;
-- manually recorded ground-truth event date, event class, displaced-demand label, replacement-supply label and retraction metadata where known;
-- `gapradar backtest --as-of YYYY-MM-DD` so future cases cannot leak into a historical replay;
-- deterministic fixture mode for regression testing;
-- Wayback mode that asks the Internet Archive for the closest first-party snapshot at or before the historical replay date;
-- separate archive coverage reporting: an unavailable snapshot is **not** silently converted into a detector miss;
-- archived reaction evidence scored by the same migration-pain logic used live;
-- archived replacement pages scored by the same supply logic used live;
-- a starter downstream corpus covering Heroku, Docker Free Team, Unity Runtime Fee and Reddit API reactions, plus replacement evidence for Heroku, Docker and Unity;
-- a dedicated `Historical Backtest` GitHub Action that prints and uploads both fixture and Wayback reports.
+## Demand hypothesis
 
-Historical full-page recall rules are isolated from the live feed scanner. This matters: an early V0.7 experiment broadened body matching enough to incorrectly classify Shopify's **“Oxygen is now available on trial plan stores”** as a price shock because its text mentioned that hosting had previously required a paid plan. The historical rules are now explicitly opt-in, and the live scanner has a regression test preventing that class of false positive.
+Every verified event now records an explicit `DemandHypothesis` instead of jumping directly from “change happened” to “market gap exists”. It contains:
 
-The event store also revalidates persisted events after a clean source scan, so a false positive that no longer passes current live rules is removed rather than living forever in `data/events.json`. If any live source fails, pruning is disabled for that run so a temporary outage cannot delete valid history.
+- affected users;
+- job to be done;
+- disruption created by the change;
+- official successor / migration path when known;
+- evidence basis;
+- confidence: `low`, `medium`, or `high`;
+- unresolved unknowns.
 
-### Current benchmark snapshot
+The hypothesis is allowed to be wrong. Its purpose is to make the inference visible and falsifiable rather than hiding it inside a score or LLM narrative.
 
-Observed in GitHub Actions run **34312896873** on 2026-09-09:
+Reaction evidence can raise hypothesis confidence:
 
-| Metric | Fixture replay | Wayback replay |
-| --- | ---: | ---: |
-| Cases total | 24 | 24 |
-| Cases actually evaluated | 24 | 2 |
-| TP / FP / TN / FN | 17 / 1 / 5 / 1 | 2 / 0 / 0 / 0 |
-| Precision | **0.9444** | 1.0000* |
-| Recall | **0.9444** | 1.0000* |
-| Event-type accuracy | **0.9412** | 1.0000* |
-| Archive coverage | 1.0000 | **0.0833** |
-| Demand cases evaluated | 4 | 1 |
-| Demand accuracy | 1.0000** | 0.0000** |
-| Supply cases evaluated | 3 | 0 |
-| Supply accuracy | 1.0000** | n/a |
+- no qualifying reaction / failed search → hypothesis remains `low`;
+- early reaction signal → `medium`;
+- repeated reaction signal → `high`.
 
-\* The Wayback precision/recall numbers are **not meaningful evidence of 100% accuracy** because only 2 of 24 official cases were retrievable and evaluable in that run. The important Wayback result is the 8.33% archive coverage and the visible timeout/missing-snapshot failures.
+Missing reaction never means “no demand”.
 
-\** Downstream demand/supply samples are currently tiny and hand curated. Their accuracy numbers are regression checks for those fixtures, not claims about market-wide performance.
+## Supply analysis
 
-The fixture benchmark intentionally keeps known misses visible instead of tuning them away:
+Supply now runs for any **verified event with an explicit demand hypothesis**. It no longer waits for the event to “survive” a reaction gate.
 
-- **False negative:** IFTTT SMS/Phone free-access change (2023) was missed.
-- **False positive:** a normal IFTTT Pro guide was incorrectly classified as a price shock.
-- **Type error:** Chrome Manifest V2 was detected, but classified as `shutdown_eol` instead of the expected `api_terms_change`.
-- In Wayback replay, most failures were archive availability/network problems (`archive_missing`, read/connect timeouts, connection refused), and one retrievable Docker reaction page did not qualify as migration pain under the current scorer.
-
-These failures are part of the benchmark result, not hidden test debris.
-
-### Run the benchmark
-
-```bash
-# Deterministic curated benchmark
-gapradar backtest \
-  --mode fixture \
-  --output data/backtest/report-fixture.json
-
-# Replay only history known by a date
-gapradar backtest \
-  --as-of 2023-12-31 \
-  --mode fixture
-
-# Fetch archived first-party/reaction/supply pages
-gapradar backtest \
-  --mode wayback \
-  --output data/backtest/report-wayback.json
-```
-
-The report exposes TP / FP / TN / FN, precision, recall, event-type accuracy and archive coverage. Demand/supply accuracy is shown only for cases that actually have benchmark evidence pages and, in Wayback mode, only when those pages were retrievable. A small downstream sample must not be presented as universal market accuracy.
-
-See `data/backtest/README.md` for benchmark methodology and boundaries.
-
-## Evidence hierarchy
-
-| Tier | Purpose | Examples | Can verify the event? |
-| --- | --- | --- | --- |
-| Tier 1 — Official | Establish the fact | vendor changelog, official blog, developer docs | **Yes** |
-| Tier 2 — Reaction | Measure displaced demand | HN, GitHub issues, forums | No |
-| Tier 3 — Supply | Measure replacement supply | GitHub repositories, npm packages, competing products | No |
-
-**No Tier-1 source = no verified event. Tier-2 and Tier-3 evidence can only evaluate a verified event.**
-
-## Demand states
-
-- `unassessed` — demand search has not run or the search failed;
-- `no_signal` — the recorded queries completed but no qualifying migration-pain signal was detected;
-- `early_signal` — at least one qualifying displaced-demand reaction;
-- `repeated_signal` — at least three qualifying displaced-demand reactions.
-
-`no_signal` is a detection result, not a market truth.
-
-## Supply states
+Current supply states:
 
 - `unassessed`
 - `no_supply`
 - `thin_supply`
 - `served`
 
-Supply validation is skipped unless demand survives the reaction gate.
-
-## Gap states
+Current gap states:
 
 - `unassessed`
 - `watch`
 - `potential_gap`
 - `likely_served`
 
-A `potential_gap` is still not a command to build. It is the first state that earns a `REVIEW` dossier.
+Interpretation:
 
-## Dossier verdicts
+- verified hypothesis + supply unassessed → no gap verdict yet;
+- verified hypothesis + thin/no supply + weak/no reaction → `watch`;
+- verified hypothesis + repeated reaction + thin/no supply → `potential_gap`;
+- strong replacement supply → `likely_served` even when reaction is absent.
 
-- `NO DETECTED SIGNAL` — the current audited search found no qualifying displaced-demand evidence; this does **not** mean demand is absent;
-- `SEARCH FAILED` — reaction search did not complete and no demand conclusion is allowed;
-- `WATCH` — some evidence exists, but the chain is incomplete or still early;
-- `REVIEW` — repeated displaced demand survived the supply check and deserves human opportunity review;
-- `LIKELY SERVED` — displaced demand exists, but credible replacement supply already looks strong;
-- `INSUFFICIENT EVIDENCE` — the event itself is not adequately verified.
+## Daily signal funnel
 
-GapRadar is explicitly allowed to say **we did not detect demand yet** without pretending that means **there is no demand**.
+The dashboard now exposes a funnel instead of forcing a daily winner count:
 
-## Current live sources and boundary
+```text
+world-scan candidates
+        ↓
+Tier-1 verified events
+        ↓
+explicit demand hypotheses
+        ↓
+supply maps completed
+        ↓
+WATCH / REVIEW / LIKELY SERVED
+```
 
-First-party events: GitHub, Shopify, Slack, Cloudflare.  
-Reaction: Hacker News and GitHub Issues.  
+A day with zero market gaps can be a correct result. The funnel is a health signal, not a quota.
+
+## Discovery vs verification
+
+These are deliberately separate responsibilities:
+
+- `worldscan.py` — broad candidate discovery from news and industry feeds; noisy by design.
+- `detector.py` — precision-first hard-event verification and official-domain guardrails.
+
+Do not weaken `detector.py` just to make the broad scanner produce more candidates.
+
+Current broad discovery includes targeted Google News feeds plus selected technology/industry feeds. Current first-party verification sources include GitHub, Shopify, Slack and Cloudflare.
+
+## Evidence hierarchy
+
+| Tier | Purpose | Examples | Can verify the event? |
+| --- | --- | --- | --- |
+| Tier 1 — Official | Establish the fact | vendor changelog, official blog, developer docs | **Yes** |
+| Tier 2 — Reaction | Adjust demand confidence | HN, GitHub Issues, forums, vendor communities | No |
+| Tier 3 — Supply | Assess whether the job is already served | GitHub repositories, npm, competing products | No |
+
+**No Tier-1 source = no verified event.** Tier-2 and Tier-3 evidence may evaluate a verified event, but neither can manufacture a Tier-1 fact.
+
+## Current verification benchmark
+
+The V0.7 historical fixture benchmark remains useful, but its meaning is deliberately narrow.
+
+Observed in GitHub Actions run `34312896873` on 2026-09-09:
+
+| Metric | Fixture replay | Wayback replay |
+| --- | ---: | ---: |
+| Cases total | 24 | 24 |
+| Cases actually evaluated | 24 | 2 |
+| TP / FP / TN / FN | 17 / 1 / 5 / 1 | 2 / 0 / 0 / 0 |
+| Precision | 0.9444 | 1.0000* |
+| Recall | 0.9444 | 1.0000* |
+| Event-type accuracy | 0.9412 | 1.0000* |
+| Archive coverage | 1.0000 | 0.0833 |
+
+\* Wayback precision/recall is not meaningful evidence because only 2 of 24 official cases were retrievable in that run.
+
+This benchmark primarily measures **classification / verification logic when the historical evidence item is already present**. It must not be presented as proof that WORLD SCAN can discover 94.44% of real market changes from an open information stream.
+
+Known fixture failures remain visible:
+
+- false negative: IFTTT SMS/Phone free-access change;
+- false positive: normal IFTTT Pro guide misclassified as price shock;
+- type mismatch: Chrome Manifest V2 classified as shutdown/EOL instead of API/platform change.
+
+## Current live boundary
+
+Broad discovery: targeted Google News searches plus selected tech / industry RSS feeds.  
+First-party verification: GitHub, Shopify, Slack, Cloudflare.  
+Reaction support: Hacker News and GitHub Issues, with ecosystem routing metadata for missing vendor-community coverage.  
 Supply: GitHub repositories and npm.
 
-This is **not an all-web radar**. Its current live event coverage is intentionally narrow while precision and recall are being measured. A change announced only by an unmonitored vendor can be missed completely.
+This is **not an all-web radar**. Coverage is still narrow and candidate false positives remain an active engineering problem.
 
 ## Quick start
 
@@ -158,67 +170,72 @@ source .venv/bin/activate
 python -m pip install -e '.[dev]'
 pytest
 
+gapradar world-scan
 gapradar doctor
 gapradar scan
 gapradar validate-demand
 gapradar validate-supply
 gapradar build-dossiers
-gapradar report
 gapradar export
-gapradar backtest --mode fixture
+python -m http.server 8000 --directory docs
 ```
 
-The daily GitHub Action runs the live chain and commits refreshed events, source health, dossiers, and dashboard output. The Historical Backtest workflow is separate so archive availability never blocks the live radar.
+Then open `http://localhost:8000`.
+
+The Daily Radar workflow runs the same chain automatically and commits refreshed world candidates, verified events, demand hypotheses, evidence, dossiers and dashboard output.
 
 ## Guardrails
 
 1. **No official source, no verified event.**
-2. Community reaction can never create a Tier-1 fact.
-3. Popular discussion is not displaced demand unless it contains migration pain tied to the affected product.
-4. A failed search cannot become `no_signal`.
-5. `no_signal` means “not detected by these queries”, never “no demand exists”.
-6. Popular software is not replacement supply unless it is relevant to the affected product.
-7. Supply analysis is skipped when an event fails the demand gate.
-8. `REVIEW` requires repeated demand that survives the supply check.
-9. Dossiers summarize evidence; they do not fabricate market size, revenue forecasts, opportunity scores, or build windows.
-10. Archive failure is archive failure, not detector failure.
-11. Fixture accuracy is benchmark accuracy, not a claim about the whole market.
-12. Historical recall rules may not silently weaken live precision.
+2. WORLD SCAN candidates are leads, not facts.
+3. Discovery confidence and opportunity confidence are separate.
+4. Every verified event must expose an explicit demand hypothesis before a market-gap judgment.
+5. Demand hypotheses may be low-confidence; uncertainty must be visible.
+6. Reaction evidence adjusts confidence; it never gates hypothesis creation or supply analysis.
+7. A failed reaction search cannot become `no_signal`.
+8. `no_signal` means “not detected by these queries”, never “no demand exists”.
+9. Popular software is not replacement supply unless it is relevant to the affected job.
+10. Strong replacement supply can mark a hypothesis `likely_served` even when reaction evidence is absent.
+11. `REVIEW` requires stronger evidence than `WATCH`; missing evidence is never silently invented.
+12. Dossiers do not fabricate market size, revenue forecasts, opportunity scores, or build windows.
+13. Archive failure is archive failure, not detector failure.
+14. Fixture accuracy is benchmark accuracy, not market-wide discovery accuracy.
+15. Historical recall rules may not silently weaken live precision.
 
 ## Repository layout
 
 ```text
-config/sources.yml             first-party live source registry
-src/gapradar/detector.py       live + historical hard-event detection
-src/gapradar/reaction.py       auditable reaction search + archived reaction scorer
-src/gapradar/supply.py         live supply search + archived supply scorer
-src/gapradar/backtest.py       as-of / fixture / Wayback replay engine
-src/gapradar/dossier.py        evidence-grounded opportunity dossier builder
-src/gapradar/models.py         evidence, search quality, demand, supply and gap state
-src/gapradar/store.py          persistence + stale-event revalidation
+config/world_sources.yml       broad world/news discovery sources
+config/sources.yml             first-party verification sources
+src/gapradar/worldscan.py      broad candidate discovery
+src/gapradar/detector.py       precision-first event verification
+src/gapradar/models.py         demand hypothesis + evidence + state machine
+src/gapradar/reaction.py       supporting reaction search
+src/gapradar/supply.py         replacement-supply search, independent of reaction
+src/gapradar/dossier.py        hypothesis-first opportunity dossier
+src/gapradar/backtest.py       historical verification replay
+src/gapradar/render.py         Today’s Market Gaps dashboard + signal funnel
 src/gapradar/cli.py            radar commands
-data/backtest/events.json      historical event + negative-control corpus
-data/backtest/downstream.json  historical reaction/supply evidence corpus
-data/backtest/README.md        benchmark methodology
-data/events.json               verified live event state + reaction query audit
+data/world-gaps.json           broad candidate state
+data/events.json               verified event state + hypotheses + evidence
 data/dossiers.json             generated dossier index
-docs/dossiers/                 per-event Markdown + JSON dossiers
-docs/index.html                generated dashboard
-.github/workflows/             CI + live radar + historical backtest
-tests/                         precision, recall and false-positive regression tests
+docs/index.html                standalone dashboard
+.github/workflows/radar.yml    automated daily discovery/verification pipeline
+tests/                         regression and evidence-state tests
 ```
 
 ## Roadmap
 
 **V0.1 — Hard-event skeleton** ✅  
 **V0.2 — Precision-first live radar** ✅  
-**V0.3 — Displaced-demand validation** ✅  
-**V0.4 — Supply-gap analysis** ✅  
+**V0.3 — Reaction evidence** ✅  
+**V0.4 — Supply analysis** ✅  
 **V0.5 — Opportunity dossier** ✅  
-**V0.6 — Auditable demand search** ✅  
-**V0.7 — Historical backtest framework** ✅
+**V0.6 — Auditable evidence search** ✅  
+**V0.7 — Historical verification benchmark** ✅  
+**V0.8 — World-change discovery + explicit demand hypotheses** 🚧
 
-The next work should increase **benchmark coverage before product surface area**: more independently verifiable historical reaction/supply evidence, more negative controls, retraction replay, then low-cost Tier-1 coverage expansion such as shared changelog/status platforms. It should not add fake intelligence scores.
+The next benchmark should test the discovery layer itself: give GapRadar a noisy historical information stream without preselecting the event URL and measure whether WORLD SCAN retrieves the known structural events without flooding the pipeline with false positives.
 
 ## License
 
