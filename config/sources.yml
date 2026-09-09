@@ -19,6 +19,15 @@ sources:
     lookback_days: 30
     max_entries: 120
 
+  - name: Slack Developer Changelog
+    vendor: Slack
+    url: https://docs.slack.dev/changelog/rss.xml
+    allowed_domains:
+      - docs.slack.dev
+      - slack.dev
+    lookback_days: 30
+    max_entries: 120
+
   - name: Cloudflare Blog
     vendor: Cloudflare
     url: https://blog.cloudflare.com/rss/
