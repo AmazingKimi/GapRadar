@@ -7,7 +7,7 @@
     "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
     "summary": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
     "event_date": "2026-08-27T16:00:00Z",
-    "detected_at": "2026-09-09T04:28:41.720860Z",
+    "detected_at": "2026-09-09T04:31:13.514968Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -25,7 +25,7 @@
     ],
     "reaction_evidence": [],
     "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T04:28:46.493346Z",
+    "reaction_checked_at": "2026-09-09T04:31:17.711527Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
@@ -111,7 +111,7 @@
     "supply_sources_checked": [],
     "supply_candidate_count": 0,
     "supply_status": "unassessed",
-    "gap_status": "no_demand",
+    "gap_status": "unassessed",
     "confidence": "weak",
     "status": "verified",
     "notes": []
@@ -124,7 +124,7 @@
     "headline": "Script tags are deprecated and will stop running on March 1, 2027",
     "summary": "Starting October 1, 2026, the scriptTagCreate and scriptTagUpdate mutations will return an user error, and the ScriptTag REST Admin API resource will reject POST and PUT . The deprecation applies to all API versions, including older ones, so pinning won't defer it. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Storefronts are the last place script tags still run, since they already stopped working on the Order status page . If your app uses a script tag to load JavaScript onto a store, then you need to replace it before then. What's changing A script tag loads JavaScript on a storefront without any changes to theme code. After March 1, 2027, Shopify won't inject",
     "event_date": "2026-08-24T16:00:00Z",
-    "detected_at": "2026-09-09T04:28:41.721373Z",
+    "detected_at": "2026-09-09T04:31:13.515506Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -156,7 +156,7 @@
       }
     ],
     "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T04:28:54.594192Z",
+    "reaction_checked_at": "2026-09-09T04:31:25.863622Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
@@ -238,7 +238,7 @@
     ],
     "reaction_search_quality": "adequate",
     "demand_status": "early_signal",
-    "supply_checked_at": "2026-09-09T04:28:56.118134Z",
+    "supply_checked_at": "2026-09-09T04:31:27.455058Z",
     "supply_sources_checked": [
       "github_repositories",
       "npm"
