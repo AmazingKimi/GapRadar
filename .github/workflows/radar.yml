@@ -36,10 +36,24 @@ jobs:
           cache: pip
       - run: python -m pip install -e .
       - name: Compile core radar and dashboard modules
-        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/strip_legacy_runtime.py src/gapradar/worldverify.py src/gapradar/blindbacktest.py src/gapradar/discovery.py
+        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/strip_legacy_runtime.py src/gapradar/worldverify.py src/gapradar/officialfinder.py src/gapradar/blindbacktest.py src/gapradar/discovery.py
 
       - name: Scan world news and industry changes
         run: python -m gapradar.cli world-scan
+
+      - name: Find conservative first-party source candidates
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from gapradar.officialfinder import find_for_candidates, save_leads
+          from gapradar.worldscan import load_candidates
+
+          candidates = load_candidates(Path('data/world-gaps.json'))
+          leads = find_for_candidates(candidates)
+          save_leads(Path('data/world-official-leads.json'), leads)
+          found = sum(bool(row.candidate_urls) for row in leads)
+          print(f'First-party source candidates found for {found}/{len(leads)} world lead(s). These are source candidates, not verified facts.')
+          PY
 
       - name: Probe configured first-party sources
         run: python -m gapradar.cli doctor
@@ -88,11 +102,15 @@ jobs:
 
       - name: Verify architecture and dashboard contracts
         run: |
+          test -f data/world-official-leads.json
           test -f data/world-verifications.json
           test -f data/backtest/blind-report.json
           python - <<'PY'
           import json
           from pathlib import Path
+
+          official_leads = json.loads(Path('data/world-official-leads.json').read_text())
+          assert all(row['status'] in {'first_party_candidates', 'not_found', 'search_failed'} for row in official_leads)
 
           verifications = json.loads(Path('data/world-verifications.json').read_text())
           assert all(row['status'] in {'tier1_verified', 'unverified'} for row in verifications)
@@ -128,13 +146,13 @@ jobs:
 
       - name: Commit radar state
         run: |
-          if git diff --quiet -- data/world-gaps.json data/world-verifications.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json data/backtest/blind-report.json docs/index.html docs/dossiers; then
+          if git diff --quiet -- data/world-gaps.json data/world-official-leads.json data/world-verifications.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json data/backtest/blind-report.json docs/index.html docs/dossiers; then
             echo "No radar changes."
             exit 0
           fi
           git config user.name "gapradar-bot"
           git config user.email "gapradar-bot@users.noreply.github.com"
-          git add data/world-gaps.json data/world-verifications.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json data/backtest/blind-report.json docs/index.html docs/dossiers
+          git add data/world-gaps.json data/world-official-leads.json data/world-verifications.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json data/backtest/blind-report.json docs/index.html docs/dossiers
           git commit -m "data: refresh continuous market radar"
           git pull --rebase origin main
           git push origin HEAD:main
