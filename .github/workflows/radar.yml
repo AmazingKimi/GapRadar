@@ -38,6 +38,8 @@ jobs:
         run: gapradar scan
       - name: Validate displaced demand
         run: gapradar validate-demand
+      - name: Validate replacement supply
+        run: gapradar validate-supply
       - name: Export dashboard
         run: gapradar export
       - name: Commit radar state
