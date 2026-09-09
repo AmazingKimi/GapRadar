@@ -66,22 +66,19 @@ jobs:
           python -m gapradar.dashboard_runtime
       - name: Verify functional dashboard contract
         run: |
-          grep -q '从世界的变化' docs/index.html
-          grep -q 'class="sidebar"' docs/index.html
-          grep -q 'class="brandmark"' docs/index.html
-          grep -q 'class="globe"' docs/index.html
-          grep -q 'id="langToggle"' docs/index.html
-          grep -q 'id="themeToggle"' docs/index.html
-          grep -q 'gapradar-runtime-v3' docs/index.html
+          grep -q 'gapradar-runtime-v4' docs/index.html
           grep -q 'Find the next opportunity' docs/index.html
-          grep -q 'Today’s Opportunities' docs/index.html
-          grep -q 'Items scanned today' docs/index.html
-          grep -q "中文 ✓  |  EN" docs/index.html
-          grep -q 'localStorage.setItem' docs/index.html
+          grep -q '中文 ✓  |  EN' docs/index.html
+          grep -q 'Dark ✓  |  Light' docs/index.html
           grep -q 'width:calc(100vw - 230px)' docs/index.html
-          grep -q 'M84 99l31-32' docs/index.html
-          if grep -q "Today's Market Gaps" docs/index.html; then
-            echo 'Old dashboard detected after export.'
+          grep -q 'Automatic scan every 6 hours' docs/index.html
+          grep -q 'Important Global Changes' docs/index.html
+          if grep -q 'gapradar-runtime-v3' docs/index.html || grep -q 'gapradar-runtime-v2' docs/index.html; then
+            echo 'Stale runtime detected after export.'
+            exit 1
+          fi
+          if grep -q 'var r=document.documentElement,l=document.getElementById' docs/index.html; then
+            echo 'Legacy inline controller still present; double-toggle bug would return.'
             exit 1
           fi
       - name: Commit radar state
