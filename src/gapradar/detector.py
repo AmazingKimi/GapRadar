@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import re
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse
 
 import feedparser
@@ -12,35 +12,59 @@ import httpx
 from .models import EventType, EvidenceTier, MarketEvent, SourceEvidence
 
 
-PATTERNS: dict[EventType, tuple[str, ...]] = {
+TITLE_PATTERNS: dict[EventType, tuple[str, ...]] = {
+    EventType.PRICE_SHOCK: (
+        r"\bpricing (?:change|changes|update|updates)\b",
+        r"\bprice (?:increase|increases|change|changes|update|updates)\b",
+        r"\bnew pricing\b",
+        r"\bfree (?:plan|tier).*(?:end|ending|remove|removed|retire|retired|discontinue|discontinued)\w*\b",
+        r"\bbilling (?:change|changes|update|updates)\b",
+    ),
+    EventType.API_TERMS: (
+        r"\b(?:API|APIs|SDK|endpoint|endpoints|REST|GraphQL|webhook|webhooks).*(?:deprecat|sunset|retir|remov|discontinu)\w*\b",
+        r"\b(?:deprecat|sunset|retir|remov|discontinu)\w*.*(?:API|APIs|SDK|endpoint|endpoints|REST|GraphQL|webhook|webhooks)\b",
+        r"\bterms of service.*(?:change|changes|update|updates)\b",
+        r"\bpolicy (?:change|changes|update|updates)\b",
+        r"\bbreaking change\b",
+    ),
     EventType.SHUTDOWN: (
         r"\bshut(?:ting)? down\b",
-        r"\bdiscontinu(?:e|ed|ing)\b",
+        r"\bdecommission(?:ed|ing)?\b",
         r"\bend[- ]of[- ]life\b",
         r"\bEOL\b",
         r"\bretir(?:e|ed|ing)\b",
-        r"\bwill no longer be available\b",
-    ),
-    EventType.PRICE_SHOCK: (
-        r"\bpricing (?:change|update)\b",
-        r"\bprice (?:increase|change|update)\b",
-        r"\bnew pricing\b",
-        r"\bfree (?:plan|tier).*(?:end|remove|retire|discontinue)\w*\b",
-    ),
-    EventType.API_TERMS: (
-        r"\bAPI.*(?:deprecat|sunset|retir|discontinu)\w*\b",
-        r"\bdeprecat\w*.*API\b",
-        r"\bterms of service.*(?:change|update)\b",
-        r"\bpolicy (?:change|update)\b",
-        r"\bbreaking change\b",
+        r"\bdeprecated\b",
+        r"\bdiscontinu(?:e|ed|ing)\b",
+        r"\bno longer available\b",
     ),
 }
 
-# Specific contexts must win over generic retirement language. For example,
-# "free tier will be discontinued" is a pricing event, not a product shutdown.
+# Body matches are intentionally stricter than title matches. This prevents a
+# generic changelog post that merely mentions "deprecations" from becoming an
+# event. A body-only match must describe a concrete removal or forced change.
+BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
+    EventType.PRICE_SHOCK: (
+        r"\bfree (?:plan|tier).{0,120}\b(?:will|is|has been).{0,40}\b(?:removed|retired|discontinued|ended)\b",
+        r"\bprice.{0,80}\b(?:will|is).{0,30}\b(?:increase|increasing|changing)\b",
+        r"\b(?:billing|pricing).{0,80}\b(?:will|is).{0,30}\b(?:change|changing)\b",
+    ),
+    EventType.API_TERMS: (
+        r"\b(?:API|SDK|endpoint|REST|GraphQL|webhook).{0,180}\b(?:will|is|has been).{0,50}\b(?:deprecated|removed|retired|sunset|discontinued)\b",
+        r"\b(?:deprecated|removed|retired|sunset|discontinued).{0,180}\b(?:API|SDK|endpoint|REST|GraphQL|webhook)\b",
+        r"\bterms of service.{0,100}\b(?:will|have|has).{0,30}\b(?:change|changed|updated)\b",
+    ),
+    EventType.SHUTDOWN: (
+        r"\b(?:product|service|app|application|platform|feature|model).{0,160}\b(?:will|is|has been).{0,50}\b(?:retired|shutdown|shut down|decommissioned|discontinued|deprecated)\b",
+        r"\bwill no longer be available\b",
+        r"\bfully retired\b",
+        r"\bhas been decommissioned\b",
+        r"\bis now retired\b",
+    ),
+}
+
 CLASSIFICATION_ORDER = (
-    EventType.API_TERMS,
     EventType.PRICE_SHOCK,
+    EventType.API_TERMS,
     EventType.SHUTDOWN,
 )
 
@@ -51,14 +75,39 @@ class OfficialSource:
     vendor: str
     url: str
     allowed_domains: tuple[str, ...]
+    lookback_days: int = 30
+    max_entries: int = 120
+
+
+@dataclass(frozen=True)
+class SourceProbe:
+    source: OfficialSource
+    http_status: int
+    entry_count: int
+    official_link_count: int
+
+
+def _match(patterns: tuple[str, ...], text: str) -> bool:
+    normalized = " ".join(text.split())
+    return any(re.search(pattern, normalized, flags=re.IGNORECASE | re.DOTALL) for pattern in patterns)
 
 
 def classify(text: str) -> EventType | None:
-    normalized = " ".join(text.split())
+    """Compatibility classifier used by tests and callers with one text blob."""
     for event_type in CLASSIFICATION_ORDER:
-        for pattern in PATTERNS[event_type]:
-            if re.search(pattern, normalized, flags=re.IGNORECASE | re.DOTALL):
-                return event_type
+        if _match(TITLE_PATTERNS[event_type], text):
+            return event_type
+    return None
+
+
+def classify_entry(title: str, summary: str) -> EventType | None:
+    """Prefer explicit title signals; allow only strict body-only fallbacks."""
+    for event_type in CLASSIFICATION_ORDER:
+        if _match(TITLE_PATTERNS[event_type], title):
+            return event_type
+    for event_type in CLASSIFICATION_ORDER:
+        if _match(BODY_PATTERNS[event_type], summary):
+            return event_type
     return None
 
 
@@ -79,44 +128,96 @@ def _published(entry: dict) -> datetime | None:
     return datetime(*parsed[:6], tzinfo=timezone.utc)
 
 
-def scan_source(source: OfficialSource, *, timeout: float = 20.0) -> list[MarketEvent]:
-    with httpx.Client(timeout=timeout, follow_redirects=True, headers={"User-Agent": "GapRadar/0.1"}) as client:
-        response = client.get(source.url)
-        response.raise_for_status()
+def _clean_html(value: str) -> str:
+    return " ".join(re.sub(r"<[^>]+>", " ", value).split())
 
-    feed = feedparser.loads(response.text)
+
+def _infer_product(source: OfficialSource, title: str) -> str:
+    subject = re.sub(r"^(?:upcoming\s+)?(?:deprecation(?: notice)? of\s+)", "", title, flags=re.IGNORECASE)
+    subject = re.sub(r"\b(?:is|are|was|were|will be)?\s*(?:now\s+)?(?:deprecated|retired|retiring|discontinued|decommissioned)\b.*$", "", subject, flags=re.IGNORECASE).strip(" :-–—")
+    if 2 <= len(subject) <= 90:
+        return subject
+    return source.name
+
+
+def parse_feed(feed_text: str, source: OfficialSource, *, now: datetime | None = None) -> list[MarketEvent]:
+    now = now or datetime.now(timezone.utc)
+    cutoff = now - timedelta(days=source.lookback_days)
+    feed = feedparser.loads(feed_text)
     events: list[MarketEvent] = []
 
-    for entry in feed.entries:
+    for entry in feed.entries[: source.max_entries]:
         title = str(entry.get("title", "")).strip()
-        summary = str(entry.get("summary", "")).strip()
+        summary = str(entry.get("summary", entry.get("description", ""))).strip()
         link = str(entry.get("link", "")).strip()
-        event_type = classify(f"{title}\n{summary}")
-        if not event_type or not link:
+        published_at = _published(entry)
+
+        if not title or not link:
+            continue
+        if published_at and published_at < cutoff:
             continue
         if not is_allowed_official_url(link, source.allowed_domains):
             continue
 
+        event_type = classify_entry(title, summary)
+        if not event_type:
+            continue
+
+        clean_summary = _clean_html(summary)
+        product = _infer_product(source, title)
         evidence = SourceEvidence(
             tier=EvidenceTier.TIER_1_OFFICIAL,
             title=title,
             url=link,
             publisher=source.vendor,
-            published_at=_published(entry),
-            excerpt=re.sub(r"<[^>]+>", " ", summary)[:500],
+            published_at=published_at,
+            excerpt=clean_summary[:700],
             is_official=True,
         )
         event = MarketEvent(
-            id=make_event_id(source.vendor, source.name, title),
-            product=source.name,
+            id=make_event_id(source.vendor, product, title),
+            product=product,
             vendor=source.vendor,
             event_type=event_type,
             headline=title,
             summary=evidence.excerpt or title,
-            event_date=evidence.published_at,
+            event_date=published_at,
             official_evidence=[evidence],
         )
         event.verify()
         events.append(event)
 
     return events
+
+
+def _get(source: OfficialSource, timeout: float) -> httpx.Response:
+    with httpx.Client(
+        timeout=timeout,
+        follow_redirects=True,
+        headers={"User-Agent": "GapRadar/0.2 (+https://github.com/AmazingKimi/GapRadar)"},
+    ) as client:
+        response = client.get(source.url)
+        response.raise_for_status()
+        return response
+
+
+def scan_source(source: OfficialSource, *, timeout: float = 20.0) -> list[MarketEvent]:
+    response = _get(source, timeout)
+    return parse_feed(response.text, source)
+
+
+def probe_source(source: OfficialSource, *, timeout: float = 20.0) -> SourceProbe:
+    response = _get(source, timeout)
+    feed = feedparser.loads(response.text)
+    entries = list(feed.entries[: source.max_entries])
+    official_links = sum(
+        1
+        for entry in entries
+        if is_allowed_official_url(str(entry.get("link", "")), source.allowed_domains)
+    )
+    return SourceProbe(
+        source=source,
+        http_status=response.status_code,
+        entry_count=len(entries),
+        official_link_count=official_links,
+    )
