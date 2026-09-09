@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import re
-from html import escape
+from html import escape, unescape
 from pathlib import Path
 
-from .priority import PriorityLead, load_priority_leads
+from .priority import PriorityLead, _publisher, load_priority_leads
 from .worldscan import GapCandidate, load_candidates
 
 SECTOR_ZH = {
@@ -39,6 +39,41 @@ def _evidence_zh(state: str) -> str:
     return {"tier1_verified": "Tier-1 已验证", "official_candidate": "已找到官方候选", "news_only": "Tier-1 待确认"}.get(state, "证据待确认")
 
 
+def _clean_summary(candidate: GapCandidate) -> str:
+    """Return article-specific RSS text, never a generic GapRadar template."""
+    summary = " ".join(unescape(candidate.summary or "").replace("\xa0", " ").split())
+    # Google News RSS often gives only "headline  publisher". Strip the duplicate
+    # headline and keep any real synopsis if the feed supplied one.
+    headline = " ".join(candidate.headline.split())
+    if summary.lower().startswith(headline.lower()):
+        summary = summary[len(headline):].strip(" -–—:|·")
+    publisher = _publisher(candidate)
+    if summary.lower() in {publisher.lower(), ""}:
+        return ""
+    return summary
+
+
+def _news_intro_en(candidate: GapCandidate) -> str:
+    publisher = _publisher(candidate)
+    real_summary = _clean_summary(candidate)
+    if real_summary:
+        return real_summary
+
+    headline = " ".join(candidate.headline.strip().rstrip(".").split())
+    # Fallback is still event-specific: it states exactly what this source reports,
+    # rather than inserting a repeated market-opportunity template.
+    return f"{publisher} reports: {headline}."
+
+
+def _news_intro_zh(candidate: GapCandidate) -> str:
+    publisher = _publisher(candidate)
+    real_summary = _clean_summary(candidate)
+    if real_summary:
+        return real_summary
+    headline = " ".join(candidate.headline.strip().rstrip(".").split())
+    return f"{publisher} 报道：{headline}。"
+
+
 def _card(candidate: GapCandidate, row: PriorityLead) -> str:
     sector = candidate.sector or "Other"
     zh_sector = SECTOR_ZH.get(sector, sector)
@@ -49,6 +84,7 @@ def _card(candidate: GapCandidate, row: PriorityLead) -> str:
         '<span class="badge"><span class="lang-zh">' + escape(zh_sector) + '</span><span class="lang-en">' + escape(sector) + '</span></span>'
         '<span class="badge status ' + cls + '"><span class="lang-zh">' + escape(_status_zh(row.status)) + '</span><span class="lang-en">' + escape(row.status.title()) + '</span></span>'
         '<h3>' + escape(candidate.headline) + '</h3>'
+        '<p class="news-intro"><span class="lang-zh">' + escape(_news_intro_zh(candidate)) + '</span><span class="lang-en">' + escape(_news_intro_en(candidate)) + '</span></p>'
         '<div class="bottommeta"><span class="lang-zh">' + escape(_evidence_zh(row.evidence_state)) + '</span><span class="lang-en">' + escape(row.evidence_label) + '</span></div>'
         '<a class="arrow" href="' + escape(candidate.url) + '" target="_blank" rel="noopener noreferrer">→</a>'
         '</article>'
