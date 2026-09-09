@@ -14,7 +14,7 @@
     "tier_1_official": 1,
     "tier_2_reaction": 0,
     "tier_3_supply": 0,
-    "reaction_candidates_checked": 0,
+    "reaction_candidates_checked": 42,
     "supply_candidates_checked": 0
   },
   "reaction_search_quality": "adequate",
@@ -56,6 +56,78 @@
       "ok": true
     },
     {
+      "source": "hacker_news",
+      "query": "Shopify Theme CLI",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Shopify Shopify Theme CLI",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Shopify Theme CLI deprecated",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Shopify Theme CLI sunset",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Shopify Theme CLI migration",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Shopify Theme CLI alternative",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Theme CLI v3.83.x",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Shopify Theme CLI v3.83.x",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Theme CLI v3.83.x deprecated",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Theme CLI v3.83.x sunset",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Theme CLI v3.83.x migration",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Theme CLI v3.83.x alternative",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
       "source": "github_issues",
       "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" Shopify created:>=2026-05-12 is:issue",
       "candidate_count": 0,
@@ -88,6 +160,78 @@
     {
       "source": "github_issues",
       "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" alternative created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Shopify Theme CLI\" Shopify created:>=2026-05-12 is:issue",
+      "candidate_count": 40,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Shopify Theme CLI\" created:>=2026-05-12 is:issue",
+      "candidate_count": 40,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Shopify Theme CLI\" deprecated created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Shopify Theme CLI\" sunset created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Shopify Theme CLI\" migration created:>=2026-05-12 is:issue",
+      "candidate_count": 3,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Shopify Theme CLI\" alternative created:>=2026-05-12 is:issue",
+      "candidate_count": 1,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Theme CLI v3.83.x\" Shopify created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Theme CLI v3.83.x\" created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Theme CLI v3.83.x\" deprecated created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Theme CLI v3.83.x\" sunset created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Theme CLI v3.83.x\" migration created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Theme CLI v3.83.x\" alternative created:>=2026-05-12 is:issue",
       "candidate_count": 0,
       "ok": true
     }
