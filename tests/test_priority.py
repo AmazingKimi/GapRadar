@@ -4,7 +4,7 @@ from gapradar.worldscan import GapCandidate
 from gapradar.worldverify import WorldVerification
 
 
-def _candidate(cid: str, headline: str, change_type: str, signal: str) -> GapCandidate:
+def _candidate(cid: str, headline: str, change_type: str, signal: str, summary: str | None = None) -> GapCandidate:
     return GapCandidate(
         id=cid,
         discovered_at="2026-09-09T00:00:00+00:00",
@@ -12,7 +12,7 @@ def _candidate(cid: str, headline: str, change_type: str, signal: str) -> GapCan
         source="news",
         headline=headline,
         url="https://example.com",
-        summary=headline,
+        summary=summary or headline,
         change_type=change_type,
         matched_signal=signal,
         recommendation="WATCH",
@@ -24,12 +24,26 @@ def _candidate(cid: str, headline: str, change_type: str, signal: str) -> GapCan
     )
 
 
-def test_high_specificity_unverified_lead_can_be_recommended_for_investigation_without_becoming_review():
-    candidate = _candidate("apple", "Apple TV service price hike reaches 20% in 2026", "price_shock", "price hike")
+def test_consumer_price_story_stays_watch_without_business_actionability_or_evidence():
+    candidate = _candidate("apple", "Apple TV streaming service price hike reaches 20% in 2026", "price_shock", "price hike")
+    rows = build_priority_leads([candidate], {}, [], [])
+    assert rows[0].status == "WATCH"
+    assert rows[0].evidence_state == "news_only"
+    assert "No acceptable first-party source" in rows[0].reason
+
+
+def test_concrete_business_shutdown_can_be_investigate_before_tier1_without_becoming_review():
+    candidate = _candidate(
+        "platform",
+        "Developer platform will shut down API service in 2026",
+        "shutdown_eol",
+        "shut down",
+        "Developers and businesses using the API must migrate before end of support in 2026.",
+    )
     rows = build_priority_leads([candidate], {}, [], [])
     assert rows[0].status == "INVESTIGATE"
     assert rows[0].evidence_state == "news_only"
-    assert "No acceptable first-party source" in rows[0].reason
+    assert rows[0].status != "REVIEW"
 
 
 def test_tier1_confirmation_raises_priority_but_does_not_fake_gap_review():
