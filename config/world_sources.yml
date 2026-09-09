@@ -1,0 +1,30 @@
+feeds:
+  - name: Google News · software shutdowns
+    url: https://news.google.com/rss/search?q=%28software%20OR%20app%20OR%20SaaS%20OR%20platform%29%20%28%22shutting%20down%22%20OR%20sunset%20OR%20discontinued%20OR%20%22end%20of%20life%22%29&hl=en-US&gl=US&ceid=US:en
+    lookback_hours: 72
+    max_entries: 100
+
+  - name: Google News · SaaS pricing shocks
+    url: https://news.google.com/rss/search?q=%28SaaS%20OR%20software%20OR%20cloud%20OR%20app%29%20%28%22price%20increase%22%20OR%20%22price%20hike%22%20OR%20%22pricing%20change%22%20OR%20%22free%20tier%22%29&hl=en-US&gl=US&ceid=US:en
+    lookback_hours: 72
+    max_entries: 100
+
+  - name: Google News · API and platform changes
+    url: https://news.google.com/rss/search?q=%28API%20OR%20developer%20OR%20platform%29%20%28deprecated%20OR%20%22terms%20of%20service%22%20OR%20%22policy%20change%22%20OR%20%22rate%20limit%22%20OR%20%22licensing%20change%22%29&hl=en-US&gl=US&ceid=US:en
+    lookback_hours: 72
+    max_entries: 100
+
+  - name: Google News · regulation creates software work
+    url: https://news.google.com/rss/search?q=%28software%20OR%20AI%20OR%20data%20OR%20cybersecurity%20OR%20fintech%20OR%20ecommerce%29%20%28%22new%20regulation%22%20OR%20%22new%20rules%22%20OR%20%22compliance%20deadline%22%20OR%20mandate%29&hl=en-US&gl=US&ceid=US:en
+    lookback_hours: 72
+    max_entries: 100
+
+  - name: TechCrunch
+    url: https://techcrunch.com/feed/
+    lookback_hours: 72
+    max_entries: 100
+
+  - name: Ars Technica
+    url: https://feeds.arstechnica.com/arstechnica/index
+    lookback_hours: 72
+    max_entries: 100
