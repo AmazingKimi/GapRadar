@@ -1,8 +1,8 @@
 {
-  "input_candidates": 27,
+  "input_candidates": 28,
   "context_rejected": 21,
   "duplicate_collapsed": 0,
-  "kept_candidates": 6,
+  "kept_candidates": 7,
   "rejection_reasons": {
     "commercial_mandate_not_regulation": 9,
     "negated_mandate": 1,

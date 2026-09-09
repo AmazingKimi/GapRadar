@@ -1,14 +1,5 @@
 [
   {
-    "candidate_id": "52f1eb44691af255",
-    "status": "INVESTIGATE",
-    "priority_score": 7,
-    "evidence_state": "tier1_verified",
-    "evidence_label": "Tier-1 · mass.gov",
-    "reason": "mass.gov confirms the underlying change behind “Massachusetts Will Require New Data Centers to Use Clean Energy”. Replacement-supply research checked 21 candidates, found 0 strong match(es), and coverage is partial. That makes new compliance, testing, reporting or implementation work worth investigating now.",
-    "next_check": "Close the remaining supply-coverage gaps, then test the demand hypothesis with affected users before calling this a validated market gap."
-  },
-  {
     "candidate_id": "a4667ed73e330db1",
     "status": "INVESTIGATE",
     "priority_score": 7,
@@ -24,6 +15,15 @@
     "evidence_state": "official_candidate",
     "evidence_label": "Official lead · heavyindustries.gov.in",
     "reason": "Autocar Professional reports “EV BMS Cybersecurity Testing Now Mandatory in India”. A related first-party page was found on heavyindustries.gov.in, but it has not yet confirmed the exact “Mandatory” claim. Investigate the claim first; if confirmed, the likely demand surface is new compliance, testing, reporting or implementation work.",
+    "next_check": "Verify the exact claim on the first-party page; only then spend deeper research effort on demand and supply."
+  },
+  {
+    "candidate_id": "52f1eb44691af255",
+    "status": "INVESTIGATE",
+    "priority_score": 5,
+    "evidence_state": "official_candidate",
+    "evidence_label": "Official lead · mass.gov",
+    "reason": "EnergyNow.com reports “Massachusetts Will Require New Data Centers to Use Clean Energy”. A related first-party page was found on mass.gov, but it has not yet confirmed the exact “Will Require New Data Centers to Use Clean Energy - EnergyNow.com Mass” claim. Investigate the claim first; if confirmed, the likely demand surface is new compliance, testing, reporting or implementation work.",
     "next_check": "Verify the exact claim on the first-party page; only then spend deeper research effort on demand and supply."
   },
   {
@@ -51,6 +51,15 @@
     "evidence_state": "news_only",
     "evidence_label": "Tier-1 pending",
     "reason": "The Apple Post reports “Apple Music to make AI labels mandatory for music created with artificial intelligence”, with a concrete regulatory requirement signal (“mandatory”). No acceptable first-party source has been located yet. If the report is confirmed, the likely demand surface is new compliance, testing, reporting or implementation work.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
+  },
+  {
+    "candidate_id": "854120de9417fdac",
+    "status": "WATCH",
+    "priority_score": 2,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "Calgary Sun reports “GREEN: Say hello to PM Mark Carney’s new de facto EV sales mandate”, with a concrete regulatory requirement signal (“mandate”). No acceptable first-party source has been located yet. If the report is confirmed, the likely demand surface is new compliance, testing, reporting or implementation work.",
     "next_check": "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
   }
 ]

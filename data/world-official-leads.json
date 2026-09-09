@@ -1,14 +1,29 @@
 [
   {
+    "candidate_id": "854120de9417fdac",
+    "status": "not_found",
+    "query": "\"GREEN: Say hello to PM Mark Carney’s new de facto EV sales mandate\" official",
+    "candidate_urls": [],
+    "candidate_hosts": [],
+    "search_coverage": "adequate",
+    "errors": [],
+    "queries": [
+      "\"GREEN: Say hello to PM Mark Carney’s new de facto EV sales mandate\" official",
+      "green say hello mark carney facto sales rule regulation requirement mandate official",
+      "green say hello mark carney rule regulation requirement mandate regulator official"
+    ],
+    "authority_route": "public_or_unknown"
+  },
+  {
     "candidate_id": "52f1eb44691af255",
     "status": "first_party_candidates",
     "query": "\"Massachusetts Will Require New Data Centers to Use Clean Energy\" official",
     "candidate_urls": [
+      "https://www.mass.gov/doc/frequently-asked-questions-massdep-clean-energy-standard/download",
+      "https://www.mass.gov/doc/310-cmr-775-massdep-response-to-comments/download",
+      "https://www.mass.gov/info-details/clean-peak-energy-standard-program-details",
       "https://www.mass.gov/doc/efsb-25-10-decision-opening/download",
-      "https://www.mass.gov/doc/updated-siting-and-permitting-process-for-clean-energy-infrastructure-in-massachusetts/download",
-      "https://www.mass.gov/doc/commission-on-energy-infrastructure-siting-and-permitting-final-recommendations/download",
-      "https://www.mass.gov/executive-orders/no-658-establishing-requirements-for-responsible-data-center-development-and-operations-in-massachusetts-to-protect-and-support-ratepayers-communities-and-the-environment",
-      "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval"
+      "https://www.mass.gov/info-details/statutes-regulations-and-guidelines"
     ],
     "candidate_hosts": [
       "www.mass.gov",
@@ -32,11 +47,9 @@
     "status": "first_party_candidates",
     "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
     "candidate_urls": [
-      "https://heavyindustries.gov.in/sites/default/files/2026-07/lsauq_452_0.pdf",
       "https://heavyindustries.gov.in/sites/default/files/2026-07/lsauq_452.pdf"
     ],
     "candidate_hosts": [
-      "heavyindustries.gov.in",
       "heavyindustries.gov.in"
     ],
     "search_coverage": "adequate",
