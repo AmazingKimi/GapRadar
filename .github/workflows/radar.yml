@@ -1,0 +1,32 @@
+name: Daily Radar
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 1 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install -e .
+      - run: gapradar scan
+      - name: Commit newly detected events
+        run: |
+          if git diff --quiet -- data/events.json; then
+            echo "No new verified events."
+            exit 0
+          fi
+          git config user.name "gapradar-bot"
+          git config user.email "gapradar-bot@users.noreply.github.com"
+          git add data/events.json
+          git commit -m "data: update verified market events"
+          git push
