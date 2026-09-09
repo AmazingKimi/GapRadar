@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import json
 import os
 import re
-from dataclasses import replace
+from dataclasses import asdict, dataclass
 from html import unescape
+from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlparse
 
 import httpx
@@ -12,6 +14,22 @@ from .worldscan import GapCandidate
 
 SOLUTION_WORDS = re.compile(r"\b(alternative|replacement|competitor|migration|migrate|compliance|platform|software|tool|service|solution)\b", re.I)
 NOISE_HOSTS = {"news.google.com", "youtube.com", "www.youtube.com", "facebook.com", "www.facebook.com", "x.com", "twitter.com"}
+
+
+@dataclass(frozen=True)
+class WorldLeadAssessment:
+    candidate_id: str
+    ecosystem: str
+    supply_status: str
+    supply_sources_checked: list[str]
+    supply_sources_missing: list[str]
+    supply_candidate_count: int
+    supply_evidence: list[dict[str, object]]
+    supply_coverage: str
+    gap_assessment: str
+    final_recommendation: str
+    summary: str
+    errors: list[str]
 
 
 def _tokens(text: str) -> list[str]:
@@ -33,10 +51,10 @@ def _route(candidate: GapCandidate) -> tuple[str, tuple[str, ...], str]:
     if candidate.change_type == "api_terms_change" or re.search(r"\b(api|sdk|developer|cli|github|npm)\b", text):
         return "developer", ("github_repositories", "npm"), "developer alternatives and migration tooling"
     if candidate.change_type == "regulatory_shift":
-        return "regulatory", ("web_search",), "compliance software, reporting, evidence and workflow tools"
+        return "regulatory", ("web_search",), "compliance software reporting evidence workflow tools"
     if candidate.change_type == "shutdown_eol":
-        return "replacement", ("web_search",), "replacement products and migration services"
-    return "commercial", ("web_search",), "lower-cost substitutes and competing products"
+        return "replacement", ("web_search",), "replacement products migration services alternatives"
+    return "commercial", ("web_search",), "lower cost substitutes competing products alternatives"
 
 
 def _decode_ddg_url(value: str) -> str:
@@ -125,7 +143,7 @@ def _relevance(row: dict[str, str], candidate: GapCandidate) -> int:
     return score
 
 
-def analyze_candidate(candidate: GapCandidate) -> GapCandidate:
+def analyze_candidate(candidate: GapCandidate) -> WorldLeadAssessment:
     ecosystem, planned_sources, intent = _route(candidate)
     subject = _subject(candidate)
     query = f'"{subject}" {intent}'
@@ -157,19 +175,13 @@ def analyze_candidate(candidate: GapCandidate) -> GapCandidate:
     coverage = "failed" if not checked else ("partial" if missing else "adequate")
 
     if coverage == "failed":
-        supply_status = "unassessed"
-        assessment = "INSUFFICIENT COVERAGE"
-        recommendation = "WATCH"
+        supply_status, assessment, recommendation = "unassessed", "INSUFFICIENT COVERAGE", "WATCH"
         summary = "Supply investigation failed across the planned sources; no market-gap conclusion is allowed."
     elif len(evidence) >= 3:
-        supply_status = "served"
-        assessment = "LIKELY SERVED"
-        recommendation = "DISMISS"
+        supply_status, assessment, recommendation = "served", "LIKELY SERVED", "DISMISS"
         summary = "Several relevant substitutes or solution providers were found in the checked supply sources. A broad gap is not established; only narrower unmet jobs remain worth investigating."
     elif len(evidence) >= 1:
-        supply_status = "thin_supply"
-        assessment = "POTENTIAL GAP"
-        recommendation = "REVIEW"
+        supply_status, assessment, recommendation = "thin_supply", "POTENTIAL GAP", "REVIEW"
         summary = "Some relevant supply exists, but the checked market appears thin enough to justify human review of the exact unmet job."
     else:
         supply_status = "no_supply_detected"
@@ -177,8 +189,9 @@ def analyze_candidate(candidate: GapCandidate) -> GapCandidate:
         recommendation = "REVIEW" if coverage == "adequate" else "WATCH"
         summary = "No qualifying replacement supply was detected in the checked sources. This is coverage-bounded and is not proof that no alternatives exist."
 
-    return replace(
-        candidate,
+    return WorldLeadAssessment(
+        candidate_id=candidate.id,
+        ecosystem=ecosystem,
         supply_status=supply_status,
         supply_sources_checked=checked,
         supply_sources_missing=missing,
@@ -187,11 +200,21 @@ def analyze_candidate(candidate: GapCandidate) -> GapCandidate:
         supply_coverage=coverage,
         gap_assessment=assessment,
         final_recommendation=recommendation,
-        deep_dive_summary=summary,
-        deep_dive_errors=errors,
-        ecosystem=ecosystem,
+        summary=summary,
+        errors=errors,
     )
 
 
-def analyze_candidates(candidates: list[GapCandidate]) -> list[GapCandidate]:
+def analyze_candidates(candidates: list[GapCandidate]) -> list[WorldLeadAssessment]:
     return [analyze_candidate(candidate) for candidate in candidates]
+
+
+def save_assessments(path: Path, assessments: list[WorldLeadAssessment]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps([asdict(item) for item in assessments], indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def load_assessments(path: Path) -> list[WorldLeadAssessment]:
+    if not path.exists():
+        return []
+    return [WorldLeadAssessment(**row) for row in json.loads(path.read_text(encoding="utf-8"))]
