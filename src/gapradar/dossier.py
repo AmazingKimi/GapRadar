@@ -18,6 +18,7 @@ class OpportunityDossier:
     verdict: str
     rationale: str
     what_changed: str
+    demand_hypothesis: dict[str, object] | None
     displaced_demand: list[dict[str, object]]
     replacement_supply: list[dict[str, object]]
     unresolved_gap: str
@@ -47,50 +48,51 @@ def _verdict(event: MarketEvent) -> tuple[str, str, str]:
             "The event does not have qualifying first-party verification.",
             "Do not investigate commercially until the event itself is verified.",
         )
-    if event.demand_status == "unassessed":
-        if event.reaction_search_quality == "failed":
-            return (
-                "SEARCH FAILED",
-                "The event is verified, but the demand search did not complete successfully.",
-                "Repair or rerun reaction search before making any demand conclusion.",
-            )
+    if event.demand_hypothesis is None:
         return (
-            "NEEDS DEMAND CHECK",
-            "A real market change is verified, but displaced demand has not been adequately assessed.",
-            "Run reaction validation before spending time on substitutes or product design.",
-        )
-    if event.demand_status == "no_signal":
-        return (
-            "NO DETECTED SIGNAL",
-            "The checked queries found no qualifying displaced-demand evidence. " + _coverage_sentence(event) + " This is a coverage-bounded result, not proof that demand is absent.",
-            "Do not infer zero demand. Inspect missing ecosystem sources before downgrading the event commercially.",
+            "NEEDS HYPOTHESIS",
+            "The market change is verified, but GapRadar has not yet recorded an explicit demand hypothesis.",
+            "Record the affected users, job-to-be-done, disruption, basis and unknowns before judging the gap.",
         )
     if event.supply_status == "unassessed":
+        reaction_context = "Reaction search failed, but that does not block supply analysis." if event.reaction_search_quality == "failed" else "Reaction evidence is optional supporting context."
         return (
-            "WATCH",
-            "Displaced-demand evidence exists, but replacement supply has not been assessed.",
-            "Map credible substitutes before deciding whether a gap exists.",
+            "NEEDS SUPPLY CHECK",
+            f"A verified change and explicit demand hypothesis exist. {reaction_context}",
+            "Map credible replacement supply before deciding whether the hypothesis points to an underserved gap.",
         )
     if event.gap_status == "likely_served":
         return (
             "LIKELY SERVED",
-            "Displaced demand exists, but credible replacement supply already appears strong.",
-            "Do not clone the displaced product. Look only for specific complaints that existing substitutes fail to solve.",
+            "The demand hypothesis exists, but credible replacement supply already appears strong.",
+            "Do not clone the incumbent. Look only for a narrower job existing substitutes handle badly.",
         )
     if event.gap_status == "potential_gap":
         return (
             "REVIEW",
-            "Repeated displaced demand survived the replacement-supply check; the evidence supports human opportunity review.",
+            "A verified demand hypothesis has repeated reaction support and replacement supply appears absent or thin.",
             "Interview affected users and define the narrow unmet job before writing product code.",
+        )
+    if event.gap_status == "watch":
+        reaction_note = (
+            "Repeated reaction evidence is not present, so confidence remains bounded. " + _coverage_sentence(event)
+            if event.demand_status in {"no_signal", "unassessed"}
+            else "Some reaction evidence supports the hypothesis, but the chain is still early."
+        )
+        return (
+            "WATCH",
+            "The demand hypothesis survived supply analysis, but evidence is not strong enough for REVIEW. " + reaction_note,
+            "Keep the hypothesis alive, improve reaction coverage where useful, and inspect whether the remaining supply actually satisfies the affected job.",
         )
     return (
         "WATCH",
-        "Some displaced-demand evidence exists, but it is not yet strong enough to establish an underserved gap.",
-        "Keep monitoring for repeated pain, failed migrations, and evidence that substitutes are inadequate.",
+        "The event is verified and the demand hypothesis is recorded, but the commercial evidence chain is incomplete.",
+        "Continue supply and evidence review without treating missing reaction as proof of no demand.",
     )
 
 
 def build_dossier(event: MarketEvent) -> OpportunityDossier:
+    event.verify()
     verdict, rationale, next_action = _verdict(event)
     reactions = [
         {
@@ -114,15 +116,14 @@ def build_dossier(event: MarketEvent) -> OpportunityDossier:
         }
         for item in event.supply_evidence[:8]
     ]
+    hypothesis = event.demand_hypothesis.model_dump() if event.demand_hypothesis else None
 
     if event.gap_status == "potential_gap":
         unresolved = "Repeated migration pain is visible while qualifying replacement supply is absent or thin. The exact unmet job still requires human validation."
     elif event.gap_status == "likely_served":
         unresolved = "No broad supply gap is established. Any opportunity would need to come from a narrower failure shared across existing substitutes."
-    elif event.demand_status == "no_signal":
-        coverage = reaction_coverage(event)
-        missing = ", ".join(str(item) for item in coverage["missing_sources"]) or "none"
-        unresolved = f"No migration pain was detected in checked sources. Missing preferred ecosystem sources: {missing}. The evidence chain is incomplete until that coverage gap is understood."
+    elif event.gap_status == "watch":
+        unresolved = "A plausible demand hypothesis remains after supply review, but confidence is still bounded. Missing reaction evidence does not invalidate the hypothesis."
     else:
         unresolved = "The evidence chain is incomplete; GapRadar does not infer the missing commercial conclusion."
 
@@ -134,6 +135,7 @@ def build_dossier(event: MarketEvent) -> OpportunityDossier:
         verdict=verdict,
         rationale=rationale,
         what_changed=_clean(event.summary),
+        demand_hypothesis=hypothesis,
         displaced_demand=reactions,
         replacement_supply=supply,
         unresolved_gap=unresolved,
@@ -164,6 +166,25 @@ def _markdown(dossier: OpportunityDossier, event: MarketEvent) -> str:
         "",
         dossier.what_changed,
         "",
+        "## Demand hypothesis",
+        "",
+    ]
+    if dossier.demand_hypothesis:
+        h = dossier.demand_hypothesis
+        lines.extend([
+            f"- Confidence: `{h.get('confidence', 'low')}`",
+            f"- Affected users: {h.get('affected_users', '')}",
+            f"- Job to be done: {h.get('job_to_be_done', '')}",
+            f"- Disruption: {h.get('disruption', '')}",
+            f"- Official successor: {h.get('official_successor', 'unknown')}",
+            f"- Basis: {'; '.join(str(x) for x in h.get('basis', [])) or 'none recorded'}",
+            f"- Unknowns: {'; '.join(str(x) for x in h.get('unknowns', [])) or 'none recorded'}",
+        ])
+    else:
+        lines.append("No explicit demand hypothesis recorded.")
+
+    lines.extend([
+        "",
         "## Evidence chain",
         "",
         f"- Tier 1 official: {dossier.evidence_counts['tier_1_official']}",
@@ -177,7 +198,7 @@ def _markdown(dossier: OpportunityDossier, event: MarketEvent) -> str:
         f"- Supply state: `{event.supply_status}`",
         f"- Gap state: `{event.gap_status}`",
         "",
-    ]
+    ])
     if official:
         lines.extend([f"Official source: {official.url}", ""])
 
@@ -189,12 +210,12 @@ def _markdown(dossier: OpportunityDossier, event: MarketEvent) -> str:
     else:
         lines.append("No reaction query audit is available.")
 
-    lines.extend(["", "## Displaced demand", ""])
+    lines.extend(["", "## Supporting reaction evidence", ""])
     if dossier.displaced_demand:
         for row in dossier.displaced_demand:
             lines.append(f"- [{row['title']}]({row['url']}) — {row['publisher']} · signal {row['signal_score']} · engagement {row['engagement']}")
     else:
-        lines.append("No qualifying migration-pain evidence was detected in the checked queries.")
+        lines.append("No qualifying migration-pain evidence was detected in the checked queries. This does not invalidate the demand hypothesis.")
 
     lines.extend(["", "## Replacement supply", ""])
     if dossier.replacement_supply:
@@ -204,7 +225,7 @@ def _markdown(dossier: OpportunityDossier, event: MarketEvent) -> str:
         if event.supply_checked_at:
             lines.append("No qualifying replacement supply found in the checked sources.")
         else:
-            lines.append("Supply analysis was not run because the event did not survive the demand gate, or because supply is not yet assessed.")
+            lines.append("Supply analysis has not run yet. Reaction evidence is not a prerequisite for running it.")
 
     lines.extend([
         "",
