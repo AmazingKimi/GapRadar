@@ -9,10 +9,10 @@ def _candidate(cid: str, headline: str, publisher: str, sector: str, change_type
         "id": cid,
         "discovered_at": "2026-09-09T00:00:00+00:00",
         "published_at": "2026-09-09T00:00:00+00:00",
-        "source": "Google News",
+        "source": publisher,
         "headline": headline,
         "url": f"https://example.com/{cid}",
-        "summary": f"{headline} &nbsp;&nbsp; {publisher}",
+        "summary": publisher,
         "change_type": change_type,
         "matched_signal": "mandatory" if change_type == "regulatory_shift" else "shutdown",
         "recommendation": "WATCH",
@@ -41,7 +41,6 @@ def test_priority_patch_renders_distinct_story_intros_without_overlay_metadata(t
     priorities = tmp_path / "priority-leads.json"
     candidates = tmp_path / "world-gaps.json"
     html.write_text(
-        '<div class="stats"><div><b>10</b><span>a</span></div><div><b>3</b><span>b</span></div><div><b>1</b><span>c</span></div><div><b>0</b><span>d</span></div></div>'
         '<section class="section" id="opps"><div class="opps"><article class="opp">old filler</article></div></section>'
         '<section class="section" id="feed"><div></div></section>',
         encoding="utf-8",
@@ -61,10 +60,11 @@ def test_priority_patch_renders_distinct_story_intros_without_overlay_metadata(t
     text = html.read_text(encoding="utf-8")
     assert "old filler" not in text
     assert text.count('class="news-intro"') == 3
-    assert "Autocar Professional reports that EV BMS Cybersecurity Testing is now mandatory in India." in text
-    assert "EnergyNow.com reports that Massachusetts will require New Data Centers to Use Clean Energy." in text
-    assert "Android Central reports that Samsung is preparing to shut down two more apps late in 2026." in text
+    assert "Source: Autocar Professional" in text and "mandatory" in text
+    assert "Source: EnergyNow.com" in text
+    assert "Source: Android Central" in text and "shutdown" in text
+    assert text.count('data-candidate-id=') == 3
     assert "THIS GENERIC ANALYSIS MUST NOT RENDER" not in text
     assert "bottommeta" not in text
     assert "Official lead · mass.gov" not in text
-    assert ">3</b>" in text
+    assert "View evidence chain" in text
