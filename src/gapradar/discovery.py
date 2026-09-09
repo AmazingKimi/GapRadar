@@ -275,7 +275,7 @@ def run_case(case: dict[str, Any]) -> dict[str, Any]:
         "reaction_evidence_count": len(event.reaction_evidence),
         "demand_status": event.demand_status,
         "reaction_search_quality": event.reaction_search_quality,
-        "reaction_evidence_urls": [item.url for item in event.reaction_evidence],
+        "reaction_evidence_urls": [str(item.url) for item in event.reaction_evidence],
         "supply_candidate_count": event.supply_candidate_count,
         "supply_evidence_count": len(event.supply_evidence),
         "supply_status": event.supply_status,
