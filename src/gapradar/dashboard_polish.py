@@ -3,10 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-MARKER = "gapradar-polish-v2"
+MARKER = "gapradar-polish-v3"
 
 STYLE = r'''
-/* gapradar-polish-v2 */
+/* gapradar-polish-v3 */
 .radar-funnel{margin-top:12px;padding-top:11px;border-top:1px dashed color-mix(in srgb,var(--line) 78%,transparent);color:var(--muted);font-size:10px;line-height:1.55}
 .radar-funnel b{color:var(--text);font-weight:700}.radar-funnel .warn{color:#f1b36b}.radar-funnel .ok{color:var(--green)}.radar-funnel .bad{color:#e58c87}
 .discovery-slot{padding-bottom:56px!important}.discovery-slot h3{margin-top:60px!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.discovery-slot p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;max-height:4.35em;line-height:1.45}.discovery-slot .bottommeta{bottom:16px!important;white-space:nowrap}.discovery-slot .arrow{bottom:13px!important}
@@ -32,9 +32,14 @@ SCRIPT = r'''
    const zh=row.querySelector('.company .lang-zh')?.textContent?.trim()||'全球变化';
    const en=row.querySelector('.company .lang-en')?.textContent?.trim()||'World Change';
    const href=row.querySelector('.round')?.getAttribute('href')||'#';
+   const zhEvidence=row.querySelector('.what .lang-zh')?.textContent?.trim()||'这是一条尚待继续核验的真实扫描线索。';
+   const enEvidence=row.querySelector('.what .lang-en')?.textContent?.trim()||'This is a real scanned lead that still needs evidence work.';
    const card=document.createElement('article');card.className='opp discovery-slot';
-   card.innerHTML='<div class="oppArt"><svg viewBox="0 0 500 260"><rect width="500" height="260" fill="#173148"/><path d="M0 184 96 118l68 42 81-72 92 57 163-101v216H0Z" fill="#214563"/></svg></div><span class="badge"><span class="lang-zh">'+zh+'</span><span class="lang-en">'+en+'</span></span><span class="badge status"><span class="lang-zh">Tier-1 未解决</span><span class="lang-en">Tier-1 unresolved</span></span><h3></h3><p><span class="lang-zh">本轮尚未取得可验证的一手证据。可能是未找到官方候选源，也可能是候选官方页面未通过事实核验；因此暂不判定为市场机会。</span><span class="lang-en">This run did not obtain verifiable first-party evidence. The official source may be missing or a candidate page may have failed factual verification, so this is not promoted to an opportunity.</span></p><div class="bottommeta"><span class="lang-zh">发现线索</span><span class="lang-en">Discovery lead</span></div><a class="arrow" target="_blank" rel="noopener noreferrer">→</a>';
-   card.querySelector('h3').textContent=headline;card.querySelector('.arrow').href=href;grid.appendChild(card);
+   card.innerHTML='<div class="oppArt"><svg viewBox="0 0 500 260"><rect width="500" height="260" fill="#173148"/><path d="M0 184 96 118l68 42 81-72 92 57 163-101v216H0Z" fill="#214563"/></svg></div><span class="badge"><span class="lang-zh">'+zh+'</span><span class="lang-en">'+en+'</span></span><span class="badge status"><span class="lang-zh">持续观察</span><span class="lang-en">WATCH</span></span><h3></h3><p><span class="lang-zh"></span><span class="lang-en"></span></p><div class="bottommeta"><span class="lang-zh">补充线索</span><span class="lang-en">Additional lead</span></div><a class="arrow" target="_blank" rel="noopener noreferrer">→</a>';
+   card.querySelector('h3').textContent=headline;
+   card.querySelector('p .lang-zh').textContent=zhEvidence;
+   card.querySelector('p .lang-en').textContent=enEvidence;
+   card.querySelector('.arrow').href=href;grid.appendChild(card);
  }
 })();
 '''
@@ -74,6 +79,8 @@ def patch(path: Path = Path("docs/index.html")) -> None:
 
     summary = cadence.get("summary") or {}
     observed_days = int(summary.get("days_observed", 0))
+    priority_total = int(summary.get("priority_leads_total", 0))
+    priority_days = int(summary.get("days_with_priority", 0))
     reviews = int(summary.get("review_opportunities_total", 0))
     review_days = int(summary.get("days_with_review", 0))
 
@@ -92,17 +99,22 @@ def patch(path: Path = Path("docs/index.html")) -> None:
         f"Unresolved leads average {avg_hours:.1f}h, oldest {oldest_hours:.1f}h; Tier-1 yield {tier1_yield:.0f}%."
     )
     if observed_days:
-        zh += f" 商业产出基线：已观察 <b>{observed_days}</b> 天，共产出 <b>{reviews}</b> 条 REVIEW，<b>{review_days}</b> 天至少有 1 条。"
-        en += f" Commercial cadence: <b>{observed_days}</b> observed day(s), <b>{reviews}</b> REVIEW opportunities total, with at least one on <b>{review_days}</b> day(s)."
+        zh += (
+            f" 可用性基线：已观察 <b>{observed_days}</b> 天，累计 <b class='ok'>{priority_total}</b> 条优先调查线索，"
+            f"其中 <b>{priority_days}</b> 天至少有 1 条；严格 REVIEW 市场缺口共 <b>{reviews}</b> 条（{review_days} 天有产出）。"
+        )
+        en += (
+            f" Utility cadence: <b>{observed_days}</b> observed day(s), <b class='ok'>{priority_total}</b> priority lead(s) total, "
+            f"with at least one on <b>{priority_days}</b> day(s); strict validated REVIEW gaps: <b>{reviews}</b> across {review_days} day(s)."
+        )
 
     funnel = f'<div class="radar-funnel"><span class="lang-zh">{zh}</span><span class="lang-en">{en}</span></div>'
     anchor = '</div></div></section><section class="section" id="sectors">'
     if anchor in html:
         html = html.replace(anchor, f'</div>{funnel}</div></section><section class="section" id="sectors">', 1)
 
-    # Strip older polish layer before adding the current one when an already-exported
-    # page is patched locally.
     html = html.replace('gapradar-polish-v1', 'gapradar-polish-legacy')
+    html = html.replace('gapradar-polish-v2', 'gapradar-polish-legacy')
     html = html.replace('</body></html>', f'<!-- {MARKER} --><style>{STYLE}</style><script>{SCRIPT}</script></body></html>')
     path.write_text(html, encoding="utf-8")
 
