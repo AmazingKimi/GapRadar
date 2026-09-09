@@ -6,11 +6,25 @@ feeds:
     lookback_hours: 72
     max_entries: 100
 
+  - name: Google News · ending support and closures
+    url: https://news.google.com/rss/search?q=%28software%20OR%20app%20OR%20cloud%20OR%20developer%20OR%20platform%29%20%28%22ending%20support%22%20OR%20%22will%20no%20longer%20support%22%20OR%20retiring%20OR%20closure%29&hl=en-US&gl=US&ceid=US:en
+    change_type: shutdown_eol
+    prefiltered: true
+    lookback_hours: 96
+    max_entries: 100
+
   - name: Google News · SaaS pricing shocks
     url: https://news.google.com/rss/search?q=%28SaaS%20OR%20software%20OR%20cloud%20OR%20app%29%20%28%22price%20increase%22%20OR%20%22price%20hike%22%20OR%20%22pricing%20change%22%20OR%20%22free%20tier%22%29&hl=en-US&gl=US&ceid=US:en
     change_type: price_shock
     prefiltered: true
     lookback_hours: 72
+    max_entries: 100
+
+  - name: Google News · free plan and subscription changes
+    url: https://news.google.com/rss/search?q=%28software%20OR%20SaaS%20OR%20app%20OR%20cloud%29%20%28%22free%20plan%22%20OR%20%22free%20tier%22%20OR%20subscription%29%20%28ending%20OR%20removed%20OR%20increase%20OR%20pricing%29&hl=en-US&gl=US&ceid=US:en
+    change_type: price_shock
+    prefiltered: true
+    lookback_hours: 96
     max_entries: 100
 
   - name: Google News · API and platform changes
@@ -20,11 +34,25 @@ feeds:
     lookback_hours: 72
     max_entries: 100
 
+  - name: Google News · API breaking and access changes
+    url: https://news.google.com/rss/search?q=%28API%20OR%20developer%29%20%28%22breaking%20change%22%20OR%20%22access%20change%22%20OR%20deprecation%20OR%20%22developer%20policy%22%29&hl=en-US&gl=US&ceid=US:en
+    change_type: api_terms_change
+    prefiltered: true
+    lookback_hours: 96
+    max_entries: 100
+
   - name: Google News · regulation creates software work
     url: https://news.google.com/rss/search?q=%28software%20OR%20AI%20OR%20data%20OR%20cybersecurity%20OR%20fintech%20OR%20ecommerce%29%20%28%22new%20regulation%22%20OR%20%22new%20rules%22%20OR%20%22compliance%20deadline%22%20OR%20mandate%29&hl=en-US&gl=US&ceid=US:en
     change_type: regulatory_shift
     prefiltered: true
     lookback_hours: 72
+    max_entries: 100
+
+  - name: Google News · AI and data compliance
+    url: https://news.google.com/rss/search?q=%28AI%20OR%20data%20OR%20cybersecurity%29%20%28regulation%20OR%20compliance%20OR%20mandatory%20OR%20%22will%20require%22%29&hl=en-US&gl=US&ceid=US:en
+    change_type: regulatory_shift
+    prefiltered: true
+    lookback_hours: 96
     max_entries: 100
 
   - name: TechCrunch
