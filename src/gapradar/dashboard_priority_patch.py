@@ -17,6 +17,18 @@ SECTOR_ZH = {
     "Consumer & Society": "消费 / 社会",
     "Frontier": "太空 / 前沿",
 }
+CHANGE_EN = {
+    "shutdown_eol": "shutdown / end-of-life",
+    "price_shock": "price change",
+    "api_terms_change": "API / terms change",
+    "regulatory_shift": "regulatory requirement",
+}
+CHANGE_ZH = {
+    "shutdown_eol": "停服 / 生命周期结束",
+    "price_shock": "价格变化",
+    "api_terms_change": "API / 条款变化",
+    "regulatory_shift": "监管 / 强制要求",
+}
 
 GRID_RE = re.compile(r'(<div class="opps">).*?(</div></section><section class="section" id="feed">)', re.S)
 
@@ -37,6 +49,8 @@ def _status_zh(status: str) -> str:
 
 def _clean_summary(candidate: GapCandidate) -> str:
     summary = " ".join(unescape(candidate.summary or "").replace("\xa0", " ").split())
+    summary = re.sub(r"<[^>]+>", " ", summary)
+    summary = " ".join(summary.split())
     headline = " ".join(candidate.headline.split())
     if summary.lower().startswith(headline.lower()):
         summary = summary[len(headline):].strip(" -–—:|·")
@@ -47,33 +61,23 @@ def _clean_summary(candidate: GapCandidate) -> str:
 
 
 def _news_intro_en(candidate: GapCandidate) -> str:
-    publisher = _publisher(candidate)
     real_summary = _clean_summary(candidate)
     if real_summary:
         return real_summary
-
-    headline = " ".join(candidate.headline.strip().rstrip(".").split())
-    patterns = (
-        (r"^(.+?) Now Mandatory in (.+)$", lambda m: f"{publisher} reports that {m.group(1)} is now mandatory in {m.group(2)}."),
-        (r"^(.+?) Will Require (.+)$", lambda m: f"{publisher} reports that {m.group(1)} will require {m.group(2)}."),
-        (r"^(.+?) preps the shutdown of (.+)$", lambda m: f"{publisher} reports that {m.group(1)} is preparing to shut down {m.group(2)}."),
-        (r"^(.+?) price (?:hike|increase):? (.+)$", lambda m: f"{publisher} reports a price increase affecting {m.group(1)}: {m.group(2)}."),
-    )
-    for pattern, render in patterns:
-        match = re.match(pattern, headline, flags=re.I)
-        if match:
-            return render(match)
-    lowered = headline[:1].lower() + headline[1:] if headline else "this change"
-    return f"{publisher} reports that {lowered}."
+    publisher = _publisher(candidate)
+    label = CHANGE_EN.get(candidate.change_type, "structural change")
+    signal = (candidate.matched_signal or "structural signal").strip().strip('"')
+    return f"Source: {publisher} · detected as {label} from signal “{signal[:72]}”."
 
 
 def _news_intro_zh(candidate: GapCandidate) -> str:
-    publisher = _publisher(candidate)
     real_summary = _clean_summary(candidate)
     if real_summary:
         return real_summary
-    headline = " ".join(candidate.headline.strip().rstrip(".").split())
-    return f"{publisher} 报道：{headline}。"
+    publisher = _publisher(candidate)
+    label = CHANGE_ZH.get(candidate.change_type, "结构性变化")
+    signal = (candidate.matched_signal or "结构性信号").strip().strip('"')
+    return f"来源：{publisher} · 因“{signal[:72]}”被识别为{label}线索。"
 
 
 def _card(candidate: GapCandidate, row: PriorityLead) -> str:
@@ -81,7 +85,7 @@ def _card(candidate: GapCandidate, row: PriorityLead) -> str:
     zh_sector = SECTOR_ZH.get(sector, sector)
     cls = "review" if row.status == "REVIEW" else "watch"
     return (
-        '<article class="opp priority-card" data-priority-status="' + escape(row.status) + '"'
+        '<article class="opp priority-card" tabindex="0" role="button" data-candidate-id="' + escape(candidate.id) + '" data-priority-status="' + escape(row.status) + '"'
         ' data-evidence="' + escape(row.evidence_label) + '"'
         ' data-reason="' + escape(row.reason) + '"'
         ' data-next-check="' + escape(row.next_check) + '"'
@@ -94,8 +98,8 @@ def _card(candidate: GapCandidate, row: PriorityLead) -> str:
         '<h3>' + escape(candidate.headline) + '</h3>'
         '<p class="news-intro"><span class="lang-zh">' + escape(_news_intro_zh(candidate)) + '</span><span class="lang-en">' + escape(_news_intro_en(candidate)) + '</span></p>'
         '</div>'
-        '<div class="card-cta"><span class="lang-zh">查看证据链</span><span class="lang-en">View evidence</span></div>'
-        '<a class="arrow" href="' + escape(candidate.url) + '" target="_blank" rel="noopener noreferrer">→</a>'
+        '<div class="card-cta"><span class="lang-zh">查看证据链</span><span class="lang-en">View evidence chain</span></div>'
+        '<a class="arrow" href="' + escape(candidate.url) + '" target="_blank" rel="noopener noreferrer" aria-label="Open source">→</a>'
         '</article>'
     )
 
@@ -123,7 +127,6 @@ def patch(
         )
 
     html, count = GRID_RE.subn(r'\1' + cards + r'\2', html, count=1)
-
     path.write_text(html, encoding="utf-8")
     return count
 
