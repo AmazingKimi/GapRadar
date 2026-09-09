@@ -3,6 +3,7 @@ from __future__ import annotations
 import html
 import json
 import re
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date, datetime, time, timezone
 from pathlib import Path
@@ -29,7 +30,7 @@ class WaybackClient:
 
     cdx_url = "https://web.archive.org/cdx/search/cdx"
 
-    def __init__(self, timeout: float = 25.0) -> None:
+    def __init__(self, timeout: float = 12.0) -> None:
         self.timeout = timeout
         self.headers = {"User-Agent": "GapRadar/0.7 (+https://github.com/AmazingKimi/GapRadar)"}
 
@@ -122,14 +123,7 @@ def _page_content(
     return title, body, snapshot.archive_url, "evaluated"
 
 
-def _replay_downstream(
-    event,
-    downstream: dict[str, Any],
-    *,
-    mode: Literal["fixture", "wayback"],
-    target: date,
-    wayback: WaybackClient | None,
-) -> dict[str, Any]:
+def _replay_downstream(event, downstream: dict[str, Any], *, mode: Literal["fixture", "wayback"], target: date, wayback: WaybackClient | None) -> dict[str, Any]:
     reaction_specs = list(downstream.get("reaction_pages") or [])
     supply_specs = list(downstream.get("supply_pages") or [])
     reaction_rows: list[dict[str, Any]] = []
@@ -140,23 +134,13 @@ def _replay_downstream(
         evidence = None
         if status == "evaluated":
             evidence = archived_reaction_evidence(
-                event,
-                title=title,
-                body=body,
-                url=str(spec["url"]),
+                event, title=title, body=body, url=str(spec["url"]),
                 publisher=str(spec.get("publisher") or "Archived community"),
-                published_at=_as_datetime(target),
-                engagement=int(spec.get("engagement") or 0),
+                published_at=_as_datetime(target), engagement=int(spec.get("engagement") or 0),
             )
             if evidence is not None:
                 event.reaction_evidence.append(evidence)
-        reaction_rows.append({
-            "url": spec["url"],
-            "status": status,
-            "qualified": evidence is not None,
-            "archive_url": archive_or_error if status == "evaluated" and mode == "wayback" else None,
-            "error": archive_or_error if status == "archive_error" else None,
-        })
+        reaction_rows.append({"url": spec["url"], "status": status, "qualified": evidence is not None, "archive_url": archive_or_error if status == "evaluated" and mode == "wayback" else None, "error": archive_or_error if status == "archive_error" else None})
 
     if reaction_specs:
         event.reaction_checked_at = _as_datetime(target)
@@ -170,25 +154,14 @@ def _replay_downstream(
         evidence = None
         if status == "evaluated":
             evidence = archived_supply_evidence(
-                event,
-                title=title,
-                body=body,
-                url=str(spec["url"]),
-                publisher=str(spec.get("publisher") or "Archived supply"),
-                observed_at=_as_datetime(target),
-                popularity=int(spec.get("popularity") or 0),
-                archived=bool(spec.get("archived", False)),
+                event, title=title, body=body, url=str(spec["url"]),
+                publisher=str(spec.get("publisher") or "Archived supply"), observed_at=_as_datetime(target),
+                popularity=int(spec.get("popularity") or 0), archived=bool(spec.get("archived", False)),
                 quality_hint=float(spec.get("quality_hint") or 0.0),
             )
             if evidence is not None:
                 event.supply_evidence.append(evidence)
-        supply_rows.append({
-            "url": spec["url"],
-            "status": status,
-            "qualified": evidence is not None,
-            "archive_url": archive_or_error if status == "evaluated" and mode == "wayback" else None,
-            "error": archive_or_error if status == "archive_error" else None,
-        })
+        supply_rows.append({"url": spec["url"], "status": status, "qualified": evidence is not None, "archive_url": archive_or_error if status == "evaluated" and mode == "wayback" else None, "error": archive_or_error if status == "archive_error" else None})
 
     if supply_specs:
         event.supply_checked_at = _as_datetime(target)
@@ -211,13 +184,7 @@ def _replay_downstream(
     }
 
 
-def replay_case(
-    case: dict[str, Any],
-    *,
-    mode: Literal["fixture", "wayback"],
-    wayback: WaybackClient | None = None,
-    downstream: dict[str, Any] | None = None,
-) -> dict[str, Any]:
+def replay_case(case: dict[str, Any], *, mode: Literal["fixture", "wayback"], wayback: WaybackClient | None = None, downstream: dict[str, Any] | None = None) -> dict[str, Any]:
     expected = bool(case.get("expected_detect", True))
     target = _parse_day(str(case["replay_as_of"]))
     snapshot_meta: dict[str, Any] = {}
@@ -240,49 +207,25 @@ def replay_case(
     detected, observed_type = _classify_case(title, body)
     expected_type = case.get("event_type") if expected else None
     type_match = (observed_type == expected_type) if expected and detected else None
-
-    if expected and detected:
-        outcome = "tp"
-    elif expected and not detected:
-        outcome = "fn"
-    elif not expected and detected:
-        outcome = "fp"
-    else:
-        outcome = "tn"
+    outcome = "tp" if expected and detected else "fn" if expected else "fp" if detected else "tn"
 
     downstream_result: dict[str, Any] = {}
     if detected and downstream:
         event = event_from_document(
-            vendor=str(case.get("vendor") or "Unknown"),
-            product=str(case.get("product") or "Unknown"),
-            title=title,
-            summary=body,
-            url=str(case["official_url"]),
-            published_at=_as_datetime(_parse_day(str(case["event_date"]))),
-            historical=True,
+            vendor=str(case.get("vendor") or "Unknown"), product=str(case.get("product") or "Unknown"),
+            title=title, summary=body, url=str(case["official_url"]),
+            published_at=_as_datetime(_parse_day(str(case["event_date"]))), historical=True,
         )
         if event is not None:
             downstream_result = _replay_downstream(event, downstream, mode=mode, target=target, wayback=wayback)
 
     return {
-        "id": case["id"],
-        "vendor": case.get("vendor"),
-        "product": case.get("product"),
-        "event_date": case.get("event_date"),
-        "replay_as_of": case.get("replay_as_of"),
-        "official_url": case.get("official_url"),
-        "expected_detect": expected,
-        "expected_type": expected_type,
-        "observed_detect": detected,
-        "observed_type": observed_type,
-        "type_match": type_match,
-        "outcome": outcome,
-        "ground_truth_demand": case.get("ground_truth_demand", "unknown"),
-        "ground_truth_supply": case.get("ground_truth_supply", "unknown"),
-        "retracted": bool(case.get("retracted", False)),
-        "status": "evaluated",
-        **snapshot_meta,
-        **downstream_result,
+        "id": case["id"], "vendor": case.get("vendor"), "product": case.get("product"),
+        "event_date": case.get("event_date"), "replay_as_of": case.get("replay_as_of"),
+        "official_url": case.get("official_url"), "expected_detect": expected, "expected_type": expected_type,
+        "observed_detect": detected, "observed_type": observed_type, "type_match": type_match, "outcome": outcome,
+        "ground_truth_demand": case.get("ground_truth_demand", "unknown"), "ground_truth_supply": case.get("ground_truth_supply", "unknown"),
+        "retracted": bool(case.get("retracted", False)), "status": "evaluated", **snapshot_meta, **downstream_result,
     }
 
 
@@ -296,55 +239,41 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
     unavailable = [row for row in results if row.get("status") != "evaluated"]
 
     demand_rows = [row for row in evaluated if row.get("reaction_pages_total", 0) > 0 and row.get("reaction_pages_evaluated", 0) > 0]
-    demand_correct = sum(
-        1 for row in demand_rows
-        if (row.get("ground_truth_demand") == "yes") == (row.get("observed_demand_status") in {"early_signal", "repeated_signal"})
-    )
+    demand_correct = sum(1 for row in demand_rows if (row.get("ground_truth_demand") == "yes") == (row.get("observed_demand_status") in {"early_signal", "repeated_signal"}))
     supply_rows = [row for row in evaluated if row.get("supply_pages_total", 0) > 0 and row.get("supply_pages_evaluated", 0) > 0]
-    supply_correct = sum(
-        1 for row in supply_rows
-        if (row.get("ground_truth_supply") == "served") == (row.get("observed_supply_status") == "served")
-    )
+    supply_correct = sum(1 for row in supply_rows if (row.get("ground_truth_supply") == "served") == (row.get("observed_supply_status") == "served"))
 
     return {
-        "cases_total": len(results),
-        "cases_evaluated": len(evaluated),
-        "archive_unavailable": len(unavailable),
-        "tp": counts["tp"],
-        "fp": counts["fp"],
-        "tn": counts["tn"],
-        "fn": counts["fn"],
+        "cases_total": len(results), "cases_evaluated": len(evaluated), "archive_unavailable": len(unavailable),
+        "tp": counts["tp"], "fp": counts["fp"], "tn": counts["tn"], "fn": counts["fn"],
         "precision": round(counts["tp"] / precision_den, 4) if precision_den else None,
         "recall": round(counts["tp"] / recall_den, 4) if recall_den else None,
         "event_type_accuracy": round(type_correct / len(positives_with_type), 4) if positives_with_type else None,
         "archive_coverage": round(len(evaluated) / len(results), 4) if results else None,
-        "demand_cases_evaluated": len(demand_rows),
-        "demand_accuracy": round(demand_correct / len(demand_rows), 4) if demand_rows else None,
-        "supply_cases_evaluated": len(supply_rows),
-        "supply_accuracy": round(supply_correct / len(supply_rows), 4) if supply_rows else None,
+        "demand_cases_evaluated": len(demand_rows), "demand_accuracy": round(demand_correct / len(demand_rows), 4) if demand_rows else None,
+        "supply_cases_evaluated": len(supply_rows), "supply_accuracy": round(supply_correct / len(supply_rows), 4) if supply_rows else None,
     }
 
 
-def run_backtest(
-    fixture_path: Path,
-    *,
-    as_of: date | None = None,
-    mode: Literal["fixture", "wayback"] = "fixture",
-) -> dict[str, Any]:
+def run_backtest(fixture_path: Path, *, as_of: date | None = None, mode: Literal["fixture", "wayback"] = "fixture") -> dict[str, Any]:
     cases = load_cases(fixture_path)
     if as_of is not None:
         cases = [case for case in cases if _parse_day(str(case["event_date"])) <= as_of]
     downstream_path = fixture_path.with_name("downstream.json")
     downstream = load_downstream(downstream_path)
-    client = WaybackClient() if mode == "wayback" else None
-    results = [replay_case(case, mode=mode, wayback=client, downstream=downstream.get(str(case["id"]))) for case in cases]
+
+    if mode == "wayback":
+        def run_one(case: dict[str, Any]) -> dict[str, Any]:
+            return replay_case(case, mode=mode, wayback=WaybackClient(), downstream=downstream.get(str(case["id"])))
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            results = list(pool.map(run_one, cases))
+    else:
+        results = [replay_case(case, mode=mode, downstream=downstream.get(str(case["id"]))) for case in cases]
+
     return {
-        "mode": mode,
-        "as_of": as_of.isoformat() if as_of else None,
-        "fixture": str(fixture_path),
+        "mode": mode, "as_of": as_of.isoformat() if as_of else None, "fixture": str(fixture_path),
         "downstream_fixture": str(downstream_path) if downstream_path.exists() else None,
-        "metrics": summarize(results),
-        "results": results,
+        "metrics": summarize(results), "results": results,
         "limitations": [
             "Fixture mode is a hand-curated benchmark, not a universal accuracy estimate.",
             "Wayback mode scores only retrievable archived documents; archive misses/errors are reported separately and never converted into detector misses.",
