@@ -2,10 +2,19 @@
   {
     "candidate_id": "52f1eb44691af255",
     "status": "INVESTIGATE",
+    "priority_score": 12,
+    "evidence_state": "tier1_verified",
+    "evidence_label": "Tier-1 · mass.gov",
+    "reason": "mass.gov confirms the underlying change behind “Massachusetts Will Require New Data Centers to Use Clean Energy”. The event is an actionable regulatory requirement affecting the demand surface “new compliance, testing, reporting or implementation work”. Supply research checked 21 candidate(s), found 0 strong match(es), with partial coverage.",
+    "next_check": "Close remaining supply-coverage gaps and test the explicit demand hypothesis with affected users before promoting this to REVIEW."
+  },
+  {
+    "candidate_id": "14436a2a2ff1f7ea",
+    "status": "INVESTIGATE",
     "priority_score": 9,
     "evidence_state": "official_candidate",
-    "evidence_label": "Official lead · mass.gov",
-    "reason": "EnergyNow.com reports “Massachusetts Will Require New Data Centers to Use Clean Energy”. GapRadar found a plausible authority page on mass.gov, but that page has not yet confirmed the exact “Will Require New Data Centers to Use Clean Energy - EnergyNow.com Mass” claim. If confirmed, investigate new compliance, testing, reporting or implementation work.",
+    "evidence_label": "Official lead · heavyindustries.gov.in",
+    "reason": "Autocar Professional reports “EV BMS Cybersecurity Testing Now Mandatory in India”. GapRadar found a plausible authority page on heavyindustries.gov.in, but that page has not yet confirmed the exact “Mandatory” claim. If confirmed, investigate new compliance, testing, reporting or implementation work.",
     "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
   },
   {
@@ -15,15 +24,6 @@
     "evidence_state": "news_only",
     "evidence_label": "Tier-1 pending",
     "reason": "Android Central reports “Samsung preps the shutdown of two more apps late in 2026” and the detector matched “shutdown” as a shutdown / end-of-life signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect migration or replacement demand before the affected product disappears.",
-    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
-  },
-  {
-    "candidate_id": "14436a2a2ff1f7ea",
-    "status": "INVESTIGATE",
-    "priority_score": 7,
-    "evidence_state": "news_only",
-    "evidence_label": "Tier-1 pending",
-    "reason": "Autocar Professional reports “EV BMS Cybersecurity Testing Now Mandatory in India” and the detector matched “Mandatory” as a regulatory requirement signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect new compliance, testing, reporting or implementation work.",
     "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {
