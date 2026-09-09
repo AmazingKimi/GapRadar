@@ -6,15 +6,15 @@
     "candidate_urls": [
       "https://www.mass.gov/doc/efsb-25-10-decision-opening/download",
       "https://www.mass.gov/doc/2024-climate-act-draft-regulations-eversource-national-grid-07-28-2025/download",
-      "https://www.mass.gov/news/governor-healey-halts-data-center-tax-incentive-and-calls-for-strict-guardrails-to-protect-ratepayers-environment-public-health",
-      "https://budget.digital.mass.gov/govbudget/fy24/budbriefpdf/fy24_bb09_climate_action.pdf",
-      "https://www.mass.gov/doc/updated-siting-and-permitting-process-for-clean-energy-infrastructure-in-massachusetts/download"
+      "https://www.mass.gov/executive-orders/no-658-establishing-requirements-for-responsible-data-center-development-and-operations-in-massachusetts-to-protect-and-support-ratepayers-communities-and-the-environment",
+      "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
+      "https://www.mass.gov/info-details/efsb-permitting-dashboard"
     ],
     "candidate_hosts": [
       "www.mass.gov",
       "www.mass.gov",
       "www.mass.gov",
-      "budget.digital.mass.gov",
+      "www.mass.gov",
       "www.mass.gov"
     ],
     "search_coverage": "adequate",

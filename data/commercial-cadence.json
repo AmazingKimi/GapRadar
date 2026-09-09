@@ -2,17 +2,21 @@
   "days": [
     {
       "date": "2026-09-09",
-      "runs": 8,
+      "runs": 9,
       "raw_entries": 755,
       "kept_candidates": 8,
       "official_candidates": 3,
       "tier1_verified": 3,
       "deep_analyses": 3,
+      "priority_leads": 4,
       "review_opportunities": 0
     }
   ],
   "summary": {
     "days_observed": 1,
+    "priority_leads_total": 4,
+    "days_with_priority": 1,
+    "priority_leads_per_day": 4.0,
     "review_opportunities_total": 0,
     "days_with_review": 0,
     "review_opportunities_per_day": 0.0,

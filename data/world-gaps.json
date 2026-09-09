@@ -1,7 +1,7 @@
 [
   {
     "id": "52f1eb44691af255",
-    "discovered_at": "2026-09-09T10:54:13.629691+00:00",
+    "discovered_at": "2026-09-09T11:00:36.964025+00:00",
     "published_at": "2026-09-08T22:38:27+00:00",
     "source": "Google News · energy climate structural change",
     "headline": "Massachusetts Will Require New Data Centers to Use Clean Energy",
@@ -18,7 +18,7 @@
   },
   {
     "id": "14436a2a2ff1f7ea",
-    "discovered_at": "2026-09-09T10:54:13.629691+00:00",
+    "discovered_at": "2026-09-09T11:00:36.964025+00:00",
     "published_at": "2026-09-08T15:17:01+00:00",
     "source": "Google News · AI and data regulation",
     "headline": "EV BMS Cybersecurity Testing Now Mandatory in India",
@@ -35,12 +35,12 @@
   },
   {
     "id": "86a0955dccc4b9fd",
-    "discovered_at": "2026-09-09T10:54:13.629691+00:00",
+    "discovered_at": "2026-09-09T11:00:36.964025+00:00",
     "published_at": "2026-09-08T15:09:01+00:00",
     "source": "Google News · SaaS pricing shocks",
     "headline": "The latest Apple price hike: Apple TV streaming service",
     "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE92aUtBYVl0WGZWdVpiS3RfNlc1UFhIZDdsdXlmVzg5LTJIVnBNSzNaTVJUR3pDRWJlY043TWFBcXRwck8weFRwcEtSRHRidzNmUFlhcDZNOEhOLWZPUzAxRWQ0YUNhWGFqMWI5OQ?oc=5",
-    "summary": "The latest Apple price hike: Apple TV streaming service &nbsp;&nbsp; Mashable",
+    "summary": "The latest Apple price hike: Apple TV streaming service &nbsp;&nbsp; mashable.com",
     "change_type": "price_shock",
     "matched_signal": "price hike",
     "recommendation": "WATCH",
@@ -52,7 +52,7 @@
   },
   {
     "id": "1a9ab0b99d425f58",
-    "discovered_at": "2026-09-09T10:54:13.629691+00:00",
+    "discovered_at": "2026-09-09T11:00:36.964025+00:00",
     "published_at": "2026-09-08T08:20:58+00:00",
     "source": "Google News · energy climate structural change",
     "headline": "Afriforum challenges Eskom’s 8.83% electricity price increase",
@@ -69,7 +69,7 @@
   },
   {
     "id": "a4667ed73e330db1",
-    "discovered_at": "2026-09-09T10:54:13.629691+00:00",
+    "discovered_at": "2026-09-09T11:00:36.964025+00:00",
     "published_at": "2026-09-07T18:14:00+00:00",
     "source": "Google News · software shutdowns",
     "headline": "Samsung preps the shutdown of two more apps late in 2026",
@@ -86,7 +86,7 @@
   },
   {
     "id": "5b1d4ece4414b40f",
-    "discovered_at": "2026-09-09T10:54:13.629691+00:00",
+    "discovered_at": "2026-09-09T11:00:36.964025+00:00",
     "published_at": "2026-09-06T19:44:12+00:00",
     "source": "Google News · AI and data regulation",
     "headline": "Apple Music to make AI labels mandatory for music created with artificial intelligence",
