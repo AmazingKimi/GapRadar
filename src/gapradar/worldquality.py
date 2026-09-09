@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import json
 import re
-from dataclasses import replace
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 
 from .worldscan import GapCandidate, load_candidates, save_candidates
@@ -33,6 +34,19 @@ BUSINESS_MANDATE = re.compile(
     r"\b(wins?|won|selected|awarded|secures?|lands?|gets?)\b.{0,80}\bmandate\b|\b(investment|asset management|fund|pension|portfolio)\s+mandate\b|\bmandate\s+from\b.{0,80}\b(fund|pension|client|investor)\b",
     re.I,
 )
+TOKEN_STOP = {
+    "the", "a", "an", "and", "or", "of", "to", "for", "in", "on", "at", "by", "from", "with",
+    "new", "latest", "today", "says", "say", "will", "may", "could", "after", "before", "amid",
+}
+
+
+@dataclass(frozen=True)
+class WorldQualityReport:
+    input_candidates: int
+    context_rejected: int
+    duplicate_collapsed: int
+    kept_candidates: int
+    rejection_reasons: dict[str, int]
 
 
 def rejection_reason(candidate: GapCandidate) -> str | None:
@@ -69,7 +83,50 @@ def refine_candidate(candidate: GapCandidate) -> GapCandidate | None:
     )
 
 
-def refine_candidates(candidates: list[GapCandidate]) -> tuple[list[GapCandidate], list[tuple[str, str]]]:
+def _event_tokens(candidate: GapCandidate) -> set[str]:
+    text = candidate.headline.lower().replace("’", "'")
+    words = re.findall(r"[a-z0-9][a-z0-9.+-]{2,}", text)
+    return {word for word in words if word not in TOKEN_STOP}
+
+
+def _event_similarity(left: GapCandidate, right: GapCandidate) -> float:
+    if left.change_type != right.change_type:
+        return 0.0
+    a, b = _event_tokens(left), _event_tokens(right)
+    if not a or not b:
+        return 0.0
+    overlap = len(a & b)
+    jaccard = overlap / len(a | b)
+    containment = overlap / min(len(a), len(b))
+    return max(jaccard, containment * 0.92)
+
+
+def _prefer(left: GapCandidate, right: GapCandidate) -> GapCandidate:
+    """Keep the richer/newer representation when two rows describe one event."""
+    left_score = (len(left.summary or ""), left.published_at or "", len(left.headline))
+    right_score = (len(right.summary or ""), right.published_at or "", len(right.headline))
+    return left if left_score >= right_score else right
+
+
+def collapse_duplicate_events(candidates: list[GapCandidate], threshold: float = 0.78) -> tuple[list[GapCandidate], int]:
+    clusters: list[GapCandidate] = []
+    collapsed = 0
+    for candidate in sorted(candidates, key=lambda row: row.published_at or row.discovered_at, reverse=True):
+        match_index = None
+        for index, existing in enumerate(clusters):
+            if _event_similarity(candidate, existing) >= threshold:
+                match_index = index
+                break
+        if match_index is None:
+            clusters.append(candidate)
+        else:
+            clusters[match_index] = _prefer(clusters[match_index], candidate)
+            collapsed += 1
+    clusters.sort(key=lambda row: row.published_at or row.discovered_at, reverse=True)
+    return clusters, collapsed
+
+
+def refine_candidates(candidates: list[GapCandidate]) -> tuple[list[GapCandidate], list[tuple[str, str]], int]:
     kept: list[GapCandidate] = []
     rejected: list[tuple[str, str]] = []
     for candidate in candidates:
@@ -78,17 +135,42 @@ def refine_candidates(candidates: list[GapCandidate]) -> tuple[list[GapCandidate
             rejected.append((candidate.id, rejection_reason(candidate) or "context_rejected"))
         else:
             kept.append(refined)
-    return kept, rejected
+    deduped, collapsed = collapse_duplicate_events(kept)
+    return deduped, rejected, collapsed
 
 
-def run(path: Path = Path("data/world-gaps.json")) -> tuple[int, int]:
+def save_report(path: Path, report: WorldQualityReport) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(asdict(report), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def run(
+    path: Path = Path("data/world-gaps.json"),
+    report_path: Path = Path("data/world-quality-report.json"),
+) -> tuple[int, int, int]:
     candidates = load_candidates(path)
-    kept, rejected = refine_candidates(candidates)
+    kept, rejected, collapsed = refine_candidates(candidates)
     save_candidates(path, kept)
-    print(f"World quality guard: kept {len(kept)}/{len(candidates)} candidate(s); rejected {len(rejected)} contextual false positive(s).")
+    reasons: dict[str, int] = {}
+    for _, reason in rejected:
+        reasons[reason] = reasons.get(reason, 0) + 1
+    save_report(
+        report_path,
+        WorldQualityReport(
+            input_candidates=len(candidates),
+            context_rejected=len(rejected),
+            duplicate_collapsed=collapsed,
+            kept_candidates=len(kept),
+            rejection_reasons=reasons,
+        ),
+    )
+    print(
+        f"World quality guard: {len(candidates)} input → {len(kept)} kept; "
+        f"rejected {len(rejected)} contextual false positive(s), collapsed {collapsed} duplicate event(s)."
+    )
     for candidate_id, reason in rejected[:20]:
         print(f"  - {candidate_id}: {reason}")
-    return len(kept), len(rejected)
+    return len(kept), len(rejected), collapsed
 
 
 if __name__ == "__main__":
