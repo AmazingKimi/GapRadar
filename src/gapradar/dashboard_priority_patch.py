@@ -85,12 +85,7 @@ def _card(candidate: GapCandidate, row: PriorityLead) -> str:
     zh_sector = SECTOR_ZH.get(sector, sector)
     cls = "review" if row.status == "REVIEW" else "watch"
     return (
-        '<article class="opp priority-card" tabindex="0" role="button" data-candidate-id="' + escape(candidate.id) + '" data-priority-status="' + escape(row.status) + '"'
-        ' data-evidence="' + escape(row.evidence_label) + '"'
-        ' data-reason="' + escape(row.reason) + '"'
-        ' data-next-check="' + escape(row.next_check) + '"'
-        ' data-score="' + str(row.priority_score) + '"'
-        ' data-url="' + escape(candidate.url) + '">'
+        '<article class="opp priority-card" tabindex="0" role="button" data-candidate-id="' + escape(candidate.id) + '" data-priority-status="' + escape(row.status) + '" data-url="' + escape(candidate.url) + '">'
         '<div class="oppArt">' + _art(candidate.change_type) + '</div>'
         '<span class="badge"><span class="lang-zh">' + escape(zh_sector) + '</span><span class="lang-en">' + escape(sector) + '</span></span>'
         '<span class="badge status ' + cls + '"><span class="lang-zh">' + escape(_status_zh(row.status)) + '</span><span class="lang-en">' + escape(row.status.title()) + '</span></span>'
