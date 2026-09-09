@@ -1,99 +1,71 @@
 [
   {
-    "candidate_id": "a3328f38cb0cc06f",
-    "status": "first_party_candidates",
-    "query": "\"Daily News Wrap-Up: PM Surya Ghar 2.0 May Mandate Energy Storage\" official",
-    "candidate_urls": [
-      "https://pmsuryaghar.gov.in",
-      "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2024/dec/doc2024125465001.pdf",
-      "https://consumer.pmsuryaghar.gov.in/consumer",
-      "https://www.mercomindia.com/daily-news-wrap-up-maharashtra-ci-solar-moves-toward-demand-matching",
-      "https://pmsuryaghar.gov.in/⁠"
-    ],
-    "candidate_hosts": [
-      "pmsuryaghar.gov.in",
-      "static.pib.gov.in",
-      "consumer.pmsuryaghar.gov.in",
-      "www.mercomindia.com",
-      "pmsuryaghar.gov.in"
-    ],
-    "search_coverage": "adequate",
-    "errors": [],
-    "queries": [
-      "\"Daily News Wrap-Up: PM Surya Ghar 2.0 May Mandate Energy Storage\" official",
-      "wrap-up surya ghar mandate energy storage rule regulation requirement mandate official",
-      "wrap-up surya ghar mandate rule regulation requirement mandate official",
-      "wrap-up surya ghar mandate energy storage government regulator requirement"
-    ]
-  },
-  {
-    "candidate_id": "bc658468240f8785",
-    "status": "first_party_candidates",
-    "query": "\"Labour promises new rules for data centre electricity use, coordinated AI policy across government\" official",
-    "candidate_urls": [
-      "https://www.gov.uk/government/news/government-sets-out-plan-for-new-era-of-clean-electricity",
-      "https://nationalpolicyforum.labour.org.uk/wp-content/uploads/2025/03/2025-NPF-consultation-documents_CLEAN-ENERGY.pdf",
-      "https://www.gov.uk/government/publications/a-new-approach-to-ensure-regulators-and-regulation-support-growth/new-approach-to-ensure-regulators-and-regulation-support-growth-html",
-      "https://www.ferc.gov",
-      "https://www.reginfo.gov/public/do/eAgendaMain"
-    ],
-    "candidate_hosts": [
-      "www.gov.uk",
-      "nationalpolicyforum.labour.org.uk",
-      "www.gov.uk",
-      "www.ferc.gov",
-      "www.reginfo.gov"
-    ],
-    "search_coverage": "adequate",
-    "errors": [],
-    "queries": [
-      "\"Labour promises new rules for data centre electricity use, coordinated AI policy across government\" official",
-      "labour promises for centre electricity use rule regulation requirement mandate official",
-      "labour promises for centre rule regulation requirement mandate official",
-      "labour promises for centre electricity use government regulator requirement"
-    ]
-  },
-  {
     "candidate_id": "52f1eb44691af255",
-    "status": "not_found",
+    "status": "first_party_candidates",
     "query": "\"Massachusetts Will Require New Data Centers to Use Clean Energy\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
+    "candidate_urls": [
+      "https://energynow.com/2026/09/massachusetts-will-require-new-data-centers-to-use-clean-energy",
+      "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
+      "https://childcare.mass.gov/resource/1608087503000/EEC_InterimRegulations",
+      "https://www.mass.gov/guides/clean-energy-standard-310-cmr-775",
+      "https://www.mass.gov/info-details/clean-energy-siting-permitting-regulations"
+    ],
+    "candidate_hosts": [
+      "energynow.com",
+      "www.mass.gov",
+      "childcare.mass.gov",
+      "www.mass.gov",
+      "www.mass.gov"
+    ],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
       "\"Massachusetts Will Require New Data Centers to Use Clean Energy\" official",
-      "massachusetts centers use clean energy nbsp rule regulation requirement mandate official",
+      "site:mass.gov massachusetts centers use clean rule regulation requirement mandate official",
+      "massachusetts centers use clean energy energynow.com rule regulation requirement mandate official",
       "massachusetts centers use clean rule regulation requirement mandate official",
-      "massachusetts centers use clean energy nbsp government regulator requirement"
+      "massachusetts centers use clean energy energynow.com government regulator requirement"
     ]
   },
   {
     "candidate_id": "14436a2a2ff1f7ea",
-    "status": "not_found",
+    "status": "first_party_candidates",
     "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
+    "candidate_urls": [
+      "https://auto.economictimes.indiatimes.com/news/auto-technology/india-tightens-cybersecurity-norms-for-ev-battery-systems-with-wireless-connectivity/133950713",
+      "https://www.energetica-india.net/news/morth-mandates-cybersecurity-testing-for-wireless-enabled-ev-bms",
+      "https://www.autoguideindia.com/reports/india-draft-cybersecurity-software-update-rules-connected-autonomous-vehicles"
+    ],
+    "candidate_hosts": [
+      "auto.economictimes.indiatimes.com",
+      "www.energetica-india.net",
+      "www.autoguideindia.com"
+    ],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
       "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
+      "site:nic.in bms cybersecurity testing now rule regulation requirement mandate official",
+      "site:gov.in bms cybersecurity testing now rule regulation requirement mandate official",
       "bms cybersecurity testing now mandatory india rule regulation requirement mandate official",
-      "bms cybersecurity testing now rule regulation requirement mandate official",
-      "bms cybersecurity testing now mandatory india government regulator requirement"
+      "bms cybersecurity testing now rule regulation requirement mandate official"
     ]
   },
   {
     "candidate_id": "86a0955dccc4b9fd",
-    "status": "not_found",
+    "status": "first_party_candidates",
     "query": "\"The latest Apple price hike: Apple TV streaming service\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
+    "candidate_urls": [
+      "https://tv.apple.com/us/offer/tvs.sbd.4000"
+    ],
+    "candidate_hosts": [
+      "tv.apple.com"
+    ],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
       "\"The latest Apple price hike: Apple TV streaming service\" official",
-      "apple streaming nbsp mashable pricing price fee subscription official"
+      "apple streaming mashable pricing price fee subscription official"
     ]
   },
   {
@@ -106,38 +78,8 @@
     "errors": [],
     "queries": [
       "\"Afriforum challenges Eskom’s 8.83% electricity price increase\" official",
-      "afriforum challenges eskom electricity nbsp mybroadband pricing price fee subscription official",
+      "afriforum challenges eskom electricity mybroadband pricing price fee subscription official",
       "afriforum challenges eskom electricity pricing price fee subscription official"
-    ]
-  },
-  {
-    "candidate_id": "29e9ffc0607d1144",
-    "status": "not_found",
-    "query": "\"India May Mandate Storage For Solar, Wind Projects From 2027\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": [],
-    "queries": [
-      "\"India May Mandate Storage For Solar, Wind Projects From 2027\" official",
-      "india mandate storage for solar wind rule regulation requirement mandate official",
-      "india mandate storage for rule regulation requirement mandate official",
-      "india mandate storage for solar wind government regulator requirement"
-    ]
-  },
-  {
-    "candidate_id": "33ef99e5fb709e44",
-    "status": "not_found",
-    "query": "\"Tories launch bid to revoke ZEV mandate as Labour and EV industry hit back\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": [],
-    "queries": [
-      "\"Tories launch bid to revoke ZEV mandate as Labour and EV industry hit back\" official",
-      "tories launch bid revoke zev mandate rule regulation requirement mandate official",
-      "tories launch bid revoke rule regulation requirement mandate official",
-      "tories launch bid revoke zev mandate government regulator requirement"
     ]
   },
   {
@@ -152,21 +94,6 @@
       "\"3 Red Line stations reopen Monday after 2-month shutdown for major construction\" official",
       "red line stations reopen monday after shutdown sunset discontinued end support official",
       "red line stations reopen shutdown sunset discontinued end support official"
-    ]
-  },
-  {
-    "candidate_id": "7b01b84fa1160659",
-    "status": "not_found",
-    "query": "\"Trump's Trade War Targets Bombardier: Manufacturing Mandate Looms\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": [],
-    "queries": [
-      "\"Trump's Trade War Targets Bombardier: Manufacturing Mandate Looms\" official",
-      "trump trade war targets bombardier manufacturing rule regulation requirement mandate official",
-      "trump trade war targets rule regulation requirement mandate official",
-      "trump trade war targets bombardier manufacturing government regulator requirement"
     ]
   },
   {
@@ -194,23 +121,8 @@
     "errors": [],
     "queries": [
       "\"Samsung preps the shutdown of two more apps late in 2026\" official",
-      "samsung preps two apps late nbsp shutdown sunset discontinued end support official",
+      "samsung preps two apps late android shutdown sunset discontinued end support official",
       "samsung preps two apps shutdown sunset discontinued end support official"
-    ]
-  },
-  {
-    "candidate_id": "f0367b9ac4658554",
-    "status": "not_found",
-    "query": "\"UK neared EV mandate in August but still fell short\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": [],
-    "queries": [
-      "\"UK neared EV mandate in August but still fell short\" official",
-      "neared mandate august but still fell rule regulation requirement mandate official",
-      "neared mandate august but rule regulation requirement mandate official",
-      "neared mandate august but still fell government regulator requirement"
     ]
   },
   {
@@ -226,21 +138,6 @@
       "apple music make labels mandatory for rule regulation requirement mandate official",
       "apple music make labels rule regulation requirement mandate official",
       "apple music make labels mandatory for government regulator requirement"
-    ]
-  },
-  {
-    "candidate_id": "1a275084185bdfc3",
-    "status": "not_found",
-    "query": "\"Engineering goods exporters seek mandate on carbon emission certificate under EU norms\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": [],
-    "queries": [
-      "\"Engineering goods exporters seek mandate on carbon emission certificate under EU norms\" official",
-      "engineering goods exporters seek mandate carbon rule regulation requirement mandate official",
-      "engineering goods exporters seek rule regulation requirement mandate official",
-      "engineering goods exporters seek mandate carbon government regulator requirement"
     ]
   }
 ]

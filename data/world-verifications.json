@@ -1,19 +1,9 @@
 [
   {
-    "candidate_id": "a3328f38cb0cc06f",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "bc658468240f8785",
+    "candidate_id": "52f1eb44691af255",
     "status": "tier1_verified",
     "event_id": null,
-    "official_url": "https://www.gov.uk/government/news/government-sets-out-plan-for-new-era-of-clean-electricity",
+    "official_url": "https://www.mass.gov/guides/clean-energy-standard-310-cmr-775",
     "match_score": 10,
     "reasons": [
       "first_party_page",
@@ -22,57 +12,31 @@
     ]
   },
   {
-    "candidate_id": "52f1eb44691af255",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
     "candidate_id": "14436a2a2ff1f7ea",
-    "status": "unverified",
+    "status": "tier1_verified",
     "event_id": null,
-    "official_url": null,
-    "match_score": 1,
+    "official_url": "https://auto.economictimes.indiatimes.com/news/auto-technology/india-tightens-cybersecurity-norms-for-ev-battery-systems-with-wireless-connectivity/133950713",
+    "match_score": 10,
     "reasons": [
-      "date_proximity"
+      "first_party_page",
+      "subject_overlap",
+      "hard_change_confirmed"
     ]
   },
   {
     "candidate_id": "86a0955dccc4b9fd",
-    "status": "unverified",
+    "status": "tier1_verified",
     "event_id": null,
-    "official_url": null,
-    "match_score": 1,
+    "official_url": "https://tv.apple.com/us/offer/tvs.sbd.4000",
+    "match_score": 10,
     "reasons": [
-      "date_proximity"
+      "first_party_page",
+      "subject_overlap",
+      "hard_change_confirmed"
     ]
   },
   {
     "candidate_id": "1a9ab0b99d425f58",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "29e9ffc0607d1144",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "33ef99e5fb709e44",
     "status": "unverified",
     "event_id": null,
     "official_url": null,
@@ -89,16 +53,6 @@
     "match_score": 4,
     "reasons": [
       "event_type",
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "7b01b84fa1160659",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
       "date_proximity"
     ]
   },
@@ -124,27 +78,7 @@
     ]
   },
   {
-    "candidate_id": "f0367b9ac4658554",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
     "candidate_id": "5b1d4ece4414b40f",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "1a275084185bdfc3",
     "status": "unverified",
     "event_id": null,
     "official_url": null,

@@ -1,6 +1,6 @@
 [
   {
-    "candidate_id": "bc658468240f8785",
+    "candidate_id": "52f1eb44691af255",
     "ecosystem": "regulatory",
     "supply_status": "no_supply_detected",
     "supply_sources_checked": [
@@ -9,7 +9,7 @@
     "supply_sources_missing": [
       "web_search"
     ],
-    "supply_candidate_count": 10,
+    "supply_candidate_count": 21,
     "supply_evidence": [],
     "supply_coverage": "partial",
     "gap_assessment": "INSUFFICIENT COVERAGE",
@@ -19,20 +19,93 @@
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ],
     "tier1_status": "tier1_verified",
-    "official_url": "https://www.gov.uk/government/news/government-sets-out-plan-for-new-era-of-clean-electricity",
+    "official_url": "https://www.mass.gov/guides/clean-energy-standard-310-cmr-775",
     "demand_hypothesis": {
-      "affected_users": "Organizations obligated by the new requirement described by: Labour promises new rules for data centre electricity use, coordinated AI policy across government.",
+      "affected_users": "Organizations obligated by the new requirement described by: Massachusetts Will Require New Data Centers to Use Clean Energy.",
       "job_to_be_done": "Comply with the new requirement with the least operational burden, evidence-collection cost and implementation risk.",
       "disruption": "A regulatory or policy shift creates mandatory work, controls, reporting or migration.",
       "official_successor": "unknown",
       "basis": [
-        "https://www.gov.uk/government/news/government-sets-out-plan-for-new-era-of-clean-electricity"
+        "https://www.mass.gov/guides/clean-energy-standard-310-cmr-775"
       ],
       "confidence": "low",
       "unknowns": [
         "Exact obligated segments",
         "Effective date and enforcement intensity",
         "Existing compliance-tool coverage"
+      ]
+    }
+  },
+  {
+    "candidate_id": "14436a2a2ff1f7ea",
+    "ecosystem": "regulatory",
+    "supply_status": "unassessed",
+    "supply_sources_checked": [],
+    "supply_sources_missing": [
+      "web_search"
+    ],
+    "supply_candidate_count": 0,
+    "supply_evidence": [],
+    "supply_coverage": "failed",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results",
+      "google_news_supply: no results"
+    ],
+    "tier1_status": "tier1_verified",
+    "official_url": "https://auto.economictimes.indiatimes.com/news/auto-technology/india-tightens-cybersecurity-norms-for-ev-battery-systems-with-wireless-connectivity/133950713",
+    "demand_hypothesis": {
+      "affected_users": "Organizations obligated by the new requirement described by: EV BMS Cybersecurity Testing Now Mandatory in India.",
+      "job_to_be_done": "Comply with the new requirement with the least operational burden, evidence-collection cost and implementation risk.",
+      "disruption": "A regulatory or policy shift creates mandatory work, controls, reporting or migration.",
+      "official_successor": "unknown",
+      "basis": [
+        "https://auto.economictimes.indiatimes.com/news/auto-technology/india-tightens-cybersecurity-norms-for-ev-battery-systems-with-wireless-connectivity/133950713"
+      ],
+      "confidence": "low",
+      "unknowns": [
+        "Exact obligated segments",
+        "Effective date and enforcement intensity",
+        "Existing compliance-tool coverage"
+      ]
+    }
+  },
+  {
+    "candidate_id": "86a0955dccc4b9fd",
+    "ecosystem": "commercial",
+    "supply_status": "no_supply_detected",
+    "supply_sources_checked": [
+      "google_news_supply"
+    ],
+    "supply_sources_missing": [
+      "web_search"
+    ],
+    "supply_candidate_count": 30,
+    "supply_evidence": [],
+    "supply_coverage": "partial",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Fallback news-index search returned results but no strongly relevant product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results"
+    ],
+    "tier1_status": "tier1_verified",
+    "official_url": "https://tv.apple.com/us/offer/tvs.sbd.4000",
+    "demand_hypothesis": {
+      "affected_users": "Price-sensitive customers affected by the pricing change described by: The latest Apple Apple TV streaming service.",
+      "job_to_be_done": "Keep the core outcome while reducing the new cost burden or changing the pricing model.",
+      "disruption": "A material price, fee or free-tier change may release previously locked-in demand.",
+      "official_successor": "unknown",
+      "basis": [
+        "https://tv.apple.com/us/offer/tvs.sbd.4000"
+      ],
+      "confidence": "low",
+      "unknowns": [
+        "Share of customers materially affected",
+        "Switching costs",
+        "Whether lower-cost substitutes already serve the core job"
       ]
     }
   }
