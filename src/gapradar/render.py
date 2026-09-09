@@ -22,6 +22,9 @@ h1 { font-size:clamp(42px,7vw,78px); line-height:.96; margin:12px 0 16px; letter
 .metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:30px 0 26px; }
 .metric { padding:18px; background:rgba(15,24,35,.86); border:1px solid var(--line); border-radius:18px; }
 .metric strong { display:block; font-size:30px; }.metric span { color:var(--muted); font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+.funnel { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:10px 0 30px; }
+.funnel .step { position:relative; padding:16px; background:#0b141e; border:1px solid #26374a; border-radius:16px; }
+.funnel .step b { display:block; font-size:24px; margin-bottom:3px; }.funnel .step span { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.07em; }
 .section-head { display:flex; justify-content:space-between; align-items:end; gap:20px; margin:34px 0 14px; }
 .section-head h2 { margin:0; font-size:24px; }.section-head p { margin:0; color:var(--muted); max-width:720px; }
 .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
@@ -29,12 +32,12 @@ h1 { font-size:clamp(42px,7vw,78px); line-height:.96; margin:12px 0 16px; letter
 .card.verified { border-color:#2d6353; box-shadow:0 0 0 1px rgba(113,229,181,.08) inset; }
 .card h3 { margin:12px 0 7px; font-size:21px; line-height:1.25; }.meta,.summary,.small { color:var(--muted); }.summary { margin:8px 0 0; }
 .badges { display:flex; flex-wrap:wrap; gap:7px; }.badge { display:inline-flex; padding:5px 9px; border:1px solid #33465c; border-radius:999px; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:#c8d6e5; }
-.badge.review { color:#09121a; background:var(--green); border-color:var(--green); font-weight:800; }.badge.watch { color:#1d1600; background:var(--yellow); border-color:var(--yellow); font-weight:800; }.badge.verified { color:var(--green); border-color:#326b59; }.badge.signal { color:var(--accent); border-color:#315b73; }
+.badge.review { color:#09121a; background:var(--green); border-color:var(--green); font-weight:800; }.badge.watch { color:#1d1600; background:var(--yellow); border-color:var(--yellow); font-weight:800; }.badge.verified { color:var(--green); border-color:#326b59; }.badge.signal { color:var(--accent); border-color:#315b73; }.badge.low { color:var(--yellow); border-color:#665524; }.badge.medium { color:var(--accent); border-color:#315b73; }.badge.high { color:var(--green); border-color:#326b59; }
 .block { margin-top:16px; padding:14px; border:1px solid #233247; border-radius:14px; background:#0a121b; }.block h4 { margin:0 0 7px; color:#d8e5ef; font-size:12px; text-transform:uppercase; letter-spacing:.08em; }.block p { margin:0; color:#aebcca; }
-.block.reco { border-color:#315a4f; background:#0b1716; }.block.validate { border-color:#34445b; }
+.block.reco { border-color:#315a4f; background:#0b1716; }.block.validate { border-color:#34445b; }.block.hypothesis { border-color:#51476d; background:#12101c; }
 a { color:var(--accent); text-decoration:none; }.evidence { margin-top:14px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; font-size:13px; }
 .empty { padding:28px; border:1px dashed #334153; border-radius:18px; color:var(--muted); }.footer { margin-top:38px; color:#6f8194; font-size:12px; }
-@media(max-width:820px){.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.topbar{flex-direction:column}.section-head{align-items:flex-start;flex-direction:column}}
+@media(max-width:820px){.grid{grid-template-columns:1fr}.metrics,.funnel{grid-template-columns:repeat(2,minmax(0,1fr))}.topbar{flex-direction:column}.section-head{align-items:flex-start;flex-direction:column}}
 """
 
 
@@ -63,12 +66,12 @@ def _world_card(row: GapCandidate) -> str:
     summary = row.summary or "No feed summary supplied."
     return f"""
     <article class="card">
-      <div class="badges"><span class="badge {recommendation_class}">{escape(row.recommendation)}</span><span class="badge signal">{escape(row.change_type.replace('_',' '))}</span><span class="badge">{escape(row.validation_status)}</span></div>
+      <div class="badges"><span class="badge {recommendation_class}">{escape(row.recommendation)}</span><span class="badge signal">{escape(row.change_type.replace('_',' '))}</span><span class="badge">candidate</span></div>
       <h3>{escape(row.headline)}</h3>
       <div class="meta">{escape(row.source)} · {escape(row.published_at or 'time unavailable')}</div>
       <p class="summary">{escape(summary[:650])}</p>
-      <div class="block reco"><h4>GapRadar recommendation</h4><p><b>Why now:</b> {escape(row.why_now)}<br><br><b>Potential gap:</b> {escape(row.gap_hypothesis)}</p></div>
-      <div class="block validate"><h4>Validation summary</h4><p>{escape(row.validation_summary)}</p></div>
+      <div class="block reco"><h4>Candidate gap hypothesis</h4><p><b>Why now:</b> {escape(row.why_now)}<br><br><b>Potential gap:</b> {escape(row.gap_hypothesis)}</p></div>
+      <div class="block validate"><h4>Discovery status</h4><p>{escape(row.validation_summary)}</p></div>
       <div class="evidence"><span class="small">Matched signal: “{escape(row.matched_signal)}”</span><a href="{escape(row.url)}" target="_blank" rel="noreferrer">open source ↗</a></div>
     </article>"""
 
@@ -76,36 +79,53 @@ def _world_card(row: GapCandidate) -> str:
 def _verified_card(event: MarketEvent) -> str:
     dossier = build_dossier(event)
     official = event.official_evidence[0] if event.official_evidence else None
-    recommendation, why_now, hypothesis = _verified_recommendation(event)
+    recommendation, why_now, fallback_hypothesis = _verified_recommendation(event)
     evidence_link = f'<a href="{escape(str(official.url))}" target="_blank" rel="noreferrer">official source ↗</a>' if official else "no official source"
     reaction_note = (
-        f"Supporting reaction evidence: {len(event.reaction_evidence)} qualifying signal(s); search quality {event.reaction_search_quality}."
-        if event.reaction_checked_at else "Supporting reaction search has not run yet."
+        f"Reaction evidence: {len(event.reaction_evidence)} qualifying signal(s); search quality {event.reaction_search_quality}."
+        if event.reaction_checked_at else "Reaction search has not run yet."
     )
     supply_note = (
-        f"Replacement supply: {event.supply_status}; accepted supply evidence {len(event.supply_evidence)}."
+        f"Replacement supply: {event.supply_status}; accepted evidence {len(event.supply_evidence)}."
         if event.supply_checked_at else "Replacement supply has not yet been mapped."
     )
     validation = (
         "Tier-1 official evidence verifies the market change. " + reaction_note + " " + supply_note +
-        " Reaction evidence is supporting context, not the discovery trigger."
+        " Reaction adjusts confidence only; it never blocks the demand hypothesis or the supply search."
     )
     when = event.event_date.date().isoformat() if event.event_date else "date unknown"
+    hypothesis = event.demand_hypothesis
+    if hypothesis:
+        hypothesis_html = (
+            f'<div class="block hypothesis"><h4>Demand hypothesis · {escape(hypothesis.confidence)} confidence</h4>'
+            f'<p><b>Affected users:</b> {escape(hypothesis.affected_users)}<br><br>'
+            f'<b>Job to be done:</b> {escape(hypothesis.job_to_be_done)}<br><br>'
+            f'<b>Disruption:</b> {escape(hypothesis.disruption)}<br><br>'
+            f'<b>Official successor:</b> {escape(hypothesis.official_successor)}<br><br>'
+            f'<b>Unknowns:</b> {escape("; ".join(hypothesis.unknowns) or "none recorded")}</p></div>'
+        )
+        confidence_badge = f'<span class="badge {escape(hypothesis.confidence)}">hypothesis {escape(hypothesis.confidence)}</span>'
+    else:
+        hypothesis_html = f'<div class="block hypothesis"><h4>Demand hypothesis</h4><p>{escape(fallback_hypothesis)}</p></div>'
+        confidence_badge = '<span class="badge low">hypothesis unassessed</span>'
     return f"""
     <article class="card verified">
-      <div class="badges"><span class="badge review">{recommendation}</span><span class="badge verified">officially verified</span><span class="badge signal">{escape(event.event_type.value.replace('_',' '))}</span></div>
+      <div class="badges"><span class="badge review">{recommendation}</span><span class="badge verified">officially verified</span><span class="badge signal">{escape(event.event_type.value.replace('_',' '))}</span>{confidence_badge}</div>
       <h3>{escape(event.headline)}</h3>
       <div class="meta">{escape(event.vendor)} · {escape(event.product)} · {when}</div>
       <p class="summary">{escape(event.summary[:650])}</p>
-      <div class="block reco"><h4>GapRadar recommendation</h4><p><b>Why now:</b> {escape(why_now)}<br><br><b>Potential gap:</b> {escape(hypothesis)}</p></div>
+      <div class="block reco"><h4>Why this change matters</h4><p>{escape(why_now)}</p></div>
+      {hypothesis_html}
       <div class="block validate"><h4>Validation summary</h4><p>{escape(validation)}<br><br><b>Dossier:</b> {escape(dossier.verdict)} — {escape(dossier.rationale)}</p></div>
-      <div class="evidence"><span class="small">Tier 1: {len(event.official_evidence)} · Reaction: {len(event.reaction_evidence)} · Supply: {len(event.supply_evidence)}</span>{evidence_link}</div>
+      <div class="evidence"><span class="small">Tier 1: {len(event.official_evidence)} · Reaction: {len(event.reaction_evidence)} · Supply: {len(event.supply_evidence)} · Gap: {escape(event.gap_status)}</span>{evidence_link}</div>
     </article>"""
 
 
 def render_dashboard(events: list[MarketEvent], output: Path, world_candidates: list[GapCandidate] | None = None) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     world_candidates = world_candidates or []
+    for event in events:
+        event.verify()
     verified_cards = "\n".join(_verified_card(event) for event in events)
     world_cards = "\n".join(_world_card(row) for row in world_candidates[:40])
     if not verified_cards:
@@ -113,15 +133,20 @@ def render_dashboard(events: list[MarketEvent], output: Path, world_candidates: 
     if not world_cards:
         world_cards = '<div class="empty">No broad world-scan candidates matched the structural-change rules in this run.</div>'
 
-    review_count = sum(1 for row in world_candidates if row.recommendation == "REVIEW") + len(events)
+    hypotheses = sum(1 for event in events if event.demand_hypothesis is not None)
+    supply_mapped = sum(1 for event in events if event.supply_checked_at is not None)
+    gap_watch = sum(1 for event in events if event.gap_status in {"watch", "potential_gap"})
+    review_count = sum(1 for row in world_candidates if row.recommendation == "REVIEW") + gap_watch
     html = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GapRadar — Today Opportunity Board</title><style>{CSS}</style></head>
 <body><main>
-<div class="topbar"><div><div class="eyebrow">Market Gap Intelligence · Today</div><h1>Today’s Market Gaps</h1><p class="lede">GapRadar scans what changed in the market first — shutdowns, pricing shocks, API/platform changes and new rules — then turns those changes into opportunity hypotheses and validation summaries. Community complaints are supporting evidence, not the discovery engine.</p></div><div class="pulse"><span class="dot"></span> radar active</div></div>
-<section class="metrics"><div class="metric"><strong>{len(world_candidates)}</strong><span>world signals</span></div><div class="metric"><strong>{len(events)}</strong><span>officially verified</span></div><div class="metric"><strong>{review_count}</strong><span>review now</span></div><div class="metric"><strong>{max(0, len(world_candidates)-sum(1 for r in world_candidates if r.recommendation=='REVIEW'))}</strong><span>watch</span></div></section>
-<div class="section-head"><div><div class="eyebrow">Highest confidence</div><h2>Verified opportunity triggers</h2></div><p>These market changes are backed by first-party evidence. The recommendation comes from the structural change itself; reaction and supply evidence only refine confidence.</p></div>
+<div class="topbar"><div><div class="eyebrow">Market Gap Intelligence · Today</div><h1>Today’s Market Gaps</h1><p class="lede">GapRadar watches what changes in the world, verifies which changes are real, then investigates where they may create demand the market has not adequately served. Community reaction is supporting evidence, never the discovery engine or a veto.</p></div><div class="pulse"><span class="dot"></span> radar active</div></div>
+<section class="metrics"><div class="metric"><strong>{len(world_candidates)}</strong><span>candidate signals</span></div><div class="metric"><strong>{len(events)}</strong><span>officially verified</span></div><div class="metric"><strong>{gap_watch}</strong><span>verified gaps to watch</span></div><div class="metric"><strong>{sum(1 for e in events if e.gap_status=='likely_served')}</strong><span>likely served</span></div></section>
+<div class="section-head"><div><div class="eyebrow">Signal funnel</div><h2>What survived today’s pipeline</h2></div><p>This funnel is a health check, not a quota. A correct day may end with zero gaps.</p></div>
+<section class="funnel"><div class="step"><b>{len(world_candidates)}</b><span>broad candidates</span></div><div class="step"><b>{len(events)}</b><span>Tier-1 verified</span></div><div class="step"><b>{hypotheses}</b><span>demand hypotheses</span></div><div class="step"><b>{supply_mapped}</b><span>supply maps completed</span></div></section>
+<div class="section-head"><div><div class="eyebrow">Highest confidence</div><h2>Verified opportunity triggers</h2></div><p>Each verified event now carries an explicit demand hypothesis. Reaction may raise confidence; no reaction never deletes the hypothesis or blocks supply analysis.</p></div>
 <section class="grid">{verified_cards}</section>
-<div class="section-head"><div><div class="eyebrow">Broad world scan</div><h2>New gap candidates found today</h2></div><p>These are fresh structural-change signals from news and industry feeds. They are recommendations for investigation, not claims of proven businesses. Each card shows exactly what was validated and what remains unknown.</p></div>
+<div class="section-head"><div><div class="eyebrow">Broad world scan</div><h2>New structural-change candidates</h2></div><p>These are noisy discovery leads from news and industry feeds. They are candidates awaiting verification, not proven business opportunities.</p></div>
 <section class="grid">{world_cards}</section>
-<div class="footer">GapRadar · WORLD SCAN → CHANGE → GAP HYPOTHESIS → SUPPLY/REACTION VALIDATION → DOSSIER. No fake opportunity scores, revenue estimates, or forced daily winners.</div>
+<div class="footer">GapRadar · WORLD SCAN → CANDIDATE → VERIFY → DEMAND HYPOTHESIS → REACTION + SUPPLY → GAP → DOSSIER. Event confidence and opportunity confidence are separate.</div>
 </main></body></html>"""
     output.write_text(html, encoding="utf-8")
