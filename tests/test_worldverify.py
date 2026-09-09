@@ -10,7 +10,7 @@ def _event() -> MarketEvent:
         id="shopify-cli",
         product="Shopify Theme CLI",
         vendor="Shopify",
-        event_type=EventType.SHUTDOWN_EOL,
+        event_type=EventType.SHUTDOWN,
         headline="Older Shopify Theme CLI versions will no longer be supported",
         summary="Theme CLI versions 3.83.x and earlier lose support.",
         event_date=datetime(2026, 8, 27, tzinfo=timezone.utc),
@@ -26,6 +26,7 @@ def _event() -> MarketEvent:
             is_official=True,
         )
     )
+    event.verify()
     return event
 
 
