@@ -28,7 +28,7 @@
     "excerpt": null,
     "subject_overlap": 0,
     "errors": [
-      "first-party page did not locally confirm the claimed target/outcome: www.mass.gov"
+      "https://www.mass.gov/executive-orders/no-658-establishing-requirements-for-responsible-data-center-development-and-operations-in-massachusetts-to-protect-and-support-ratepayers-communities-and-the-environment: HTTPStatusError: Client error '403 Forbidden' for url 'https://www.mass.gov/executive-orders/no-658-establishing-requirements-for-responsible-data-center-development-and-operations-in-massachusetts-to-protect-and-support-ratepayers-communities-and-the-environment'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
     ]
   },
   {
@@ -39,10 +39,7 @@
     "official_title": null,
     "excerpt": null,
     "subject_overlap": 0,
-    "errors": [
-      "subject overlap too weak for heavyindustries.gov.in: 0 < 2",
-      "subject overlap too weak for heavyindustries.gov.in: 0 < 2"
-    ]
+    "errors": []
   },
   {
     "candidate_id": "86a0955dccc4b9fd",

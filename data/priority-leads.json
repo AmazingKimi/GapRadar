@@ -1,14 +1,5 @@
 [
   {
-    "candidate_id": "14436a2a2ff1f7ea",
-    "status": "INVESTIGATE",
-    "priority_score": 9,
-    "evidence_state": "official_candidate",
-    "evidence_label": "Official lead · heavyindustries.gov.in",
-    "reason": "Autocar Professional reports “EV BMS Cybersecurity Testing Now Mandatory in India”. GapRadar found a plausible authority page on heavyindustries.gov.in, but that page has not yet confirmed the exact “Mandatory” claim. If confirmed, investigate new compliance, testing, reporting or implementation work.",
-    "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
-  },
-  {
     "candidate_id": "52f1eb44691af255",
     "status": "INVESTIGATE",
     "priority_score": 9,
@@ -27,6 +18,15 @@
     "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {
+    "candidate_id": "14436a2a2ff1f7ea",
+    "status": "INVESTIGATE",
+    "priority_score": 7,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "Autocar Professional reports “EV BMS Cybersecurity Testing Now Mandatory in India” and the detector matched “Mandatory” as a regulatory requirement signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect new compliance, testing, reporting or implementation work.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
+  },
+  {
     "candidate_id": "5b1d4ece4414b40f",
     "status": "WATCH",
     "priority_score": 5,
@@ -41,7 +41,7 @@
     "priority_score": 5,
     "evidence_state": "news_only",
     "evidence_label": "Tier-1 pending",
-    "reason": "mashable.com reports “The latest Apple price hike: Apple TV streaming service” and the detector matched “price hike” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
+    "reason": "Mashable reports “The latest Apple price hike: Apple TV streaming service” and the detector matched “price hike” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
     "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {
