@@ -10,6 +10,7 @@ from urllib.parse import urlsplit, urlunsplit
 import httpx
 
 from .models import EvidenceTier, MarketEvent, SourceEvidence
+from .routing import reaction_source_plan
 
 
 MIGRATION_TERMS = (
@@ -96,7 +97,8 @@ def _product_aliases(event: MarketEvent) -> list[str]:
                 break
     meaningful = [
         word.strip(".,:;()") for word in words
-        if word.lower().strip(".,:;()") not in STOPWORDS and not re.match(r"^v?\d+(?:\.\d+)*x?$", word.lower().strip(".,:;()"))
+        if word.lower().strip(".,:;()") not in STOPWORDS
+        and not re.match(r"^v?\d+(?:\.\d+)*x?$", word.lower().strip(".,:;()"))
     ]
     if len(meaningful) >= 3:
         aliases.append(" ".join(meaningful[-3:]))
@@ -111,6 +113,8 @@ def _relevant_to_event(text: str, event: MarketEvent) -> bool:
     vendor_hit = bool(vendor and vendor in text)
     hits = sum(1 for token in tokens if re.search(rf"\b{re.escape(token)}\b", text, flags=re.IGNORECASE))
 
+    # Generic/short products are dangerous (for example "Script tags").
+    # They must be vendor-anchored or the HTML ecosystem swamps the result set.
     if len(tokens) <= 2:
         return vendor_hit and (product in text or hits >= 1)
     if vendor_hit and hits >= 1:
@@ -159,7 +163,6 @@ def archived_reaction_evidence(
     published_at: datetime | None = None,
     engagement: int = 0,
 ) -> SourceEvidence | None:
-    """Apply the live reaction scorer to an archived historical document."""
     candidate = ReactionCandidate(
         title=_normalize(title)[:240],
         url=url,
@@ -230,6 +233,19 @@ def github_issue_queries(event: MarketEvent, cutoff: str) -> list[str]:
     return list(dict.fromkeys(queries))
 
 
+def _bounded_queries(queries: list[str], vendor: str, limit: int = 10) -> list[str]:
+    """Prefer vendor-anchored and change-language queries while avoiding API-rate-limit explosions."""
+    vendor_lower = vendor.lower()
+    change_words = ("deprecated", "sunset", "migration", "alternative", "pricing", "price increase", "api change")
+    scored: list[tuple[int, int, str]] = []
+    for index, query in enumerate(queries):
+        q = query.lower()
+        score = (3 if vendor_lower and vendor_lower in q else 0) + (2 if any(word in q for word in change_words) else 0)
+        scored.append((-score, index, query))
+    scored.sort()
+    return [query for _, _, query in scored[:limit]]
+
+
 def _parse_iso(value: str | None) -> datetime | None:
     if not value:
         return None
@@ -268,7 +284,7 @@ def _hn_query(query: str, since: int, timeout: float) -> list[ReactionCandidate]
 def search_hacker_news(event: MarketEvent, *, timeout: float = 15.0, days: int = 120) -> list[ReactionCandidate]:
     since = int((datetime.now(timezone.utc) - timedelta(days=days)).timestamp())
     rows: list[ReactionCandidate] = []
-    for query in hacker_news_queries(event):
+    for query in _bounded_queries(hacker_news_queries(event), event.vendor):
         rows.extend(_hn_query(query, since, timeout))
     return dedupe_candidates(rows)
 
@@ -300,14 +316,26 @@ def _github_query(query: str, headers: dict[str, str], timeout: float) -> list[R
 
 def search_github_issues(event: MarketEvent, *, timeout: float = 15.0, days: int = 120) -> list[ReactionCandidate]:
     cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).date().isoformat()
-    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.7"}
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.8"}
     token = os.getenv("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
     rows: list[ReactionCandidate] = []
-    for query in github_issue_queries(event, cutoff):
+    for query in _bounded_queries(github_issue_queries(event, cutoff), event.vendor):
         rows.extend(_github_query(query, headers, timeout))
     return dedupe_candidates(rows)
+
+
+def _candidate_is_after_event(candidate: ReactionCandidate, event: MarketEvent) -> bool:
+    if candidate.published_at is None or event.event_date is None:
+        return True
+    event_time = event.event_date
+    if event_time.tzinfo is None:
+        event_time = event_time.replace(tzinfo=timezone.utc)
+    candidate_time = candidate.published_at
+    if candidate_time.tzinfo is None:
+        candidate_time = candidate_time.replace(tzinfo=timezone.utc)
+    return candidate_time >= event_time - timedelta(days=1)
 
 
 def validate_event_reaction(event: MarketEvent) -> MarketEvent:
@@ -317,7 +345,8 @@ def validate_event_reaction(event: MarketEvent) -> MarketEvent:
     audits: list[dict[str, object]] = []
 
     since = int((datetime.now(timezone.utc) - timedelta(days=120)).timestamp())
-    for query in hacker_news_queries(event):
+    hn_queries = _bounded_queries(hacker_news_queries(event), event.vendor)
+    for query in hn_queries:
         try:
             found = _hn_query(query, since, 15.0)
             candidates.extend(found)
@@ -329,11 +358,12 @@ def validate_event_reaction(event: MarketEvent) -> MarketEvent:
             audits.append({"source": "hacker_news", "query": query, "candidate_count": 0, "ok": False})
 
     cutoff = (datetime.now(timezone.utc) - timedelta(days=120)).date().isoformat()
-    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.7"}
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.8"}
     token = os.getenv("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
-    for query in github_issue_queries(event, cutoff):
+    gh_queries = _bounded_queries(github_issue_queries(event, cutoff), event.vendor)
+    for query in gh_queries:
         try:
             found = _github_query(query, headers, 15.0)
             candidates.extend(found)
@@ -344,7 +374,7 @@ def validate_event_reaction(event: MarketEvent) -> MarketEvent:
             failures.append(f"github_issues [{query}]: {type(exc).__name__}: {exc}")
             audits.append({"source": "github_issues", "query": query, "candidate_count": 0, "ok": False})
 
-    unique = dedupe_candidates(candidates)
+    unique = [candidate for candidate in dedupe_candidates(candidates) if _candidate_is_after_event(candidate, event)]
     accepted: list[SourceEvidence] = []
     for candidate in unique:
         score = score_migration_pain(candidate, event)
@@ -370,15 +400,26 @@ def validate_event_reaction(event: MarketEvent) -> MarketEvent:
     event.reaction_sources_checked = checked
     event.reaction_queries = audits
     event.reaction_checked_at = datetime.now(timezone.utc)
+
     successful = sum(1 for row in audits if row.get("ok"))
+    plan = reaction_source_plan(event)
+    preferred_missing = [source for source in plan.preferred_sources if source not in checked]
     if successful == 0:
         event.reaction_search_quality = "failed"
-    elif successful < len(audits):
+    elif successful < len(audits) or preferred_missing:
         event.reaction_search_quality = "degraded"
     else:
         event.reaction_search_quality = "adequate"
-    event.notes = [note for note in event.notes if not note.startswith("Reaction source failure:")]
+
+    event.notes = [
+        note for note in event.notes
+        if not note.startswith("Reaction source failure:") and not note.startswith("Reaction coverage gap:")
+    ]
     event.notes.extend(f"Reaction source failure: {failure}" for failure in failures)
+    if preferred_missing:
+        event.notes.append(
+            "Reaction coverage gap: preferred ecosystem sources not checked: " + ", ".join(preferred_missing)
+        )
     event.verify()
     return event
 
