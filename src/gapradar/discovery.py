@@ -13,6 +13,7 @@ import httpx
 from .detector import event_from_document
 from .models import EvidenceTier, MarketEvent, SourceEvidence
 from .reaction import ReactionCandidate, dedupe_candidates, hacker_news_queries, score_migration_pain
+from .routing import reaction_source_plan
 from .supply import SupplyCandidate, score_supply
 
 
@@ -38,17 +39,36 @@ def _parse_iso(value: str | None) -> datetime | None:
         return None
 
 
+def _event_day(event: MarketEvent) -> date | None:
+    return event.event_date.date() if event.event_date else None
+
+
 def _reaction_query_subset(event: MarketEvent) -> list[str]:
-    """Keep historical scouting broad enough to discover, but bounded for API reliability."""
     queries = hacker_news_queries(event)
-    preferred = [q for q in queries if event.vendor.lower() in q.lower()]
-    fallback = [q for q in queries if q not in preferred]
-    return (preferred + fallback)[:6]
+    vendor = event.vendor.lower()
+    change_words = ("deprecated", "sunset", "migration", "alternative", "pricing", "price increase", "api change")
+    ranked = sorted(
+        enumerate(queries),
+        key=lambda row: (
+            -int(vendor in row[1].lower()),
+            -int(any(word in row[1].lower() for word in change_words)),
+            row[0],
+        ),
+    )
+    return [query for _, query in ranked[:6]]
+
+
+def _window_start(event: MarketEvent, as_of: date, days: int) -> date:
+    start = as_of - timedelta(days=days)
+    event_day = _event_day(event)
+    if event_day and event_day > start:
+        return event_day
+    return start
 
 
 def discover_hn(event: MarketEvent, *, as_of: date, days: int = 120, timeout: float = 12.0) -> tuple[list[ReactionCandidate], list[DiscoveryAudit]]:
     end = int(_as_dt(as_of).timestamp())
-    start = int((_as_dt(as_of) - timedelta(days=days)).timestamp())
+    start = int(_as_dt(_window_start(event, as_of, days)).timestamp())
     rows: list[ReactionCandidate] = []
     audits: list[DiscoveryAudit] = []
     for query in _reaction_query_subset(event):
@@ -88,7 +108,7 @@ def discover_hn(event: MarketEvent, *, as_of: date, days: int = 120, timeout: fl
 
 
 def discover_github_issues(event: MarketEvent, *, as_of: date, days: int = 120, timeout: float = 12.0) -> tuple[list[ReactionCandidate], list[DiscoveryAudit]]:
-    start = (as_of - timedelta(days=days)).isoformat()
+    start = _window_start(event, as_of, days).isoformat()
     end = as_of.isoformat()
     token = os.getenv("GITHUB_TOKEN")
     headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.8"}
@@ -134,9 +154,20 @@ def discover_github_issues(event: MarketEvent, *, as_of: date, days: int = 120, 
     return dedupe_candidates(rows), audits
 
 
+def _candidate_in_event_window(candidate: ReactionCandidate, event: MarketEvent, as_of: date) -> bool:
+    if candidate.published_at is None:
+        return True
+    observed = candidate.published_at.date()
+    event_day = _event_day(event)
+    if event_day and observed < event_day:
+        return False
+    return observed <= as_of
+
+
 def apply_discovered_reaction(event: MarketEvent, candidates: list[ReactionCandidate], audits: list[DiscoveryAudit], *, as_of: date) -> None:
+    filtered = [candidate for candidate in dedupe_candidates(candidates) if _candidate_in_event_window(candidate, event, as_of)]
     accepted: list[SourceEvidence] = []
-    for candidate in dedupe_candidates(candidates):
+    for candidate in filtered:
         score = score_migration_pain(candidate, event)
         if score < 3:
             continue
@@ -157,12 +188,22 @@ def apply_discovered_reaction(event: MarketEvent, candidates: list[ReactionCandi
         )
     accepted.sort(key=lambda item: (item.signal_score, item.engagement), reverse=True)
     event.reaction_evidence = accepted[:12]
-    event.reaction_candidate_count = len(dedupe_candidates(candidates))
+    event.reaction_candidate_count = len(filtered)
     event.reaction_queries = [audit.__dict__ for audit in audits]
     event.reaction_sources_checked = sorted({audit.source for audit in audits if audit.ok})
     event.reaction_checked_at = _as_dt(as_of)
     successes = sum(1 for audit in audits if audit.ok)
-    event.reaction_search_quality = "failed" if successes == 0 else "degraded" if successes < len(audits) else "adequate"
+    plan = reaction_source_plan(event)
+    coverage_missing = [source for source in plan.preferred_sources if source not in event.reaction_sources_checked]
+    if successes == 0:
+        event.reaction_search_quality = "failed"
+    elif successes < len(audits) or coverage_missing:
+        event.reaction_search_quality = "degraded"
+    else:
+        event.reaction_search_quality = "adequate"
+    event.notes = [note for note in event.notes if not note.startswith("Reaction coverage gap:")]
+    if coverage_missing:
+        event.notes.append("Reaction coverage gap: preferred ecosystem sources not checked: " + ", ".join(coverage_missing))
     event.verify()
 
 
@@ -172,7 +213,6 @@ def _supply_terms(event: MarketEvent) -> str:
 
 
 def discover_github_supply(event: MarketEvent, *, as_of: date, timeout: float = 12.0) -> tuple[list[SupplyCandidate], DiscoveryAudit]:
-    """Discover repos that already existed by as_of. Current star counts are never treated as historical popularity."""
     token = os.getenv("GITHUB_TOKEN")
     headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.8"}
     if token:
@@ -240,7 +280,7 @@ def apply_discovered_supply(event: MarketEvent, candidates: list[SupplyCandidate
 
 def run_case(case: dict[str, Any]) -> dict[str, Any]:
     if not case.get("expected_detect", True):
-        return {"id": case["id"], "status": "negative_control_skipped"}
+        return {"id": case["id"], "cohort": case.get("cohort", "headline"), "status": "negative_control_skipped"}
     as_of = date.fromisoformat(str(case["replay_as_of"]))
     event = event_from_document(
         vendor=str(case["vendor"]),
@@ -252,7 +292,7 @@ def run_case(case: dict[str, Any]) -> dict[str, Any]:
         historical=True,
     )
     if event is None:
-        return {"id": case["id"], "status": "event_not_detected"}
+        return {"id": case["id"], "cohort": case.get("cohort", "headline"), "status": "event_not_detected"}
 
     hn, hn_audits = discover_hn(event, as_of=as_of)
     gh, gh_audits = discover_github_issues(event, as_of=as_of)
@@ -264,8 +304,10 @@ def run_case(case: dict[str, Any]) -> dict[str, Any]:
         supply, supply_audit = discover_github_supply(event, as_of=as_of)
         apply_discovered_supply(event, supply, supply_audit, as_of=as_of)
 
+    plan = reaction_source_plan(event)
     return {
         "id": case["id"],
+        "cohort": case.get("cohort", "headline"),
         "vendor": case["vendor"],
         "product": case["product"],
         "as_of": as_of.isoformat(),
@@ -276,6 +318,9 @@ def run_case(case: dict[str, Any]) -> dict[str, Any]:
         "demand_status": event.demand_status,
         "reaction_search_quality": event.reaction_search_quality,
         "reaction_evidence_urls": [str(item.url) for item in event.reaction_evidence],
+        "preferred_reaction_sources": list(plan.preferred_sources),
+        "checked_reaction_sources": list(event.reaction_sources_checked),
+        "missing_reaction_sources": [source for source in plan.preferred_sources if source not in event.reaction_sources_checked],
         "supply_candidate_count": event.supply_candidate_count,
         "supply_evidence_count": len(event.supply_evidence),
         "supply_status": event.supply_status,
@@ -285,7 +330,7 @@ def run_case(case: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
+def _metrics_for(rows: list[dict[str, Any]]) -> dict[str, Any]:
     evaluated = [row for row in rows if row.get("status") == "evaluated"]
     demand_labeled = [row for row in evaluated if row.get("ground_truth_demand") in {"yes", "no"}]
     demand_hits = [row for row in demand_labeled if row.get("demand_status") in {"early_signal", "repeated_signal"}]
@@ -297,8 +342,16 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "demand_detected": len(demand_hits),
         "demand_recall": round(demand_recall, 4) if demand_recall is not None else None,
         "search_failed": sum(1 for row in evaluated if row.get("reaction_search_quality") == "failed"),
+        "coverage_degraded": sum(1 for row in evaluated if row.get("missing_reaction_sources")),
         "supply_runs": sum(1 for row in evaluated if row.get("supply_audit") is not None),
     }
+
+
+def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    overall = _metrics_for(rows)
+    cohorts = sorted({str(row.get("cohort", "headline")) for row in rows})
+    overall["by_cohort"] = {cohort: _metrics_for([row for row in rows if row.get("cohort", "headline") == cohort]) for cohort in cohorts}
+    return overall
 
 
 def run(fixture: Path, output: Path, *, as_of: date | None = None) -> dict[str, Any]:
@@ -313,10 +366,12 @@ def run(fixture: Path, output: Path, *, as_of: date | None = None) -> dict[str, 
         "metrics": summarize(rows),
         "results": rows,
         "limitations": [
-            "No reaction or supply URLs are supplied to the scout; it must query HN/GitHub itself from vendor/product/date context.",
+            "No reaction or supply URLs are supplied to the scout; it must query its implemented sources itself from vendor/product/date context.",
             "The official event document is still fixture-provided; this benchmark isolates downstream discovery rather than Tier-1 event discovery.",
+            "Reaction candidates are restricted to the event-to-as-of window to avoid counting unrelated pre-event discussions as displacement evidence.",
+            "Preferred ecosystem sources that are not implemented are reported as coverage gaps and downgrade search quality.",
             "GitHub supply candidates are filtered to repositories created by the historical as-of date, but repository metadata is current. Current star counts are deliberately ignored.",
-            "No detected signal is not proof of no demand; failed searches remain failed.",
+            "No detected signal is not proof of no demand; failed or incomplete source coverage remains visible.",
         ],
     }
     output.parent.mkdir(parents=True, exist_ok=True)
