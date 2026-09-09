@@ -29,7 +29,7 @@
     "tier_1_official": 1,
     "tier_2_reaction": 0,
     "tier_3_supply": 0,
-    "reaction_candidates_checked": 1,
+    "reaction_candidates_checked": 0,
     "supply_candidates_checked": 30
   },
   "reaction_search_quality": "degraded",
@@ -128,31 +128,31 @@
       "source": "github_issues",
       "query": "\"Shopify Theme CLI\" sunset created:>=2026-05-12 is:issue",
       "candidate_count": 0,
-      "ok": true
+      "ok": false
     },
     {
       "source": "github_issues",
       "query": "\"Shopify Theme CLI\" migration created:>=2026-05-12 is:issue",
-      "candidate_count": 3,
-      "ok": true
+      "candidate_count": 0,
+      "ok": false
     },
     {
       "source": "github_issues",
       "query": "\"Shopify Theme CLI\" alternative created:>=2026-05-12 is:issue",
-      "candidate_count": 1,
-      "ok": true
+      "candidate_count": 0,
+      "ok": false
     },
     {
       "source": "github_issues",
       "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" Shopify created:>=2026-05-12 is:issue",
       "candidate_count": 0,
-      "ok": true
+      "ok": false
     },
     {
       "source": "github_issues",
       "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" created:>=2026-05-12 is:issue",
       "candidate_count": 0,
-      "ok": true
+      "ok": false
     }
   ],
   "reaction_coverage": {

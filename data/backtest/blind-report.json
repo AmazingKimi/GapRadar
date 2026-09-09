@@ -1,0 +1,239 @@
+{
+  "mode": "blind_noisy_stream_offline",
+  "seed": 620,
+  "fixture": "data/backtest/events.json",
+  "metrics": {
+    "cases_total": 24,
+    "tp": 3,
+    "fp": 0,
+    "tn": 6,
+    "fn": 15,
+    "precision": 1.0,
+    "recall": 0.1667,
+    "event_type_accuracy": 0.6667
+  },
+  "results": [
+    {
+      "id": "ifttt-twitter-2023",
+      "expected_detect": true,
+      "expected_type": "price_shock",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "mozilla-pocket-2025",
+      "expected_detect": true,
+      "expected_type": "shutdown_eol",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "negative-hashicorp-faq-2023",
+      "expected_detect": false,
+      "expected_type": null,
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "tn",
+      "type_match": null
+    },
+    {
+      "id": "ifttt-free-tier-2023",
+      "expected_detect": true,
+      "expected_type": "price_shock",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "hashicorp-bsl-2023",
+      "expected_detect": true,
+      "expected_type": "api_terms_change",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "chrome-manifest-v2-2021",
+      "expected_detect": true,
+      "expected_type": "api_terms_change",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "google-podcasts-2023",
+      "expected_detect": true,
+      "expected_type": "shutdown_eol",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "google-jamboard-2023",
+      "expected_detect": true,
+      "expected_type": "shutdown_eol",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "negative-dropbox-webauthn-2018",
+      "expected_detect": false,
+      "expected_type": null,
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "tn",
+      "type_match": null
+    },
+    {
+      "id": "github-atom-2022",
+      "expected_detect": true,
+      "expected_type": "shutdown_eol",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "negative-chrome-feature-update",
+      "expected_detect": false,
+      "expected_type": null,
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "tn",
+      "type_match": null
+    },
+    {
+      "id": "google-cloud-iot-core-2022",
+      "expected_detect": true,
+      "expected_type": "shutdown_eol",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "unity-runtime-fee-cancel-2024",
+      "expected_detect": true,
+      "expected_type": "price_shock",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "heroku-free-plans-2022",
+      "expected_detect": true,
+      "expected_type": "price_shock",
+      "observed_detect": true,
+      "observed_type": "shutdown_eol",
+      "outcome": "tp",
+      "type_match": false
+    },
+    {
+      "id": "docker-free-team-2023",
+      "expected_detect": true,
+      "expected_type": "price_shock",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "unity-runtime-fee-2023",
+      "expected_detect": true,
+      "expected_type": "price_shock",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "negative-ifttt-pro-guide-2022",
+      "expected_detect": false,
+      "expected_type": null,
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "tn",
+      "type_match": null
+    },
+    {
+      "id": "google-stadia-2022",
+      "expected_detect": true,
+      "expected_type": "shutdown_eol",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "negative-github-skills-2022",
+      "expected_detect": false,
+      "expected_type": null,
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "tn",
+      "type_match": null
+    },
+    {
+      "id": "negative-github-achievements-2022",
+      "expected_detect": false,
+      "expected_type": null,
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "tn",
+      "type_match": null
+    },
+    {
+      "id": "dropbox-mailbox-carousel-2015",
+      "expected_detect": true,
+      "expected_type": "shutdown_eol",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "ifttt-sms-phone-free-2023",
+      "expected_detect": true,
+      "expected_type": "price_shock",
+      "observed_detect": false,
+      "observed_type": null,
+      "outcome": "fn",
+      "type_match": null
+    },
+    {
+      "id": "twilio-authy-desktop-2024",
+      "expected_detect": true,
+      "expected_type": "shutdown_eol",
+      "observed_detect": true,
+      "observed_type": "shutdown_eol",
+      "outcome": "tp",
+      "type_match": true
+    },
+    {
+      "id": "reddit-data-api-2023",
+      "expected_detect": true,
+      "expected_type": "api_terms_change",
+      "observed_detect": true,
+      "observed_type": "api_terms_change",
+      "outcome": "tp",
+      "type_match": true
+    }
+  ],
+  "limitations": [
+    "The scanner is not told which rows are positives before evaluation; positives and negative controls are shuffled into one stream.",
+    "This measures the WORLD SCAN structural-language/context gate against the historical corpus, not internet retrieval coverage.",
+    "The text snippets remain hand-curated historical fixtures, so this is a stricter discovery-logic benchmark but not proof of all-web recall.",
+    "A separate live/archived retrieval benchmark is still required before making market-wide coverage claims."
+  ]
+}
