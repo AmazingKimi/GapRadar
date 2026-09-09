@@ -1,0 +1,299 @@
+[
+  {
+    "candidate_id": "13395948a3493792",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": [
+      "first-party page did not confirm regulatory_shift: www.hyundai.com",
+      "subject overlap too weak for www.hyundai.com: 0 < 2"
+    ]
+  },
+  {
+    "candidate_id": "a3328f38cb0cc06f",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": [
+      "subject overlap too weak for static.pib.gov.in: 0 < 1",
+      "subject overlap too weak for static.pib.gov.in: 0 < 1",
+      "https://consumer.pmsuryaghar.gov.in/consumer: HTTPStatusError: Client error '403 Forbidden' for url 'https://consumer.pmsuryaghar.gov.in/consumer'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "https://pmsuryaghar.gov.in/⁠: HTTPStatusError: Client error '403 Forbidden' for url 'https://pmsuryaghar.gov.in/%E2%81%A0'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "first-party page did not confirm regulatory_shift: mnre.gov.in"
+    ]
+  },
+  {
+    "candidate_id": "bc658468240f8785",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "52f1eb44691af255",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "9ca59f0103294ea8",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "9bfa78df8d49ae2a",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "cd6e87e93d6ec8e6",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "14436a2a2ff1f7ea",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "86a0955dccc4b9fd",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "39e773880bde1269",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "7f6f5639be057208",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "8200d9ed5089fe5f",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "1a9ab0b99d425f58",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "4e68e4ecc7c00c43",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "29e9ffc0607d1144",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "33ef99e5fb709e44",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "92110bbf958b398e",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": [
+      "duckduckgo [\"Brookfield wins $1 billion mandate from British nuclear fund\" official]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=%22Brookfield+wins+%241+billion+mandate+from+British+nuclear+fund%22+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "duckduckgo [brookfield wins billion mandate british nuclear rule regulation requirement mand]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=brookfield+wins+billion+mandate+british+nuclear+rule+regulation+requirement+mandate+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    ]
+  },
+  {
+    "candidate_id": "64f6975ef71e8dce",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": [
+      "duckduckgo [\"Brookfield Wins $1 Billion Mandate From British Nuclear Fund\" official]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=%22Brookfield+Wins+%241+Billion+Mandate+From+British+Nuclear+Fund%22+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "duckduckgo [brookfield wins billion mandate british nuclear rule regulation requirement mand]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=brookfield+wins+billion+mandate+british+nuclear+rule+regulation+requirement+mandate+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    ]
+  },
+  {
+    "candidate_id": "5a6d31c87ca2276d",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": [
+      "duckduckgo [\"3 Red Line stations reopen Monday after 2-month shutdown for major construction]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=%223+Red+Line+stations+reopen+Monday+after+2-month+shutdown+for+major+construction%22+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "duckduckgo [red line stations reopen monday after shutdown sunset discontinued end support o]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=red+line+stations+reopen+monday+after+shutdown+sunset+discontinued+end+support+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    ]
+  },
+  {
+    "candidate_id": "7b01b84fa1160659",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": [
+      "duckduckgo [\"Trump's Trade War Targets Bombardier: Manufacturing Mandate Looms\" official]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=%22Trump%27s+Trade+War+Targets+Bombardier%3A+Manufacturing+Mandate+Looms%22+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "duckduckgo [trump trade war targets bombardier manufacturing rule regulation requirement man]: RemoteProtocolError: Server disconnected without sending a response.",
+      "duckduckgo [trump trade war targets rule regulation requirement mandate official]: ConnectTimeout: timed out",
+      "duckduckgo [trump trade war targets bombardier manufacturing government regulator requiremen]: ConnectTimeout: timed out"
+    ]
+  },
+  {
+    "candidate_id": "48452bf0d5a2a7c4",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": [
+      "duckduckgo [\"Trump's Trade Tactics Target Bombardier: Manufacturing Mandate\" official]: ConnectTimeout: timed out",
+      "duckduckgo [trump trade tactics target bombardier manufacturing rule regulation requirement ]: ConnectTimeout: timed out",
+      "duckduckgo [trump trade tactics target rule regulation requirement mandate official]: ConnectTimeout: timed out",
+      "duckduckgo [trump trade tactics target bombardier manufacturing government regulator require]: ConnectTimeout: timed out"
+    ]
+  },
+  {
+    "candidate_id": "a4667ed73e330db1",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": [
+      "duckduckgo [\"Samsung preps the shutdown of two more apps late in 2026\" official]: ConnectTimeout: timed out",
+      "duckduckgo [samsung preps two apps late nbsp shutdown sunset discontinued end support offici]: ConnectTimeout: timed out",
+      "duckduckgo [samsung preps two apps shutdown sunset discontinued end support official]: ConnectTimeout: timed out"
+    ]
+  },
+  {
+    "candidate_id": "1825b169a66b7440",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": [
+      "duckduckgo [\"Richard Tice: A Reform government would scrap EV mandate to save Jaguar Land Ro]: ConnectTimeout: timed out",
+      "duckduckgo [richard tice reform would scrap mandate rule regulation requirement mandate offi]: ConnectTimeout: timed out",
+      "duckduckgo [richard tice reform would rule regulation requirement mandate official]: ConnectTimeout: timed out",
+      "duckduckgo [richard tice reform would scrap mandate government regulator requirement]: ConnectTimeout: timed out"
+    ]
+  },
+  {
+    "candidate_id": "f0367b9ac4658554",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": [
+      "duckduckgo [\"UK neared EV mandate in August but still fell short\" official]: ConnectTimeout: timed out",
+      "duckduckgo [neared mandate august but still fell rule regulation requirement mandate officia]: ConnectTimeout: timed out",
+      "duckduckgo [neared mandate august but rule regulation requirement mandate official]: ConnectTimeout: timed out",
+      "duckduckgo [neared mandate august but still fell government regulator requirement]: ConnectTimeout: timed out"
+    ]
+  },
+  {
+    "candidate_id": "5b1d4ece4414b40f",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": [
+      "duckduckgo [\"Apple Music to make AI labels mandatory for music created with artificial intel]: ConnectTimeout: timed out",
+      "duckduckgo [apple music make labels mandatory for rule regulation requirement mandate offici]: ConnectTimeout: timed out",
+      "duckduckgo [apple music make labels rule regulation requirement mandate official]: ConnectTimeout: timed out",
+      "duckduckgo [apple music make labels mandatory for government regulator requirement]: ConnectTimeout: timed out"
+    ]
+  }
+]

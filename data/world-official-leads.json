@@ -1,227 +1,426 @@
 [
   {
     "candidate_id": "13395948a3493792",
-    "status": "not_found",
-    "query": "\"Hyundai’s 60% Electrified Target Isn’t an EV Mandate\" official announcement",
-    "candidate_urls": [],
-    "candidate_hosts": [],
+    "status": "first_party_candidates",
+    "query": "\"Hyundai’s 60% Electrified Target Isn’t an EV Mandate\" official",
+    "candidate_urls": [
+      "https://www.hyundai.com/worldwide/en/newsroom/detail/hyundai-motor-company-unveils-bold-2030-vision-and-product-roadmap-at-2025-ceo-investor-day-0000001018",
+      "https://www.hyundai.com/content/dam/hyundai/ww/en/images/company/sustainability/about-sustainability/2026/hmc-2026-sustainability-report-en.pdf"
+    ],
+    "candidate_hosts": [
+      "www.hyundai.com",
+      "www.hyundai.com"
+    ],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Hyundai’s 60% Electrified Target Isn’t an EV Mandate\" official",
+      "hyundai electrified target isn mandate nbsp rule regulation requirement mandate official",
+      "hyundai electrified target isn rule regulation requirement mandate official",
+      "hyundai electrified target isn mandate nbsp government regulator requirement"
+    ]
   },
   {
     "candidate_id": "a3328f38cb0cc06f",
-    "status": "not_found",
-    "query": "\"Daily News Wrap-Up: PM Surya Ghar 2.0 May Mandate Energy Storage\" official announcement",
-    "candidate_urls": [],
-    "candidate_hosts": [],
+    "status": "first_party_candidates",
+    "query": "\"Daily News Wrap-Up: PM Surya Ghar 2.0 May Mandate Energy Storage\" official",
+    "candidate_urls": [
+      "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2024/aug/doc2024812373601.pdf",
+      "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2024/dec/doc2024125465001.pdf",
+      "https://consumer.pmsuryaghar.gov.in/consumer",
+      "https://pmsuryaghar.gov.in/⁠",
+      "https://mnre.gov.in/en/notice/guidelines-for-pm-surya-ghar-muft-bijli-yojana"
+    ],
+    "candidate_hosts": [
+      "static.pib.gov.in",
+      "static.pib.gov.in",
+      "consumer.pmsuryaghar.gov.in",
+      "pmsuryaghar.gov.in",
+      "mnre.gov.in"
+    ],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Daily News Wrap-Up: PM Surya Ghar 2.0 May Mandate Energy Storage\" official",
+      "wrap-up surya ghar mandate energy storage rule regulation requirement mandate official",
+      "wrap-up surya ghar mandate rule regulation requirement mandate official",
+      "wrap-up surya ghar mandate energy storage government regulator requirement"
+    ]
   },
   {
     "candidate_id": "bc658468240f8785",
     "status": "not_found",
-    "query": "\"Labour promises new rules for data centre electricity use, coordinated AI policy across government\" official announcement",
+    "query": "\"Labour promises new rules for data centre electricity use, coordinated AI policy across government\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Labour promises new rules for data centre electricity use, coordinated AI policy across government\" official",
+      "labour promises for centre electricity use rule regulation requirement mandate official",
+      "labour promises for centre rule regulation requirement mandate official",
+      "labour promises for centre electricity use government regulator requirement"
+    ]
   },
   {
     "candidate_id": "52f1eb44691af255",
     "status": "not_found",
-    "query": "\"Massachusetts Will Require New Data Centers to Use Clean Energy\" official announcement",
+    "query": "\"Massachusetts Will Require New Data Centers to Use Clean Energy\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Massachusetts Will Require New Data Centers to Use Clean Energy\" official",
+      "massachusetts centers use clean energy nbsp rule regulation requirement mandate official",
+      "massachusetts centers use clean rule regulation requirement mandate official",
+      "massachusetts centers use clean energy nbsp government regulator requirement"
+    ]
   },
   {
     "candidate_id": "9ca59f0103294ea8",
     "status": "not_found",
-    "query": "\"Ossiomo Power shutdown weakens businesses, SMEs, others in Edo\" official announcement",
+    "query": "\"Ossiomo Power shutdown weakens businesses, SMEs, others in Edo\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Ossiomo Power shutdown weakens businesses, SMEs, others in Edo\" official",
+      "ossiomo power weakens businesses smes others shutdown sunset discontinued end support official",
+      "ossiomo power weakens businesses shutdown sunset discontinued end support official"
+    ]
   },
   {
     "candidate_id": "9bfa78df8d49ae2a",
     "status": "not_found",
-    "query": "\"From Shutdown to Showcase: Holtec's IPO Puts Palisades at Center of Nuclear Industry's Future\" official announcement",
+    "query": "\"From Shutdown to Showcase: Holtec's IPO Puts Palisades at Center of Nuclear Industry's Future\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"From Shutdown to Showcase: Holtec's IPO Puts Palisades at Center of Nuclear Industry's Future\" official",
+      "showcase holtec ipo puts palisades center shutdown sunset discontinued end support official",
+      "showcase holtec ipo puts shutdown sunset discontinued end support official"
+    ]
   },
   {
     "candidate_id": "cd6e87e93d6ec8e6",
     "status": "not_found",
-    "query": "\"Brookfield wins $1 billion mandate from UK’s Nuclear Liabilities Fund\" official announcement",
+    "query": "\"Brookfield wins $1 billion mandate from UK’s Nuclear Liabilities Fund\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Brookfield wins $1 billion mandate from UK’s Nuclear Liabilities Fund\" official",
+      "brookfield wins billion mandate nuclear liabilities rule regulation requirement mandate official",
+      "brookfield wins billion mandate rule regulation requirement mandate official",
+      "brookfield wins billion mandate nuclear liabilities government regulator requirement"
+    ]
   },
   {
     "candidate_id": "14436a2a2ff1f7ea",
     "status": "not_found",
-    "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official announcement",
+    "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
+      "bms cybersecurity testing now mandatory india rule regulation requirement mandate official",
+      "bms cybersecurity testing now rule regulation requirement mandate official",
+      "bms cybersecurity testing now mandatory india government regulator requirement"
+    ]
   },
   {
     "candidate_id": "86a0955dccc4b9fd",
     "status": "not_found",
-    "query": "\"The latest Apple price hike: Apple TV streaming service\" official announcement",
+    "query": "\"The latest Apple price hike: Apple TV streaming service\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"The latest Apple price hike: Apple TV streaming service\" official",
+      "apple streaming nbsp mashable pricing price fee subscription official"
+    ]
   },
   {
     "candidate_id": "39e773880bde1269",
     "status": "not_found",
-    "query": "\"Addleshaw Goddard wins UK government nuclear energy development mandate\" official announcement",
+    "query": "\"Addleshaw Goddard wins UK government nuclear energy development mandate\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Addleshaw Goddard wins UK government nuclear energy development mandate\" official",
+      "addleshaw goddard wins nuclear energy development rule regulation requirement mandate official",
+      "addleshaw goddard wins nuclear rule regulation requirement mandate official",
+      "addleshaw goddard wins nuclear energy development government regulator requirement"
+    ]
   },
   {
     "candidate_id": "7f6f5639be057208",
     "status": "not_found",
-    "query": "\"Brookfield selected by Nuclear Liabilities Fund for $1bn multi-decade investment mandate\" official announcement",
+    "query": "\"Brookfield selected by Nuclear Liabilities Fund for $1bn multi-decade investment mandate\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Brookfield selected by Nuclear Liabilities Fund for $1bn multi-decade investment mandate\" official",
+      "brookfield selected nuclear liabilities fund for rule regulation requirement mandate official",
+      "brookfield selected nuclear liabilities rule regulation requirement mandate official",
+      "brookfield selected nuclear liabilities fund for government regulator requirement"
+    ]
   },
   {
     "candidate_id": "8200d9ed5089fe5f",
     "status": "not_found",
-    "query": "\"Brookfield lands $1B mandate from UK’s nuclear decommissioning fund\" official announcement",
+    "query": "\"Brookfield lands $1B mandate from UK’s nuclear decommissioning fund\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Brookfield lands $1B mandate from UK’s nuclear decommissioning fund\" official",
+      "brookfield lands mandate nuclear decommissioning fund rule regulation requirement mandate official",
+      "brookfield lands mandate nuclear rule regulation requirement mandate official",
+      "brookfield lands mandate nuclear decommissioning fund government regulator requirement"
+    ]
   },
   {
     "candidate_id": "1a9ab0b99d425f58",
     "status": "not_found",
-    "query": "\"Afriforum challenges Eskom’s 8.83% electricity price increase\" official announcement",
+    "query": "\"Afriforum challenges Eskom’s 8.83% electricity price increase\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Afriforum challenges Eskom’s 8.83% electricity price increase\" official",
+      "afriforum challenges eskom electricity nbsp mybroadband pricing price fee subscription official",
+      "afriforum challenges eskom electricity pricing price fee subscription official"
+    ]
   },
   {
     "candidate_id": "4e68e4ecc7c00c43",
     "status": "not_found",
-    "query": "\"Brookfield Selected by Nuclear Liabilities Fund for $1 Billion Long-Term Investment Mandate\" official announcement",
+    "query": "\"Brookfield Selected by Nuclear Liabilities Fund for $1 Billion Long-Term Investment Mandate\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Brookfield Selected by Nuclear Liabilities Fund for $1 Billion Long-Term Investment Mandate\" official",
+      "brookfield selected nuclear liabilities fund for rule regulation requirement mandate official",
+      "brookfield selected nuclear liabilities rule regulation requirement mandate official",
+      "brookfield selected nuclear liabilities fund for government regulator requirement"
+    ]
   },
   {
     "candidate_id": "29e9ffc0607d1144",
     "status": "not_found",
-    "query": "\"India May Mandate Storage For Solar, Wind Projects From 2027\" official announcement",
+    "query": "\"India May Mandate Storage For Solar, Wind Projects From 2027\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"India May Mandate Storage For Solar, Wind Projects From 2027\" official",
+      "india mandate storage for solar wind rule regulation requirement mandate official",
+      "india mandate storage for rule regulation requirement mandate official",
+      "india mandate storage for solar wind government regulator requirement"
+    ]
   },
   {
     "candidate_id": "33ef99e5fb709e44",
     "status": "not_found",
-    "query": "\"Tories launch bid to revoke ZEV mandate as Labour and EV industry hit back\" official announcement",
+    "query": "\"Tories launch bid to revoke ZEV mandate as Labour and EV industry hit back\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
     "search_coverage": "adequate",
-    "errors": []
+    "errors": [],
+    "queries": [
+      "\"Tories launch bid to revoke ZEV mandate as Labour and EV industry hit back\" official",
+      "tories launch bid revoke zev mandate rule regulation requirement mandate official",
+      "tories launch bid revoke rule regulation requirement mandate official",
+      "tories launch bid revoke zev mandate government regulator requirement"
+    ]
   },
   {
     "candidate_id": "92110bbf958b398e",
     "status": "not_found",
-    "query": "\"Brookfield wins $1 billion mandate from British nuclear fund - Bloomberg News\" official announcement",
+    "query": "\"Brookfield wins $1 billion mandate from British nuclear fund\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": []
+    "search_coverage": "partial",
+    "errors": [
+      "duckduckgo [\"Brookfield wins $1 billion mandate from British nuclear fund\" official]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=%22Brookfield+wins+%241+billion+mandate+from+British+nuclear+fund%22+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "duckduckgo [brookfield wins billion mandate british nuclear rule regulation requirement mand]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=brookfield+wins+billion+mandate+british+nuclear+rule+regulation+requirement+mandate+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    ],
+    "queries": [
+      "\"Brookfield wins $1 billion mandate from British nuclear fund\" official",
+      "brookfield wins billion mandate british nuclear rule regulation requirement mandate official",
+      "brookfield wins billion mandate rule regulation requirement mandate official",
+      "brookfield wins billion mandate british nuclear government regulator requirement"
+    ]
   },
   {
     "candidate_id": "64f6975ef71e8dce",
     "status": "not_found",
-    "query": "\"Brookfield Wins $1 Billion Mandate From British Nuclear Fund\" official announcement",
+    "query": "\"Brookfield Wins $1 Billion Mandate From British Nuclear Fund\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": []
+    "search_coverage": "partial",
+    "errors": [
+      "duckduckgo [\"Brookfield Wins $1 Billion Mandate From British Nuclear Fund\" official]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=%22Brookfield+Wins+%241+Billion+Mandate+From+British+Nuclear+Fund%22+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "duckduckgo [brookfield wins billion mandate british nuclear rule regulation requirement mand]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=brookfield+wins+billion+mandate+british+nuclear+rule+regulation+requirement+mandate+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    ],
+    "queries": [
+      "\"Brookfield Wins $1 Billion Mandate From British Nuclear Fund\" official",
+      "brookfield wins billion mandate british nuclear rule regulation requirement mandate official",
+      "brookfield wins billion mandate rule regulation requirement mandate official",
+      "brookfield wins billion mandate british nuclear government regulator requirement"
+    ]
   },
   {
     "candidate_id": "5a6d31c87ca2276d",
     "status": "not_found",
-    "query": "\"3 Red Line stations reopen Monday after 2-month shutdown for major construction\" official announcement",
+    "query": "\"3 Red Line stations reopen Monday after 2-month shutdown for major construction\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": []
+    "search_coverage": "partial",
+    "errors": [
+      "duckduckgo [\"3 Red Line stations reopen Monday after 2-month shutdown for major construction]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=%223+Red+Line+stations+reopen+Monday+after+2-month+shutdown+for+major+construction%22+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "duckduckgo [red line stations reopen monday after shutdown sunset discontinued end support o]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=red+line+stations+reopen+monday+after+shutdown+sunset+discontinued+end+support+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+    ],
+    "queries": [
+      "\"3 Red Line stations reopen Monday after 2-month shutdown for major construction\" official",
+      "red line stations reopen monday after shutdown sunset discontinued end support official",
+      "red line stations reopen shutdown sunset discontinued end support official"
+    ]
   },
   {
     "candidate_id": "7b01b84fa1160659",
     "status": "not_found",
-    "query": "\"Trump's Trade War Targets Bombardier: Manufacturing Mandate Looms\" official announcement",
+    "query": "\"Trump's Trade War Targets Bombardier: Manufacturing Mandate Looms\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": []
+    "search_coverage": "partial",
+    "errors": [
+      "duckduckgo [\"Trump's Trade War Targets Bombardier: Manufacturing Mandate Looms\" official]: HTTPStatusError: Client error '403 Forbidden' for url 'https://html.duckduckgo.com/html/?q=%22Trump%27s+Trade+War+Targets+Bombardier%3A+Manufacturing+Mandate+Looms%22+official'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "duckduckgo [trump trade war targets bombardier manufacturing rule regulation requirement man]: RemoteProtocolError: Server disconnected without sending a response.",
+      "duckduckgo [trump trade war targets rule regulation requirement mandate official]: ConnectTimeout: timed out",
+      "duckduckgo [trump trade war targets bombardier manufacturing government regulator requiremen]: ConnectTimeout: timed out"
+    ],
+    "queries": [
+      "\"Trump's Trade War Targets Bombardier: Manufacturing Mandate Looms\" official",
+      "trump trade war targets bombardier manufacturing rule regulation requirement mandate official",
+      "trump trade war targets rule regulation requirement mandate official",
+      "trump trade war targets bombardier manufacturing government regulator requirement"
+    ]
   },
   {
     "candidate_id": "48452bf0d5a2a7c4",
     "status": "not_found",
-    "query": "\"Trump's Trade Tactics Target Bombardier: Manufacturing Mandate\" official announcement",
+    "query": "\"Trump's Trade Tactics Target Bombardier: Manufacturing Mandate\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": []
+    "search_coverage": "partial",
+    "errors": [
+      "duckduckgo [\"Trump's Trade Tactics Target Bombardier: Manufacturing Mandate\" official]: ConnectTimeout: timed out",
+      "duckduckgo [trump trade tactics target bombardier manufacturing rule regulation requirement ]: ConnectTimeout: timed out",
+      "duckduckgo [trump trade tactics target rule regulation requirement mandate official]: ConnectTimeout: timed out",
+      "duckduckgo [trump trade tactics target bombardier manufacturing government regulator require]: ConnectTimeout: timed out"
+    ],
+    "queries": [
+      "\"Trump's Trade Tactics Target Bombardier: Manufacturing Mandate\" official",
+      "trump trade tactics target bombardier manufacturing rule regulation requirement mandate official",
+      "trump trade tactics target rule regulation requirement mandate official",
+      "trump trade tactics target bombardier manufacturing government regulator requirement"
+    ]
   },
   {
     "candidate_id": "a4667ed73e330db1",
     "status": "not_found",
-    "query": "\"Samsung preps the shutdown of two more apps late in 2026\" official announcement",
+    "query": "\"Samsung preps the shutdown of two more apps late in 2026\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": []
+    "search_coverage": "partial",
+    "errors": [
+      "duckduckgo [\"Samsung preps the shutdown of two more apps late in 2026\" official]: ConnectTimeout: timed out",
+      "duckduckgo [samsung preps two apps late nbsp shutdown sunset discontinued end support offici]: ConnectTimeout: timed out",
+      "duckduckgo [samsung preps two apps shutdown sunset discontinued end support official]: ConnectTimeout: timed out"
+    ],
+    "queries": [
+      "\"Samsung preps the shutdown of two more apps late in 2026\" official",
+      "samsung preps two apps late nbsp shutdown sunset discontinued end support official",
+      "samsung preps two apps shutdown sunset discontinued end support official"
+    ]
   },
   {
     "candidate_id": "1825b169a66b7440",
     "status": "not_found",
-    "query": "\"Richard Tice: A Reform government would scrap EV mandate to save Jaguar Land Rover\" official announcement",
+    "query": "\"Richard Tice: A Reform government would scrap EV mandate to save Jaguar Land Rover\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": []
+    "search_coverage": "partial",
+    "errors": [
+      "duckduckgo [\"Richard Tice: A Reform government would scrap EV mandate to save Jaguar Land Ro]: ConnectTimeout: timed out",
+      "duckduckgo [richard tice reform would scrap mandate rule regulation requirement mandate offi]: ConnectTimeout: timed out",
+      "duckduckgo [richard tice reform would rule regulation requirement mandate official]: ConnectTimeout: timed out",
+      "duckduckgo [richard tice reform would scrap mandate government regulator requirement]: ConnectTimeout: timed out"
+    ],
+    "queries": [
+      "\"Richard Tice: A Reform government would scrap EV mandate to save Jaguar Land Rover\" official",
+      "richard tice reform would scrap mandate rule regulation requirement mandate official",
+      "richard tice reform would rule regulation requirement mandate official",
+      "richard tice reform would scrap mandate government regulator requirement"
+    ]
   },
   {
     "candidate_id": "f0367b9ac4658554",
     "status": "not_found",
-    "query": "\"UK neared EV mandate in August but still fell short\" official announcement",
+    "query": "\"UK neared EV mandate in August but still fell short\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": []
+    "search_coverage": "partial",
+    "errors": [
+      "duckduckgo [\"UK neared EV mandate in August but still fell short\" official]: ConnectTimeout: timed out",
+      "duckduckgo [neared mandate august but still fell rule regulation requirement mandate officia]: ConnectTimeout: timed out",
+      "duckduckgo [neared mandate august but rule regulation requirement mandate official]: ConnectTimeout: timed out",
+      "duckduckgo [neared mandate august but still fell government regulator requirement]: ConnectTimeout: timed out"
+    ],
+    "queries": [
+      "\"UK neared EV mandate in August but still fell short\" official",
+      "neared mandate august but still fell rule regulation requirement mandate official",
+      "neared mandate august but rule regulation requirement mandate official",
+      "neared mandate august but still fell government regulator requirement"
+    ]
   },
   {
     "candidate_id": "5b1d4ece4414b40f",
     "status": "not_found",
-    "query": "\"Apple Music to make AI labels mandatory for music created with artificial intelligence\" official announcement",
+    "query": "\"Apple Music to make AI labels mandatory for music created with artificial intelligence\" official",
     "candidate_urls": [],
     "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": []
+    "search_coverage": "partial",
+    "errors": [
+      "duckduckgo [\"Apple Music to make AI labels mandatory for music created with artificial intel]: ConnectTimeout: timed out",
+      "duckduckgo [apple music make labels mandatory for rule regulation requirement mandate offici]: ConnectTimeout: timed out",
+      "duckduckgo [apple music make labels rule regulation requirement mandate official]: ConnectTimeout: timed out",
+      "duckduckgo [apple music make labels mandatory for government regulator requirement]: ConnectTimeout: timed out"
+    ],
+    "queries": [
+      "\"Apple Music to make AI labels mandatory for music created with artificial intelligence\" official",
+      "apple music make labels mandatory for rule regulation requirement mandate official",
+      "apple music make labels rule regulation requirement mandate official",
+      "apple music make labels mandatory for government regulator requirement"
+    ]
   }
 ]
