@@ -95,18 +95,17 @@ BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
     ),
 }
 
-# Backtests may inspect full archived pages whose titles are generic. These
-# broader body rules are deliberately opt-in so they can improve historical
-# recall without weakening the live feed scanner's precision-first contract.
 STRONG_BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
     EventType.PRICE_SHOCK: (
         r"\b(?:sunset|end|retire|limit|deactivat)\w*.{0,140}\bfree.{0,100}\b(?:plans?|tier|users?)\b",
-        r"\bfree.{0,120}\b(?:plans?|tier|users?).{0,180}\b(?:paid|subscription|pro|sunset|end|retire|limit|deactivat)\w*\b",
+        r"\bfree.{0,120}\b(?:plans?|tier|users?).{0,180}\b(?:sunset|end|retire|limit|deactivat)\w*\b",
+        r"\b(?:starting|beginning|effective|from).{0,100}\b(?:free )?(?:users?|plans?|tier).{0,140}\b(?:only|need|require|move|upgrade).{0,100}\b(?:paid|pro|subscription)\b",
         r"\b(?:introduc|new).{0,80}\b(?:runtime )?(?:fee|pricing|charge)\b",
     ),
     EventType.API_TERMS: (
         r"\b(?:adopt|adopted|switch|switched).{0,120}\b(?:business source )?(?:license|licence)\b",
         r"\b(?:data )?API.{0,180}\b(?:access|terms).{0,180}\b(?:change|commercial|pricing|paid)\w*\b",
+        r"\b(?:manifest v2|extensions?).{0,220}\b(?:phase out|transition|no longer run|deprecat)\w*\b",
     ),
     EventType.SHUTDOWN: (
         r"\b(?:we|service|product|app|application|platform|device|devices|core).{0,200}\b(?:will|have|has|begin|began|start|started).{0,100}\b(?:shut down|wind down|sunset|phase out|discontinue|retire|decommission)\w*\b",
@@ -191,7 +190,6 @@ def event_from_document(
     published_at: datetime | None = None,
     historical: bool = False,
 ) -> MarketEvent | None:
-    """Classify a first-party document; historical mode may inspect full-page body signals."""
     event_type = classify_entry(title, summary, allow_strong_body=historical)
     if event_type is None:
         return None
@@ -296,14 +294,5 @@ def probe_source(source: OfficialSource, *, timeout: float = 20.0) -> SourceProb
     response = _get(source, timeout)
     feed = feedparser.parse(response.text)
     entries = list(feed.entries[: source.max_entries])
-    official_links = sum(
-        1
-        for entry in entries
-        if is_allowed_official_url(str(entry.get("link", "")), source.allowed_domains)
-    )
-    return SourceProbe(
-        source=source,
-        http_status=response.status_code,
-        entry_count=len(entries),
-        official_link_count=official_links,
-    )
+    official_links = sum(1 for entry in entries if is_allowed_official_url(str(entry.get("link", "")), source.allowed_domains))
+    return SourceProbe(source=source, http_status=response.status_code, entry_count=len(entries), official_link_count=official_links)
