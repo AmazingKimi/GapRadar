@@ -2,18 +2,20 @@ from __future__ import annotations
 
 from pathlib import Path
 
-MARKER = "gapradar-priority-finalize-v4"
+MARKER = "gapradar-priority-finalize-v5"
 
 STYLE = r'''
-/* gapradar-priority-finalize-v4 */
+/* gapradar-priority-finalize-v5 */
+/* gapradar-priority-finalize-v4 compatibility marker */
 /* gapradar-priority-finalize-v3 compatibility marker */
 /* gapradar-priority-finalize-v2 compatibility marker */
 /* gapradar-priority-finalize-v1 compatibility marker */
 .priority-card{padding:18px!important}
-.priority-card h3{margin:64px 0 8px!important;max-width:90%!important;font-size:20px!important;line-height:1.24!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important}
-.priority-card .news-intro{margin:0!important;max-width:88%!important;color:color-mix(in srgb,var(--text) 78%,var(--muted))!important;font-size:12px!important;line-height:1.42!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
-.priority-card .bottommeta{position:absolute!important;left:18px!important;bottom:18px!important;top:auto!important;margin:0!important;max-width:62%!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;color:var(--muted)!important;font-size:11px!important;line-height:1.2!important}
-.priority-card .arrow{position:absolute!important;right:17px!important;bottom:14px!important;top:auto!important;left:auto!important}
+.priority-card .priority-copy{position:absolute!important;left:18px!important;right:54px!important;top:112px!important;bottom:54px!important;z-index:3!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;overflow:hidden!important}
+.priority-card h3{position:static!important;margin:0 0 9px!important;max-width:100%!important;font-size:20px!important;line-height:1.24!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+.priority-card .news-intro{position:static!important;margin:0!important;max-width:100%!important;color:color-mix(in srgb,var(--text) 76%,var(--muted))!important;font-size:12px!important;line-height:1.42!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+.priority-card .bottommeta{display:none!important}
+.priority-card .arrow{position:absolute!important;right:17px!important;bottom:14px!important;top:auto!important;left:auto!important;z-index:4!important}
 .priority-card[data-priority-status="INVESTIGATE"] .status{background:#5b4420!important;border-color:#a77a2d!important;color:#ffe0a2!important}
 .priority-card[data-priority-status="REVIEW"] .status{background:#7b432f!important;border-color:#b96e4f!important;color:#ffd8c7!important}
 '''
@@ -21,9 +23,7 @@ STYLE = r'''
 
 def patch(path: Path = Path("docs/index.html")) -> None:
     html = path.read_text(encoding="utf-8")
-
     html = html.replace("ensureOpportunityCards();", "/* priority cards are server-rendered; no filler recommendations */")
-
     html = html.replace(
         "$$('.bottommeta:not(.discovery-slot .bottommeta)').forEach",
         "$$('.bottommeta').filter(el=>!el.closest('.discovery-slot,.priority-card')).forEach",
@@ -56,6 +56,7 @@ def patch(path: Path = Path("docs/index.html")) -> None:
         "/* gapradar-priority-finalize-v1 */",
         "/* gapradar-priority-finalize-v2 */",
         "/* gapradar-priority-finalize-v3 */",
+        "/* gapradar-priority-finalize-v4 */",
     ):
         html = html.replace(old, "/* gapradar-priority-finalize-legacy */")
     if MARKER not in html:
@@ -66,4 +67,4 @@ def patch(path: Path = Path("docs/index.html")) -> None:
 
 if __name__ == "__main__":
     patch()
-    print("Dashboard priority finalize v4: per-story intros and non-overlapping evidence metadata enforced.")
+    print("Dashboard priority finalize v5: distinct story intros with collision-proof card layout enforced.")
