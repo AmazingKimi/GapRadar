@@ -62,7 +62,7 @@ class MarketEvent(BaseModel):
     supply_sources_checked: list[str] = Field(default_factory=list)
     supply_candidate_count: int = 0
     supply_status: Literal["unassessed", "no_supply", "thin_supply", "served"] = "unassessed"
-    gap_status: Literal["unassessed", "watch", "potential_gap", "likely_served"] = "unassessed"
+    gap_status: Literal["unassessed", "no_demand", "watch", "potential_gap", "likely_served"] = "unassessed"
     confidence: Confidence = Confidence.INSUFFICIENT
     status: Literal["candidate", "verified", "rejected"] = "candidate"
     notes: list[str] = Field(default_factory=list)
