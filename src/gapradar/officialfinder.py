@@ -17,6 +17,8 @@ NEWS_HOSTS = {
     "www.bloomberg.com", "forbes.com", "www.forbes.com", "businessinsider.com",
     "www.businessinsider.com", "youtube.com", "www.youtube.com", "reddit.com",
     "www.reddit.com", "x.com", "twitter.com", "linkedin.com", "www.linkedin.com",
+    "mercomindia.com", "www.mercomindia.com", "mashable.com", "www.mashable.com",
+    "mybroadband.co.za", "www.mybroadband.co.za",
 }
 GOVERNMENT_SUFFIXES = (
     ".gov", ".gov.uk", ".gov.au", ".gov.ca", ".gc.ca", ".gov.in", ".gov.sg",
@@ -26,7 +28,7 @@ STOP = {
     "the", "a", "an", "new", "latest", "daily", "news", "wrap", "update", "updates",
     "will", "may", "must", "require", "requires", "required", "rules", "rule", "price",
     "hike", "increase", "shutdown", "service", "platform", "data", "market", "official",
-    "announcement", "government", "today", "more", "from", "with", "into", "about",
+    "announcement", "government", "today", "more", "from", "with", "into", "about", "nbsp",
 }
 CHANGE_TERMS = {
     "shutdown_eol": "shutdown sunset discontinued end support official",
@@ -34,6 +36,18 @@ CHANGE_TERMS = {
     "api_terms_change": "API terms licensing developer official",
     "regulatory_shift": "rule regulation requirement mandate official",
 }
+
+# If a candidate clearly names a jurisdiction, a random government website from another
+# country must not count as a first-party source. These are intentionally conservative.
+JURISDICTION_RULES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
+    (re.compile(r"\bmassachusetts\b", re.I), ("mass.gov",)),
+    (re.compile(r"\bindia\b|\bindian\b", re.I), ("gov.in", "nic.in", "pib.gov.in")),
+    (re.compile(r"\buk\b|\bunited kingdom\b|\bbritain\b|\bbritish\b", re.I), ("gov.uk", "parliament.uk")),
+    (re.compile(r"\beu\b|\beuropean union\b|\beuropean commission\b", re.I), ("europa.eu", "eu")),
+    (re.compile(r"\baustralia\b|\baustralian\b", re.I), ("gov.au",)),
+    (re.compile(r"\bcanada\b|\bcanadian\b", re.I), ("gc.ca", "gov.ca")),
+    (re.compile(r"\bsingapore\b", re.I), ("gov.sg",)),
+)
 
 
 @dataclass(frozen=True)
@@ -122,6 +136,17 @@ def _subject_tokens(candidate: GapCandidate) -> list[str]:
     return values[:14]
 
 
+def _headline_tokens(candidate: GapCandidate) -> list[str]:
+    raw = re.findall(r"[A-Za-z][A-Za-z0-9.-]{2,}", candidate.headline)
+    values: list[str] = []
+    for token in raw:
+        lowered = token.lower().strip(".-")
+        if lowered in STOP or len(lowered) < 3 or lowered in values:
+            continue
+        values.append(lowered)
+    return values[:10]
+
+
 def _registrable_hint(host: str) -> str:
     parts = [part for part in host.lower().split(".") if part and part != "www"]
     if len(parts) < 2:
@@ -132,16 +157,38 @@ def _registrable_hint(host: str) -> str:
     return parts[-2]
 
 
+def _jurisdiction_hosts(candidate: GapCandidate) -> tuple[str, ...]:
+    text = f"{candidate.headline} {candidate.summary}"
+    for pattern, hosts in JURISDICTION_RULES:
+        if pattern.search(text):
+            return hosts
+    return ()
+
+
+def _host_matches_suffix(host: str, suffix: str) -> bool:
+    host = host.lower().strip(".")
+    suffix = suffix.lower().strip(".")
+    return host == suffix or host.endswith("." + suffix)
+
+
+def _government_host_matches(candidate: GapCandidate, host: str) -> bool:
+    expected = _jurisdiction_hosts(candidate)
+    if not expected:
+        return True
+    return any(_host_matches_suffix(host, suffix) for suffix in expected)
+
+
 def _looks_first_party(url: str, candidate: GapCandidate) -> bool:
     host = urlparse(url).netloc.lower().split(":")[0]
     if not host or host in NEWS_HOSTS or any(host.endswith("." + noise) for noise in NEWS_HOSTS):
         return False
     if any(host.endswith(suffix) for suffix in GOVERNMENT_SUFFIXES):
-        return True
+        return _government_host_matches(candidate, host)
     domain_hint = _registrable_hint(host)
-    tokens = _subject_tokens(candidate)
-    # Company/product-owned domains are SOURCE CANDIDATES only. Tier-1 verification
-    # still requires fetching the page and confirming the hard change statement.
+    # Company/product-owned domains are source candidates only. Restrict the domain
+    # match to headline tokens so a publisher name leaked through a summary cannot
+    # masquerade as the company involved in the event.
+    tokens = _headline_tokens(candidate)
     return len(domain_hint) >= 4 and any(
         domain_hint == token or domain_hint in token or token in domain_hint
         for token in tokens[:8]
@@ -160,6 +207,9 @@ def _query_variants(candidate: GapCandidate) -> list[str]:
         f"{subject} {change}",
         f"{core} {change}",
     ]
+    jurisdiction_hosts = _jurisdiction_hosts(candidate)
+    for host in jurisdiction_hosts[:2]:
+        variants.insert(1, f"site:{host} {core} {change}")
     if candidate.change_type == "regulatory_shift":
         variants.append(f"{subject} government regulator requirement")
     unique: list[str] = []
@@ -167,7 +217,7 @@ def _query_variants(candidate: GapCandidate) -> list[str]:
         query = " ".join(query.split())
         if query and query not in unique:
             unique.append(query)
-    return unique[:4]
+    return unique[:5]
 
 
 def _result_relevance(row: dict[str, str], candidate: GapCandidate) -> int:
@@ -211,8 +261,6 @@ def find_official_sources(candidate: GapCandidate, *, timeout: float = 10.0) -> 
     urls: list[str] = []
     hosts: list[str] = []
     for score, row in ranked:
-        # A government/regulator host can survive with weaker title overlap. Company
-        # domains need at least one additional subject/change signal in the result text.
         host = urlparse(row["url"]).netloc.lower()
         government = any(host.endswith(suffix) for suffix in GOVERNMENT_SUFFIXES)
         if score < (1 if government else 2):
