@@ -1,0 +1,167 @@
+{
+  "event_id": "835ed25a311bff70",
+  "vendor": "Shopify",
+  "product": "Oxygen is now available on trial plan stores",
+  "headline": "Oxygen is now available on trial plan stores",
+  "verdict": "NO DETECTED SIGNAL",
+  "rationale": "The checked queries found no qualifying displaced-demand evidence. This means demand was not detected, not that demand does not exist.",
+  "what_changed": "You can now deploy Hydrogen storefronts to Oxygen from trial plan stores . Previously, Oxygen hosting required a paid plan. Note that trial plan stores don't include public environments, so deployment URLs always require a store login. Learn more about supported plans .",
+  "displaced_demand": [],
+  "replacement_supply": [],
+  "unresolved_gap": "No migration pain was detected by the recorded queries. This is a detection result, not proof that no displaced demand exists.",
+  "next_action": "Do not infer zero demand. Keep monitoring, inspect the recorded queries, and broaden sources if this event is strategically important.",
+  "evidence_counts": {
+    "tier_1_official": 1,
+    "tier_2_reaction": 0,
+    "tier_3_supply": 0,
+    "reaction_candidates_checked": 6,
+    "supply_candidates_checked": 0
+  },
+  "reaction_search_quality": "adequate",
+  "reaction_queries": [
+    {
+      "source": "hacker_news",
+      "query": "Oxygen is now available on trial plan stores",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Shopify Oxygen is now available on trial plan stores",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Oxygen is now available on trial plan stores pricing",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Oxygen is now available on trial plan stores price increase",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Oxygen is now available on trial plan stores alternative",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Oxygen is now available on trial plan stores switch",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "trial plan stores",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "Shopify trial plan stores",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "trial plan stores pricing",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "trial plan stores price increase",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "trial plan stores alternative",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "hacker_news",
+      "query": "trial plan stores switch",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Oxygen is now available on trial plan stores\" Shopify created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Oxygen is now available on trial plan stores\" created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Oxygen is now available on trial plan stores\" pricing created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Oxygen is now available on trial plan stores\" price increase created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Oxygen is now available on trial plan stores\" alternative created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"Oxygen is now available on trial plan stores\" switch created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"trial plan stores\" Shopify created:>=2026-05-12 is:issue",
+      "candidate_count": 0,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"trial plan stores\" created:>=2026-05-12 is:issue",
+      "candidate_count": 6,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"trial plan stores\" pricing created:>=2026-05-12 is:issue",
+      "candidate_count": 2,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"trial plan stores\" price increase created:>=2026-05-12 is:issue",
+      "candidate_count": 1,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"trial plan stores\" alternative created:>=2026-05-12 is:issue",
+      "candidate_count": 1,
+      "ok": true
+    },
+    {
+      "source": "github_issues",
+      "query": "\"trial plan stores\" switch created:>=2026-05-12 is:issue",
+      "candidate_count": 1,
+      "ok": true
+    }
+  ]
+}
