@@ -11,6 +11,7 @@ class EventType(str, Enum):
     SHUTDOWN = "shutdown_eol"
     PRICE_SHOCK = "price_shock"
     API_TERMS = "api_terms_change"
+    REGULATORY_SHIFT = "regulatory_shift"
 
 
 class EvidenceTier(str, Enum):
@@ -121,6 +122,14 @@ class MarketEvent(BaseModel):
                 disruption="A material pricing change may make the incumbent uneconomic for part of its customer base.",
                 basis=basis,
                 unknowns=["Share of customers affected", "Switching costs", "Whether cheaper substitutes already satisfy the core job"],
+            )
+        elif self.event_type == EventType.REGULATORY_SHIFT:
+            hypothesis = DemandHypothesis(
+                affected_users=f"Organizations newly affected by the rule or requirement represented by {self.product}.",
+                job_to_be_done="Comply with the new requirement with the least operational burden, evidence-collection cost, and implementation risk.",
+                disruption="A regulatory or policy change creates mandatory work, reporting, controls, or migration that may not have existed before.",
+                basis=basis,
+                unknowns=["Exact obligated segments", "Effective date and enforcement intensity", "Whether incumbent compliance tooling already covers the new work"],
             )
         else:
             hypothesis = DemandHypothesis(
