@@ -2,24 +2,24 @@
   {
     "candidate_id": "52f1eb44691af255",
     "status": "tier1_verified",
-    "official_url": "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
+    "official_url": "https://www.mass.gov/info-details/healey-driscoll-administration-statement-of-expectations-for-responsible-data-center-development-and-operations-in-massachusetts",
     "official_host": "www.mass.gov",
-    "official_title": "Press Release Governor Healey: No Data Centers Without Local Approval",
-    "excerpt": "Governor Healey: No Data Centers Without Local Approval | Mass.gov An official website of the Commonwealth of Massachusetts Here's how you know Official websites use .mass.gov A .mass.gov website belongs to an official government organization in Massachusetts. Secure websites use HTTPS certificate A lock icon ( ) or https:// means you've safely connected to the official website. Share sensitive information only on official, secure websites. Skip to main content Mass.gov Menu Close menu Access to search Language Select language Afrikaans Albanian - Shqip Amharic - አማርኛ Arabic - العربية Armenian - Հայերեն Chinese (Simplified) - 简体中文 Chinese (Traditional) - 繁體中文 English Filipino French - Français German - Deutsch Greek - Ελληνικά Gujarati - ગુજરાતી Haitian Creole - Kreyòl Ayisyen Hebrew - עברית Hindi - हिन्दी Hmong - Hmoob Italian - Italiano Japanese - 日本語 Khmer - ភាសាខ្មែរ Kinyarwanda Korean - 한국어 Lao - ລາວ Malayalam - മലയാളം Myanmar (Burmese) - မြန်မာ Nepali - नेपाली Pashto - پښتو Persian - فارسی Polish - Polski Portuguese (Brazil) - Português Romanian - Română Russian - Русский Somali - Soomaali Spanish - Español Swahili - Kiswahili Tamil - தமிழ் Telugu - తెలుగు Thai - ไทย Tigrinya",
+    "official_title": "Healey-Driscoll Administration Statement of Expectations for Responsible Data Center Development and Operations in Massachusetts",
+    "excerpt": "Healey-Driscoll Administration Statement of Expectations for Responsible Data Center Development and Operations in Massachusetts | Mass.gov An official website of the Commonwealth of Massachusetts Here's how you know Official websites use .mass.gov A .mass.gov website belongs to an official government organization in Massachusetts. Secure websites use HTTPS certificate A lock icon ( ) or https:// means you've safely connected to the official website. Share sensitive information only on official, secure websites. Skip to main content Mass.gov Menu Close menu Access to search Language Select language Afrikaans Albanian - Shqip Amharic - አማርኛ Arabic - العربية Armenian - Հայերեն Chinese (Simplified) - 简体中文 Chinese (Traditional) - 繁體中文 English Filipino French - Français German - Deutsch Greek - Ελληνικά Gujarati - ગુજરાતી Haitian Creole - Kreyòl Ayisyen Hebrew - עברית Hindi - हिन्दी Hmong - Hmoob Italian - Italiano Japanese - 日本語 Khmer - ភាសាខ្មែរ Kinyarwanda Korean - 한국어 Lao - ລາວ Malayalam - മലയാളം Myanmar (Burmese) - မြန်မာ Nepali - नेपाली Pashto - پښتو Persian - فارسی Polish - Polski Portuguese (Brazil) - Português Romanian - Română Russian - Русский Somali - Soomaali Spanish - Espa",
     "subject_overlap": 4,
-    "errors": [
-      "first-party page did not align with the claimed target/outcome: www.mass.gov"
-    ]
+    "errors": []
   },
   {
     "candidate_id": "14436a2a2ff1f7ea",
-    "status": "unverified",
-    "official_url": null,
-    "official_host": null,
-    "official_title": null,
-    "excerpt": null,
-    "subject_overlap": 0,
-    "errors": []
+    "status": "tier1_verified",
+    "official_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2287127&reg=3&lang=1",
+    "official_host": "www.pib.gov.in",
+    "official_title": "Press Release Page | Press Information Bureau",
+    "excerpt": "Press Release Page | Press Information Bureau Ministry of Heavy Industries CYBERSECURITY VULNERABILITIES IN E-RICKSHAW BMS AND ROLE OF CERTIFICATION AGENCIES Posted On: 21 JUL 2026 5:03PM by PIB Delhi The Indian Computer Emergency Response Team (CERT-In) has received reports of safety concern involving electric three-wheelers (e-rickshaws). It has been reported that it is possible for unauthorized individuals to abruptly power off moving e-rickshaws by using a publicly available BMS mobile application. The issue lies in the Bluetooth module of the Battery Management System (BMS) chip, which is embedded in the battery module. The BMS commonly found in the low-cost e-rickshaws, have default or no credentials, which allows unauthorised users to connect and modify the settings and/or cut off the battery’s discharge, causing sudden vehicle shutdowns. CERT-In has identified the mobile apps which can be used to abruptly power-off batteries of erickshaws and reported to MeitY to remove the apps from application play stores. MHI has issued advisory for addressing Bluetooth BMS vulnerabilities in e-rickshaws to SIAM, ACMA Industry bodies and testing agencies. As per the information received ",
+    "subject_overlap": 3,
+    "errors": [
+      "subject overlap too weak for heavyindustries.gov.in: 0 < 2"
+    ]
   },
   {
     "candidate_id": "86a0955dccc4b9fd",

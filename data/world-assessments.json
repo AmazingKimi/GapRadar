@@ -19,14 +19,50 @@
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ],
     "tier1_status": "tier1_verified",
-    "official_url": "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
+    "official_url": "https://www.mass.gov/info-details/healey-driscoll-administration-statement-of-expectations-for-responsible-data-center-development-and-operations-in-massachusetts",
     "demand_hypothesis": {
       "affected_users": "Organizations obligated by the new requirement described by: Massachusetts Will Require New Data Centers to Use Clean Energy.",
       "job_to_be_done": "Comply with the new requirement with the least operational burden, evidence-collection cost and implementation risk.",
       "disruption": "A regulatory or policy shift creates mandatory work, controls, reporting or migration.",
       "official_successor": "unknown",
       "basis": [
-        "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval"
+        "https://www.mass.gov/info-details/healey-driscoll-administration-statement-of-expectations-for-responsible-data-center-development-and-operations-in-massachusetts"
+      ],
+      "confidence": "low",
+      "unknowns": [
+        "Exact obligated segments",
+        "Effective date and enforcement intensity",
+        "Existing compliance-tool coverage"
+      ]
+    }
+  },
+  {
+    "candidate_id": "14436a2a2ff1f7ea",
+    "ecosystem": "regulatory",
+    "supply_status": "unassessed",
+    "supply_sources_checked": [],
+    "supply_sources_missing": [
+      "web_search"
+    ],
+    "supply_candidate_count": 0,
+    "supply_evidence": [],
+    "supply_coverage": "failed",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results",
+      "google_news_supply: no results"
+    ],
+    "tier1_status": "tier1_verified",
+    "official_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2287127&reg=3&lang=1",
+    "demand_hypothesis": {
+      "affected_users": "Organizations obligated by the new requirement described by: EV BMS Cybersecurity Testing Now Mandatory in India.",
+      "job_to_be_done": "Comply with the new requirement with the least operational burden, evidence-collection cost and implementation risk.",
+      "disruption": "A regulatory or policy shift creates mandatory work, controls, reporting or migration.",
+      "official_successor": "unknown",
+      "basis": [
+        "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2287127&reg=3&lang=1"
       ],
       "confidence": "low",
       "unknowns": [

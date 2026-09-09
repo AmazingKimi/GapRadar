@@ -3,7 +3,7 @@
     "candidate_id": "52f1eb44691af255",
     "status": "tier1_verified",
     "event_id": null,
-    "official_url": "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
+    "official_url": "https://www.mass.gov/info-details/healey-driscoll-administration-statement-of-expectations-for-responsible-data-center-development-and-operations-in-massachusetts",
     "match_score": 10,
     "reasons": [
       "first_party_page",
@@ -13,12 +13,14 @@
   },
   {
     "candidate_id": "14436a2a2ff1f7ea",
-    "status": "unverified",
+    "status": "tier1_verified",
     "event_id": null,
-    "official_url": null,
-    "match_score": 1,
+    "official_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2287127&reg=3&lang=1",
+    "match_score": 10,
     "reasons": [
-      "date_proximity"
+      "first_party_page",
+      "subject_overlap",
+      "hard_change_confirmed"
     ]
   },
   {
