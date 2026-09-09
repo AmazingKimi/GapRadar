@@ -1,16 +1,29 @@
-# V0.1 only accepts first-party feeds. Community sources belong to later
-# reaction/supply stages and must never verify an event by themselves.
+# GapRadar V0.2 only accepts first-party feeds as Tier 1 evidence.
+# Community sources belong to later reaction/supply stages and can never
+# verify an event by themselves.
 sources:
-  - name: GitHub
+  - name: GitHub Changelog
     vendor: GitHub
     url: https://github.blog/changelog/feed/
     allowed_domains:
       - github.blog
       - github.com
+    lookback_days: 30
+    max_entries: 120
 
-  - name: Cloudflare
+  - name: Shopify Developer Changelog
+    vendor: Shopify
+    url: https://shopify.dev/changelog/feed.xml
+    allowed_domains:
+      - shopify.dev
+    lookback_days: 30
+    max_entries: 120
+
+  - name: Cloudflare Blog
     vendor: Cloudflare
     url: https://blog.cloudflare.com/rss/
     allowed_domains:
       - blog.cloudflare.com
       - cloudflare.com
+    lookback_days: 30
+    max_entries: 120
