@@ -11,7 +11,6 @@ from typing import Any, Literal
 import httpx
 
 from .detector import classify_entry
-from .models import EventType
 
 
 @dataclass(frozen=True)
@@ -87,7 +86,7 @@ def load_cases(path: Path) -> list[dict[str, Any]]:
 
 
 def _classify_case(case: dict[str, Any], title: str, body: str) -> tuple[bool, str | None]:
-    detected = classify_entry(title, body)
+    detected = classify_entry(title, body, allow_strong_body=True)
     return detected is not None, detected.value if detected else None
 
 
