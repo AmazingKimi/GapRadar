@@ -39,6 +39,20 @@ def test_irrelevant_popular_repo_is_rejected():
     assert score_supply(candidate, event(), now=NOW) == 0
 
 
+def test_same_ecosystem_package_is_not_automatically_a_replacement():
+    candidate = SupplyCandidate(
+        title="@shopify/graphql-client",
+        url="https://www.npmjs.com/package/@shopify/graphql-client",
+        publisher="npm",
+        source_kind="npm_package",
+        description="A Shopify client for Storefront API scripts and app integrations",
+        popularity=1000,
+        quality_hint=0.9,
+        updated_at=NOW,
+    )
+    assert score_supply(candidate, event(), now=NOW) == 0
+
+
 def test_active_relevant_alternative_scores_high():
     candidate = SupplyCandidate(
         title="acme/shopify-script-tag-alternative",
