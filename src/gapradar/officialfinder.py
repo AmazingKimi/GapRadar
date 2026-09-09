@@ -47,11 +47,27 @@ JURISDICTION_RULES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
     (re.compile(r"\bcanada\b|\bcanadian\b", re.I), ("gc.ca", "gov.ca")),
     (re.compile(r"\bsingapore\b", re.I), ("gov.sg",)),
 )
-# Brand/platform wording in a regulatory-shaped headline usually describes a private
-# platform policy, not public law. This must search the owner, not a government site.
 PRIVATE_POLICY = re.compile(
     r"\b(apple(?: music| tv)?|samsung|google|youtube|meta|facebook|instagram|microsoft|amazon|spotify|netflix|openai|github|shopify|slack|cloudflare|discord|tiktok)\b",
     re.I,
+)
+# Authority domains are product-owner mappings, not event-specific exceptions. They
+# let company policy, pricing, shutdown and developer-platform leads search the
+# owner's first-party surface directly before relying on generic search ranking.
+OWNER_DOMAINS: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
+    (re.compile(r"\bapple\b", re.I), ("apple.com",)),
+    (re.compile(r"\bsamsung\b", re.I), ("samsung.com",)),
+    (re.compile(r"\bgoogle\b|\byoutube\b", re.I), ("google.com", "support.google.com", "developers.google.com", "blog.youtube")),
+    (re.compile(r"\bmicrosoft\b|\bazure\b", re.I), ("microsoft.com", "learn.microsoft.com", "azure.microsoft.com")),
+    (re.compile(r"\bamazon\b|\baws\b", re.I), ("amazon.com", "aws.amazon.com")),
+    (re.compile(r"\bmeta\b|\bfacebook\b|\binstagram\b", re.I), ("about.fb.com", "developers.facebook.com")),
+    (re.compile(r"\bopenai\b", re.I), ("openai.com",)),
+    (re.compile(r"\bgithub\b", re.I), ("github.blog", "docs.github.com")),
+    (re.compile(r"\bshopify\b", re.I), ("shopify.com", "shopify.dev")),
+    (re.compile(r"\bslack\b", re.I), ("slack.com", "api.slack.com")),
+    (re.compile(r"\bcloudflare\b", re.I), ("cloudflare.com", "developers.cloudflare.com")),
+    (re.compile(r"\bspotify\b", re.I), ("spotify.com", "newsroom.spotify.com")),
+    (re.compile(r"\bnetflix\b", re.I), ("netflix.com", "about.netflix.com")),
 )
 
 
@@ -87,7 +103,7 @@ def _decode_ddg_url(value: str) -> str:
 
 
 def _ddg(query: str, timeout: float) -> list[dict[str, str]]:
-    response = httpx.get("https://html.duckduckgo.com/html/", params={"q": query}, headers={"User-Agent": "Mozilla/5.0 GapRadar/0.8"}, timeout=timeout, follow_redirects=True)
+    response = httpx.get("https://html.duckduckgo.com/html/", params={"q": query}, headers={"User-Agent": "Mozilla/5.0 GapRadar/0.9"}, timeout=timeout, follow_redirects=True)
     response.raise_for_status()
     rows: list[dict[str, str]] = []
     links = re.findall(r'class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>', response.text, flags=re.I | re.S)
@@ -100,7 +116,7 @@ def _ddg(query: str, timeout: float) -> list[dict[str, str]]:
 
 
 def _bing(query: str, timeout: float) -> list[dict[str, str]]:
-    response = httpx.get("https://www.bing.com/search", params={"q": query, "count": 20}, headers={"User-Agent": "Mozilla/5.0 GapRadar/0.8"}, timeout=timeout, follow_redirects=True)
+    response = httpx.get("https://www.bing.com/search", params={"q": query, "count": 20}, headers={"User-Agent": "Mozilla/5.0 GapRadar/0.9"}, timeout=timeout, follow_redirects=True)
     response.raise_for_status()
     rows: list[dict[str, str]] = []
     for block in re.findall(r'<li class="b_algo".*?</li>', response.text, flags=re.I | re.S)[:20]:
@@ -123,9 +139,6 @@ def _headline_tokens(candidate: GapCandidate, limit: int = 14) -> list[str]:
 
 
 def _subject_tokens(candidate: GapCandidate) -> list[str]:
-    # Search terms come from the headline only. Summaries often contain publisher
-    # domains/bylines and previously polluted official-source queries with Mashable,
-    # MyBroadband, EnergyNow, etc.
     return _headline_tokens(candidate, 14)
 
 
@@ -142,6 +155,14 @@ def _registrable_hint(host: str) -> str:
 def _jurisdiction_hosts(candidate: GapCandidate) -> tuple[str, ...]:
     text = f"{candidate.headline} {candidate.summary}"
     for pattern, hosts in JURISDICTION_RULES:
+        if pattern.search(text):
+            return hosts
+    return ()
+
+
+def _owner_hosts(candidate: GapCandidate) -> tuple[str, ...]:
+    text = candidate.headline
+    for pattern, hosts in OWNER_DOMAINS:
         if pattern.search(text):
             return hosts
     return ()
@@ -170,6 +191,11 @@ def _government_host_matches(candidate: GapCandidate, host: str) -> bool:
     return any(_host_matches_suffix(host, suffix) for suffix in expected)
 
 
+def _owner_host_matches(candidate: GapCandidate, host: str) -> bool:
+    expected = _owner_hosts(candidate)
+    return bool(expected) and any(_host_matches_suffix(host, suffix) for suffix in expected)
+
+
 def _looks_first_party(url: str, candidate: GapCandidate) -> bool:
     host = urlparse(url).netloc.lower().split(":")[0]
     if not host or host in NEWS_HOSTS or any(host.endswith("." + noise) for noise in NEWS_HOSTS):
@@ -180,6 +206,8 @@ def _looks_first_party(url: str, candidate: GapCandidate) -> bool:
         return route != "company_owner" and _government_host_matches(candidate, host)
     if route == "public_regulator":
         return False
+    if _owner_host_matches(candidate, host):
+        return True
     domain_hint = _registrable_hint(host)
     return len(domain_hint) >= 4 and domain_hint in _headline_tokens(candidate, 10)
 
@@ -192,7 +220,15 @@ def _query_variants(candidate: GapCandidate) -> list[str]:
     owner = " ".join(tokens[:2])
     change = CHANGE_TERMS.get(candidate.change_type, "announcement")
     route = _authority_route(candidate)
-    variants = [f'"{headline}" official']
+    variants: list[str] = []
+
+    # Direct authority-domain queries come first. Search engines are much better at
+    # finding buried newsroom/support/changelog pages when the owner domain is explicit.
+    if route == "company_owner":
+        for host in _owner_hosts(candidate)[:3]:
+            variants.append(f"site:{host} {core} {change}")
+
+    variants.append(f'"{headline}" official')
     if route == "public_regulator":
         for host in _jurisdiction_hosts(candidate)[:2]:
             variants.append(f"site:{host} {core} {change}")
@@ -210,7 +246,7 @@ def _query_variants(candidate: GapCandidate) -> list[str]:
         query = " ".join(query.split())
         if query and query not in unique:
             unique.append(query)
-    return unique[:5]
+    return unique[:6]
 
 
 def _result_relevance(row: dict[str, str], candidate: GapCandidate) -> int:
@@ -220,6 +256,9 @@ def _result_relevance(row: dict[str, str], candidate: GapCandidate) -> int:
     score = min(hits, 5)
     if re.search(r"\b(deprecat|sunset|discontinu|shutdown|pricing|price|fee|license|licensing|terms|mandate|required|regulation|rule)\b", text):
         score += 1
+    host = urlparse(row.get("url", "")).netloc.lower()
+    if _owner_host_matches(candidate, host) or _government_host_matches(candidate, host) and any(host.endswith(suffix) for suffix in GOVERNMENT_SUFFIXES):
+        score += 2
     return score
 
 
