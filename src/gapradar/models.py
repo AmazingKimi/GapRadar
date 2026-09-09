@@ -34,6 +34,10 @@ class SourceEvidence(BaseModel):
     published_at: datetime | None = None
     excerpt: str = ""
     is_official: bool = False
+    source_kind: str | None = None
+    signal: Literal["migration_pain", "discussion", "unknown"] | None = None
+    signal_score: int = 0
+    engagement: int = 0
 
 
 class MarketEvent(BaseModel):
@@ -48,6 +52,10 @@ class MarketEvent(BaseModel):
     official_evidence: list[SourceEvidence] = Field(default_factory=list)
     reaction_evidence: list[SourceEvidence] = Field(default_factory=list)
     supply_evidence: list[SourceEvidence] = Field(default_factory=list)
+    reaction_checked_at: datetime | None = None
+    reaction_sources_checked: list[str] = Field(default_factory=list)
+    reaction_candidate_count: int = 0
+    demand_status: Literal["unassessed", "no_signal", "early_signal", "repeated_signal"] = "unassessed"
     confidence: Confidence = Confidence.INSUFFICIENT
     status: Literal["candidate", "verified", "rejected"] = "candidate"
     notes: list[str] = Field(default_factory=list)
@@ -58,6 +66,14 @@ class MarketEvent(BaseModel):
         for item in items:
             if item.tier != EvidenceTier.TIER_1_OFFICIAL or not item.is_official:
                 raise ValueError("official_evidence must contain only verified tier-1 official sources")
+        return items
+
+    @field_validator("reaction_evidence")
+    @classmethod
+    def reaction_evidence_must_be_tier_2(cls, items: list[SourceEvidence]) -> list[SourceEvidence]:
+        for item in items:
+            if item.tier != EvidenceTier.TIER_2_REACTION or item.is_official:
+                raise ValueError("reaction_evidence must contain only non-official tier-2 sources")
         return items
 
     def verify(self) -> "MarketEvent":
@@ -71,6 +87,15 @@ class MarketEvent(BaseModel):
         self.status = "verified"
         reaction_count = len(self.reaction_evidence)
         supply_count = len(self.supply_evidence)
+
+        if self.reaction_checked_at is None:
+            self.demand_status = "unassessed"
+        elif reaction_count >= 3:
+            self.demand_status = "repeated_signal"
+        elif reaction_count >= 1:
+            self.demand_status = "early_signal"
+        else:
+            self.demand_status = "no_signal"
 
         if reaction_count >= 3 and supply_count >= 1:
             self.confidence = Confidence.STRONG
