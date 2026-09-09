@@ -14,7 +14,7 @@
     "supply_coverage": "partial",
     "gap_assessment": "INSUFFICIENT COVERAGE",
     "final_recommendation": "WATCH",
-    "summary": "Fallback news-index search returned a usable result set but no qualifying supply evidence. News coverage alone is insufficient to promote this to a market gap.",
+    "summary": "Fallback news-index search returned results but no qualifying product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]
@@ -29,12 +29,12 @@
     "supply_sources_missing": [
       "web_search"
     ],
-    "supply_candidate_count": 7,
+    "supply_candidate_count": 8,
     "supply_evidence": [],
     "supply_coverage": "partial",
     "gap_assessment": "INSUFFICIENT COVERAGE",
     "final_recommendation": "WATCH",
-    "summary": "Fallback news-index search returned a usable result set but no qualifying supply evidence. News coverage alone is insufficient to promote this to a market gap.",
+    "summary": "Fallback news-index search returned results but no qualifying product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]
@@ -49,12 +49,12 @@
     "supply_sources_missing": [
       "web_search"
     ],
-    "supply_candidate_count": 9,
+    "supply_candidate_count": 10,
     "supply_evidence": [],
     "supply_coverage": "partial",
     "gap_assessment": "INSUFFICIENT COVERAGE",
     "final_recommendation": "WATCH",
-    "summary": "Fallback news-index search returned a usable result set but no qualifying supply evidence. News coverage alone is insufficient to promote this to a market gap.",
+    "summary": "Fallback news-index search returned results but no qualifying product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]
@@ -62,7 +62,7 @@
   {
     "candidate_id": "52f1eb44691af255",
     "ecosystem": "regulatory",
-    "supply_status": "served_signal",
+    "supply_status": "thin_supply_signal",
     "supply_sources_checked": [
       "google_news_supply"
     ],
@@ -72,27 +72,6 @@
     "supply_candidate_count": 21,
     "supply_evidence": [
       {
-        "title": "Massachusetts Will Require New Data Centers to Use Clean Energy - Bloomberg.com",
-        "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQaElsWnFDd2ZucUw5eFphTmtqa1p5VXpXMEc4MkdxcjQ1RkFGcHBybTJNaDVZQWlIVFlPUzR1OVRBbmt3YjF4VTVCMF9xR3Qzck92d3ZZMG1kbVlFZF9XOXlaWnFUY1BZcGFfbkZGY3A4UE0yeDBuZUMyZTFJUVhzU0J0UHV0TWJFU2t2aFNyenpHdDRNWU1ZclhpUkQxMnZlMzRlTTFXeDJhRklDOEFRY296Y3c?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMitAFBVV95cUxQaElsWnFDd2ZucUw5eFphTmtqa1p5VXpXMEc4MkdxcjQ1RkFGcHBybTJNaDVZQWlIVFlPUzR1OVRBbmt3YjF4VTVCMF9xR3Qzck92d3ZZMG1kbVlFZF9XOXlaWnFUY1BZcGFfbkZGY3A4UE0yeDBuZUMyZTFJUVhzU0J0UHV0TWJFU2t2aFNyenpHdDRNWU1ZclhpUkQxMnZlMzRlTTFXeDJhRklDOEFRY296Y3c?oc=5\" target=\"_blank\">Massachusetts Will Require New Data Centers to Use Clean Energy</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Bloomberg.com</font>",
-        "source": "Bloomberg.com",
-        "relevance": 4
-      },
-      {
-        "title": "Proposed Rollback of EPA Greenhouse Gas Reporting Program Will Lead to Lost Credibility, Competitiveness, and Higher Costs - Center for Climate and Energy Solutions",
-        "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQWlNZMUQyMHFOeGRMNnpWWC14cEg2MF9PWnZ3aVE2d1Ffb1JraWNzb0h1LXMyUlowWlBMbkk4V1ZjdEgyM001Q203dGF0N2VOTDQzaW8tYkxZMDZKcDFsUDVqTlY4R3gzZ1VSSzFtYnJBeEY3V01LUFRQUFRmT2NINXB4WWdzSmZGUEtNeUt6enQzUFBTWm41a1ZwOHdsMThpc0owTjB2NWFGOUtsdDlxVkpn?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMisgFBVV95cUxQWlNZMUQyMHFOeGRMNnpWWC14cEg2MF9PWnZ3aVE2d1Ffb1JraWNzb0h1LXMyUlowWlBMbkk4V1ZjdEgyM001Q203dGF0N2VOTDQzaW8tYkxZMDZKcDFsUDVqTlY4R3gzZ1VSSzFtYnJBeEY3V01LUFRQUFRmT2NINXB4WWdzSmZGUEtNeUt6enQzUFBTWm41a1ZwOHdsMThpc0owTjB2NWFGOUtsdDlxVkpn?oc=5\" target=\"_blank\">Proposed Rollback of EPA Greenhouse Gas Reporting Program Will Lead to Lost Credibility, Competitiveness, and Higher Costs</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Center for Climate and Ener",
-        "source": "Center for Climate and Energy Solutions",
-        "relevance": 4
-      },
-      {
-        "title": "Regulatory Agenda: Addressing Greenhouse Gas Emissions from Health Care Building Energy Use - National Academy of Medicine",
-        "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQM2hFN3Q4OXBQM001Q3J5bXZLUDRYbkxqYTRCeWxuV2UwUVJEMHRNMTgtcVNtX0x1M0JINzdnRkVPLVFoVl9uQjFrTC1yblVlRFpWcUtDcHBHRU1tTVBpVy1YQ0pRLWlQeHdVS2ZpUC00elRZMnJPOTk3d24xdmVWbW81UXIwTnBXQTBVMGxUQWdzaU10Szlld19kQXZRQ21mcF9uT2RGVmJ2T3R4eE9tOG1lRWRnWTQ2al9CTQ?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMivAFBVV95cUxQM2hFN3Q4OXBQM001Q3J5bXZLUDRYbkxqYTRCeWxuV2UwUVJEMHRNMTgtcVNtX0x1M0JINzdnRkVPLVFoVl9uQjFrTC1yblVlRFpWcUtDcHBHRU1tTVBpVy1YQ0pRLWlQeHdVS2ZpUC00elRZMnJPOTk3d24xdmVWbW81UXIwTnBXQTBVMGxUQWdzaU10Szlld19kQXZRQ21mcF9uT2RGVmJ2T3R4eE9tOG1lRWRnWTQ2al9CTQ?oc=5\" target=\"_blank\">Regulatory Agenda: Addressing Greenhouse Gas Emissions from Health Care Building Energy Use</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">National Academy of Medicine</font>",
-        "source": "National Academy of Medicine",
-        "relevance": 4
-      },
-      {
         "title": "Managing the Risks of China’s Access to U.S. Data and Control of Software and Connected Technology - Carnegie Endowment for International Peace",
         "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPZXZScDZXQXBmTGsyX1RTZ2w3S0NWUkNzQ3ZRSm1ib19zODFFUU9IbnNqUGZDR05hOXNpaU9Ud3RrMTdqV01LQV9yUlB4c0VSWTRVVGh4a09RcjZhcE5MN0RRTzV6M2psTjRYZ1p0MHRlb1c1MEdQZ1QwWTVTQmRST1BUbXlwZmNVaUlKQUhCU25UZnZzZEV3ck1sZmVubjZ3WnU4VGRpUi1EVXFYUVpXOWk5RDVySlFXWTlSbUloYS1lVjFZbDhULVB6aDUwdEZFWi00UldrQjlrdw?oc=5",
         "snippet": "<a href=\"https://news.google.com/rss/articles/CBMi2gFBVV95cUxPZXZScDZXQXBmTGsyX1RTZ2w3S0NWUkNzQ3ZRSm1ib19zODFFUU9IbnNqUGZDR05hOXNpaU9Ud3RrMTdqV01LQV9yUlB4c0VSWTRVVGh4a09RcjZhcE5MN0RRTzV6M2psTjRYZ1p0MHRlb1c1MEdQZ1QwWTVTQmRST1BUbXlwZmNVaUlKQUhCU25UZnZzZEV3ck1sZmVubjZ3WnU4VGRpUi1EVXFYUVpXOWk5RDVySlFXWTlSbUloYS1lVjFZbDhULVB6aDUwdEZFWi00UldrQjlrdw?oc=5\" target=\"_blank\">Managing the Risks of China’s Access to U.S. Data and Control of Software and Connected Technology</a>&nbsp;&nbsp;<font color=\"#6f6f6",
@@ -101,9 +80,9 @@
       }
     ],
     "supply_coverage": "partial",
-    "gap_assessment": "LIKELY SERVED",
-    "final_recommendation": "DISMISS",
-    "summary": "Fallback market search found several relevant substitute/compliance-solution signals across multiple publishers. Broad supply appears present; a narrower unmet job would be required before treating this as a gap.",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Fallback market search found some product-like supply signals, but news-index coverage is not sufficient to conclude that the market is served or underserved.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]
@@ -121,13 +100,6 @@
     "supply_candidate_count": 30,
     "supply_evidence": [
       {
-        "title": "EU AI Act Article 50: New Guidance Expands Enterprise AI Compliance Obligations - Law.com",
-        "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNR0Iwd1NYRHMxOXRzY2E3c05UV0Y5VnVUOW9CbEpvZFZNMHc3TFFJejhSSjdMWVZyLWpYeDM3b0w5YkxYdzY5OGJvTWotdURlMWV5MmVpUW0xZzVrZWhSN19RNDJGbFl3TV9GMWpidHRMTGxxRUJFbEFjTWFOVFlEelRRaXl6cGd2SWd2bU9jZ2pBWURtYU43ZFJxRHFHRkVPUEtVWFRqOXNObDFsVVVaNV9wME9aUjF0SUhyZVZ4TQ?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMivwFBVV95cUxNR0Iwd1NYRHMxOXRzY2E3c05UV0Y5VnVUOW9CbEpvZFZNMHc3TFFJejhSSjdMWVZyLWpYeDM3b0w5YkxYdzY5OGJvTWotdURlMWV5MmVpUW0xZzVrZWhSN19RNDJGbFl3TV9GMWpidHRMTGxxRUJFbEFjTWFOVFlEelRRaXl6cGd2SWd2bU9jZ2pBWURtYU43ZFJxRHFHRkVPUEtVWFRqOXNObDFsVVVaNV9wME9aUjF0SUhyZVZ4TQ?oc=5\" target=\"_blank\">EU AI Act Article 50: New Guidance Expands Enterprise AI Compliance Obligations</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Law.com</font>",
-        "source": "Law.com",
-        "relevance": 8
-      },
-      {
         "title": "EU AI Act Compliance Guide for CISOs & GRC Leaders | Kovrr - Security Boulevard",
         "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNRmVMaS0weXYzYnMwQUFfZlZMbDBzMGxNVGpYWHU0OHdjbF9UT2haWGJTZWdSVDV0WHZPa0xWUng4ZGk2NmZXTVFUUWtXS29nbVRnQTJaRGZnR3J3YjZ5eHg4MTVMQ0N2VmlVR3lUd0xGeC1teW96SkxnUm5JZTFORTc5SlhBaFNJUmt6Qnc1TTk4QmNxYWJwMg?oc=5",
         "snippet": "<a href=\"https://news.google.com/rss/articles/CBMimAFBVV95cUxNRmVMaS0weXYzYnMwQUFfZlZMbDBzMGxNVGpYWHU0OHdjbF9UT2haWGJTZWdSVDV0WHZPa0xWUng4ZGk2NmZXTVFUUWtXS29nbVRnQTJaRGZnR3J3YjZ5eHg4MTVMQ0N2VmlVR3lUd0xGeC1teW96SkxnUm5JZTFORTc5SlhBaFNJUmt6Qnc1TTk4QmNxYWJwMg?oc=5\" target=\"_blank\">EU AI Act Compliance Guide for CISOs & GRC Leaders | Kovrr</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Security Boulevard</font>",
@@ -135,52 +107,24 @@
         "relevance": 7
       },
       {
-        "title": "Compliance for AI Agents: What Financial Services Organizations Need to Know - Banking Exchange",
-        "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPeE9ON3I3MlRuMmM2ZS00eTU3eWhrb0MtX2pwczZEME9sZm1qa3dqWk56M0drZXhVVV8xWmZSVU1sckVnY3hscVZvTUUyci1naU96aEQyM1R3VWFzMkxUZVBjOGthRG1URXN2X0NCLXJmY3hlb21wN1l4aVgtNlowNUZPRG1YWVNFR1VrT0h0SVBUSzhZQVp6d2NlU1FTamRtQ0c3ZExRR28wdVdNYTJTRXBDV2ZSTDdYWXhUSE0zN1Zyd0dCMlRn?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMixwFBVV95cUxPeE9ON3I3MlRuMmM2ZS00eTU3eWhrb0MtX2pwczZEME9sZm1qa3dqWk56M0drZXhVVV8xWmZSVU1sckVnY3hscVZvTUUyci1naU96aEQyM1R3VWFzMkxUZVBjOGthRG1URXN2X0NCLXJmY3hlb21wN1l4aVgtNlowNUZPRG1YWVNFR1VrT0h0SVBUSzhZQVp6d2NlU1FTamRtQ0c3ZExRR28wdVdNYTJTRXBDV2ZSTDdYWXhUSE0zN1Zyd0dCMlRn?oc=5\" target=\"_blank\">Compliance for AI Agents: What Financial Services Organizations Need to Know</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Banking Exchange</font>",
-        "source": "Banking Exchange",
-        "relevance": 6
-      },
-      {
-        "title": "Marketing AI Governance: Safe Integration in Enterprise [In-Depth Analysis, 2026] - klover.ai",
-        "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPcllnRXJHYkRzbHdINnZ6dDBsY2FkN3dDWXQ0VUxGdTZ4YS1QcWE4THJMNVhPbENQMHljTVNVdzNCa3Y5TkEyNy1ZSWdVYmVyNW9uejJ3N2hrSWd0N1oyZy1EWmhrV1NMZUxJMmJGV2RfNGo5VW1fWVJuZjZfVWZLYkdNaHVUOU52Tkx4SDFoLTlIU3JXQUVacXFDcnBUclRv?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMioAFBVV95cUxPcllnRXJHYkRzbHdINnZ6dDBsY2FkN3dDWXQ0VUxGdTZ4YS1QcWE4THJMNVhPbENQMHljTVNVdzNCa3Y5TkEyNy1ZSWdVYmVyNW9uejJ3N2hrSWd0N1oyZy1EWmhrV1NMZUxJMmJGV2RfNGo5VW1fWVJuZjZfVWZLYkdNaHVUOU52Tkx4SDFoLTlIU3JXQUVacXFDcnBUclRv?oc=5\" target=\"_blank\">Marketing AI Governance: Safe Integration in Enterprise [In-Depth Analysis, 2026]</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">klover.ai</font>",
-        "source": "klover.ai",
-        "relevance": 4
-      },
-      {
-        "title": "Executive Guide to Enterprise AI Governance and Risk Management - appinventiv.com",
-        "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9zQ0VTQndKbXAzcWlsdDVJRVNaMFVDb19GNWRRR3ZESFIycVNFNy1LLU4zWl9WNUg1c080bHRDY2hNMVhlU2tRa3lmbC1oSzM2VV9xSVBxeUd4Q1BhX0tnaUp4alVDV3d2U2YyVQ?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMibEFVX3lxTE9zQ0VTQndKbXAzcWlsdDVJRVNaMFVDb19GNWRRR3ZESFIycVNFNy1LLU4zWl9WNUg1c080bHRDY2hNMVhlU2tRa3lmbC1oSzM2VV9xSVBxeUd4Q1BhX0tnaUp4alVDV3d2U2YyVQ?oc=5\" target=\"_blank\">Executive Guide to Enterprise AI Governance and Risk Management</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">appinventiv.com</font>",
-        "source": "appinventiv.com",
-        "relevance": 4
-      },
-      {
-        "title": "AI Watch: Global regulatory tracker - United States - White & Case LLP",
-        "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPbnFCYmQ4ZElvUk9tUFQ0Z210S2hrNmtMaGhid3IxZmozUnVDUm8tZ0FrY05nNlR5bXZLOUk5WWJkcHVjMzhvazJ6M3I2bGtCUlZFWlBBT2l1MGdGbExWY09kWXZZNlQxTW16VjJzSC1McDZ2N21oTjdqclZnVHZTN1VpbmRacC10NjZNYVNIWnBOUGRpblNsRURZbw?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMimwFBVV95cUxPbnFCYmQ4ZElvUk9tUFQ0Z210S2hrNmtMaGhid3IxZmozUnVDUm8tZ0FrY05nNlR5bXZLOUk5WWJkcHVjMzhvazJ6M3I2bGtCUlZFWlBBT2l1MGdGbExWY09kWXZZNlQxTW16VjJzSC1McDZ2N21oTjdqclZnVHZTN1VpbmRacC10NjZNYVNIWnBOUGRpblNsRURZbw?oc=5\" target=\"_blank\">AI Watch: Global regulatory tracker - United States</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">White & Case LLP</font>",
-        "source": "White & Case LLP",
-        "relevance": 3
-      },
-      {
-        "title": "Global Fragmentation of AI Governance and Regulation - Bloomsbury Intelligence and Security Institute (BISI)",
-        "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBZem5BZ2xEMkFlYzRjb1RNRkVSa1h3U19KV19FcXNGS25rNnY5R2tZczIxeWNhTThPc0YtLUxMYllCRUU4ODdaRjZCWjk3bTZ5c3dXdElPaUVfanJfTkQ5WHEtV2ZHcS1MUUZGV3FSMEJ6WFk?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMic0FVX3lxTFBZem5BZ2xEMkFlYzRjb1RNRkVSa1h3U19KV19FcXNGS25rNnY5R2tZczIxeWNhTThPc0YtLUxMYllCRUU4ODdaRjZCWjk3bTZ5c3dXdElPaUVfanJfTkQ5WHEtV2ZHcS1MUUZGV3FSMEJ6WFk?oc=5\" target=\"_blank\">Global Fragmentation of AI Governance and Regulation</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Bloomsbury Intelligence and Security Institute (BISI)</font>",
-        "source": "Bloomsbury Intelligence and Security Institute (BISI)",
-        "relevance": 3
-      },
-      {
-        "title": "GCs Embrace AI Gains but Lag on Governance, Litera Study Finds - Law.com",
-        "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNUDRZQzU1S0sxWmxzeVFLTzBIbFpFY090cjhYV2ZVc3F3ZkwyU2VpZXhGSFQwdGVSZ2xfRUVhZ1drVG1PZ1E2Z3YzZ0EyY3U2NlBsc0ZUYTBtbVBfVkU2ekFuY3pZUmxIOUNGZTBJNVNTbWxKUnF2NnNYdmNXaWYzWVlFVmIxeHkwbFBzdWtUVDdmd1ZHZkdURzBYQ2JqRUt1NHVlTm5NY1Q?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMiqAFBVV95cUxNUDRZQzU1S0sxWmxzeVFLTzBIbFpFY090cjhYV2ZVc3F3ZkwyU2VpZXhGSFQwdGVSZ2xfRUVhZ1drVG1PZ1E2Z3YzZ0EyY3U2NlBsc0ZUYTBtbVBfVkU2ekFuY3pZUmxIOUNGZTBJNVNTbWxKUnF2NnNYdmNXaWYzWVlFVmIxeHkwbFBzdWtUVDdmd1ZHZkdURzBYQ2JqRUt1NHVlTm5NY1Q?oc=5\" target=\"_blank\">GCs Embrace AI Gains but Lag on Governance, Litera Study Finds</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Law.com</font>",
+        "title": "Specialty AI Insurance Emerges as Key Tool to Tamp Down Risk - Law.com",
+        "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPTlB2WElaZGs2ZnBKRmVGdjNaUE9LMXloQVhSaUo3UmVTdWdaSDlRR0VxSVRLaTRoMzZ6UmdmbWdWS3hwblNYOVFHak9Zb3MxUEFzRVFKOXhKNmhvWUFrZ2pEajZMM1dHbTZtcXV4R2FzNnpEM1lRM20xTVI1UlR4MFlFSngzWm5odFVSYkxHemhpUTJjUWpCcVVQTktjeXJjd3FqWUtXYw?oc=5",
+        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMipwFBVV95cUxPTlB2WElaZGs2ZnBKRmVGdjNaUE9LMXloQVhSaUo3UmVTdWdaSDlRR0VxSVRLaTRoMzZ6UmdmbWdWS3hwblNYOVFHak9Zb3MxUEFzRVFKOXhKNmhvWUFrZ2pEajZMM1dHbTZtcXV4R2FzNnpEM1lRM20xTVI1UlR4MFlFSngzWm5odFVSYkxHemhpUTJjUWpCcVVQTktjeXJjd3FqWUtXYw?oc=5\" target=\"_blank\">Specialty AI Insurance Emerges as Key Tool to Tamp Down Risk</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Law.com</font>",
         "source": "Law.com",
+        "relevance": 3
+      },
+      {
+        "title": "Software development industry challenges in 2026 - Netguru",
+        "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5fdWROTHoxeTdrVEZTWmJidlBlYzhJYTlwLUVQdUlwMXh2X2hlYUlxemZ5TWhfSTY1YW40WEQ1a0psQUdaMV9ZZDdoV2NLY2t3Q214VnhLdGhjQUpvUVdJY2xzMmxZdkpVUnBEODlfOWxHNnRrR2xCWg?oc=5",
+        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMieEFVX3lxTE5fdWROTHoxeTdrVEZTWmJidlBlYzhJYTlwLUVQdUlwMXh2X2hlYUlxemZ5TWhfSTY1YW40WEQ1a0psQUdaMV9ZZDdoV2NLY2t3Q214VnhLdGhjQUpvUVdJY2xzMmxZdkpVUnBEODlfOWxHNnRrR2xCWg?oc=5\" target=\"_blank\">Software development industry challenges in 2026</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Netguru</font>",
+        "source": "Netguru",
         "relevance": 3
       }
     ],
     "supply_coverage": "partial",
     "gap_assessment": "LIKELY SERVED",
     "final_recommendation": "DISMISS",
-    "summary": "Fallback market search found several relevant substitute/compliance-solution signals across multiple publishers. Broad supply appears present; a narrower unmet job would be required before treating this as a gap.",
+    "summary": "Fallback market search found multiple product-like substitute or compliance-solution signals across publishers. Broad supply appears present, but the primary web-search lane is still missing.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]
@@ -198,13 +142,6 @@
     "supply_candidate_count": 30,
     "supply_evidence": [
       {
-        "title": "5 Cheaper Streaming Devices To Try Instead Of The Apple TV 4K - bgr.com",
-        "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQWmdvTEF1ZVdaR0phSFlpbjd1VDNaVW5xVTlySndWWU9IQ1lOY1o0WlA0X2xQc2hBUlg2RkZGU3dQSW1CTF90Rk05VnNnTVRMRjZUanZWOWNQakpha3BwVUZycFpaRkZkV09veEtiM1FoSEZZbnJFaGRibU8tQmxXSGhyTGlaUXI0S3BrMg?oc=5",
-        "snippet": "<a href=\"https://news.google.com/rss/articles/CBMijAFBVV95cUxQWmdvTEF1ZVdaR0phSFlpbjd1VDNaVW5xVTlySndWWU9IQ1lOY1o0WlA0X2xQc2hBUlg2RkZGU3dQSW1CTF90Rk05VnNnTVRMRjZUanZWOWNQakpha3BwVUZycFpaRkZkV09veEtiM1FoSEZZbnJFaGRibU8tQmxXSGhyTGlaUXI0S3BrMg?oc=5\" target=\"_blank\">5 Cheaper Streaming Devices To Try Instead Of The Apple TV 4K</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">bgr.com</font>",
-        "source": "bgr.com",
-        "relevance": 3
-      },
-      {
         "title": "Best Music Streaming Service of 2026 - CNET",
         "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQRUszcFBDdVh5eEpUZjJWc3RCQ3I0YXdvRWF2OWhpY3hNdk51NzBsNUNGYVRZYmNLQ3lvNkk2LURDRmVTYVRibHAzQWtjNkFTc1Vtc1NIbEZNNkdSZGs4ZW01bjh0QzVPdmFfNHVLS285bjVwaVoxZzF3YzBBZjhRdDhYcw?oc=5",
         "snippet": "<a href=\"https://news.google.com/rss/articles/CBMigwFBVV95cUxQRUszcFBDdVh5eEpUZjJWc3RCQ3I0YXdvRWF2OWhpY3hNdk51NzBsNUNGYVRZYmNLQ3lvNkk2LURDRmVTYVRibHAzQWtjNkFTc1Vtc1NIbEZNNkdSZGs4ZW01bjh0QzVPdmFfNHVLS285bjVwaVoxZzF3YzBBZjhRdDhYcw?oc=5\" target=\"_blank\">Best Music Streaming Service of 2026</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">CNET</font>",
@@ -215,7 +152,7 @@
     "supply_coverage": "partial",
     "gap_assessment": "INSUFFICIENT COVERAGE",
     "final_recommendation": "WATCH",
-    "summary": "Fallback market search found some relevant supply signals, but news-index coverage is not sufficient to conclude that the market is served or underserved.",
+    "summary": "Fallback market search found some product-like supply signals, but news-index coverage is not sufficient to conclude that the market is served or underserved.",
     "errors": [
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ]

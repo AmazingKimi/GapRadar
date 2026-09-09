@@ -208,8 +208,8 @@
       "tier_1_official": 1,
       "tier_2_reaction": 0,
       "tier_3_supply": 0,
-      "reaction_candidates_checked": 13,
-      "supply_candidates_checked": 30
+      "reaction_candidates_checked": 16,
+      "supply_candidates_checked": 60
     },
     "reaction_search_quality": "degraded",
     "reaction_queries": [
@@ -276,14 +276,14 @@
       {
         "source": "github_issues",
         "query": "\"Script tags\" alternative created:>=2026-05-12 is:issue",
-        "candidate_count": 0,
-        "ok": false
+        "candidate_count": 40,
+        "ok": true
       },
       {
         "source": "github_issues",
         "query": "\"Script tags\" created:>=2026-05-12 is:issue",
-        "candidate_count": 0,
-        "ok": false
+        "candidate_count": 40,
+        "ok": true
       }
     ],
     "reaction_coverage": {
