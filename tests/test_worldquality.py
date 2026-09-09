@@ -46,6 +46,12 @@ def test_rejects_commercial_investment_mandate():
     assert rejection_reason(row) == "commercial_mandate_not_regulation"
 
 
+def test_rejects_speculative_or_promised_regulation_before_tier1_search():
+    assert rejection_reason(candidate("India May Mandate Storage For Solar, Wind Projects From 2027", "regulatory_shift")) == "speculative_or_proposed_regulation"
+    assert rejection_reason(candidate("Labour promises new rules for data centre electricity use", "regulatory_shift")) == "speculative_or_proposed_regulation"
+    assert rejection_reason(candidate("Tories launch bid to revoke ZEV mandate", "regulatory_shift")) == "speculative_or_proposed_regulation"
+
+
 def test_keeps_real_regulatory_requirement_but_does_not_promote_it_to_opportunity():
     row = candidate("Massachusetts Will Require New Data Centers to Use Clean Energy", "regulatory_shift")
     refined = refine_candidate(row)
