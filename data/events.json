@@ -7,7 +7,7 @@
     "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
     "summary": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
     "event_date": "2026-08-27T16:00:00Z",
-    "detected_at": "2026-09-09T04:03:33.921757Z",
+    "detected_at": "2026-09-09T04:04:03.889661Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -25,7 +25,7 @@
     ],
     "reaction_evidence": [],
     "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T04:03:35.041785Z",
+    "reaction_checked_at": "2026-09-09T04:04:05.448295Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
@@ -49,7 +49,7 @@
     "headline": "Script tags are deprecated and will stop running on March 1, 2027",
     "summary": "Starting October 1, 2026, the scriptTagCreate and scriptTagUpdate mutations will return an user error, and the ScriptTag REST Admin API resource will reject POST and PUT . The deprecation applies to all API versions, including older ones, so pinning won't defer it. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Storefronts are the last place script tags still run, since they already stopped working on the Order status page . If your app uses a script tag to load JavaScript onto a store, then you need to replace it before then. What's changing A script tag loads JavaScript on a storefront without any changes to theme code. After March 1, 2027, Shopify won't inject",
     "event_date": "2026-08-24T16:00:00Z",
-    "detected_at": "2026-09-09T04:03:33.922226Z",
+    "detected_at": "2026-09-09T04:04:03.890074Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -67,7 +67,7 @@
     ],
     "reaction_evidence": [],
     "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T04:03:36.243593Z",
+    "reaction_checked_at": "2026-09-09T04:04:07.169411Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
