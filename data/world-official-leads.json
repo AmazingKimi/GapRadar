@@ -4,18 +4,18 @@
     "status": "first_party_candidates",
     "query": "\"Daily News Wrap-Up: PM Surya Ghar 2.0 May Mandate Energy Storage\" official",
     "candidate_urls": [
-      "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2024/aug/doc2024812373601.pdf",
+      "https://pmsuryaghar.gov.in",
       "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2024/dec/doc2024125465001.pdf",
       "https://consumer.pmsuryaghar.gov.in/consumer",
-      "https://pmsuryaghar.gov.in/⁠",
-      "https://mnre.gov.in/en/notice/guidelines-for-pm-surya-ghar-muft-bijli-yojana"
+      "https://www.mercomindia.com/daily-news-wrap-up-maharashtra-ci-solar-moves-toward-demand-matching",
+      "https://pmsuryaghar.gov.in/⁠"
     ],
     "candidate_hosts": [
-      "static.pib.gov.in",
+      "pmsuryaghar.gov.in",
       "static.pib.gov.in",
       "consumer.pmsuryaghar.gov.in",
-      "pmsuryaghar.gov.in",
-      "mnre.gov.in"
+      "www.mercomindia.com",
+      "pmsuryaghar.gov.in"
     ],
     "search_coverage": "adequate",
     "errors": [],
@@ -33,12 +33,14 @@
     "candidate_urls": [
       "https://www.gov.uk/government/news/government-sets-out-plan-for-new-era-of-clean-electricity",
       "https://nationalpolicyforum.labour.org.uk/wp-content/uploads/2025/03/2025-NPF-consultation-documents_CLEAN-ENERGY.pdf",
+      "https://www.gov.uk/government/publications/a-new-approach-to-ensure-regulators-and-regulation-support-growth/new-approach-to-ensure-regulators-and-regulation-support-growth-html",
       "https://www.ferc.gov",
       "https://www.reginfo.gov/public/do/eAgendaMain"
     ],
     "candidate_hosts": [
       "www.gov.uk",
       "nationalpolicyforum.labour.org.uk",
+      "www.gov.uk",
       "www.ferc.gov",
       "www.reginfo.gov"
     ],
@@ -53,20 +55,10 @@
   },
   {
     "candidate_id": "52f1eb44691af255",
-    "status": "first_party_candidates",
+    "status": "not_found",
     "query": "\"Massachusetts Will Require New Data Centers to Use Clean Energy\" official",
-    "candidate_urls": [
-      "https://energynow.com/2026/09/massachusetts-will-require-new-data-centers-to-use-clean-energy",
-      "https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter239",
-      "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
-      "https://www.mass.gov/info-details/efsb-permitting-dashboard"
-    ],
-    "candidate_hosts": [
-      "energynow.com",
-      "malegislature.gov",
-      "www.mass.gov",
-      "www.mass.gov"
-    ],
+    "candidate_urls": [],
+    "candidate_hosts": [],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
@@ -234,6 +226,21 @@
       "apple music make labels mandatory for rule regulation requirement mandate official",
       "apple music make labels rule regulation requirement mandate official",
       "apple music make labels mandatory for government regulator requirement"
+    ]
+  },
+  {
+    "candidate_id": "1a275084185bdfc3",
+    "status": "not_found",
+    "query": "\"Engineering goods exporters seek mandate on carbon emission certificate under EU norms\" official",
+    "candidate_urls": [],
+    "candidate_hosts": [],
+    "search_coverage": "adequate",
+    "errors": [],
+    "queries": [
+      "\"Engineering goods exporters seek mandate on carbon emission certificate under EU norms\" official",
+      "engineering goods exporters seek mandate carbon rule regulation requirement mandate official",
+      "engineering goods exporters seek rule regulation requirement mandate official",
+      "engineering goods exporters seek mandate carbon government regulator requirement"
     ]
   }
 ]

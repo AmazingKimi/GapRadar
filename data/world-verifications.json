@@ -142,5 +142,15 @@
     "reasons": [
       "date_proximity"
     ]
+  },
+  {
+    "candidate_id": "1a275084185bdfc3",
+    "status": "unverified",
+    "event_id": null,
+    "official_url": null,
+    "match_score": 1,
+    "reasons": [
+      "date_proximity"
+    ]
   }
 ]

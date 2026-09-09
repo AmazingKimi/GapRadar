@@ -8,11 +8,11 @@
     "excerpt": null,
     "subject_overlap": 0,
     "errors": [
-      "subject overlap too weak for static.pib.gov.in: 0 < 1",
+      "https://pmsuryaghar.gov.in: HTTPStatusError: Client error '403 Forbidden' for url 'https://pmsuryaghar.gov.in'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
       "subject overlap too weak for static.pib.gov.in: 0 < 1",
       "https://consumer.pmsuryaghar.gov.in/consumer: HTTPStatusError: Client error '403 Forbidden' for url 'https://consumer.pmsuryaghar.gov.in/consumer'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
-      "https://pmsuryaghar.gov.in/⁠: HTTPStatusError: Client error '403 Forbidden' for url 'https://pmsuryaghar.gov.in/%E2%81%A0'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
-      "first-party page did not confirm regulatory_shift: mnre.gov.in"
+      "first-party page did not confirm regulatory_shift: www.mercomindia.com",
+      "https://pmsuryaghar.gov.in/⁠: HTTPStatusError: Client error '403 Forbidden' for url 'https://pmsuryaghar.gov.in/%E2%81%A0'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
     ]
   },
   {
@@ -33,12 +33,7 @@
     "official_title": null,
     "excerpt": null,
     "subject_overlap": 0,
-    "errors": [
-      "https://energynow.com/2026/09/massachusetts-will-require-new-data-centers-to-use-clean-energy: HTTPStatusError: Client error '403 Forbidden' for url 'https://energynow.com/2026/09/massachusetts-will-require-new-data-centers-to-use-clean-energy'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
-      "first-party page did not confirm regulatory_shift: malegislature.gov",
-      "first-party page did not confirm regulatory_shift: www.mass.gov",
-      "first-party page did not confirm regulatory_shift: www.mass.gov"
-    ]
+    "errors": []
   },
   {
     "candidate_id": "14436a2a2ff1f7ea",
@@ -142,6 +137,16 @@
   },
   {
     "candidate_id": "5b1d4ece4414b40f",
+    "status": "unverified",
+    "official_url": null,
+    "official_host": null,
+    "official_title": null,
+    "excerpt": null,
+    "subject_overlap": 0,
+    "errors": []
+  },
+  {
+    "candidate_id": "1a275084185bdfc3",
     "status": "unverified",
     "official_url": null,
     "official_host": null,
