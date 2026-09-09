@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from gapradar.dashboard_priority_finalize import patch
+from gapradar.dashboard_priority_finalize import MARKER, patch
 
 
 def test_finalize_uses_priority_leads_and_disables_runtime_filler(tmp_path: Path):
@@ -29,4 +29,6 @@ def test_finalize_uses_priority_leads_and_disables_runtime_filler(tmp_path: Path
     assert "Only REVIEW means the market-gap evidence chain is complete" in html
     assert "ensureOpportunityCards();" not in html
     assert "no filler recommendations" in html
-    assert "gapradar-priority-finalize-v2" in html
+    assert MARKER in html
+    assert ".priority-card .bottommeta{display:none!important}" in html
+    assert "priority-copy" in html
