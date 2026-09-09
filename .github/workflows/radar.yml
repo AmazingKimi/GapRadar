@@ -39,6 +39,10 @@ jobs:
         run: gapradar doctor
       - name: Scan live first-party sources
         run: gapradar scan
+      - name: Collect supporting reaction evidence
+        run: gapradar validate-demand
+      - name: Map replacement supply independently of reaction
+        run: gapradar validate-supply
       - name: Build verified-event dossiers
         run: gapradar build-dossiers
       - name: Export Today Opportunity Board
