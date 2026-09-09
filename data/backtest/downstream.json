@@ -1,0 +1,104 @@
+{
+  "heroku-free-plans-2022": {
+    "reaction_pages": [
+      {
+        "url": "https://news.ycombinator.com/item?id=32599398",
+        "publisher": "Hacker News",
+        "title_hint": "Tell HN: Heroku alternatives with generous free tiers",
+        "excerpt_hint": "I plan to migrate my Heroku apps to Fly. Here are alternatives to what Heroku used to offer, including Fly.io, Northflank, Koyeb and Render.",
+        "engagement": 156
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=32617412",
+        "publisher": "Hacker News",
+        "title_hint": "Ask HN: Heroku free tier will be stopped, what are some good alternatives?",
+        "excerpt_hint": "Heroku will stop their free plan starting November 28, 2022. What are some other good alternatives?",
+        "engagement": 3
+      }
+    ],
+    "supply_pages": [
+      {
+        "url": "https://fly.io/docs/getting-started/migrate-from-heroku/",
+        "publisher": "Fly.io",
+        "title_hint": "Migrate from Heroku",
+        "excerpt_hint": "This guide will walk you through migrating your Heroku app to Fly.io, including apps, Postgres, Redis, background workers, environment variables and custom domains.",
+        "popularity": 300,
+        "quality_hint": 0.9
+      }
+    ]
+  },
+  "docker-free-team-2023": {
+    "reaction_pages": [
+      {
+        "url": "https://news.ycombinator.com/item?id=35154025",
+        "publisher": "Hacker News",
+        "title_hint": "Docker is sunsetting Free Team organizations",
+        "excerpt_hint": "I use free teams and will be switching to GitHub or somewhere else because of how short notice this was. People are looking for a replacement container registry and alternatives.",
+        "engagement": 340
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=35187250",
+        "publisher": "Hacker News",
+        "title_hint": "We apologize. We did a terrible job announcing the end of Docker Free Teams",
+        "excerpt_hint": "Our team is moving away from Docker into Podman and Quay. I am looking for alternatives and do not want to rely on Docker anymore.",
+        "engagement": 100
+      }
+    ],
+    "supply_pages": [
+      {
+        "url": "https://podman.io/blogs/2019/11/05/docker2podman",
+        "publisher": "Podman",
+        "title_hint": "Migrating from Docker to Podman",
+        "excerpt_hint": "Migrating from Docker to Podman describes Podman as an alternative container engine and a migration path for Docker users.",
+        "popularity": 300,
+        "quality_hint": 0.9
+      }
+    ]
+  },
+  "unity-runtime-fee-2023": {
+    "reaction_pages": [
+      {
+        "url": "https://news.ycombinator.com/item?id=37484226",
+        "publisher": "Hacker News",
+        "title_hint": "Unity plan pricing and packaging updates",
+        "excerpt_hint": "I've resisted moving to Godot because I already know Unity, but they have finally forced me to switch. I will move as soon as possible.",
+        "engagement": 20
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=37520079",
+        "publisher": "Hacker News",
+        "title_hint": "Unity's new pricing: A wake-up call on the importance of open source",
+        "excerpt_hint": "Developers discuss switching from Unity to Godot or Unreal because of the Runtime Fee and pricing changes.",
+        "engagement": 1436
+      }
+    ],
+    "supply_pages": [
+      {
+        "url": "https://docs.godotengine.org/en/3.3/getting_started/editor/unity_to_godot.html",
+        "publisher": "Godot Engine",
+        "title_hint": "From Unity to Godot Engine",
+        "excerpt_hint": "This guide provides an overview of Godot Engine from the viewpoint of a Unity user and helps migrate existing Unity experience to Godot.",
+        "popularity": 500,
+        "quality_hint": 0.9
+      }
+    ]
+  },
+  "reddit-data-api-2023": {
+    "reaction_pages": [
+      {
+        "url": "https://news.ycombinator.com/item?id=35617763",
+        "publisher": "Hacker News",
+        "title_hint": "Reddit will begin charging for access to its API",
+        "excerpt_hint": "Third-party app developers discuss moving to a paid API model, whether apps such as Apollo will break, and the need to change or replace their current approach.",
+        "engagement": 640
+      },
+      {
+        "url": "https://news.ycombinator.com/item?id=36245435",
+        "publisher": "Hacker News",
+        "title_hint": "Apollo will close down on June 30th",
+        "excerpt_hint": "Reddit API is moving to a paid model for third-party apps and the announced pricing makes continued operation untenable, forcing Apollo to shut down.",
+        "engagement": 500
+      }
+    ]
+  }
+}
