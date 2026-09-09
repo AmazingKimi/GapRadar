@@ -39,7 +39,7 @@ def scan(
             failures += 1
             console.print(f"[yellow]![/yellow] {source.vendor}/{source.name}: {exc}")
 
-    merged = merge_events(load_events(output), incoming)
+    merged = merge_events(load_events(output), incoming, revalidate_existing=failures == 0)
     save_events(output, merged)
     console.print(f"\nSources: {len(configured)} · new matches: {len(incoming)} · stored: {len(merged)} · failures: {failures}")
 
