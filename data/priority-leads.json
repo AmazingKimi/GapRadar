@@ -5,7 +5,7 @@
     "priority_score": 9,
     "evidence_state": "official_candidate",
     "evidence_label": "Official lead · heavyindustries.gov.in",
-    "reason": "Autocar Professional reports “EV BMS Cybersecurity Testing Now Mandatory in India”. GapRadar found a plausible authority page on heavyindustries.gov.in, but that page has not yet confirmed the exact “Mandatory” claim. If confirmed, investigate new compliance, testing, reporting or implementation work.",
+    "reason": "autocarpro.in reports “EV BMS Cybersecurity Testing Now Mandatory in India”. GapRadar found a plausible authority page on heavyindustries.gov.in, but that page has not yet confirmed the exact “Mandatory” claim. If confirmed, investigate new compliance, testing, reporting or implementation work.",
     "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
   },
   {
@@ -15,15 +15,6 @@
     "evidence_state": "official_candidate",
     "evidence_label": "Official lead · mass.gov",
     "reason": "EnergyNow.com reports “Massachusetts Will Require New Data Centers to Use Clean Energy”. GapRadar found a plausible authority page on mass.gov, but that page has not yet confirmed the exact “Will Require New Data Centers to Use Clean Energy - EnergyNow.com Mass” claim. If confirmed, investigate new compliance, testing, reporting or implementation work.",
-    "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
-  },
-  {
-    "candidate_id": "86a0955dccc4b9fd",
-    "status": "INVESTIGATE",
-    "priority_score": 7,
-    "evidence_state": "official_candidate",
-    "evidence_label": "Official lead · tv.apple.com",
-    "reason": "mashable.com reports “The latest Apple price hike: Apple TV streaming service”. GapRadar found a plausible authority page on tv.apple.com, but that page has not yet confirmed the exact “price hike” claim. If confirmed, investigate switching demand from customers exposed to the new cost.",
     "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
   },
   {
@@ -42,6 +33,15 @@
     "evidence_state": "news_only",
     "evidence_label": "Tier-1 pending",
     "reason": "The Apple Post reports “Apple Music to make AI labels mandatory for music created with artificial intelligence” and the detector matched “mandatory” as a regulatory requirement signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect new compliance, testing, reporting or implementation work.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
+  },
+  {
+    "candidate_id": "86a0955dccc4b9fd",
+    "status": "WATCH",
+    "priority_score": 5,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "mashable.com reports “The latest Apple price hike: Apple TV streaming service” and the detector matched “price hike” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
     "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {

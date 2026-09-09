@@ -40,7 +40,6 @@
     "excerpt": null,
     "subject_overlap": 0,
     "errors": [
-      "subject overlap too weak for heavyindustries.gov.in: 0 < 2",
       "subject overlap too weak for heavyindustries.gov.in: 0 < 2"
     ]
   },
@@ -52,10 +51,7 @@
     "official_title": null,
     "excerpt": null,
     "subject_overlap": 0,
-    "errors": [
-      "first-party page did not explicitly confirm price_shock: tv.apple.com",
-      "first-party page did not explicitly confirm price_shock: www.apple.com"
-    ]
+    "errors": []
   },
   {
     "candidate_id": "1a9ab0b99d425f58",

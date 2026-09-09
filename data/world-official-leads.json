@@ -54,11 +54,9 @@
     "status": "first_party_candidates",
     "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
     "candidate_urls": [
-      "https://heavyindustries.gov.in/sites/default/files/2026-07/lsauq_452_0.pdf",
       "https://heavyindustries.gov.in/sites/default/files/2026-07/lsauq_452.pdf"
     ],
     "candidate_hosts": [
-      "heavyindustries.gov.in",
       "heavyindustries.gov.in"
     ],
     "search_coverage": "adequate",
@@ -74,16 +72,10 @@
   },
   {
     "candidate_id": "86a0955dccc4b9fd",
-    "status": "first_party_candidates",
+    "status": "not_found",
     "query": "site:apple.com apple streaming pricing price fee subscription",
-    "candidate_urls": [
-      "https://tv.apple.com",
-      "https://www.apple.com/apple-tv"
-    ],
-    "candidate_hosts": [
-      "tv.apple.com",
-      "www.apple.com"
-    ],
+    "candidate_urls": [],
+    "candidate_hosts": [],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
