@@ -4,12 +4,13 @@ import re
 from pathlib import Path
 
 STYLE = r'''
-/* gapradar-runtime-v5 */
+/* gapradar-runtime-v6 */
 .content{max-width:none!important;width:calc(100vw - 230px)!important;margin-left:230px!important;padding:16px clamp(28px,2.2vw,52px) 48px!important}
 .hero{grid-template-columns:minmax(430px,1.12fr) minmax(430px,.88fr)!important;gap:clamp(38px,4vw,76px)!important}
 .overview{width:100%}.sectors{grid-template-columns:repeat(auto-fit,minmax(165px,1fr))!important}.opps{grid-template-columns:repeat(3,minmax(280px,1fr))!important}
 .more,.filters span,.sector,.control,.nav a,.btn,.arrow,.round{cursor:pointer}.more:hover,.filters span:hover{filter:brightness(1.35)}.sector{transition:transform .16s ease,border-color .16s ease}.sector:hover{transform:translateY(-2px);border-color:#3d7099}.sector.selected{border-color:var(--cyan);box-shadow:0 0 0 1px color-mix(in srgb,var(--cyan) 30%,transparent)}
 .filters span.active{color:var(--text);font-weight:750}.saved-on{color:#7bdca3!important}.opp[hidden],.row[hidden]{display:none!important}
+.discovery-slot .status{background:#3b4754;border-color:#617182;color:#d9e6f2}.discovery-slot p{max-width:92%}
 .globe{left:30%!important;top:-48px!important;width:min(540px,38vw)!important;height:320px!important;opacity:.62!important}.globe svg{overflow:visible}
 .control{min-width:88px!important;justify-content:center!important;font-weight:700!important;transition:.16s ease!important}.control:hover{border-color:var(--cyan)!important}.control.is-active{background:rgba(70,142,215,.18)!important;border-color:#3974a8!important}
 html[data-lang="en"] .lang-zh{display:none!important}html[data-lang="en"] .lang-en{display:inline!important}html[data-lang="zh"] .lang-en{display:none!important}html[data-lang="zh"] .lang-zh{display:inline!important}
@@ -29,11 +30,30 @@ SCRIPT = r'''
  const root=document.documentElement;
  const $=(s)=>document.querySelector(s), $$=(s)=>Array.from(document.querySelectorAll(s));
  const COPY={
-  zh:{hero1:'从世界的变化',hero2:'发现下一个机会',heroP:'我们持续扫描全球的政策、公司动态、技术进展和市场变化，帮你发现可能被忽视的市场缺口。',today:'查看今日机会　→',browse:'浏览行业雷达',changing:'全球正在发生变化',changingP:'我们为你持续监测，并寻找值得关注的机会。',sector:'行业雷达',sectorP:'哪些领域今天变化最活跃？',opp:'今日推荐机会',oppP:'基于最新变化，我们认为以下机会最值得关注。',feed:'全球重要变化',feedP:'今天发现的其他值得了解的变化。',allSector:'查看全部行业　→',allOpp:'查看全部机会　→',stats:['今日扫描资讯','关键变化事件','深入分析','值得关注机会'],filters:['全部','科技','能源','监管','消费'],footer:'每 6 小时自动扫描一次 · 推荐代表研究价值，不构成投资建议。',updated:'最后更新',next:'下次更新',market:'企业市场',watch:'持续观察',early:'早期机会'},
-  en:{hero1:'See what is changing',hero2:'Find the next opportunity',heroP:'We continuously scan policy, company, technology and market shifts worldwide to uncover market gaps others may miss.',today:'View today’s opportunities　→',browse:'Browse sector radar',changing:'The world is changing',changingP:'We continuously monitor those changes and look for opportunities worth your attention.',sector:'Sector Radar',sectorP:'Which sectors are moving most today?',opp:'Today’s Opportunities',oppP:'The opportunities most worth watching based on the latest changes.',feed:'Important Global Changes',feedP:'Other changes worth knowing about today.',allSector:'View all sectors　→',allOpp:'View all opportunities　→',stats:['Items scanned today','Key change events','Deep analyses','Opportunities to watch'],filters:['All','Tech','Energy','Regulation','Consumer'],footer:'Automatic scan every 6 hours · Recommendations indicate research value, not investment advice.',updated:'Last updated',next:'Next update',market:'Business market',watch:'Watch',early:'Early opportunity'}
+  zh:{hero1:'从世界的变化',hero2:'发现下一个机会',heroP:'我们持续扫描全球的政策、公司动态、技术进展和市场变化，帮你发现可能被忽视的市场缺口。',today:'查看今日机会　→',browse:'浏览行业雷达',changing:'全球正在发生变化',changingP:'我们为你持续监测，并寻找值得关注的机会。',sector:'行业雷达',sectorP:'哪些领域今天变化最活跃？',opp:'今日推荐机会',oppP:'基于最新变化，我们认为以下机会最值得关注。',feed:'全球重要变化',feedP:'今天发现的其他值得了解的变化。',allSector:'查看全部行业　→',allOpp:'查看全部机会　→',stats:['今日扫描资讯','关键变化事件','深入分析','值得关注机会'],filters:['全部','科技','能源','监管','消费'],footer:'每 6 小时自动扫描一次 · 推荐代表研究价值，不构成投资建议。',updated:'最后更新',next:'下次更新',market:'企业市场',watch:'持续观察',early:'早期机会',unverified:'待一手证据',lead:'发现线索',leadNote:'发现了结构性变化，但尚未通过 Tier-1 一手来源验证，因此暂不判定为市场机会。'},
+  en:{hero1:'See what is changing',hero2:'Find the next opportunity',heroP:'We continuously scan policy, company, technology and market shifts worldwide to uncover market gaps others may miss.',today:'View today’s opportunities　→',browse:'Browse sector radar',changing:'The world is changing',changingP:'We continuously monitor those changes and look for opportunities worth your attention.',sector:'Sector Radar',sectorP:'Which sectors are moving most today?',opp:'Today’s Opportunities',oppP:'The opportunities most worth watching based on the latest changes.',feed:'Important Global Changes',feedP:'Other changes worth knowing about today.',allSector:'View all sectors　→',allOpp:'View all opportunities　→',stats:['Items scanned today','Key change events','Deep analyses','Opportunities to watch'],filters:['All','Tech','Energy','Regulation','Consumer'],footer:'Automatic scan every 6 hours · Recommendations indicate research value, not investment advice.',updated:'Last updated',next:'Next update',market:'Business market',watch:'Watch',early:'Early opportunity',unverified:'Awaiting Tier-1',lead:'Discovery lead',leadNote:'A structural change was detected, but Tier-1 first-party evidence is not verified yet, so this is not promoted to a market opportunity.'}
  };
  function text(el,v){if(el&&v!=null)el.textContent=v}
+ function esc(v){return String(v||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
  function rawPill(p){if(!p)return'';if(!p.dataset.raw){p.dataset.raw=p.textContent.replace(/^(最后更新|下次更新|Last updated|Next update|●\s*最后更新|●\s*下次更新|●\s*Last updated|●\s*Next update)\s*/,'')}return p.dataset.raw}
+ function ensureOpportunityCards(){
+  const grid=$('.opps');if(!grid)return;
+  let cards=$$('.opps .opp');
+  if(cards.length===1&&/今天没有足够证据支持/.test(cards[0].textContent))grid.innerHTML='';
+  cards=$$('.opps .opp');
+  const rows=$$('.feed .row');
+  for(let i=cards.length;i<3;i++){
+   const row=rows[i]||rows[0];if(!row)break;
+   const sectorEn=row.querySelector('.company .lang-en')?.textContent.trim()||'World Change';
+   const sectorZh=row.querySelector('.company .lang-zh')?.textContent.trim()||'全球变化';
+   const headline=row.querySelector('.what b')?.textContent.trim()||'Market change under review';
+   const href=row.querySelector('.round')?.getAttribute('href')||'#';
+   const article=document.createElement('article');
+   article.className='opp discovery-slot';
+   article.innerHTML='<div class="oppArt"><svg viewBox="0 0 500 260"><rect width="500" height="260" fill="#173148"/><path d="M0 184 96 118l68 42 81-72 92 57 163-101v216H0Z" fill="#214563"/></svg></div><span class="badge"><span class="lang-zh">'+esc(sectorZh)+'</span><span class="lang-en">'+esc(sectorEn)+'</span></span><span class="badge status"><span class="lang-zh">待一手证据</span><span class="lang-en">Awaiting Tier-1</span></span><h3>'+esc(headline)+'</h3><p><span class="lang-zh">发现了结构性变化，但尚未通过 Tier-1 一手来源验证，因此暂不判定为市场机会。</span><span class="lang-en">A structural change was detected, but Tier-1 first-party evidence is not verified yet, so this is not promoted to a market opportunity.</span></p><div class="bottommeta"><span class="lang-zh">发现线索</span><span class="lang-en">Discovery lead</span></div><a class="arrow" href="'+esc(href)+'" target="_blank" rel="noopener noreferrer">→</a>';
+   grid.appendChild(article);
+  }
+ }
  function applyLanguage(lang){
   lang=lang==='en'?'en':'zh';const d=COPY[lang];root.dataset.lang=lang;root.setAttribute('lang',lang==='en'?'en':'zh-CN');localStorage.setItem('gapradar-lang',lang);
   const h=$('.hero h1');if(h)h.innerHTML=d.hero1+'<br><span class="grad">'+d.hero2+'</span>';
@@ -42,7 +62,7 @@ SCRIPT = r'''
   const heads=$$('.section .head');if(heads[0]){text(heads[0].querySelector('h2'),d.sector);text(heads[0].querySelector('p'),d.sectorP);text(heads[0].querySelector('.more'),d.allSector)}if(heads[1]){text(heads[1].querySelector('h2'),d.opp);text(heads[1].querySelector('p'),d.oppP);text(heads[1].querySelector('.more'),d.allOpp)}
   const fh=$('#feed .feedtop');if(fh){text(fh.querySelector('h2'),d.feed);text(fh.querySelector('p'),d.feedP)}
   const filters=$$('.filters>*');d.filters.forEach((v,i)=>{if(filters[i]){let count='';if(i===0){const m=filters[i].textContent.match(/\d+/);count=m?' '+m[0]:''}text(filters[i],v+count)}});
-  $$('.bottommeta').forEach(el=>{const early=/早期|Early/i.test(el.textContent);text(el,d.market+'　◷ '+(early?d.early:d.watch))});
+  $$('.bottommeta:not(.discovery-slot .bottommeta)').forEach(el=>{const early=/早期|Early/i.test(el.textContent);text(el,d.market+'　◷ '+(early?d.early:d.watch))});
   const foot=$('.footer');if(foot)text(foot,'GapRadar by AMAZING KIMI · '+d.footer);
   const pills=$$('.topline .pill');if(pills[0])text(pills[0],d.updated+' '+rawPill(pills[0]));if(pills[1])text(pills[1],'● '+d.next+' '+rawPill(pills[1]).replace(/^●\s*/,''));
   const l=$('#langToggle');if(l){text(l,lang==='zh'?'中文 ✓  |  EN':'中文  |  EN ✓');l.classList.add('is-active')}
@@ -58,14 +78,14 @@ SCRIPT = r'''
   $$('.more').forEach((m,i)=>{m.onclick=()=>{(i===0?$('#sectors'):i===1?$('#opps'):$('#feed'))?.scrollIntoView({behavior:'smooth'})}});
   $$('.arrow,.round').forEach(a=>a.setAttribute('rel','noopener noreferrer'));
  }
- root.dataset.theme=localStorage.getItem('gapradar-theme')==='light'?'light':'dark';world();wire();applyLanguage(localStorage.getItem('gapradar-lang')==='en'?'en':'zh');applyTheme(root.dataset.theme);
+ root.dataset.theme=localStorage.getItem('gapradar-theme')==='light'?'light':'dark';ensureOpportunityCards();world();wire();applyLanguage(localStorage.getItem('gapradar-lang')==='en'?'en':'zh');applyTheme(root.dataset.theme);
 })();
 '''
 
 
 def patch_dashboard(path: Path = Path('docs/index.html')) -> None:
     html = path.read_text(encoding='utf-8')
-    for old in ('gapradar-runtime-v5', 'gapradar-runtime-v4', 'gapradar-runtime-v3', 'gapradar-runtime-v2'):
+    for old in ('gapradar-runtime-v6', 'gapradar-runtime-v5', 'gapradar-runtime-v4', 'gapradar-runtime-v3', 'gapradar-runtime-v2'):
         token = f'<!-- {old} -->'
         if token in html:
             html = html.split(token, 1)[0].rstrip()
@@ -73,7 +93,7 @@ def patch_dashboard(path: Path = Path('docs/index.html')) -> None:
     html = re.sub(r'<script>\(function\(\)\{var r=document\.documentElement.*?</script>\s*$', '', html, flags=re.S)
     if html.endswith('</body></html>'):
         html = html[:-14]
-    payload = f'<!-- gapradar-runtime-v5 --><style>{STYLE}</style><script>{SCRIPT}</script></body></html>'
+    payload = f'<!-- gapradar-runtime-v6 --><style>{STYLE}</style><script>{SCRIPT}</script></body></html>'
     path.write_text(html + payload, encoding='utf-8')
 
 
