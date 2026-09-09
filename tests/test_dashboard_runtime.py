@@ -14,9 +14,19 @@ def test_runtime_covers_complete_bilingual_controls() -> None:
         "Consumer",
         "Dark ✓  |  Light",
         "中文  |  EN ✓",
+        "Awaiting Tier-1",
+        "Discovery lead",
+        "A structural change was detected, but Tier-1 first-party evidence is not verified yet",
     ]
     for token in required:
         assert token in SCRIPT
+
+
+def test_runtime_keeps_three_truthful_opportunity_slots() -> None:
+    assert "function ensureOpportunityCards()" in SCRIPT
+    assert "for(let i=cards.length;i<3;i++)" in SCRIPT
+    assert "discovery-slot" in SCRIPT
+    assert "not promoted to a market opportunity" in SCRIPT
 
 
 def test_runtime_has_mobile_breakpoints() -> None:
@@ -39,6 +49,7 @@ def test_export_sequence_removes_legacy_controller_and_injects_single_runtime(tm
     strip(html)
     patch_dashboard(html)
     text = html.read_text(encoding="utf-8")
-    assert "gapradar-runtime-v5" in text
+    assert "gapradar-runtime-v6" in text
+    assert "gapradar-runtime-v5" not in text
     assert "var r=document.documentElement,l=document.getElementById" not in text
-    assert text.count("gapradar-runtime-v5") == 2  # CSS marker + HTML marker
+    assert text.count("gapradar-runtime-v6") == 2  # CSS marker + HTML marker
