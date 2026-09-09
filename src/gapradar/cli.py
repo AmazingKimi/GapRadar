@@ -8,6 +8,7 @@ from rich.table import Table
 
 from .config import load_sources
 from .detector import scan_source
+from .render import render_dashboard
 from .store import load_events, merge_events, save_events
 
 app = typer.Typer(no_args_is_help=True, help="Evidence-first market change radar.")
@@ -57,6 +58,17 @@ def report(
             str(len(event.official_evidence)),
         )
     console.print(table)
+
+
+@app.command("export")
+def export_dashboard(
+    events: Path = typer.Option(Path("data/events.json")),
+    output: Path = typer.Option(Path("docs/index.html")),
+) -> None:
+    """Export a standalone HTML radar dashboard."""
+    rows = load_events(events)
+    render_dashboard(rows, output)
+    console.print(f"Dashboard exported to {output} with {len(rows)} event(s).")
 
 
 if __name__ == "__main__":
