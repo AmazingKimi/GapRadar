@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 import typer
@@ -42,15 +44,15 @@ def scan(
         f"\nSources: {len(configured)} · new matches: {len(incoming)} · "
         f"stored: {len(merged)} · failures: {failures}"
     )
-    if configured and failures == len(configured):
-        raise typer.Exit(code=2)
 
 
 @app.command()
 def doctor(
     sources: Path = typer.Option(Path("config/sources.yml"), exists=True, readable=True),
+    output: Path = typer.Option(Path("data/source-health.json")),
+    strict: bool = typer.Option(False, help="Exit non-zero if any source is unhealthy."),
 ) -> None:
-    """Check whether configured official feeds are reachable and structurally usable."""
+    """Check official feed reachability and persist a machine-readable health snapshot."""
     table = Table(title="GapRadar — Source Health")
     table.add_column("Source")
     table.add_column("HTTP")
@@ -58,13 +60,28 @@ def doctor(
     table.add_column("Official links", justify="right")
     table.add_column("Status")
     failures = 0
+    rows: list[dict[str, object]] = []
+    checked_at = datetime.now(timezone.utc).isoformat()
 
     for source in load_sources(sources):
+        row: dict[str, object] = {
+            "vendor": source.vendor,
+            "name": source.name,
+            "url": source.url,
+            "checked_at": checked_at,
+        }
         try:
             result = probe_source(source)
             healthy = result.entry_count > 0 and result.official_link_count > 0
             if not healthy:
                 failures += 1
+            row.update(
+                status="ok" if healthy else "bad_feed",
+                http_status=result.http_status,
+                entry_count=result.entry_count,
+                official_link_count=result.official_link_count,
+                error=None,
+            )
             table.add_row(
                 f"{source.vendor}/{source.name}",
                 str(result.http_status),
@@ -74,10 +91,21 @@ def doctor(
             )
         except Exception as exc:
             failures += 1
+            row.update(
+                status="error",
+                http_status=None,
+                entry_count=0,
+                official_link_count=0,
+                error=f"{type(exc).__name__}: {exc}",
+            )
             table.add_row(f"{source.vendor}/{source.name}", "—", "0", "0", f"ERROR: {exc}")
+        rows.append(row)
 
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(rows, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     console.print(table)
-    if failures:
+    console.print(f"Health snapshot written to {output}. Failures: {failures}.")
+    if strict and failures:
         raise typer.Exit(code=2)
 
 
