@@ -10,6 +10,7 @@ from rich.table import Table
 
 from .config import load_sources
 from .detector import probe_source, scan_source
+from .reaction import validate_reactions
 from .render import render_dashboard
 from .store import load_events, merge_events, save_events
 
@@ -44,6 +45,32 @@ def scan(
         f"\nSources: {len(configured)} · new matches: {len(incoming)} · "
         f"stored: {len(merged)} · failures: {failures}"
     )
+
+
+@app.command("validate-demand")
+def validate_demand(
+    events: Path = typer.Option(Path("data/events.json"), exists=True, readable=True),
+) -> None:
+    """Search public reaction sources and retain only migration-pain evidence."""
+    rows = load_events(events)
+    validated = validate_reactions(rows)
+    save_events(events, validated)
+
+    table = Table(title="GapRadar — Displaced Demand")
+    table.add_column("Vendor / Product")
+    table.add_column("Candidates", justify="right")
+    table.add_column("Pain signals", justify="right")
+    table.add_column("Demand status")
+    table.add_column("Sources")
+    for event in validated:
+        table.add_row(
+            f"{event.vendor} / {event.product}",
+            str(event.reaction_candidate_count),
+            str(len(event.reaction_evidence)),
+            event.demand_status,
+            ", ".join(event.reaction_sources_checked) or "none",
+        )
+    console.print(table)
 
 
 @app.command()
@@ -119,15 +146,17 @@ def report(
     table.add_column("Type")
     table.add_column("Vendor / Product")
     table.add_column("Confidence")
+    table.add_column("Demand")
+    table.add_column("Reaction")
     table.add_column("Headline")
-    table.add_column("Official evidence")
     for event in rows:
         table.add_row(
             event.event_type.value,
             f"{event.vendor} / {event.product}",
             event.confidence.value,
+            event.demand_status,
+            str(len(event.reaction_evidence)),
             event.headline,
-            str(len(event.official_evidence)),
         )
     console.print(table)
 
