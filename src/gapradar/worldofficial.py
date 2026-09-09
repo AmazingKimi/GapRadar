@@ -45,41 +45,52 @@ def _overlap(candidate: GapCandidate, text: str) -> int:
     return sum(1 for token in _subject_tokens(candidate)[:10] if len(token) >= 4 and token in lowered)
 
 
-def _meaningful_tokens(value: str) -> set[str]:
+def _phrase_tokens(value: str) -> list[str]:
     stop = {
         "will", "new", "the", "and", "for", "with", "from", "into", "that", "this", "use", "using",
         "require", "requires", "required", "must", "mandatory", "mandate", "rule", "rules", "regulation",
         "massachusetts", "india", "united", "kingdom", "britain", "british", "european", "union", "australia",
-        "canada", "singapore", "clean", "energy",
+        "canada", "singapore",
     }
-    return {
+    return [
         token for token in re.findall(r"[a-z0-9][a-z0-9+-]{2,}", value.lower())
         if token not in stop and len(token) >= 4
-    }
+    ]
+
+
+def _phrase_present(tokens: list[str], text: str) -> bool:
+    if not tokens:
+        return True
+    normalized = " ".join(re.findall(r"[a-z0-9+]+", text.lower()))
+    if len(tokens) == 1:
+        return bool(re.search(rf"\b{re.escape(tokens[0])}\b", normalized))
+    phrase = r"\b" + r"\s+".join(re.escape(token) for token in tokens) + r"\b"
+    return bool(re.search(phrase, normalized))
 
 
 def _claim_target_alignment(candidate: GapCandidate, text: str) -> bool:
-    """Require the official page to discuss the actual object of the claimed change.
+    """Require an official page to confirm the specific object of a regulatory claim.
 
-    Generic regulator pages can contain words like `require`, `clean`, and `energy` and
-    otherwise look relevant. For a headline of the form `will require X to Y`, both the
-    regulated target (X) and the required outcome (Y) must be represented on the page.
+    Generic regulator pages often contain broad words such as `require`, `clean`, and
+    `energy`. A headline like `will require data centers to use clean energy` therefore
+    cannot be verified by loose token overlap. Both the regulated target phrase and the
+    required outcome phrase must be present on the first-party page.
     """
     if candidate.change_type != "regulatory_shift":
         return True
-    lowered = text.lower()
+
     match = re.search(r"\bwill\s+require\s+(.{3,90}?)\s+to\s+(.{3,110})$", candidate.headline, re.I)
     if match:
-        target = _meaningful_tokens(match.group(1))
-        outcome = _meaningful_tokens(match.group(2))
-        target_hit = not target or any(token in lowered for token in target)
-        outcome_hit = not outcome or any(token in lowered for token in outcome)
-        return target_hit and outcome_hit
+        target = _phrase_tokens(match.group(1))
+        outcome = _phrase_tokens(match.group(2))
+        return _phrase_present(target, text) and _phrase_present(outcome, text)
 
-    # For other regulatory headlines, at least one distinctive non-generic headline
-    # token must occur on the page in addition to the broad overlap check.
-    distinctive = _meaningful_tokens(candidate.headline)
-    return not distinctive or any(token in lowered for token in distinctive)
+    distinctive = _phrase_tokens(candidate.headline)
+    if not distinctive:
+        return True
+    lowered = text.lower()
+    hits = sum(bool(re.search(rf"\b{re.escape(token)}\b", lowered)) for token in distinctive)
+    return hits >= min(2, len(distinctive))
 
 
 def _explicit_change_confirmation(candidate: GapCandidate, text: str) -> bool:
