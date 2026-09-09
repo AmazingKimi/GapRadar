@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 STYLE = r'''
-/* gapradar-runtime-v4 */
+/* gapradar-runtime-v5 */
 .content{max-width:none!important;width:calc(100vw - 230px)!important;margin-left:230px!important;padding:16px clamp(28px,2.2vw,52px) 48px!important}
 .hero{grid-template-columns:minmax(430px,1.12fr) minmax(430px,.88fr)!important;gap:clamp(38px,4vw,76px)!important}
 .overview{width:100%}.sectors{grid-template-columns:repeat(auto-fit,minmax(165px,1fr))!important}.opps{grid-template-columns:repeat(3,minmax(280px,1fr))!important}
@@ -17,8 +17,10 @@ html[data-theme="light"]{color-scheme:light;--bg:#eef5fb!important;--bg2:#e6f0f7
 html[data-theme="light"] body{background:#eef5fb!important;color:#0d1b28!important}html[data-theme="light"] .app{background:radial-gradient(circle at 61% 4%,rgba(90,157,221,.18),transparent 30%),linear-gradient(135deg,#edf5fb,#f8fbfe 73%)!important}html[data-theme="light"] .sidebar{background:#f7fbff!important}html[data-theme="light"] .nav a{color:#294259!important}html[data-theme="light"] .nav a.active{color:#0d1b28!important;background:#dceafb!important;border-color:#a9c8e5!important}html[data-theme="light"] .overview,html[data-theme="light"] .sector,html[data-theme="light"] .feed,html[data-theme="light"] .row{background:#fff!important;color:#0d1b28!important;border-color:#c8d9e7!important}html[data-theme="light"] .badge{background:#e5f2ff!important;color:#245b86!important}html[data-theme="light"] .opp{background:#fff!important;border-color:#bfd2e2!important;color:#0d1b28!important}
 @media(min-width:1600px){.hero h1{font-size:54px}.opps{gap:16px!important}}
 @media(min-width:2100px){.content{padding-left:56px!important;padding-right:56px!important}.hero{grid-template-columns:minmax(560px,1.18fr) minmax(520px,.82fr)!important}.sectors{grid-template-columns:repeat(7,minmax(0,1fr))!important}.opp{height:285px!important}}
-@media(max-width:1200px){.hero{grid-template-columns:1fr!important}.globe{left:45%!important;opacity:.35!important}.opps{grid-template-columns:repeat(2,1fr)!important}}
-@media(max-width:860px){.content{width:100%!important;margin-left:0!important;padding:18px 16px!important}.hero{grid-template-columns:1fr!important}.opps{grid-template-columns:1fr!important}}
+@media(max-width:1200px){.hero{grid-template-columns:1fr!important}.globe{left:45%!important;opacity:.35!important}.opps{grid-template-columns:repeat(2,1fr)!important}.topline{flex-wrap:wrap!important;height:auto!important}.head,.feedtop{gap:12px!important}}
+@media(max-width:860px){.sidebar{display:none!important}.content{width:100%!important;margin-left:0!important;padding:18px 18px 36px!important}.hero{grid-template-columns:1fr!important;gap:18px!important}.globe{left:auto!important;right:-90px!important;top:6px!important;width:390px!important;height:230px!important;opacity:.18!important}.opps{grid-template-columns:1fr!important}.topline{justify-content:flex-start!important;gap:6px!important}.pill,.control{height:30px!important}.head,.feedtop{align-items:flex-start!important;flex-wrap:wrap!important}.row{grid-template-columns:minmax(120px,160px) minmax(0,1fr) 84px 30px!important}.more{white-space:nowrap!important}}
+@media(max-width:640px){.content{padding:14px 14px 30px!important}.topline{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important}.pill,.control{width:100%!important;min-width:0!important;justify-content:center!important;font-size:10px!important;padding:0 7px!important;overflow:hidden!important;white-space:nowrap!important}.hero{min-height:0!important;padding-top:8px!important}.hero h1{font-size:clamp(34px,10vw,44px)!important;line-height:1.05!important}.hero p{font-size:14px!important;line-height:1.55!important}.actions{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}.btn{width:100%!important}.overview{padding:16px!important}.stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}.stats b{font-size:25px!important}.stats span{font-size:10px!important}.section{margin-top:20px!important}.headleft{display:block!important}.head h2,.feedtop h2{font-size:20px!important}.head p,.feedtop p{margin-top:3px!important}.more{display:none!important}.sectors{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.sector{height:108px!important;padding:12px!important}.sectorIcon{width:35px!important;height:35px!important}.sector strong{font-size:12px!important}.bars{left:52px!important}.opp{height:245px!important;padding:15px!important}.opp h3{font-size:18px!important;margin-top:68px!important}.filters{width:100%!important;overflow-x:auto!important;gap:8px!important;padding-bottom:2px!important;white-space:nowrap!important}.feed{overflow:hidden!important}.row{grid-template-columns:minmax(0,1fr) 28px!important;gap:8px!important;padding:11px 12px!important}.row .company{grid-column:1!important}.row .what{grid-column:1!important}.row .time{display:none!important}.row .round{grid-column:2!important;grid-row:1 / span 2!important;align-self:center!important}.what b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.what span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.footer{line-height:1.6!important}}
+@media(max-width:420px){.content{padding-left:12px!important;padding-right:12px!important}.topline{grid-template-columns:1fr!important}.hero h1{font-size:34px!important}.sectors{grid-template-columns:1fr 1fr!important}.sector{min-width:0!important}.badge{font-size:9px!important;padding:4px 7px!important}.opp h3{font-size:17px!important}}
 '''
 
 SCRIPT = r'''
@@ -31,7 +33,7 @@ SCRIPT = r'''
   en:{hero1:'See what is changing',hero2:'Find the next opportunity',heroP:'We continuously scan policy, company, technology and market shifts worldwide to uncover market gaps others may miss.',today:'View today’s opportunities　→',browse:'Browse sector radar',changing:'The world is changing',changingP:'We continuously monitor those changes and look for opportunities worth your attention.',sector:'Sector Radar',sectorP:'Which sectors are moving most today?',opp:'Today’s Opportunities',oppP:'The opportunities most worth watching based on the latest changes.',feed:'Important Global Changes',feedP:'Other changes worth knowing about today.',allSector:'View all sectors　→',allOpp:'View all opportunities　→',stats:['Items scanned today','Key change events','Deep analyses','Opportunities to watch'],filters:['All','Tech','Energy','Regulation','Consumer'],footer:'Automatic scan every 6 hours · Recommendations indicate research value, not investment advice.',updated:'Last updated',next:'Next update',market:'Business market',watch:'Watch',early:'Early opportunity'}
  };
  function text(el,v){if(el&&v!=null)el.textContent=v}
- function rawPill(p){if(!p)return'';if(!p.dataset.raw){p.dataset.raw=p.textContent.replace(/^(最后更新|下次更新|Last updated|Next update)\s*/,'')}return p.dataset.raw}
+ function rawPill(p){if(!p)return'';if(!p.dataset.raw){p.dataset.raw=p.textContent.replace(/^(最后更新|下次更新|Last updated|Next update|●\s*最后更新|●\s*下次更新|●\s*Last updated|●\s*Next update)\s*/,'')}return p.dataset.raw}
  function applyLanguage(lang){
   lang=lang==='en'?'en':'zh';const d=COPY[lang];root.dataset.lang=lang;root.setAttribute('lang',lang==='en'?'en':'zh-CN');localStorage.setItem('gapradar-lang',lang);
   const h=$('.hero h1');if(h)h.innerHTML=d.hero1+'<br><span class="grad">'+d.hero2+'</span>';
@@ -63,18 +65,15 @@ SCRIPT = r'''
 
 def patch_dashboard(path: Path = Path('docs/index.html')) -> None:
     html = path.read_text(encoding='utf-8')
-    # Remove any previous injected runtime first.
-    for old in ('gapradar-runtime-v4', 'gapradar-runtime-v3', 'gapradar-runtime-v2'):
+    for old in ('gapradar-runtime-v5', 'gapradar-runtime-v4', 'gapradar-runtime-v3', 'gapradar-runtime-v2'):
         token = f'<!-- {old} -->'
         if token in html:
             html = html.split(token, 1)[0].rstrip()
             break
-    # Remove the renderer's legacy inline controller. Two controllers on the same
-    # buttons caused language/theme clicks to toggle twice and cancel themselves.
     html = re.sub(r'<script>\(function\(\)\{var r=document\.documentElement.*?</script>\s*$', '', html, flags=re.S)
     if html.endswith('</body></html>'):
         html = html[:-14]
-    payload = f'<!-- gapradar-runtime-v4 --><style>{STYLE}</style><script>{SCRIPT}</script></body></html>'
+    payload = f'<!-- gapradar-runtime-v5 --><style>{STYLE}</style><script>{SCRIPT}</script></body></html>'
     path.write_text(html + payload, encoding='utf-8')
 
 
