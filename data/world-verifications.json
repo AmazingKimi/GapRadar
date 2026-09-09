@@ -3,7 +3,7 @@
     "candidate_id": "52f1eb44691af255",
     "status": "tier1_verified",
     "event_id": null,
-    "official_url": "https://www.mass.gov/guides/clean-energy-standard-310-cmr-775",
+    "official_url": "https://www.mass.gov/info-details/clean-peak-energy-standard-program-details",
     "match_score": 10,
     "reasons": [
       "first_party_page",
@@ -13,26 +13,22 @@
   },
   {
     "candidate_id": "14436a2a2ff1f7ea",
-    "status": "tier1_verified",
+    "status": "unverified",
     "event_id": null,
-    "official_url": "https://auto.economictimes.indiatimes.com/news/auto-technology/india-tightens-cybersecurity-norms-for-ev-battery-systems-with-wireless-connectivity/133950713",
-    "match_score": 10,
+    "official_url": null,
+    "match_score": 1,
     "reasons": [
-      "first_party_page",
-      "subject_overlap",
-      "hard_change_confirmed"
+      "date_proximity"
     ]
   },
   {
     "candidate_id": "86a0955dccc4b9fd",
-    "status": "tier1_verified",
+    "status": "unverified",
     "event_id": null,
-    "official_url": "https://tv.apple.com/us/offer/tvs.sbd.4000",
-    "match_score": 10,
+    "official_url": null,
+    "match_score": 1,
     "reasons": [
-      "first_party_page",
-      "subject_overlap",
-      "hard_change_confirmed"
+      "date_proximity"
     ]
   },
   {

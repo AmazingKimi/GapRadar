@@ -4,17 +4,17 @@
     "status": "first_party_candidates",
     "query": "\"Massachusetts Will Require New Data Centers to Use Clean Energy\" official",
     "candidate_urls": [
-      "https://energynow.com/2026/09/massachusetts-will-require-new-data-centers-to-use-clean-energy",
+      "https://www.mass.gov/info-details/clean-peak-energy-standard-program-details",
       "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
+      "https://www.mass.gov/info-details/efsb-permitting-dashboard",
       "https://childcare.mass.gov/resource/1608087503000/EEC_InterimRegulations",
-      "https://www.mass.gov/guides/clean-energy-standard-310-cmr-775",
-      "https://www.mass.gov/info-details/clean-energy-siting-permitting-regulations"
+      "https://www.mass.gov/info-details/statutes-regulations-and-guidelines"
     ],
     "candidate_hosts": [
-      "energynow.com",
+      "www.mass.gov",
+      "www.mass.gov",
       "www.mass.gov",
       "childcare.mass.gov",
-      "www.mass.gov",
       "www.mass.gov"
     ],
     "search_coverage": "adequate",
@@ -29,16 +29,10 @@
   },
   {
     "candidate_id": "14436a2a2ff1f7ea",
-    "status": "first_party_candidates",
+    "status": "not_found",
     "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
-    "candidate_urls": [
-      "https://auto.economictimes.indiatimes.com/news/auto-technology/india-tightens-cybersecurity-norms-for-ev-battery-systems-with-wireless-connectivity/133950713",
-      "https://www.energetica-india.net/news/morth-mandates-cybersecurity-testing-for-wireless-enabled-ev-bms"
-    ],
-    "candidate_hosts": [
-      "auto.economictimes.indiatimes.com",
-      "www.energetica-india.net"
-    ],
+    "candidate_urls": [],
+    "candidate_hosts": [],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
