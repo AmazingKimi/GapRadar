@@ -62,7 +62,7 @@ class MarketEvent(BaseModel):
     supply_sources_checked: list[str] = Field(default_factory=list)
     supply_candidate_count: int = 0
     supply_status: Literal["unassessed", "no_supply", "thin_supply", "served"] = "unassessed"
-    gap_status: Literal["unassessed", "no_demand", "watch", "potential_gap", "likely_served"] = "unassessed"
+    gap_status: Literal["unassessed", "watch", "potential_gap", "likely_served"] = "unassessed"
     confidence: Confidence = Confidence.INSUFFICIENT
     status: Literal["candidate", "verified", "rejected"] = "candidate"
     notes: list[str] = Field(default_factory=list)
@@ -122,9 +122,9 @@ class MarketEvent(BaseModel):
         else:
             self.supply_status = "no_supply"
 
-        if self.demand_status == "no_signal":
-            self.gap_status = "no_demand"
-        elif self.demand_status == "unassessed" or self.supply_status == "unassessed":
+        # no_signal means the current search did not detect qualifying demand. It
+        # is not evidence that demand is absent, so it must not become a gap verdict.
+        if self.demand_status in {"unassessed", "no_signal"} or self.supply_status == "unassessed":
             self.gap_status = "unassessed"
         elif self.supply_status == "served":
             self.gap_status = "likely_served"
