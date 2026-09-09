@@ -22,6 +22,8 @@ class OpportunityDossier:
     unresolved_gap: str
     next_action: str
     evidence_counts: dict[str, int]
+    reaction_search_quality: str
+    reaction_queries: list[dict[str, object]]
 
 
 def _clean(text: str, limit: int = 900) -> str:
@@ -37,16 +39,22 @@ def _verdict(event: MarketEvent) -> tuple[str, str, str]:
             "Do not investigate commercially until the event itself is verified.",
         )
     if event.demand_status == "unassessed":
+        if event.reaction_search_quality == "failed":
+            return (
+                "SEARCH FAILED",
+                "The event is verified, but the demand search did not complete successfully.",
+                "Repair or rerun reaction search before making any demand conclusion.",
+            )
         return (
             "NEEDS DEMAND CHECK",
-            "A real market change is verified, but displaced demand has not been assessed.",
+            "A real market change is verified, but displaced demand has not been adequately assessed.",
             "Run reaction validation before spending time on substitutes or product design.",
         )
     if event.demand_status == "no_signal":
         return (
-            "PASS",
-            "The market change is real, but checked public sources show no qualifying displaced-demand signal.",
-            "Do not build from this event now. Revisit only if migration pain appears later.",
+            "NO DETECTED SIGNAL",
+            "The checked queries found no qualifying displaced-demand evidence. This means demand was not detected, not that demand does not exist.",
+            "Do not infer zero demand. Keep monitoring, inspect the recorded queries, and broaden sources if this event is strategically important.",
         )
     if event.supply_status == "unassessed":
         return (
@@ -103,7 +111,7 @@ def build_dossier(event: MarketEvent) -> OpportunityDossier:
     elif event.gap_status == "likely_served":
         unresolved = "No broad supply gap is established. Any opportunity would need to come from a narrower failure shared across existing substitutes."
     elif event.demand_status == "no_signal":
-        unresolved = "No user displacement has been established, so there is no evidence-grounded gap to describe yet."
+        unresolved = "No migration pain was detected by the recorded queries. This is a detection result, not proof that no displaced demand exists."
     else:
         unresolved = "The evidence chain is incomplete; GapRadar does not infer the missing commercial conclusion."
 
@@ -126,6 +134,8 @@ def build_dossier(event: MarketEvent) -> OpportunityDossier:
             "reaction_candidates_checked": event.reaction_candidate_count,
             "supply_candidates_checked": event.supply_candidate_count,
         },
+        reaction_search_quality=event.reaction_search_quality,
+        reaction_queries=list(event.reaction_queries),
     )
 
 
@@ -145,7 +155,8 @@ def _markdown(dossier: OpportunityDossier, event: MarketEvent) -> str:
         "## Evidence chain",
         "",
         f"- Tier 1 official: {dossier.evidence_counts['tier_1_official']}",
-        f"- Tier 2 migration-pain reactions: {dossier.evidence_counts['tier_2_reaction']} (from {dossier.evidence_counts['reaction_candidates_checked']} candidates checked)",
+        f"- Tier 2 migration-pain reactions: {dossier.evidence_counts['tier_2_reaction']} (from {dossier.evidence_counts['reaction_candidates_checked']} unique candidates checked)",
+        f"- Reaction search quality: `{dossier.reaction_search_quality}`",
         f"- Tier 3 replacement supply: {dossier.evidence_counts['tier_3_supply']} (from {dossier.evidence_counts['supply_candidates_checked']} candidates checked)",
         f"- Demand state: `{event.demand_status}`",
         f"- Supply state: `{event.supply_status}`",
@@ -155,12 +166,20 @@ def _markdown(dossier: OpportunityDossier, event: MarketEvent) -> str:
     if official:
         lines.extend([f"Official source: {official.url}", ""])
 
-    lines.extend(["## Displaced demand", ""])
+    lines.extend(["## Reaction queries", ""])
+    if dossier.reaction_queries:
+        for row in dossier.reaction_queries:
+            status = "ok" if row.get("ok") else "failed"
+            lines.append(f"- `{row.get('source')}` · {status} · {row.get('candidate_count', 0)} candidates · `{row.get('query')}`")
+    else:
+        lines.append("No reaction query audit is available.")
+
+    lines.extend(["", "## Displaced demand", ""])
     if dossier.displaced_demand:
         for row in dossier.displaced_demand:
             lines.append(f"- [{row['title']}]({row['url']}) — {row['publisher']} · signal {row['signal_score']} · engagement {row['engagement']}")
     else:
-        lines.append("No qualifying migration-pain evidence found in the checked sources.")
+        lines.append("No qualifying migration-pain evidence was detected in the checked queries.")
 
     lines.extend(["", "## Replacement supply", ""])
     if dossier.replacement_supply:
@@ -183,7 +202,7 @@ def _markdown(dossier: OpportunityDossier, event: MarketEvent) -> str:
         dossier.next_action,
         "",
         "---",
-        "Generated by GapRadar v0.5. This dossier is an evidence review, not a revenue forecast or instruction to build.",
+        "Generated by GapRadar v0.6. This dossier is an evidence review, not a revenue forecast or instruction to build.",
         "",
     ])
     return "\n".join(lines)
