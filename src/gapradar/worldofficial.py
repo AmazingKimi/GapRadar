@@ -50,7 +50,7 @@ def _phrase_tokens(value: str) -> list[str]:
         "will", "new", "the", "and", "for", "with", "from", "into", "that", "this", "use", "using",
         "require", "requires", "required", "must", "mandatory", "mandate", "rule", "rules", "regulation",
         "massachusetts", "india", "united", "kingdom", "britain", "british", "european", "union", "australia",
-        "canada", "singapore", "now",
+        "canada", "singapore", "now", "under", "standard", "standards", "policy", "policies",
     }
     return [
         token for token in re.findall(r"[a-z0-9][a-z0-9+-]{2,}", value.lower())
@@ -78,37 +78,46 @@ def _hard_regulatory_language(text: str) -> bool:
     return bool(re.search(r"\b(will require|requires?|required|must|mandatory|shall|compliance deadline|takes effect|effective from)\b", text, re.I))
 
 
-def _claim_target_alignment(candidate: GapCandidate, text: str) -> bool:
-    """Require the claimed target and mandatory action to co-occur locally.
+def _linked_regulatory_claim(target_pattern: str, outcome_pattern: str, text: str) -> bool:
+    """Require target, mandatory language and outcome to form one local claim.
 
-    A long government page can contain `data centers`, `clean energy`, and `required`
-    in unrelated sections. Tier-1 verification therefore uses a local evidence window,
-    not page-wide token soup.
+    Page-wide proximity is too weak: an official document can require utilities in one
+    paragraph and merely discuss data centers/clean energy elsewhere. These patterns
+    require the mandatory verb to actually connect the affected target and outcome.
     """
+    normalized = _normalized(text)
+    hard = r"(?:will\s+require|requires?|required|must|mandatory|shall)"
+    patterns = (
+        rf"{hard}.{{0,90}}{target_pattern}.{{0,110}}{outcome_pattern}",
+        rf"{target_pattern}.{{0,90}}{hard}.{{0,110}}{outcome_pattern}",
+        rf"{target_pattern}.{{0,110}}{outcome_pattern}.{{0,70}}{hard}",
+    )
+    return any(re.search(pattern, normalized) for pattern in patterns)
+
+
+def _claim_target_alignment(candidate: GapCandidate, text: str) -> bool:
+    """Require the exact regulated object and required outcome to be locally linked."""
     if candidate.change_type != "regulatory_shift":
         return True
 
     match = re.search(r"\bwill\s+require\s+(.{3,90}?)\s+to\s+(.{3,110})$", candidate.headline, re.I)
     if match:
-        target = _phrase_tokens(match.group(1))
-        outcome = _phrase_tokens(match.group(2))
+        target = _phrase_tokens(match.group(1))[:3]
+        outcome = _phrase_tokens(match.group(2))[:2]
         if not target or not outcome:
             return False
-        target_pattern = _phrase_regex(target)
-        outcome_pattern = _phrase_regex(outcome)
-        for window in _windows(text, target_pattern, radius=420):
-            if re.search(outcome_pattern, window) and _hard_regulatory_language(window):
-                return True
-        return False
+        return _linked_regulatory_claim(_phrase_regex(target), _phrase_regex(outcome), text)
 
+    # Headlines without the explicit "will require X to Y" grammar still need
+    # multiple distinctive terms plus mandatory language in a tight local window.
     distinctive = _phrase_tokens(candidate.headline)
     if len(distinctive) < 2:
         return False
     normalized = _normalized(text)
-    for token in distinctive:
-        for window in _windows(normalized, rf"\b{re.escape(token)}\b", radius=280):
-            hits = sum(bool(re.search(rf"\b{re.escape(other)}\b", window)) for other in distinctive)
-            if hits >= min(2, len(distinctive)) and _hard_regulatory_language(window):
+    for token in distinctive[:6]:
+        for window in _windows(normalized, rf"\b{re.escape(token)}\b", radius=140):
+            hits = sum(bool(re.search(rf"\b{re.escape(other)}\b", window)) for other in distinctive[:6])
+            if hits >= min(3, len(distinctive)) and _hard_regulatory_language(window):
                 return True
     return False
 
