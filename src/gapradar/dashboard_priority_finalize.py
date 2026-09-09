@@ -2,22 +2,21 @@ from __future__ import annotations
 
 from pathlib import Path
 
-MARKER = "gapradar-priority-finalize-v5"
+MARKER = "gapradar-priority-finalize-v6"
 
 STYLE = r'''
-/* gapradar-priority-finalize-v5 */
-/* gapradar-priority-finalize-v4 compatibility marker */
-/* gapradar-priority-finalize-v3 compatibility marker */
-/* gapradar-priority-finalize-v2 compatibility marker */
-/* gapradar-priority-finalize-v1 compatibility marker */
-.priority-card{padding:18px!important}
-.priority-card .priority-copy{position:absolute!important;left:18px!important;right:54px!important;top:112px!important;bottom:54px!important;z-index:3!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;overflow:hidden!important}
-.priority-card h3{position:static!important;margin:0 0 9px!important;max-width:100%!important;font-size:20px!important;line-height:1.24!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
-.priority-card .news-intro{position:static!important;margin:0!important;max-width:100%!important;color:color-mix(in srgb,var(--text) 76%,var(--muted))!important;font-size:12px!important;line-height:1.42!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+/* gapradar-priority-finalize-v6 */
+.priority-card{padding:18px!important;cursor:pointer!important;overflow:hidden!important;min-height:260px!important}
+.priority-card .priority-copy{position:absolute!important;left:18px!important;right:54px!important;top:108px!important;bottom:58px!important;z-index:3!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;gap:8px!important;overflow:hidden!important}
+.priority-card h3{position:static!important;margin:0!important;max-width:100%!important;font-size:20px!important;line-height:1.22!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+.priority-card .news-intro{position:static!important;margin:0!important;max-width:100%!important;color:color-mix(in srgb,var(--text) 74%,var(--muted))!important;font-size:11.5px!important;line-height:1.42!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
 .priority-card .bottommeta{display:none!important}
+.priority-card .card-cta{left:18px!important;bottom:17px!important;font-size:10px!important;letter-spacing:.01em!important;color:var(--cyan)!important;opacity:.92!important}
 .priority-card .arrow{position:absolute!important;right:17px!important;bottom:14px!important;top:auto!important;left:auto!important;z-index:4!important}
+.priority-card:focus-visible{outline:2px solid var(--cyan)!important;outline-offset:2px!important}
 .priority-card[data-priority-status="INVESTIGATE"] .status{background:#5b4420!important;border-color:#a77a2d!important;color:#ffe0a2!important}
 .priority-card[data-priority-status="REVIEW"] .status{background:#7b432f!important;border-color:#b96e4f!important;color:#ffd8c7!important}
+@media(max-width:640px){.priority-card .priority-copy{top:92px!important;right:44px!important}.priority-card h3{font-size:17px!important}.priority-card .news-intro{font-size:10.5px!important}}
 '''
 
 
@@ -52,13 +51,8 @@ def patch(path: Path = Path("docs/index.html")) -> None:
     for old, new in replacements.items():
         html = html.replace(old, new)
 
-    for old in (
-        "/* gapradar-priority-finalize-v1 */",
-        "/* gapradar-priority-finalize-v2 */",
-        "/* gapradar-priority-finalize-v3 */",
-        "/* gapradar-priority-finalize-v4 */",
-    ):
-        html = html.replace(old, "/* gapradar-priority-finalize-legacy */")
+    for old in ("gapradar-priority-finalize-v1","gapradar-priority-finalize-v2","gapradar-priority-finalize-v3","gapradar-priority-finalize-v4","gapradar-priority-finalize-v5"):
+        html = html.replace(old, "gapradar-priority-finalize-legacy")
     if MARKER not in html:
         html = html.replace("</head>", f"<style>{STYLE}</style></head>", 1)
 
@@ -67,4 +61,4 @@ def patch(path: Path = Path("docs/index.html")) -> None:
 
 if __name__ == "__main__":
     patch()
-    print("Dashboard priority finalize v5: distinct story intros with collision-proof card layout enforced.")
+    print("Dashboard priority finalize v6: clean card hierarchy and evidence-chain CTA enforced.")
