@@ -10,7 +10,8 @@
     "errors": [
       "subject overlap too weak for www.mass.gov: 0 < 2",
       "subject overlap too weak for www.mass.gov: 0 < 2",
-      "subject overlap too weak for budget.digital.mass.gov: 0 < 2"
+      "subject overlap too weak for www.mass.gov: 0 < 2",
+      "first-party page did not locally confirm the claimed target/outcome: www.mass.gov"
     ]
   },
   {

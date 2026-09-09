@@ -1,12 +1,12 @@
 {
-  "input_candidates": 26,
-  "context_rejected": 20,
+  "input_candidates": 27,
+  "context_rejected": 21,
   "duplicate_collapsed": 0,
   "kept_candidates": 6,
   "rejection_reasons": {
     "commercial_mandate_not_regulation": 9,
     "negated_mandate": 1,
-    "speculative_or_proposed_regulation": 7,
+    "speculative_or_proposed_regulation": 8,
     "physical_shutdown_not_product_eol": 1,
     "rhetorical_or_completed_shutdown_context": 2
   }
