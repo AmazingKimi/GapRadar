@@ -22,5 +22,14 @@ def save_events(path: Path, events: list[MarketEvent]) -> None:
 def merge_events(existing: list[MarketEvent], incoming: list[MarketEvent]) -> list[MarketEvent]:
     by_id = {event.id: event for event in existing}
     for event in incoming:
+        previous = by_id.get(event.id)
+        if previous is not None:
+            event.reaction_evidence = previous.reaction_evidence
+            event.supply_evidence = previous.supply_evidence
+            event.reaction_checked_at = previous.reaction_checked_at
+            event.reaction_sources_checked = previous.reaction_sources_checked
+            event.reaction_candidate_count = previous.reaction_candidate_count
+            event.notes.extend(note for note in previous.notes if note not in event.notes)
+            event.verify()
         by_id[event.id] = event
     return sorted(by_id.values(), key=lambda e: (e.event_date or e.detected_at), reverse=True)
