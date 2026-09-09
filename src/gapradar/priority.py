@@ -101,7 +101,7 @@ def _reason(
     verification: WorldVerification | None,
     assessment: WorldLeadAssessment | None,
     official_lead: OfficialSourceLead | None,
-) -> tuple[str, str, str]:
+) -> tuple[str, str, str, str]:
     label = CHANGE_LABELS.get(candidate.change_type, "structural change")
     impact = IMPACT.get(candidate.change_type, "follow-on operational work")
     signal = (candidate.matched_signal or label).strip().rstrip(".")
