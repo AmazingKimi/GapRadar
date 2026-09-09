@@ -37,6 +37,12 @@ def test_india_candidate_gets_jurisdiction_site_query():
     assert any("site:gov.in" in query for query in _query_variants(candidate))
 
 
+def test_india_regulation_does_not_accept_publisher_with_india_in_domain():
+    candidate = _candidate("India makes EV BMS cybersecurity testing mandatory")
+    assert _looks_first_party("https://auto.economictimes.indiatimes.com/news/example", candidate) is False
+    assert _looks_first_party("https://www.mercomindia.com/story", candidate) is False
+
+
 def test_company_owned_domain_can_be_source_candidate():
     candidate = _candidate("Apple changes Apple TV subscription pricing")
     assert _looks_first_party("https://www.apple.com/newsroom/apple-tv-pricing/", candidate) is True
@@ -45,4 +51,3 @@ def test_company_owned_domain_can_be_source_candidate():
 def test_news_domain_is_never_tier1_candidate():
     candidate = _candidate("Apple changes Apple TV subscription pricing")
     assert _looks_first_party("https://www.reuters.com/technology/apple-tv-price/", candidate) is False
-    assert _looks_first_party("https://www.mercomindia.com/story", candidate) is False
