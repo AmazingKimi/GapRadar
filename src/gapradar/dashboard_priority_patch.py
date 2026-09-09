@@ -35,15 +35,8 @@ def _status_zh(status: str) -> str:
     return {"REVIEW": "重点评估", "INVESTIGATE": "优先调查", "WATCH": "持续观察", "DISMISS": "暂不关注"}.get(status, status)
 
 
-def _evidence_zh(state: str) -> str:
-    return {"tier1_verified": "Tier-1 已验证", "official_candidate": "已找到官方候选", "news_only": "Tier-1 待确认"}.get(state, "证据待确认")
-
-
 def _clean_summary(candidate: GapCandidate) -> str:
-    """Return article-specific RSS text, never a generic GapRadar template."""
     summary = " ".join(unescape(candidate.summary or "").replace("\xa0", " ").split())
-    # Google News RSS often gives only "headline  publisher". Strip the duplicate
-    # headline and keep any real synopsis if the feed supplied one.
     headline = " ".join(candidate.headline.split())
     if summary.lower().startswith(headline.lower()):
         summary = summary[len(headline):].strip(" -–—:|·")
@@ -60,9 +53,18 @@ def _news_intro_en(candidate: GapCandidate) -> str:
         return real_summary
 
     headline = " ".join(candidate.headline.strip().rstrip(".").split())
-    # Fallback is still event-specific: it states exactly what this source reports,
-    # rather than inserting a repeated market-opportunity template.
-    return f"{publisher} reports: {headline}."
+    patterns = (
+        (r"^(.+?) Now Mandatory in (.+)$", lambda m: f"{publisher} reports that {m.group(1)} is now mandatory in {m.group(2)}."),
+        (r"^(.+?) Will Require (.+)$", lambda m: f"{publisher} reports that {m.group(1)} will require {m.group(2)}."),
+        (r"^(.+?) preps the shutdown of (.+)$", lambda m: f"{publisher} reports that {m.group(1)} is preparing to shut down {m.group(2)}."),
+        (r"^(.+?) price (?:hike|increase):? (.+)$", lambda m: f"{publisher} reports a price increase affecting {m.group(1)}: {m.group(2)}."),
+    )
+    for pattern, render in patterns:
+        match = re.match(pattern, headline, flags=re.I)
+        if match:
+            return render(match)
+    lowered = headline[:1].lower() + headline[1:] if headline else "this change"
+    return f"{publisher} reports that {lowered}."
 
 
 def _news_intro_zh(candidate: GapCandidate) -> str:
@@ -83,9 +85,10 @@ def _card(candidate: GapCandidate, row: PriorityLead) -> str:
         '<div class="oppArt">' + _art(candidate.change_type) + '</div>'
         '<span class="badge"><span class="lang-zh">' + escape(zh_sector) + '</span><span class="lang-en">' + escape(sector) + '</span></span>'
         '<span class="badge status ' + cls + '"><span class="lang-zh">' + escape(_status_zh(row.status)) + '</span><span class="lang-en">' + escape(row.status.title()) + '</span></span>'
+        '<div class="priority-copy">'
         '<h3>' + escape(candidate.headline) + '</h3>'
         '<p class="news-intro"><span class="lang-zh">' + escape(_news_intro_zh(candidate)) + '</span><span class="lang-en">' + escape(_news_intro_en(candidate)) + '</span></p>'
-        '<div class="bottommeta"><span class="lang-zh">' + escape(_evidence_zh(row.evidence_state)) + '</span><span class="lang-en">' + escape(row.evidence_label) + '</span></div>'
+        '</div>'
         '<a class="arrow" href="' + escape(candidate.url) + '" target="_blank" rel="noopener noreferrer">→</a>'
         '</article>'
     )
