@@ -6,7 +6,11 @@ on:
     branches: [main]
     paths:
       - 'src/gapradar/discovery.py'
+      - 'src/gapradar/reaction.py'
+      - 'src/gapradar/routing.py'
+      - 'data/backtest/medium-events.json'
       - 'tests/test_discovery.py'
+      - 'tests/test_dossier.py'
       - '.github/workflows/discovery.yml'
 
 permissions:
@@ -15,7 +19,7 @@ permissions:
 jobs:
   scout:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,17 +28,25 @@ jobs:
           cache: pip
       - run: python -m pip install -e '.[dev]'
       - name: Unit tests
-        run: pytest tests/test_discovery.py
-      - name: Self-discovery smoke replay
+        run: pytest tests/test_discovery.py tests/test_dossier.py tests/test_reaction.py
+      - name: Headline self-discovery smoke replay
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python -m gapradar.discovery --as-of 2022-12-31 --output data/backtest/report-discovery.json
-      - name: Print discovery report
+      - name: Medium-event self-discovery replay
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python -m gapradar.discovery --fixture data/backtest/medium-events.json --output data/backtest/report-discovery-medium.json
+      - name: Print discovery reports
         if: always()
-        run: cat data/backtest/report-discovery.json || true
+        run: |
+          cat data/backtest/report-discovery.json || true
+          cat data/backtest/report-discovery-medium.json || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: historical-self-discovery-report
-          path: data/backtest/report-discovery.json
+          name: historical-self-discovery-reports
+          path: |
+            data/backtest/report-discovery.json
+            data/backtest/report-discovery-medium.json
           if-no-files-found: warn
