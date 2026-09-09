@@ -25,11 +25,33 @@ def test_generic_deprecation_mention_in_body_is_not_an_event():
     ) is None
 
 
-def test_explicit_body_removal_is_an_api_event():
+def test_live_style_feature_posts_do_not_become_market_events():
+    assert classify_entry(
+        "Variants now support multiple barcodes",
+        "The old barcode field is deprecated while the new barcodes connection is available.",
+    ) is None
+    assert classify_entry(
+        "Polaris CDN 1.1 release candidate",
+        "This release replaces a deprecated component and introduces new components.",
+    ) is None
+    assert classify_entry(
+        "Build Shopify apps in PHP and Python with new official packages",
+        "The packages provide API request helpers and replace older patterns.",
+    ) is None
+
+
+def test_explicit_body_removal_requires_migration_framing():
     assert classify_entry(
         "Platform migration notice",
         "The REST API endpoint will be removed on October 1.",
     ) == EventType.API_TERMS
+
+
+def test_explicit_deprecation_title_is_kept():
+    assert classify_entry(
+        "Script tags are deprecated and will stop running on March 1, 2027",
+        "Apps must replace script tags before the deadline.",
+    ) == EventType.SHUTDOWN
 
 
 def test_feed_enforces_lookback_and_official_domains():
