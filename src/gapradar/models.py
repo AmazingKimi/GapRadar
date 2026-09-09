@@ -26,6 +26,16 @@ class Confidence(str, Enum):
     INSUFFICIENT = "insufficient_evidence"
 
 
+class DemandHypothesis(BaseModel):
+    affected_users: str
+    job_to_be_done: str
+    disruption: str
+    official_successor: str = "unknown"
+    basis: list[str] = Field(default_factory=list)
+    confidence: Literal["low", "medium", "high"] = "low"
+    unknowns: list[str] = Field(default_factory=list)
+
+
 class SourceEvidence(BaseModel):
     tier: EvidenceTier
     title: str
@@ -50,6 +60,7 @@ class MarketEvent(BaseModel):
     event_date: datetime | None = None
     detected_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     official_evidence: list[SourceEvidence] = Field(default_factory=list)
+    demand_hypothesis: DemandHypothesis | None = None
     reaction_evidence: list[SourceEvidence] = Field(default_factory=list)
     supply_evidence: list[SourceEvidence] = Field(default_factory=list)
     reaction_checked_at: datetime | None = None
@@ -91,6 +102,36 @@ class MarketEvent(BaseModel):
                 raise ValueError("supply_evidence must contain only non-official tier-3 sources")
         return items
 
+    def _ensure_demand_hypothesis(self) -> None:
+        if self.demand_hypothesis is not None or not self.official_evidence:
+            return
+        basis = [f"{item.publisher}: {item.title}" for item in self.official_evidence[:3]]
+        if self.event_type == EventType.SHUTDOWN:
+            hypothesis = DemandHypothesis(
+                affected_users=f"Users and organizations still relying on {self.product}.",
+                job_to_be_done=f"Continue the workflow currently handled by {self.product} after the incumbent removes it.",
+                disruption="The incumbent is ending or removing a product, workflow, or supported capability.",
+                basis=basis,
+                unknowns=["Actual active user count", "Migration urgency by segment", "Quality of official successor or migration path"],
+            )
+        elif self.event_type == EventType.PRICE_SHOCK:
+            hypothesis = DemandHypothesis(
+                affected_users=f"Price-sensitive customers currently paying for {self.product}.",
+                job_to_be_done=f"Preserve the core outcome of {self.product} at a more acceptable cost or pricing model.",
+                disruption="A material pricing change may make the incumbent uneconomic for part of its customer base.",
+                basis=basis,
+                unknowns=["Share of customers affected", "Switching costs", "Whether cheaper substitutes already satisfy the core job"],
+            )
+        else:
+            hypothesis = DemandHypothesis(
+                affected_users=f"Developers and businesses dependent on {self.product} or its platform/API behavior.",
+                job_to_be_done="Keep integrations and dependent workflows functioning after the platform change.",
+                disruption="An API, terms, licensing, or platform-policy change may force rewrites, migration, or dependency replacement.",
+                basis=basis,
+                unknowns=["Number of affected integrations", "Migration complexity", "Availability of compatible alternatives"],
+            )
+        self.demand_hypothesis = hypothesis
+
     def verify(self) -> "MarketEvent":
         if not self.official_evidence:
             self.status = "candidate"
@@ -101,6 +142,7 @@ class MarketEvent(BaseModel):
             return self
 
         self.status = "verified"
+        self._ensure_demand_hypothesis()
         reaction_count = len(self.reaction_evidence)
         supply_count = len(self.supply_evidence)
 
@@ -113,6 +155,14 @@ class MarketEvent(BaseModel):
         else:
             self.demand_status = "no_signal"
 
+        if self.demand_hypothesis is not None:
+            if self.demand_status == "repeated_signal":
+                self.demand_hypothesis.confidence = "high"
+            elif self.demand_status == "early_signal":
+                self.demand_hypothesis.confidence = "medium"
+            else:
+                self.demand_hypothesis.confidence = "low"
+
         if self.supply_checked_at is None:
             self.supply_status = "unassessed"
         elif supply_count >= 3 or any(item.signal_score >= 7 for item in self.supply_evidence):
@@ -122,22 +172,22 @@ class MarketEvent(BaseModel):
         else:
             self.supply_status = "no_supply"
 
-        # no_signal means the current search did not detect qualifying demand. It
-        # is not evidence that demand is absent, so it must not become a gap verdict.
-        if self.demand_status in {"unassessed", "no_signal"} or self.supply_status == "unassessed":
+        # Reaction is a confidence modifier, never a gate. Once an event is verified
+        # and has a demand hypothesis, supply can be assessed even with no reaction.
+        if self.demand_hypothesis is None or self.supply_status == "unassessed":
             self.gap_status = "unassessed"
         elif self.supply_status == "served":
             self.gap_status = "likely_served"
-        elif self.demand_status == "repeated_signal" and self.supply_status in {"no_supply", "thin_supply"}:
+        elif self.supply_status in {"no_supply", "thin_supply"} and self.demand_status == "repeated_signal":
             self.gap_status = "potential_gap"
-        elif self.demand_status == "early_signal" and self.supply_status in {"no_supply", "thin_supply"}:
+        elif self.supply_status in {"no_supply", "thin_supply"}:
             self.gap_status = "watch"
         else:
             self.gap_status = "watch"
 
         if self.gap_status == "potential_gap":
             self.confidence = Confidence.STRONG
-        elif reaction_count >= 1:
+        elif self.gap_status in {"watch", "likely_served"} or reaction_count >= 1:
             self.confidence = Confidence.EMERGING
         else:
             self.confidence = Confidence.WEAK
