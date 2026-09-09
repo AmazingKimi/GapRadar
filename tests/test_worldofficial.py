@@ -3,15 +3,15 @@ from gapradar.worldofficial import _claim_target_alignment, verify_official_lead
 from gapradar.worldscan import GapCandidate
 
 
-def _candidate() -> GapCandidate:
+def _candidate(headline: str = "Massachusetts will require data centers to use clean energy") -> GapCandidate:
     return GapCandidate(
         id="x",
         discovered_at="2026-09-09T00:00:00+00:00",
         published_at=None,
         source="news",
-        headline="Massachusetts will require data centers to use clean energy",
+        headline=headline,
         url="https://example.com/news",
-        summary="The state will require data centers to meet a new clean-energy requirement.",
+        summary="Structural regulatory change.",
         change_type="regulatory_shift",
         matched_signal="will require",
         recommendation="WATCH",
@@ -45,9 +45,19 @@ def test_news_url_cannot_become_tier1_even_if_supplied():
     assert fact.status == "unverified"
 
 
-def test_regulatory_claim_requires_target_and_outcome_phrases():
+def test_regulatory_claim_requires_target_outcome_and_local_mandatory_language():
     candidate = _candidate()
-    generic = "Massachusetts clean energy regulation requires utilities to comply with clean energy standards."
-    specific = "Massachusetts will require data centers to use clean energy under the new regulation."
+    generic = "Massachusetts clean energy regulation requires utilities to comply. Far elsewhere the report discusses data centers and clean energy investment."
+    advisory = "The statement discusses data centers and clean energy. The administration encourages responsible development and offers guidance."
+    specific = "Massachusetts will require data centers to use clean energy under the new standard."
     assert _claim_target_alignment(candidate, generic) is False
+    assert _claim_target_alignment(candidate, advisory) is False
     assert _claim_target_alignment(candidate, specific) is True
+
+
+def test_bms_advisory_is_not_equivalent_to_mandatory_testing():
+    candidate = _candidate("EV BMS Cybersecurity Testing Now Mandatory in India")
+    advisory = "CERT-In identified cybersecurity vulnerabilities in BMS devices. MHI issued an advisory to industry bodies and testing agencies."
+    mandatory = "Cybersecurity testing of BMS is mandatory before certification and market approval."
+    assert _claim_target_alignment(candidate, advisory) is False
+    assert _claim_target_alignment(candidate, mandatory) is True
