@@ -65,11 +65,16 @@ jobs:
           print('render module:', gapradar.render.__file__)
           PY
           python -m gapradar.cli export
-      - name: Verify new dashboard shell
+      - name: Verify approved dashboard shell
         run: |
           grep -q '从世界的变化' docs/index.html
           grep -q 'class="sidebar"' docs/index.html
+          grep -q 'class="brandmark"' docs/index.html
+          grep -q 'class="globe"' docs/index.html
+          grep -q 'id="langToggle"' docs/index.html
+          grep -q 'id="themeToggle"' docs/index.html
           grep -q '行业雷达' docs/index.html
+          grep -q 'Sector Radar' docs/index.html
           if grep -q "Today's Market Gaps" docs/index.html; then
             echo 'Old dashboard detected after export.'
             exit 1
