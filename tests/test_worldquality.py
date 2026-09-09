@@ -27,8 +27,13 @@ def test_rejects_rhetorical_shutdown_headline():
         "From Shutdown to Showcase: Holtec's IPO Puts Palisades at Center of Nuclear Industry's Future",
         "shutdown_eol",
     )
-    assert rejection_reason(row) == "rhetorical_shutdown_context"
+    assert rejection_reason(row) == "rhetorical_or_completed_shutdown_context"
     assert refine_candidate(row) is None
+
+
+def test_rejects_reopened_physical_shutdown():
+    row = candidate("3 Red Line stations reopen Monday after 2-month shutdown for major construction", "shutdown_eol")
+    assert rejection_reason(row) == "rhetorical_or_completed_shutdown_context"
 
 
 def test_rejects_physical_power_shutdown_without_product_target():
@@ -50,6 +55,7 @@ def test_rejects_speculative_or_promised_regulation_before_tier1_search():
     assert rejection_reason(candidate("India May Mandate Storage For Solar, Wind Projects From 2027", "regulatory_shift")) == "speculative_or_proposed_regulation"
     assert rejection_reason(candidate("Labour promises new rules for data centre electricity use", "regulatory_shift")) == "speculative_or_proposed_regulation"
     assert rejection_reason(candidate("Tories launch bid to revoke ZEV mandate", "regulatory_shift")) == "speculative_or_proposed_regulation"
+    assert rejection_reason(candidate("Trump's Trade Tactics Target Bombardier: Manufacturing Mandate", "regulatory_shift")) == "speculative_or_proposed_regulation"
 
 
 def test_keeps_real_regulatory_requirement_but_does_not_promote_it_to_opportunity():
