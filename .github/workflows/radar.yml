@@ -203,6 +203,8 @@ jobs:
           assert metrics['tier1_verified'] + metrics['awaiting_tier1'] == len(candidates)
           cadence = json.loads(Path('data/commercial-cadence.json').read_text())
           assert cadence['summary']['days_observed'] >= 1
+          assert 'priority_leads_total' in cadence['summary']
+          assert 'review_opportunities_total' in cadence['summary']
           blind = json.loads(Path('data/backtest/blind-report.json').read_text())
           assert blind['mode'] == 'blind_noisy_stream_offline'
           assessments_path = Path('data/world-assessments.json')
@@ -213,7 +215,7 @@ jobs:
             assert all(row.get('demand_hypothesis') for row in assessments)
           PY
           grep -q 'gapradar-runtime-v6' docs/index.html
-          grep -q 'gapradar-polish-v2' docs/index.html
+          grep -q 'gapradar-polish-v3' docs/index.html
           grep -q 'gapradar-priority-finalize-v1' docs/index.html
           grep -q 'Signal funnel:' docs/index.html
           grep -q '信号漏斗：' docs/index.html
@@ -222,6 +224,8 @@ jobs:
           grep -q 'data-priority-status="INVESTIGATE"\|data-priority-status="REVIEW"' docs/index.html
           grep -q 'matched signal:' docs/index.html
           grep -q '命中信号' docs/index.html
+          grep -q 'Utility cadence:' docs/index.html
+          grep -q '可用性基线：' docs/index.html
           grep -q 'Find the next opportunity' docs/index.html
           grep -q 'Important Global Changes' docs/index.html
           grep -q '中文 ✓  |  EN' docs/index.html
