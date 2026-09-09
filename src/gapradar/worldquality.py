@@ -34,6 +34,19 @@ BUSINESS_MANDATE = re.compile(
     r"\b(wins?|won|selected|awarded|secures?|lands?|gets?)\b.{0,80}\bmandate\b|\b(investment|asset management|fund|pension|portfolio)\s+mandate\b|\bmandate\s+from\b.{0,80}\b(fund|pension|client|investor)\b",
     re.I,
 )
+# World Scan is a discovery layer, but the Tier-1 pipeline should not spend most of
+# its capacity trying to verify stories that explicitly say a rule is only proposed,
+# promised, sought, challenged, or merely possible. Those belong in a future-policy
+# watchlist, not the hard structural-change funnel.
+SPECULATIVE_REGULATION = re.compile(
+    r"\b(may|might|could|would)\s+(?:soon\s+)?(?:require|mandate|ban|force|introduce)\b"
+    r"|\b(promises?|pledges?|proposes?|proposal|seeks?|calls? for|urges?|pushes? for)\b.{0,80}\b(rule|rules|regulation|mandate|requirement|ban)\b"
+    r"|\b(bid|attempt|plan)\s+to\s+(?:revoke|change|introduce|impose)\b"
+    r"|\bmandate\s+(?:looms?|possible|proposed|planned)\b"
+    r"|\bneared\b.{0,50}\bmandate\b.{0,50}\b(fell short|missed)\b"
+    r"|\bchallenges?\b.{0,80}\b(price increase|rule|regulation|mandate)\b",
+    re.I,
+)
 TOKEN_STOP = {
     "the", "a", "an", "and", "or", "of", "to", "for", "in", "on", "at", "by", "from", "with",
     "new", "latest", "today", "says", "say", "will", "may", "could", "after", "before", "amid",
@@ -63,6 +76,8 @@ def rejection_reason(candidate: GapCandidate) -> str | None:
             return "negated_mandate"
         if BUSINESS_MANDATE.search(text):
             return "commercial_mandate_not_regulation"
+        if SPECULATIVE_REGULATION.search(text):
+            return "speculative_or_proposed_regulation"
 
     return None
 
