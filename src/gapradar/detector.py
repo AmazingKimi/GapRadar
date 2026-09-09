@@ -39,9 +39,6 @@ TITLE_PATTERNS: dict[EventType, tuple[str, ...]] = {
     ),
 }
 
-# Body matches are intentionally stricter than title matches. This prevents a
-# generic changelog post that merely mentions "deprecations" from becoming an
-# event. A body-only match must describe a concrete removal or forced change.
 BODY_PATTERNS: dict[EventType, tuple[str, ...]] = {
     EventType.PRICE_SHOCK: (
         r"\bfree (?:plan|tier).{0,120}\b(?:will|is|has been).{0,40}\b(?:removed|retired|discontinued|ended)\b",
@@ -93,7 +90,6 @@ def _match(patterns: tuple[str, ...], text: str) -> bool:
 
 
 def classify(text: str) -> EventType | None:
-    """Compatibility classifier used by tests and callers with one text blob."""
     for event_type in CLASSIFICATION_ORDER:
         if _match(TITLE_PATTERNS[event_type], text):
             return event_type
@@ -101,7 +97,6 @@ def classify(text: str) -> EventType | None:
 
 
 def classify_entry(title: str, summary: str) -> EventType | None:
-    """Prefer explicit title signals; allow only strict body-only fallbacks."""
     for event_type in CLASSIFICATION_ORDER:
         if _match(TITLE_PATTERNS[event_type], title):
             return event_type
@@ -143,7 +138,7 @@ def _infer_product(source: OfficialSource, title: str) -> str:
 def parse_feed(feed_text: str, source: OfficialSource, *, now: datetime | None = None) -> list[MarketEvent]:
     now = now or datetime.now(timezone.utc)
     cutoff = now - timedelta(days=source.lookback_days)
-    feed = feedparser.loads(feed_text)
+    feed = feedparser.parse(feed_text)
     events: list[MarketEvent] = []
 
     for entry in feed.entries[: source.max_entries]:
@@ -208,7 +203,7 @@ def scan_source(source: OfficialSource, *, timeout: float = 20.0) -> list[Market
 
 def probe_source(source: OfficialSource, *, timeout: float = 20.0) -> SourceProbe:
     response = _get(source, timeout)
-    feed = feedparser.loads(response.text)
+    feed = feedparser.parse(response.text)
     entries = list(feed.entries[: source.max_entries])
     official_links = sum(
         1
