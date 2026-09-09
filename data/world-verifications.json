@@ -61,6 +61,16 @@
     ]
   },
   {
+    "candidate_id": "eb46fb2b8863a40b",
+    "status": "unverified",
+    "event_id": null,
+    "official_url": null,
+    "match_score": 1,
+    "reasons": [
+      "date_proximity"
+    ]
+  },
+  {
     "candidate_id": "5b1d4ece4414b40f",
     "status": "unverified",
     "event_id": null,

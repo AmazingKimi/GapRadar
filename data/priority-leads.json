@@ -1,57 +1,48 @@
 [
   {
-    "candidate_id": "a4667ed73e330db1",
-    "status": "INVESTIGATE",
-    "priority_score": 7,
-    "evidence_state": "news_only",
-    "evidence_label": "Tier-1 pending",
-    "reason": "Android Central reports “Samsung preps the shutdown of two more apps late in 2026”, with a concrete shutdown / end-of-life signal (“shutdown”). No acceptable first-party source has been located yet. If the report is confirmed, the likely demand surface is migration or replacement demand before the affected product disappears.",
-    "next_check": "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
-  },
-  {
     "candidate_id": "14436a2a2ff1f7ea",
     "status": "INVESTIGATE",
-    "priority_score": 5,
+    "priority_score": 9,
     "evidence_state": "official_candidate",
     "evidence_label": "Official lead · heavyindustries.gov.in",
-    "reason": "Autocar Professional reports “EV BMS Cybersecurity Testing Now Mandatory in India”. A related first-party page was found on heavyindustries.gov.in, but it has not yet confirmed the exact “Mandatory” claim. Investigate the claim first; if confirmed, the likely demand surface is new compliance, testing, reporting or implementation work.",
-    "next_check": "Verify the exact claim on the first-party page; only then spend deeper research effort on demand and supply."
+    "reason": "Autocar Professional reports “EV BMS Cybersecurity Testing Now Mandatory in India”. GapRadar found a plausible authority page on heavyindustries.gov.in, but that page has not yet confirmed the exact “Mandatory” claim. If confirmed, investigate new compliance, testing, reporting or implementation work.",
+    "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
   },
   {
     "candidate_id": "52f1eb44691af255",
     "status": "INVESTIGATE",
-    "priority_score": 5,
+    "priority_score": 9,
     "evidence_state": "official_candidate",
     "evidence_label": "Official lead · mass.gov",
-    "reason": "EnergyNow.com reports “Massachusetts Will Require New Data Centers to Use Clean Energy”. A related first-party page was found on mass.gov, but it has not yet confirmed the exact “Will Require New Data Centers to Use Clean Energy - EnergyNow.com Mass” claim. Investigate the claim first; if confirmed, the likely demand surface is new compliance, testing, reporting or implementation work.",
-    "next_check": "Verify the exact claim on the first-party page; only then spend deeper research effort on demand and supply."
+    "reason": "EnergyNow.com reports “Massachusetts Will Require New Data Centers to Use Clean Energy”. GapRadar found a plausible authority page on mass.gov, but that page has not yet confirmed the exact “Will Require New Data Centers to Use Clean Energy - EnergyNow.com Mass” claim. If confirmed, investigate new compliance, testing, reporting or implementation work.",
+    "next_check": "Verify the exact claim on the authority page; then decide whether demand/supply research deserves deeper compute and analyst time."
   },
   {
-    "candidate_id": "86a0955dccc4b9fd",
+    "candidate_id": "a4667ed73e330db1",
     "status": "INVESTIGATE",
-    "priority_score": 5,
+    "priority_score": 10,
     "evidence_state": "news_only",
     "evidence_label": "Tier-1 pending",
-    "reason": "Mashable reports “The latest Apple price hike: Apple TV streaming service”, with a concrete price shock signal (“price hike”). No acceptable first-party source has been located yet. If the report is confirmed, the likely demand surface is switching demand from customers exposed to the new cost.",
-    "next_check": "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
-  },
-  {
-    "candidate_id": "1a9ab0b99d425f58",
-    "status": "WATCH",
-    "priority_score": 4,
-    "evidence_state": "news_only",
-    "evidence_label": "Tier-1 pending",
-    "reason": "MyBroadband reports “Afriforum challenges Eskom’s 8.83% electricity price increase”, with a concrete price shock signal (“price increase”). No acceptable first-party source has been located yet. If the report is confirmed, the likely demand surface is switching demand from customers exposed to the new cost.",
-    "next_check": "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
+    "reason": "Android Central reports “Samsung preps the shutdown of two more apps late in 2026” and the detector matched “shutdown” as a shutdown / end-of-life signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect migration or replacement demand before the affected product disappears.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {
     "candidate_id": "5b1d4ece4414b40f",
     "status": "WATCH",
-    "priority_score": 4,
+    "priority_score": 5,
     "evidence_state": "news_only",
     "evidence_label": "Tier-1 pending",
-    "reason": "The Apple Post reports “Apple Music to make AI labels mandatory for music created with artificial intelligence”, with a concrete regulatory requirement signal (“mandatory”). No acceptable first-party source has been located yet. If the report is confirmed, the likely demand surface is new compliance, testing, reporting or implementation work.",
-    "next_check": "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
+    "reason": "The Apple Post reports “Apple Music to make AI labels mandatory for music created with artificial intelligence” and the detector matched “mandatory” as a regulatory requirement signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect new compliance, testing, reporting or implementation work.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
+  },
+  {
+    "candidate_id": "86a0955dccc4b9fd",
+    "status": "WATCH",
+    "priority_score": 5,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "mashable.com reports “The latest Apple price hike: Apple TV streaming service” and the detector matched “price hike” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   },
   {
     "candidate_id": "00bcfec360bdcc41",
@@ -59,7 +50,25 @@
     "priority_score": 2,
     "evidence_state": "news_only",
     "evidence_label": "Tier-1 pending",
-    "reason": "calgarysun.com reports “GREEN: Say hello to Carney’s new de facto EV sales mandate”, with a concrete regulatory requirement signal (“mandate”). No acceptable first-party source has been located yet. If the report is confirmed, the likely demand surface is new compliance, testing, reporting or implementation work.",
-    "next_check": "Locate the responsible company, regulator or filing and verify the underlying change before deeper market analysis."
+    "reason": "Calgary Sun reports “GREEN: Say hello to Carney’s new de facto EV sales mandate” and the detector matched “mandate” as a regulatory requirement signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect new compliance, testing, reporting or implementation work.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
+  },
+  {
+    "candidate_id": "1a9ab0b99d425f58",
+    "status": "WATCH",
+    "priority_score": 2,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "mybroadband.co.za reports “Afriforum challenges Eskom’s 8.83% electricity price increase” and the detector matched “price increase” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
+  },
+  {
+    "candidate_id": "eb46fb2b8863a40b",
+    "status": "WATCH",
+    "priority_score": 0,
+    "evidence_state": "news_only",
+    "evidence_label": "Tier-1 pending",
+    "reason": "CXO Digitalpulse reports “Nvidia Server Price Increase Could Raise Indian AI Infrastructure Costs by 8–12%” and the detector matched “Price Increase” as a price shock signal. No acceptable first-party source is linked yet, so this remains a research lead rather than an opportunity claim. If verified, inspect switching demand from customers exposed to the new cost.",
+    "next_check": "Locate the responsible company, regulator or filing and verify the exact change; drop the lead if no authoritative confirmation exists."
   }
 ]

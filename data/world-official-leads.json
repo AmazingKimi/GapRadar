@@ -114,6 +114,22 @@
     "authority_route": "company_owner"
   },
   {
+    "candidate_id": "eb46fb2b8863a40b",
+    "status": "not_found",
+    "query": "\"Nvidia Server Price Increase Could Raise Indian AI Infrastructure Costs by 8–12%\" official",
+    "candidate_urls": [],
+    "candidate_hosts": [],
+    "search_coverage": "adequate",
+    "errors": [],
+    "queries": [
+      "\"Nvidia Server Price Increase Could Raise Indian AI Infrastructure Costs by 8–12%\" official",
+      "nvidia server could raise indian infrastructure costs pricing price fee subscription official",
+      "nvidia server newsroom support changelog nvidia server could raise indian pricing price fee subscription",
+      "nvidia server could raise indian pricing price fee subscription official announcement"
+    ],
+    "authority_route": "company_owner"
+  },
+  {
     "candidate_id": "5b1d4ece4414b40f",
     "status": "not_found",
     "query": "\"Apple Music to make AI labels mandatory for music created with artificial intelligence\" official",
