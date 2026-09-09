@@ -28,7 +28,7 @@ class WorldOfficialFact:
 def _clean_page(html_text: str) -> tuple[str, str]:
     title_match = re.search(r"(?is)<title[^>]*>(.*?)</title>", html_text)
     h1_match = re.search(r"(?is)<h1[^>]*>(.*?)</h1>", html_text)
-    heading = (h1_match or title_match)
+    heading = h1_match or title_match
     title = " ".join(re.sub(r"<[^>]+>", " ", unescape(heading.group(1) if heading else "")).split())
     body = re.sub(r"(?is)<script\b.*?</script>", " ", html_text)
     body = re.sub(r"(?is)<style\b.*?</style>", " ", body)
@@ -45,12 +45,26 @@ def _overlap(candidate: GapCandidate, text: str) -> int:
     return sum(1 for token in _subject_tokens(candidate)[:10] if len(token) >= 4 and token in lowered)
 
 
-def verify_official_lead(
-    candidate: GapCandidate,
-    lead: OfficialSourceLead,
-    *,
-    timeout: float = 12.0,
-) -> WorldOfficialFact:
+def _explicit_change_confirmation(candidate: GapCandidate, text: str) -> bool:
+    """Tier-1 verification is intentionally stricter than discovery classification."""
+    t = " ".join(text.lower().split())
+    if candidate.change_type == "price_shock":
+        delta = re.search(
+            r"\b(price|pricing|fee|subscription|plan)\b.{0,140}\b(increase|increased|hike|raised|rises?|higher|changing|changes?|new price|from\s+[$€£]?\d)\b"
+            r"|\b(increase|increased|hike|raised|rises?|higher|changing|changes?)\b.{0,140}\b(price|pricing|fee|subscription|plan)\b",
+            t,
+        )
+        return bool(delta)
+    if candidate.change_type == "regulatory_shift":
+        hard = re.search(
+            r"\b(will require|requires?|required|must\b|mandatory|mandate|shall\b|takes? effect|effective from|compliance deadline|new rule|new rules|regulation)\b",
+            t,
+        )
+        return bool(hard)
+    return _forced_gate(candidate.change_type, t)
+
+
+def verify_official_lead(candidate: GapCandidate, lead: OfficialSourceLead, *, timeout: float = 12.0) -> WorldOfficialFact:
     if not lead.candidate_urls:
         return WorldOfficialFact(candidate.id, "unverified", None, None, None, None, 0, list(lead.errors))
 
@@ -59,12 +73,7 @@ def verify_official_lead(
         if not _looks_first_party(url, candidate):
             continue
         try:
-            response = httpx.get(
-                url,
-                headers={"User-Agent": "Mozilla/5.0 GapRadar/0.8 first-party-verifier"},
-                timeout=timeout,
-                follow_redirects=True,
-            )
+            response = httpx.get(url, headers={"User-Agent": "Mozilla/5.0 GapRadar/0.8 first-party-verifier"}, timeout=timeout, follow_redirects=True)
             response.raise_for_status()
             final_url = str(response.url)
             if not _looks_first_party(final_url, candidate):
@@ -74,12 +83,12 @@ def verify_official_lead(
             text = f"{title} {body}"
             overlap = _overlap(candidate, text)
             host = (urlparse(final_url).hostname or "").lower()
-            min_overlap = 1 if _host_is_government(host) else 2
+            min_overlap = 2 if _host_is_government(host) else 2
             if overlap < min_overlap:
                 errors.append(f"subject overlap too weak for {host}: {overlap} < {min_overlap}")
                 continue
-            if not _forced_gate(candidate.change_type, text):
-                errors.append(f"first-party page did not confirm {candidate.change_type}: {host}")
+            if not _explicit_change_confirmation(candidate, text):
+                errors.append(f"first-party page did not explicitly confirm {candidate.change_type}: {host}")
                 continue
             return WorldOfficialFact(
                 candidate_id=candidate.id,
@@ -97,10 +106,7 @@ def verify_official_lead(
     return WorldOfficialFact(candidate.id, "unverified", None, None, None, None, 0, errors)
 
 
-def verify_official_leads(
-    candidates: list[GapCandidate],
-    leads: list[OfficialSourceLead],
-) -> list[WorldOfficialFact]:
+def verify_official_leads(candidates: list[GapCandidate], leads: list[OfficialSourceLead]) -> list[WorldOfficialFact]:
     by_candidate = {row.candidate_id: row for row in leads}
     return [
         verify_official_lead(candidate, by_candidate.get(candidate.id, OfficialSourceLead(candidate.id, "not_found", "", [], [], "failed", [], [])))
