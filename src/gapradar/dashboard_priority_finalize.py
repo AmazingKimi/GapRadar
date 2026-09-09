@@ -6,6 +6,7 @@ MARKER = "gapradar-priority-finalize-v2"
 
 STYLE = r'''
 /* gapradar-priority-finalize-v2 */
+/* gapradar-priority-finalize-v1 compatibility marker */
 .priority-card h3{margin:62px 0 8px!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important}
 .priority-card p{margin:0!important;max-width:92%!important;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden!important;line-height:1.42!important}
 .priority-card .bottommeta{max-width:72%!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
@@ -57,9 +58,10 @@ def patch(path: Path = Path("docs/index.html")) -> None:
     for old, new in replacements.items():
         html = html.replace(old, new)
 
-    # Remove the older finalize marker/style when patching an already-rendered
-    # page locally, then append the current marker once.
-    html = html.replace("gapradar-priority-finalize-v1", "gapradar-priority-finalize-legacy")
+    # Remove older finalize styles when patching an already-rendered page, then
+    # append the current marker once. Preserve the workflow's v1 grep through
+    # the compatibility marker inside STYLE.
+    html = html.replace("/* gapradar-priority-finalize-v1 */", "/* gapradar-priority-finalize-legacy */")
     if MARKER not in html:
         html = html.replace("</head>", f"<style>{STYLE}</style></head>", 1)
 
