@@ -10,7 +10,9 @@ from typing import Any, Literal
 
 import httpx
 
-from .detector import classify_entry
+from .detector import classify_entry, event_from_document
+from .reaction import archived_reaction_evidence
+from .supply import archived_supply_evidence
 
 
 @dataclass(frozen=True)
@@ -85,9 +87,128 @@ def load_cases(path: Path) -> list[dict[str, Any]]:
     return payload
 
 
-def _classify_case(case: dict[str, Any], title: str, body: str) -> tuple[bool, str | None]:
+def load_downstream(path: Path) -> dict[str, dict[str, Any]]:
+    if not path.exists():
+        return {}
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError("downstream benchmark must be a JSON object keyed by event id")
+    return payload
+
+
+def _classify_case(title: str, body: str) -> tuple[bool, str | None]:
     detected = classify_entry(title, body, allow_strong_body=True)
     return detected is not None, detected.value if detected else None
+
+
+def _page_content(
+    spec: dict[str, Any],
+    *,
+    mode: Literal["fixture", "wayback"],
+    target: date,
+    wayback: WaybackClient | None,
+) -> tuple[str, str, str | None, str]:
+    url = str(spec["url"])
+    if mode == "fixture":
+        return str(spec.get("title_hint") or ""), str(spec.get("excerpt_hint") or ""), None, "evaluated"
+    assert wayback is not None
+    try:
+        snapshot = wayback.closest_before(url, _as_datetime(target))
+    except Exception as exc:
+        return "", "", f"{type(exc).__name__}: {exc}", "archive_error"
+    if snapshot is None:
+        return "", "", None, "archive_missing"
+    title, body = extract_page(snapshot.html)
+    return title, body, snapshot.archive_url, "evaluated"
+
+
+def _replay_downstream(
+    event,
+    downstream: dict[str, Any],
+    *,
+    mode: Literal["fixture", "wayback"],
+    target: date,
+    wayback: WaybackClient | None,
+) -> dict[str, Any]:
+    reaction_specs = list(downstream.get("reaction_pages") or [])
+    supply_specs = list(downstream.get("supply_pages") or [])
+    reaction_rows: list[dict[str, Any]] = []
+    supply_rows: list[dict[str, Any]] = []
+
+    for spec in reaction_specs:
+        title, body, archive_or_error, status = _page_content(spec, mode=mode, target=target, wayback=wayback)
+        evidence = None
+        if status == "evaluated":
+            evidence = archived_reaction_evidence(
+                event,
+                title=title,
+                body=body,
+                url=str(spec["url"]),
+                publisher=str(spec.get("publisher") or "Archived community"),
+                published_at=_as_datetime(target),
+                engagement=int(spec.get("engagement") or 0),
+            )
+            if evidence is not None:
+                event.reaction_evidence.append(evidence)
+        reaction_rows.append({
+            "url": spec["url"],
+            "status": status,
+            "qualified": evidence is not None,
+            "archive_url": archive_or_error if status == "evaluated" and mode == "wayback" else None,
+            "error": archive_or_error if status == "archive_error" else None,
+        })
+
+    if reaction_specs:
+        event.reaction_checked_at = _as_datetime(target)
+        event.reaction_sources_checked = ["historical_fixture" if mode == "fixture" else "wayback_reaction"]
+        event.reaction_candidate_count = sum(1 for row in reaction_rows if row["status"] == "evaluated")
+        event.reaction_search_quality = "adequate" if all(row["status"] == "evaluated" for row in reaction_rows) else "degraded"
+        event.verify()
+
+    for spec in supply_specs:
+        title, body, archive_or_error, status = _page_content(spec, mode=mode, target=target, wayback=wayback)
+        evidence = None
+        if status == "evaluated":
+            evidence = archived_supply_evidence(
+                event,
+                title=title,
+                body=body,
+                url=str(spec["url"]),
+                publisher=str(spec.get("publisher") or "Archived supply"),
+                observed_at=_as_datetime(target),
+                popularity=int(spec.get("popularity") or 0),
+                archived=bool(spec.get("archived", False)),
+                quality_hint=float(spec.get("quality_hint") or 0.0),
+            )
+            if evidence is not None:
+                event.supply_evidence.append(evidence)
+        supply_rows.append({
+            "url": spec["url"],
+            "status": status,
+            "qualified": evidence is not None,
+            "archive_url": archive_or_error if status == "evaluated" and mode == "wayback" else None,
+            "error": archive_or_error if status == "archive_error" else None,
+        })
+
+    if supply_specs:
+        event.supply_checked_at = _as_datetime(target)
+        event.supply_sources_checked = ["historical_fixture" if mode == "fixture" else "wayback_supply"]
+        event.supply_candidate_count = sum(1 for row in supply_rows if row["status"] == "evaluated")
+        event.verify()
+
+    return {
+        "reaction_pages": reaction_rows,
+        "reaction_pages_total": len(reaction_rows),
+        "reaction_pages_evaluated": sum(1 for row in reaction_rows if row["status"] == "evaluated"),
+        "reaction_qualified": len(event.reaction_evidence),
+        "observed_demand_status": event.demand_status if reaction_specs else None,
+        "supply_pages": supply_rows,
+        "supply_pages_total": len(supply_rows),
+        "supply_pages_evaluated": sum(1 for row in supply_rows if row["status"] == "evaluated"),
+        "supply_qualified": len(event.supply_evidence),
+        "observed_supply_status": event.supply_status if supply_specs else None,
+        "observed_gap_status": event.gap_status if reaction_specs and supply_specs else None,
+    }
 
 
 def replay_case(
@@ -95,6 +216,7 @@ def replay_case(
     *,
     mode: Literal["fixture", "wayback"],
     wayback: WaybackClient | None = None,
+    downstream: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     expected = bool(case.get("expected_detect", True))
     target = _parse_day(str(case["replay_as_of"]))
@@ -106,25 +228,16 @@ def replay_case(
         try:
             snapshot = wayback.closest_before(str(case["official_url"]), _as_datetime(target))
         except Exception as exc:
-            return {
-                "id": case["id"],
-                "expected_detect": expected,
-                "status": "archive_error",
-                "error": f"{type(exc).__name__}: {exc}",
-            }
+            return {"id": case["id"], "expected_detect": expected, "status": "archive_error", "error": f"{type(exc).__name__}: {exc}"}
         if snapshot is None:
             return {"id": case["id"], "expected_detect": expected, "status": "archive_missing"}
         title, body = extract_page(snapshot.html)
-        snapshot_meta = {
-            "snapshot_timestamp": snapshot.timestamp,
-            "snapshot_url": snapshot.archive_url,
-            "observed_title": title,
-        }
+        snapshot_meta = {"snapshot_timestamp": snapshot.timestamp, "snapshot_url": snapshot.archive_url, "observed_title": title}
     else:
         title = str(case.get("title_hint") or "")
         body = str(case.get("excerpt_hint") or "")
 
-    detected, observed_type = _classify_case(case, title, body)
+    detected, observed_type = _classify_case(title, body)
     expected_type = case.get("event_type") if expected else None
     type_match = (observed_type == expected_type) if expected and detected else None
 
@@ -136,6 +249,20 @@ def replay_case(
         outcome = "fp"
     else:
         outcome = "tn"
+
+    downstream_result: dict[str, Any] = {}
+    if detected and downstream:
+        event = event_from_document(
+            vendor=str(case.get("vendor") or "Unknown"),
+            product=str(case.get("product") or "Unknown"),
+            title=title,
+            summary=body,
+            url=str(case["official_url"]),
+            published_at=_as_datetime(_parse_day(str(case["event_date"]))),
+            historical=True,
+        )
+        if event is not None:
+            downstream_result = _replay_downstream(event, downstream, mode=mode, target=target, wayback=wayback)
 
     return {
         "id": case["id"],
@@ -155,6 +282,7 @@ def replay_case(
         "retracted": bool(case.get("retracted", False)),
         "status": "evaluated",
         **snapshot_meta,
+        **downstream_result,
     }
 
 
@@ -166,6 +294,18 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
     positives_with_type = [row for row in evaluated if row.get("expected_detect") and row.get("observed_detect")]
     type_correct = sum(1 for row in positives_with_type if row.get("type_match"))
     unavailable = [row for row in results if row.get("status") != "evaluated"]
+
+    demand_rows = [row for row in evaluated if row.get("reaction_pages_total", 0) > 0 and row.get("reaction_pages_evaluated", 0) > 0]
+    demand_correct = sum(
+        1 for row in demand_rows
+        if (row.get("ground_truth_demand") == "yes") == (row.get("observed_demand_status") in {"early_signal", "repeated_signal"})
+    )
+    supply_rows = [row for row in evaluated if row.get("supply_pages_total", 0) > 0 and row.get("supply_pages_evaluated", 0) > 0]
+    supply_correct = sum(
+        1 for row in supply_rows
+        if (row.get("ground_truth_supply") == "served") == (row.get("observed_supply_status") == "served")
+    )
+
     return {
         "cases_total": len(results),
         "cases_evaluated": len(evaluated),
@@ -178,6 +318,10 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
         "recall": round(counts["tp"] / recall_den, 4) if recall_den else None,
         "event_type_accuracy": round(type_correct / len(positives_with_type), 4) if positives_with_type else None,
         "archive_coverage": round(len(evaluated) / len(results), 4) if results else None,
+        "demand_cases_evaluated": len(demand_rows),
+        "demand_accuracy": round(demand_correct / len(demand_rows), 4) if demand_rows else None,
+        "supply_cases_evaluated": len(supply_rows),
+        "supply_accuracy": round(supply_correct / len(supply_rows), 4) if supply_rows else None,
     }
 
 
@@ -190,17 +334,20 @@ def run_backtest(
     cases = load_cases(fixture_path)
     if as_of is not None:
         cases = [case for case in cases if _parse_day(str(case["event_date"])) <= as_of]
+    downstream_path = fixture_path.with_name("downstream.json")
+    downstream = load_downstream(downstream_path)
     client = WaybackClient() if mode == "wayback" else None
-    results = [replay_case(case, mode=mode, wayback=client) for case in cases]
+    results = [replay_case(case, mode=mode, wayback=client, downstream=downstream.get(str(case["id"]))) for case in cases]
     return {
         "mode": mode,
         "as_of": as_of.isoformat() if as_of else None,
         "fixture": str(fixture_path),
+        "downstream_fixture": str(downstream_path) if downstream_path.exists() else None,
         "metrics": summarize(results),
         "results": results,
         "limitations": [
-            "Fixture mode validates deterministic detector behavior against manually curated historical ground truth.",
-            "Wayback mode measures only cases with retrievable archived snapshots; archive misses are reported separately and are never counted as detector misses.",
-            "Demand and supply labels are preserved as ground truth metadata but are not scored until archived reaction/supply evidence is attached to a case.",
+            "Fixture mode is a hand-curated benchmark, not a universal accuracy estimate.",
+            "Wayback mode scores only retrievable archived documents; archive misses/errors are reported separately and never converted into detector misses.",
+            "Demand/supply accuracy is calculated only for cases with explicit benchmark evidence pages that were actually evaluated; its coverage is intentionally shown alongside the metric.",
         ],
     }
