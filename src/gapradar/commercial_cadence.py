@@ -15,12 +15,16 @@ class DailyCadence:
     official_candidates: int
     tier1_verified: int
     deep_analyses: int
-    review_opportunities: int
+    priority_leads: int = 0
+    review_opportunities: int = 0
 
 
 @dataclass(frozen=True)
 class CadenceSummary:
     days_observed: int
+    priority_leads_total: int
+    days_with_priority: int
+    priority_leads_per_day: float
     review_opportunities_total: int
     days_with_review: int
     review_opportunities_per_day: float
@@ -35,17 +39,19 @@ def _read_json(path: Path, default):
         return default
 
 
-def _current_snapshot() -> tuple[int, int, int, int, int, int]:
+def _current_snapshot() -> tuple[int, int, int, int, int, int, int]:
     scan = _read_json(Path("data/world-scan-stats.json"), {})
     quality = _read_json(Path("data/world-quality-report.json"), {})
     verification = _read_json(Path("data/world-verification-metrics.json"), {})
     assessments = _read_json(Path("data/world-assessments.json"), [])
+    priority = _read_json(Path("data/priority-leads.json"), [])
     return (
         int(scan.get("raw_entries", 0)),
         int(quality.get("kept_candidates", 0)),
         int(verification.get("first_party_candidate_found", 0)),
         int(verification.get("tier1_verified", 0)),
         len(assessments),
+        sum(str(row.get("status", "")).upper() in {"REVIEW", "INVESTIGATE"} for row in priority),
         sum(str(row.get("final_recommendation", "")).upper() == "REVIEW" for row in assessments),
     )
 
@@ -56,7 +62,11 @@ def _load_days(path: Path) -> list[DailyCadence]:
     result: list[DailyCadence] = []
     for row in rows:
         try:
-            result.append(DailyCadence(**row))
+            # Backward compatible with cadence files created before priority_leads existed.
+            item = dict(row)
+            item.setdefault("priority_leads", 0)
+            item.setdefault("review_opportunities", 0)
+            result.append(DailyCadence(**item))
         except TypeError:
             continue
     return result
@@ -64,9 +74,13 @@ def _load_days(path: Path) -> list[DailyCadence]:
 
 def summarize(days: list[DailyCadence]) -> CadenceSummary:
     count = len(days)
+    total_priority = sum(row.priority_leads for row in days)
     total_reviews = sum(row.review_opportunities for row in days)
     return CadenceSummary(
         days_observed=count,
+        priority_leads_total=total_priority,
+        days_with_priority=sum(row.priority_leads > 0 for row in days),
+        priority_leads_per_day=round(total_priority / count, 2) if count else 0.0,
         review_opportunities_total=total_reviews,
         days_with_review=sum(row.review_opportunities > 0 for row in days),
         review_opportunities_per_day=round(total_reviews / count, 2) if count else 0.0,
@@ -78,21 +92,20 @@ def summarize(days: list[DailyCadence]) -> CadenceSummary:
 def run(path: Path = Path("data/commercial-cadence.json"), *, now: datetime | None = None) -> CadenceSummary:
     now = now or datetime.now(timezone.utc)
     day_key = now.astimezone(timezone.utc).date().isoformat()
-    raw, kept, official, verified, deep, reviews = _current_snapshot()
+    raw, kept, official, verified, deep, priority, reviews = _current_snapshot()
     days = _load_days(path)
     by_date = {row.date: row for row in days}
     prior = by_date.get(day_key)
     by_date[day_key] = DailyCadence(
         date=day_key,
         runs=(prior.runs if prior else 0) + 1,
-        # The product-value question is whether a useful item was delivered at any
-        # point that day, so stages use the daily maximum rather than summing four
-        # overlapping six-hour windows.
+        # Stages use the daily maximum rather than summing overlapping 6-hour windows.
         raw_entries=max(raw, prior.raw_entries if prior else 0),
         kept_candidates=max(kept, prior.kept_candidates if prior else 0),
         official_candidates=max(official, prior.official_candidates if prior else 0),
         tier1_verified=max(verified, prior.tier1_verified if prior else 0),
         deep_analyses=max(deep, prior.deep_analyses if prior else 0),
+        priority_leads=max(priority, prior.priority_leads if prior else 0),
         review_opportunities=max(reviews, prior.review_opportunities if prior else 0),
     )
     ordered = sorted(by_date.values(), key=lambda row: row.date)[-30:]
@@ -108,8 +121,8 @@ def run(path: Path = Path("data/commercial-cadence.json"), *, now: datetime | No
     )
     print(
         f"Commercial cadence: {summary.days_observed} observed day(s), "
-        f"{summary.review_opportunities_total} REVIEW opportunity result(s), "
-        f"{summary.days_with_review} day(s) with at least one REVIEW."
+        f"{summary.priority_leads_total} priority research lead(s), "
+        f"{summary.review_opportunities_total} validated REVIEW opportunity result(s)."
     )
     return summary
 
