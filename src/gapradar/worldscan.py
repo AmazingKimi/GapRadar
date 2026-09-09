@@ -105,15 +105,17 @@ def _forced_gate(change_type: str, text: str) -> bool:
         )
         return api_context and bool(re.search(r"\b(deprecat|terms|policy|rate limit|pricing|license|licensing|access change|restriction)\b", t))
     if change_type == "regulatory_shift":
-        if re.search(r"\b(protest|rally|march|concern|calls? for regulation|opinion|commentary|debate|podcast|thought for the week|mocks?|warns?|priority|talks? about|could influence|should take center stage)\b", t):
+        if re.search(r"\b(protest|rally|march|concern|calls? for regulation|opinion|commentary|debate|podcast|thought for the week|mocks?|warns?|priority|talks? about|could influence|should take center stage|new rules of|regulation talks?)\b", t):
             return False
         if re.search(r"\b(launches?|unveils?|introduces?)\b.{0,40}\b(solution|product|tool)\b", t):
             return False
-        action = bool(re.search(
-            r"\b(will require|requires?|required|mandate|mandatory|law takes effect|new law|new rules?|adopts?|adopted|approved|passes?|passed|regulator.{0,40}(set up|created|established|requires?)|compliance deadline|rules? take effect|policy takes effect|plan for ai regulation|set up ai regulator)\b",
+        hard_action = bool(re.search(
+            r"\b(will require|requires?|required|mandate|mandatory|law takes effect|new law|adopts?|adopted|approved|passes?|passed|compliance deadline|rules? take effect|policy takes effect|plan for ai regulation|set up ai regulator)\b",
             t,
         ))
-        return action and bool(TECH_TERMS.search(t))
+        government_rules = bool(re.search(r"\b(government|regulator|legislature|parliament|commission|agency|state|massachusetts|eu|european union)\b.{0,120}\b(new rules?|rules?|requirements?|regulation|policy)\b", t))
+        ai_act_obligation = bool(re.search(r"\b(ai act|data act|digital services act|digital markets act)\b.{0,100}\b(obligation|requirement|guidance|compliance|rule)\b", t))
+        return (hard_action or government_rules or ai_act_obligation) and bool(TECH_TERMS.search(t))
     return False
 
 
