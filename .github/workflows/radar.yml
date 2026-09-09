@@ -19,14 +19,15 @@ jobs:
           cache: pip
       - run: python -m pip install -e .
       - run: gapradar scan
-      - name: Commit newly detected events
+      - run: gapradar export
+      - name: Commit radar state
         run: |
-          if git diff --quiet -- data/events.json; then
-            echo "No new verified events."
+          if git diff --quiet -- data/events.json docs/index.html; then
+            echo "No radar changes."
             exit 0
           fi
           git config user.name "gapradar-bot"
           git config user.email "gapradar-bot@users.noreply.github.com"
-          git add data/events.json
+          git add data/events.json docs/index.html
           git commit -m "data: update verified market events"
           git push
