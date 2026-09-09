@@ -33,13 +33,11 @@
     "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
     "candidate_urls": [
       "https://auto.economictimes.indiatimes.com/news/auto-technology/india-tightens-cybersecurity-norms-for-ev-battery-systems-with-wireless-connectivity/133950713",
-      "https://www.energetica-india.net/news/morth-mandates-cybersecurity-testing-for-wireless-enabled-ev-bms",
-      "https://www.autoguideindia.com/reports/india-draft-cybersecurity-software-update-rules-connected-autonomous-vehicles"
+      "https://www.energetica-india.net/news/morth-mandates-cybersecurity-testing-for-wireless-enabled-ev-bms"
     ],
     "candidate_hosts": [
       "auto.economictimes.indiatimes.com",
-      "www.energetica-india.net",
-      "www.autoguideindia.com"
+      "www.energetica-india.net"
     ],
     "search_coverage": "adequate",
     "errors": [],

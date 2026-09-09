@@ -1,7 +1,7 @@
 [
   {
     "id": "52f1eb44691af255",
-    "discovered_at": "2026-09-09T10:21:54.745951+00:00",
+    "discovered_at": "2026-09-09T10:25:21.451392+00:00",
     "published_at": "2026-09-08T22:27:45+00:00",
     "source": "Google News · energy climate structural change",
     "headline": "Massachusetts Will Require New Data Centers to Use Clean Energy",
@@ -18,7 +18,7 @@
   },
   {
     "id": "14436a2a2ff1f7ea",
-    "discovered_at": "2026-09-09T10:21:54.745951+00:00",
+    "discovered_at": "2026-09-09T10:25:21.451392+00:00",
     "published_at": "2026-09-08T15:17:01+00:00",
     "source": "Google News · AI and data regulation",
     "headline": "EV BMS Cybersecurity Testing Now Mandatory in India",
@@ -35,7 +35,7 @@
   },
   {
     "id": "86a0955dccc4b9fd",
-    "discovered_at": "2026-09-09T10:21:54.745951+00:00",
+    "discovered_at": "2026-09-09T10:25:21.451392+00:00",
     "published_at": "2026-09-08T15:09:01+00:00",
     "source": "Google News · SaaS pricing shocks",
     "headline": "The latest Apple price hike: Apple TV streaming service",
@@ -52,7 +52,7 @@
   },
   {
     "id": "1a9ab0b99d425f58",
-    "discovered_at": "2026-09-09T10:21:54.745951+00:00",
+    "discovered_at": "2026-09-09T10:25:21.451392+00:00",
     "published_at": "2026-09-08T08:20:58+00:00",
     "source": "Google News · energy climate structural change",
     "headline": "Afriforum challenges Eskom’s 8.83% electricity price increase",
@@ -69,12 +69,12 @@
   },
   {
     "id": "5a6d31c87ca2276d",
-    "discovered_at": "2026-09-09T10:21:54.745951+00:00",
+    "discovered_at": "2026-09-09T10:25:21.451392+00:00",
     "published_at": "2026-09-07T21:13:14+00:00",
     "source": "Google News · healthcare biotech structural change",
     "headline": "3 Red Line stations reopen Monday after 2-month shutdown for major construction",
     "url": "https://news.google.com/rss/articles/CBMipwJBVV95cUxQZTdBR3dBYmNRTnViSF94aGhMZDZtSzJ0TktNWnFjZWo4aXZVdklpYzVOQnFPUXRFSUlfZWdEbDNLSGFEaDZvSHgyOUJsZjcwQ1B4U1hlQloxam5SRWI5RlNManJUSDRlTXRaamFXVWFnZXRoQ19QaWF4ak02bjFtY050SHUtRFJ0NFJmMERXOER6TGgzeGtDU2dCWHVHUi02VFh3UXpUT2RwMjJLTnY2M1NBMDk0ZnZ3M19wVkI0c1pRdTROS3VTNTdLa3MwQnFlOXQ3SURYM3M2ZGV6c3V1UDA3WkRncFRpQWIwb3hIYTZ1SjBHT0NqQnp3X25ic3dpOWpLYkxtQmZRY3ZyUmZxSUwtLXYxbV9sLUxZQU9PUzBaOVhVRHVv?oc=5",
-    "summary": "3 Red Line stations reopen Monday after 2-month shutdown for major construction &nbsp;&nbsp; wjla.com",
+    "summary": "3 Red Line stations reopen Monday after 2-month shutdown for major construction &nbsp;&nbsp; WJLA",
     "change_type": "shutdown_eol",
     "matched_signal": "shutdown",
     "recommendation": "WATCH",
@@ -86,7 +86,7 @@
   },
   {
     "id": "48452bf0d5a2a7c4",
-    "discovered_at": "2026-09-09T10:21:54.745951+00:00",
+    "discovered_at": "2026-09-09T10:25:21.451392+00:00",
     "published_at": "2026-09-07T18:49:23+00:00",
     "source": "Google News · mobility robotics industry change",
     "headline": "Trump's Trade Tactics Target Bombardier: Manufacturing Mandate",
@@ -103,7 +103,7 @@
   },
   {
     "id": "a4667ed73e330db1",
-    "discovered_at": "2026-09-09T10:21:54.745951+00:00",
+    "discovered_at": "2026-09-09T10:25:21.451392+00:00",
     "published_at": "2026-09-07T18:14:00+00:00",
     "source": "Google News · software shutdowns",
     "headline": "Samsung preps the shutdown of two more apps late in 2026",
@@ -120,7 +120,7 @@
   },
   {
     "id": "5b1d4ece4414b40f",
-    "discovered_at": "2026-09-09T10:21:54.745951+00:00",
+    "discovered_at": "2026-09-09T10:25:21.451392+00:00",
     "published_at": "2026-09-06T19:44:12+00:00",
     "source": "Google News · AI and data regulation",
     "headline": "Apple Music to make AI labels mandatory for music created with artificial intelligence",

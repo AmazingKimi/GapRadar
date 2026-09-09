@@ -1,0 +1,22 @@
+{
+  "days": [
+    {
+      "date": "2026-09-09",
+      "runs": 1,
+      "raw_entries": 755,
+      "kept_candidates": 8,
+      "official_candidates": 3,
+      "tier1_verified": 3,
+      "deep_analyses": 3,
+      "review_opportunities": 0
+    }
+  ],
+  "summary": {
+    "days_observed": 1,
+    "review_opportunities_total": 0,
+    "days_with_review": 0,
+    "review_opportunities_per_day": 0.0,
+    "tier1_verified_per_day": 3.0,
+    "deep_analyses_per_day": 3.0
+  }
+}
