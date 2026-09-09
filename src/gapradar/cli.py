@@ -13,6 +13,7 @@ from .detector import probe_source, scan_source
 from .reaction import validate_reactions
 from .render import render_dashboard
 from .store import load_events, merge_events, save_events
+from .supply import validate_supply
 
 app = typer.Typer(no_args_is_help=True, help="Evidence-first market change radar.")
 console = Console()
@@ -35,7 +36,7 @@ def scan(
                 f"[green]✓[/green] {source.vendor}/{source.name}: "
                 f"{len(found)} verified event(s), lookback={source.lookback_days}d"
             )
-        except Exception as exc:  # one broken source must not kill the radar
+        except Exception as exc:
             failures += 1
             console.print(f"[yellow]![/yellow] {source.vendor}/{source.name}: {exc}")
 
@@ -69,6 +70,34 @@ def validate_demand(
             str(len(event.reaction_evidence)),
             event.demand_status,
             ", ".join(event.reaction_sources_checked) or "none",
+        )
+    console.print(table)
+
+
+@app.command("validate-supply")
+def validate_supply_command(
+    events: Path = typer.Option(Path("data/events.json"), exists=True, readable=True),
+) -> None:
+    """Search replacement supply and classify whether displaced demand appears served."""
+    rows = load_events(events)
+    validated = validate_supply(rows)
+    save_events(events, validated)
+
+    table = Table(title="GapRadar — Replacement Supply")
+    table.add_column("Vendor / Product")
+    table.add_column("Candidates", justify="right")
+    table.add_column("Accepted", justify="right")
+    table.add_column("Supply")
+    table.add_column("Gap")
+    table.add_column("Sources")
+    for event in validated:
+        table.add_row(
+            f"{event.vendor} / {event.product}",
+            str(event.supply_candidate_count),
+            str(len(event.supply_evidence)),
+            event.supply_status,
+            event.gap_status,
+            ", ".join(event.supply_sources_checked) or "none",
         )
     console.print(table)
 
@@ -147,7 +176,8 @@ def report(
     table.add_column("Vendor / Product")
     table.add_column("Confidence")
     table.add_column("Demand")
-    table.add_column("Reaction")
+    table.add_column("Supply")
+    table.add_column("Gap")
     table.add_column("Headline")
     for event in rows:
         table.add_row(
@@ -155,7 +185,8 @@ def report(
             f"{event.vendor} / {event.product}",
             event.confidence.value,
             event.demand_status,
-            str(len(event.reaction_evidence)),
+            event.supply_status,
+            event.gap_status,
             event.headline,
         )
     console.print(table)
