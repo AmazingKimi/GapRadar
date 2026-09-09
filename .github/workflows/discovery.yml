@@ -1,0 +1,40 @@
+name: Historical Self Discovery
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/gapradar/discovery.py'
+      - 'tests/test_discovery.py'
+      - '.github/workflows/discovery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  scout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - name: Unit tests
+        run: pytest tests/test_discovery.py
+      - name: Self-discovery smoke replay
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python -m gapradar.discovery --as-of 2022-12-31 --output data/backtest/report-discovery.json
+      - name: Print discovery report
+        if: always()
+        run: cat data/backtest/report-discovery.json || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: historical-self-discovery-report
+          path: data/backtest/report-discovery.json
+          if-no-files-found: warn
