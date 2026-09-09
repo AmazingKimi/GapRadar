@@ -7,7 +7,7 @@
     "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
     "summary": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
     "event_date": "2026-08-27T16:00:00Z",
-    "detected_at": "2026-09-09T05:43:30.411560Z",
+    "detected_at": "2026-09-09T05:44:23.562965Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -25,25 +25,13 @@
     ],
     "reaction_evidence": [],
     "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T05:43:44.417315Z",
+    "reaction_checked_at": "2026-09-09T05:44:30.791469Z",
     "reaction_sources_checked": [
       "hacker_news",
       "github_issues"
     ],
-    "reaction_candidate_count": 42,
+    "reaction_candidate_count": 0,
     "reaction_queries": [
-      {
-        "source": "hacker_news",
-        "query": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "hacker_news",
-        "query": "Shopify Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older",
-        "candidate_count": 0,
-        "ok": true
-      },
       {
         "source": "hacker_news",
         "query": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older deprecated",
@@ -65,18 +53,6 @@
       {
         "source": "hacker_news",
         "query": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older alternative",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "hacker_news",
-        "query": "Shopify Theme CLI",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "hacker_news",
-        "query": "Shopify Shopify Theme CLI",
         "candidate_count": 0,
         "ok": true
       },
@@ -106,49 +82,13 @@
       },
       {
         "source": "hacker_news",
-        "query": "Theme CLI v3.83.x",
+        "query": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older",
         "candidate_count": 0,
         "ok": true
       },
       {
         "source": "hacker_news",
-        "query": "Shopify Theme CLI v3.83.x",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "hacker_news",
-        "query": "Theme CLI v3.83.x deprecated",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "hacker_news",
-        "query": "Theme CLI v3.83.x sunset",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "hacker_news",
-        "query": "Theme CLI v3.83.x migration",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "hacker_news",
-        "query": "Theme CLI v3.83.x alternative",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "github_issues",
-        "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" Shopify created:>=2026-05-12 is:issue",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "github_issues",
-        "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" created:>=2026-05-12 is:issue",
+        "query": "Shopify Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older",
         "candidate_count": 0,
         "ok": true
       },
@@ -178,18 +118,6 @@
       },
       {
         "source": "github_issues",
-        "query": "\"Shopify Theme CLI\" Shopify created:>=2026-05-12 is:issue",
-        "candidate_count": 40,
-        "ok": true
-      },
-      {
-        "source": "github_issues",
-        "query": "\"Shopify Theme CLI\" created:>=2026-05-12 is:issue",
-        "candidate_count": 40,
-        "ok": true
-      },
-      {
-        "source": "github_issues",
         "query": "\"Shopify Theme CLI\" deprecated created:>=2026-05-12 is:issue",
         "candidate_count": 0,
         "ok": true
@@ -203,53 +131,29 @@
       {
         "source": "github_issues",
         "query": "\"Shopify Theme CLI\" migration created:>=2026-05-12 is:issue",
-        "candidate_count": 3,
-        "ok": true
+        "candidate_count": 0,
+        "ok": false
       },
       {
         "source": "github_issues",
         "query": "\"Shopify Theme CLI\" alternative created:>=2026-05-12 is:issue",
-        "candidate_count": 1,
-        "ok": true
+        "candidate_count": 0,
+        "ok": false
       },
       {
         "source": "github_issues",
-        "query": "\"Theme CLI v3.83.x\" Shopify created:>=2026-05-12 is:issue",
+        "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" Shopify created:>=2026-05-12 is:issue",
         "candidate_count": 0,
-        "ok": true
+        "ok": false
       },
       {
         "source": "github_issues",
-        "query": "\"Theme CLI v3.83.x\" created:>=2026-05-12 is:issue",
+        "query": "\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" created:>=2026-05-12 is:issue",
         "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "github_issues",
-        "query": "\"Theme CLI v3.83.x\" deprecated created:>=2026-05-12 is:issue",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "github_issues",
-        "query": "\"Theme CLI v3.83.x\" sunset created:>=2026-05-12 is:issue",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "github_issues",
-        "query": "\"Theme CLI v3.83.x\" migration created:>=2026-05-12 is:issue",
-        "candidate_count": 0,
-        "ok": true
-      },
-      {
-        "source": "github_issues",
-        "query": "\"Theme CLI v3.83.x\" alternative created:>=2026-05-12 is:issue",
-        "candidate_count": 0,
-        "ok": true
+        "ok": false
       }
     ],
-    "reaction_search_quality": "adequate",
+    "reaction_search_quality": "degraded",
     "demand_status": "no_signal",
     "supply_checked_at": null,
     "supply_sources_checked": [],
@@ -258,7 +162,13 @@
     "gap_status": "unassessed",
     "confidence": "weak",
     "status": "verified",
-    "notes": []
+    "notes": [
+      "Reaction source failure: github_issues [\"Shopify Theme CLI\" migration created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Shopify+Theme+CLI%22+migration+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction source failure: github_issues [\"Shopify Theme CLI\" alternative created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Shopify+Theme+CLI%22+alternative+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction source failure: github_issues [\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" Shopify created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Password+Protected+Shop+Dev+flows+on+Shopify+Theme+CLI+v3.83.x+and+older%22+Shopify+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction source failure: github_issues [\"Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older\" created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Password+Protected+Shop+Dev+flows+on+Shopify+Theme+CLI+v3.83.x+and+older%22+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction coverage gap: preferred ecosystem sources not checked: shopify_community"
+    ]
   },
   {
     "id": "b753744578cf3b4d",
@@ -268,7 +178,7 @@
     "headline": "Script tags are deprecated and will stop running on March 1, 2027",
     "summary": "Starting October 1, 2026, the scriptTagCreate and scriptTagUpdate mutations will return an user error, and the ScriptTag REST Admin API resource will reject POST and PUT . The deprecation applies to all API versions, including older ones, so pinning won't defer it. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Storefronts are the last place script tags still run, since they already stopped working on the Order status page . If your app uses a script tag to load JavaScript onto a store, then you need to replace it before then. What's changing A script tag loads JavaScript on a storefront without any changes to theme code. After March 1, 2027, Shopify won't inject",
     "event_date": "2026-08-24T16:00:00Z",
-    "detected_at": "2026-09-09T05:43:30.412128Z",
+    "detected_at": "2026-09-09T05:44:23.563594Z",
     "official_evidence": [
       {
         "tier": "tier_1_official",
@@ -286,19 +196,12 @@
     ],
     "reaction_evidence": [],
     "supply_evidence": [],
-    "reaction_checked_at": "2026-09-09T05:43:52.706544Z",
+    "reaction_checked_at": "2026-09-09T05:44:34.513870Z",
     "reaction_sources_checked": [
-      "hacker_news",
-      "github_issues"
+      "hacker_news"
     ],
-    "reaction_candidate_count": 117,
+    "reaction_candidate_count": 0,
     "reaction_queries": [
-      {
-        "source": "hacker_news",
-        "query": "Script tags",
-        "candidate_count": 0,
-        "ok": true
-      },
       {
         "source": "hacker_news",
         "query": "Shopify Script tags",
@@ -330,43 +233,49 @@
         "ok": true
       },
       {
-        "source": "github_issues",
-        "query": "\"Script tags\" Shopify created:>=2026-05-12 is:issue",
-        "candidate_count": 26,
+        "source": "hacker_news",
+        "query": "Script tags",
+        "candidate_count": 0,
         "ok": true
       },
       {
         "source": "github_issues",
-        "query": "\"Script tags\" created:>=2026-05-12 is:issue",
-        "candidate_count": 40,
-        "ok": true
+        "query": "\"Script tags\" Shopify created:>=2026-05-12 is:issue",
+        "candidate_count": 0,
+        "ok": false
       },
       {
         "source": "github_issues",
         "query": "\"Script tags\" deprecated created:>=2026-05-12 is:issue",
-        "candidate_count": 40,
-        "ok": true
+        "candidate_count": 0,
+        "ok": false
       },
       {
         "source": "github_issues",
         "query": "\"Script tags\" sunset created:>=2026-05-12 is:issue",
-        "candidate_count": 15,
-        "ok": true
+        "candidate_count": 0,
+        "ok": false
       },
       {
         "source": "github_issues",
         "query": "\"Script tags\" migration created:>=2026-05-12 is:issue",
-        "candidate_count": 40,
-        "ok": true
+        "candidate_count": 0,
+        "ok": false
       },
       {
         "source": "github_issues",
         "query": "\"Script tags\" alternative created:>=2026-05-12 is:issue",
-        "candidate_count": 40,
-        "ok": true
+        "candidate_count": 0,
+        "ok": false
+      },
+      {
+        "source": "github_issues",
+        "query": "\"Script tags\" created:>=2026-05-12 is:issue",
+        "candidate_count": 0,
+        "ok": false
       }
     ],
-    "reaction_search_quality": "adequate",
+    "reaction_search_quality": "degraded",
     "demand_status": "no_signal",
     "supply_checked_at": null,
     "supply_sources_checked": [],
@@ -375,6 +284,14 @@
     "gap_status": "unassessed",
     "confidence": "weak",
     "status": "verified",
-    "notes": []
+    "notes": [
+      "Reaction source failure: github_issues [\"Script tags\" Shopify created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Script+tags%22+Shopify+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction source failure: github_issues [\"Script tags\" deprecated created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Script+tags%22+deprecated+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction source failure: github_issues [\"Script tags\" sunset created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Script+tags%22+sunset+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction source failure: github_issues [\"Script tags\" migration created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Script+tags%22+migration+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction source failure: github_issues [\"Script tags\" alternative created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Script+tags%22+alternative+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction source failure: github_issues [\"Script tags\" created:>=2026-05-12 is:issue]: HTTPStatusError: Client error '403 Forbidden' for url 'https://api.github.com/search/issues?q=%22Script+tags%22+created%3A%3E%3D2026-05-12+is%3Aissue&sort=comments&order=desc&per_page=40'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+      "Reaction coverage gap: preferred ecosystem sources not checked: shopify_community, github_issues"
+    ]
   }
 ]
