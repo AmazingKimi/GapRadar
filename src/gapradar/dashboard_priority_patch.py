@@ -4,7 +4,7 @@ import re
 from html import escape
 from pathlib import Path
 
-from .priority import PriorityLead, _publisher, load_priority_leads
+from .priority import PriorityLead, load_priority_leads
 from .worldscan import GapCandidate, load_candidates
 
 SECTOR_ZH = {
@@ -18,13 +18,6 @@ SECTOR_ZH = {
     "Frontier": "太空 / 前沿",
 }
 
-IMPACT_ZH = {
-    "shutdown_eol": "迁移、替代产品和数据转移需求",
-    "price_shock": "价格敏感用户的替换、降本和切换需求",
-    "api_terms_change": "兼容、集成改造和依赖替换需求",
-    "regulatory_shift": "合规、检测、报告和实施服务需求",
-}
-
 GRID_RE = re.compile(r'(<div class="opps">).*?(</div></section><section class="section" id="feed">)', re.S)
 
 
@@ -36,22 +29,6 @@ def _art(kind: str) -> str:
     if kind == "regulatory_shift":
         return '<svg viewBox="0 0 500 260"><rect width="500" height="260" fill="#17334a"/><path d="M0 187 92 122l73 41 82-67 89 52 164-101v213H0Z" fill="#234d68"/></svg>'
     return '<svg viewBox="0 0 500 260"><rect width="500" height="260" fill="#163048"/><path d="M0 192 110 132l80 40 92-86 218 91v83H0Z" fill="#24506d"/></svg>'
-
-
-def _zh_reason(candidate: GapCandidate, row: PriorityLead) -> str:
-    publisher = _publisher(candidate)
-    signal = (candidate.matched_signal or candidate.change_type).strip().rstrip(".")[:58]
-    impact = IMPACT_ZH.get(candidate.change_type, "新的商业需求")
-    headline = candidate.headline.strip().rstrip(".")
-    if row.evidence_state == "tier1_verified":
-        host = row.evidence_label.split("·", 1)[-1].strip()
-        # The English rationale carries exact supply counts; keep the Chinese card
-        # concise but tied to this exact event and the verified host.
-        return f"{host} 已确认“{headline}”背后的变化。当前值得优先查的是：这是否真的释放{impact}，以及现有供给是否已经覆盖。"
-    if row.evidence_state == "official_candidate":
-        host = row.evidence_label.split("·", 1)[-1].strip()
-        return f"{publisher} 报道“{headline}”。已在 {host} 找到相关官方页面，但它还没确认“{signal}”这个具体主张；若确认，重点看{impact}。"
-    return f"{publisher} 报道“{headline}”，命中明确的“{signal}”变化信号；目前还没有可接受的一手确认。若属实，重点调查{impact}。"
 
 
 def _status_zh(status: str) -> str:
@@ -72,7 +49,6 @@ def _card(candidate: GapCandidate, row: PriorityLead) -> str:
         '<span class="badge"><span class="lang-zh">' + escape(zh_sector) + '</span><span class="lang-en">' + escape(sector) + '</span></span>'
         '<span class="badge status ' + cls + '"><span class="lang-zh">' + escape(_status_zh(row.status)) + '</span><span class="lang-en">' + escape(row.status.title()) + '</span></span>'
         '<h3>' + escape(candidate.headline) + '</h3>'
-        '<p><span class="lang-zh">' + escape(_zh_reason(candidate, row)) + '</span><span class="lang-en">' + escape(row.reason) + '</span></p>'
         '<div class="bottommeta"><span class="lang-zh">' + escape(_evidence_zh(row.evidence_state)) + '</span><span class="lang-en">' + escape(row.evidence_label) + '</span></div>'
         '<a class="arrow" href="' + escape(candidate.url) + '" target="_blank" rel="noopener noreferrer">→</a>'
         '</article>'
