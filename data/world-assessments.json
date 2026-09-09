@@ -210,13 +210,6 @@
         "relevance": 5
       },
       {
-        "title": "Afriforum challenges Eskom's 8.83% electricity price increase",
-        "url": "https://mybroadband.co.za/news/energy/666482-afriforum-challenges-eskoms-8-83-electricity-price-increase.html",
-        "snippet": "Civil rights group Afriforum said it would formally oppose Eskom's application to raise South Africa's average electricity tariff by 8.83% for the 2027/28 year.",
-        "source": "mybroadband.co.za",
-        "relevance": 4
-      },
-      {
         "title": "AfriForum Halts Eskom and Nersa Deal - energynews.africa",
         "url": "https://energynews.africa/2025/10/09/afriforum-blocks-eskom-nersa-settlement-over-transparency-concerns/",
         "snippet": "AfriForum secures a temporary halt on Eskom's R54 billion settlement with Nersa. The dispute stems from an alleged lack of public engagement and opaque decision-making. The deal allows Eskom to raise power tariffs by 8.76% and 8.83% in 2026 and 2027.",
@@ -235,6 +228,13 @@
         "url": "https://www.politicsweb.co.za/news/inflated-electricity-prices-cannot-counteract-eskoms-financial-risk-afriforum",
         "snippet": "Inflated electricity prices cannot counteract Eskom's financial risk, warns AfriForum 21 January 2026 AfriForum has submitted written comments to the National Energy Regulator of South Africa (Nersa) warning that Eskom's current tariff and regulatory assumptions risk unfairly transferring the cost of Eskom's historical mismanagement and governance failures onto electricity consumers ...",
         "source": "www.politicsweb.co.za",
+        "relevance": 3
+      },
+      {
+        "title": "AfriForum intervenes in Eskom-Nersa out-of-court settlement",
+        "url": "https://www.dailymaverick.co.za/article/2025-10-14-afriforum-legally-derails-eskom-nersa-settlement-for-higher-electricity-tariffs-for-now/",
+        "snippet": "AfriForum secures a court order halting Eskom's proposed tariff increase agreement with Nersa, aimed at raising electricity prices significantly over three years.",
+        "source": "www.dailymaverick.co.za",
         "relevance": 3
       }
     ],
