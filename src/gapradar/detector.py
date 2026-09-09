@@ -146,7 +146,7 @@ def _clean_html(value: str) -> str:
 def _infer_product(source: OfficialSource, title: str) -> str:
     subject = re.sub(r"^(?:upcoming\s+)?(?:deprecation(?: notice)? of\s+)", "", title, flags=re.IGNORECASE)
     subject = re.sub(
-        r"\b(?:is|are|was|were|will be)?\s*(?:now\s+)?(?:deprecated|retired|retiring|discontinued|decommissioned)\b.*$",
+        r"\b(?:(?:is|are|was|were|will be|to be)\s+)?(?:now\s+)?(?:deprecated|retired|retiring|discontinued|decommissioned)\b.*$",
         "",
         subject,
         flags=re.IGNORECASE,
