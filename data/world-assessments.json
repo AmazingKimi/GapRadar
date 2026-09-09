@@ -19,14 +19,14 @@
       "web_search: duckduckgo: no parsable results; bing: no parsable results"
     ],
     "tier1_status": "tier1_verified",
-    "official_url": "https://www.mass.gov/info-details/clean-peak-energy-standard-program-details",
+    "official_url": "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
     "demand_hypothesis": {
       "affected_users": "Organizations obligated by the new requirement described by: Massachusetts Will Require New Data Centers to Use Clean Energy.",
       "job_to_be_done": "Comply with the new requirement with the least operational burden, evidence-collection cost and implementation risk.",
       "disruption": "A regulatory or policy shift creates mandatory work, controls, reporting or migration.",
       "official_successor": "unknown",
       "basis": [
-        "https://www.mass.gov/info-details/clean-peak-energy-standard-program-details"
+        "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval"
       ],
       "confidence": "low",
       "unknowns": [

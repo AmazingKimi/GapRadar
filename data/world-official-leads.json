@@ -29,14 +29,10 @@
   },
   {
     "candidate_id": "14436a2a2ff1f7ea",
-    "status": "first_party_candidates",
+    "status": "not_found",
     "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
-    "candidate_urls": [
-      "https://heavyindustries.gov.in/sites/default/files/2026-07/lsauq_452.pdf"
-    ],
-    "candidate_hosts": [
-      "heavyindustries.gov.in"
-    ],
+    "candidate_urls": [],
+    "candidate_hosts": [],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
@@ -49,14 +45,10 @@
   },
   {
     "candidate_id": "86a0955dccc4b9fd",
-    "status": "first_party_candidates",
+    "status": "not_found",
     "query": "\"The latest Apple price hike: Apple TV streaming service\" official",
-    "candidate_urls": [
-      "https://tv.apple.com/us/offer/tvs.sbd.4000"
-    ],
-    "candidate_hosts": [
-      "tv.apple.com"
-    ],
+    "candidate_urls": [],
+    "candidate_hosts": [],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
