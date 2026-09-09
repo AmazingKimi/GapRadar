@@ -1,9 +1,9 @@
-name: Daily Radar
+name: Continuous Market Radar
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '17 1 * * *'
+    - cron: '17 1,7,13,19 * * *'
   push:
     branches: [main]
     paths:
@@ -42,10 +42,8 @@ jobs:
           from gapradar.worldscan import load_candidates
           from gapradar.worlddeep import analyze_candidates, save_assessments
           from gapradar.newsupply import enrich_failed_assessments
-
           candidates = load_candidates(Path('data/world-gaps.json'))
-          assessments = analyze_candidates(candidates)
-          assessments = enrich_failed_assessments(candidates, assessments)
+          assessments = enrich_failed_assessments(candidates, analyze_candidates(candidates))
           save_assessments(Path('data/world-assessments.json'), assessments)
           print(f'Deep-dived {len(assessments)} world lead(s).')
           PY
@@ -59,7 +57,7 @@ jobs:
         run: gapradar validate-supply
       - name: Build verified-event dossiers
         run: gapradar build-dossiers
-      - name: Export Today Opportunity Board
+      - name: Export live opportunity board
         run: gapradar export
       - name: Commit radar state
         run: |
@@ -70,6 +68,6 @@ jobs:
           git config user.name "gapradar-bot"
           git config user.email "gapradar-bot@users.noreply.github.com"
           git add data/world-gaps.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json docs/index.html docs/dossiers
-          git commit -m "data: update today's market gap board"
+          git commit -m "data: refresh continuous market radar"
           git pull --rebase origin main
           git push origin HEAD:main
