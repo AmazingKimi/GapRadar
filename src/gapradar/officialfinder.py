@@ -18,7 +18,8 @@ NEWS_HOSTS = {
     "www.businessinsider.com", "youtube.com", "www.youtube.com", "reddit.com",
     "www.reddit.com", "x.com", "twitter.com", "linkedin.com", "www.linkedin.com",
     "mercomindia.com", "www.mercomindia.com", "mashable.com", "www.mashable.com",
-    "mybroadband.co.za", "www.mybroadband.co.za",
+    "mybroadband.co.za", "www.mybroadband.co.za", "economictimes.indiatimes.com",
+    "auto.economictimes.indiatimes.com", "indiatimes.com", "www.indiatimes.com",
 }
 GOVERNMENT_SUFFIXES = (
     ".gov", ".gov.uk", ".gov.au", ".gov.ca", ".gc.ca", ".gov.in", ".gov.sg",
@@ -36,9 +37,6 @@ CHANGE_TERMS = {
     "api_terms_change": "API terms licensing developer official",
     "regulatory_shift": "rule regulation requirement mandate official",
 }
-
-# If a candidate clearly names a jurisdiction, a random government website from another
-# country must not count as a first-party source. These are intentionally conservative.
 JURISDICTION_RULES: tuple[tuple[re.Pattern[str], tuple[str, ...]], ...] = (
     (re.compile(r"\bmassachusetts\b", re.I), ("mass.gov",)),
     (re.compile(r"\bindia\b|\bindian\b", re.I), ("gov.in", "nic.in", "pib.gov.in")),
@@ -81,13 +79,7 @@ def _decode_ddg_url(value: str) -> str:
 
 
 def _ddg(query: str, timeout: float) -> list[dict[str, str]]:
-    response = httpx.get(
-        "https://html.duckduckgo.com/html/",
-        params={"q": query},
-        headers={"User-Agent": "Mozilla/5.0 GapRadar/0.8"},
-        timeout=timeout,
-        follow_redirects=True,
-    )
+    response = httpx.get("https://html.duckduckgo.com/html/", params={"q": query}, headers={"User-Agent": "Mozilla/5.0 GapRadar/0.8"}, timeout=timeout, follow_redirects=True)
     response.raise_for_status()
     rows: list[dict[str, str]] = []
     links = re.findall(r'class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>', response.text, flags=re.I | re.S)
@@ -95,33 +87,19 @@ def _ddg(query: str, timeout: float) -> list[dict[str, str]]:
     for index, (href, title) in enumerate(links[:20]):
         url = _decode_ddg_url(href)
         if url.startswith("http"):
-            rows.append({
-                "url": url,
-                "title": _clean_html(title),
-                "snippet": _clean_html(snippets[index] if index < len(snippets) else ""),
-            })
+            rows.append({"url": url, "title": _clean_html(title), "snippet": _clean_html(snippets[index] if index < len(snippets) else "")})
     return rows
 
 
 def _bing(query: str, timeout: float) -> list[dict[str, str]]:
-    response = httpx.get(
-        "https://www.bing.com/search",
-        params={"q": query, "count": 20},
-        headers={"User-Agent": "Mozilla/5.0 GapRadar/0.8"},
-        timeout=timeout,
-        follow_redirects=True,
-    )
+    response = httpx.get("https://www.bing.com/search", params={"q": query, "count": 20}, headers={"User-Agent": "Mozilla/5.0 GapRadar/0.8"}, timeout=timeout, follow_redirects=True)
     response.raise_for_status()
     rows: list[dict[str, str]] = []
     for block in re.findall(r'<li class="b_algo".*?</li>', response.text, flags=re.I | re.S)[:20]:
         match = re.search(r'<h2>\s*<a[^>]*href="([^"]+)"[^>]*>(.*?)</a>', block, flags=re.I | re.S)
         if match:
             snippet_match = re.search(r'<p[^>]*>(.*?)</p>', block, flags=re.I | re.S)
-            rows.append({
-                "url": match.group(1),
-                "title": _clean_html(match.group(2)),
-                "snippet": _clean_html(snippet_match.group(1) if snippet_match else ""),
-            })
+            rows.append({"url": match.group(1), "title": _clean_html(match.group(2)), "snippet": _clean_html(snippet_match.group(1) if snippet_match else "")})
     return rows
 
 
@@ -182,18 +160,18 @@ def _looks_first_party(url: str, candidate: GapCandidate) -> bool:
     host = urlparse(url).netloc.lower().split(":")[0]
     if not host or host in NEWS_HOSTS or any(host.endswith("." + noise) for noise in NEWS_HOSTS):
         return False
-    if any(host.endswith(suffix) for suffix in GOVERNMENT_SUFFIXES):
+    government = any(host.endswith(suffix) for suffix in GOVERNMENT_SUFFIXES)
+    jurisdiction = _jurisdiction_hosts(candidate)
+    if government:
         return _government_host_matches(candidate, host)
+    # A geographically scoped regulatory claim must resolve to the matching public
+    # authority, not a publisher/company domain that merely contains a country token.
+    if candidate.change_type == "regulatory_shift" and jurisdiction:
+        return False
     domain_hint = _registrable_hint(host)
-    # Company/product-owned domains are source candidates only. Restrict the domain
-    # match to headline tokens so a publisher name leaked through a summary cannot
-    # masquerade as the company involved in the event.
-    tokens = _headline_tokens(candidate)
-    return len(domain_hint) >= 4 and any(
-        domain_hint == token or domain_hint in token or token in domain_hint
-        for token in tokens[:8]
-        if len(token) >= 4
-    )
+    # Exact owned-domain identity only. Substring matching caused `india` to match
+    # `indiatimes`, incorrectly promoting a news publisher to Tier-1.
+    return len(domain_hint) >= 4 and domain_hint in _headline_tokens(candidate)[:8]
 
 
 def _query_variants(candidate: GapCandidate) -> list[str]:
@@ -202,13 +180,8 @@ def _query_variants(candidate: GapCandidate) -> list[str]:
     subject = " ".join(tokens[:6])
     core = " ".join(tokens[:4])
     change = CHANGE_TERMS.get(candidate.change_type, "official announcement")
-    variants = [
-        f'"{headline}" official',
-        f"{subject} {change}",
-        f"{core} {change}",
-    ]
-    jurisdiction_hosts = _jurisdiction_hosts(candidate)
-    for host in jurisdiction_hosts[:2]:
+    variants = [f'"{headline}" official', f"{subject} {change}", f"{core} {change}"]
+    for host in _jurisdiction_hosts(candidate)[:2]:
         variants.insert(1, f"site:{host} {core} {change}")
     if candidate.change_type == "regulatory_shift":
         variants.append(f"{subject} government regulator requirement")
@@ -236,15 +209,13 @@ def find_official_sources(candidate: GapCandidate, *, timeout: float = 10.0) -> 
     errors: list[str] = []
     successful_searches = 0
     attempted_searches = 0
-
     for query in queries:
         for name, searcher in (("duckduckgo", _ddg), ("bing", _bing)):
             attempted_searches += 1
             try:
                 found = searcher(query, timeout)
                 successful_searches += 1
-                for row in found:
-                    rows.append(dict(row, query=query, engine=name))
+                rows.extend(dict(row, query=query, engine=name) for row in found)
             except Exception as exc:
                 errors.append(f"{name} [{query[:80]}]: {type(exc).__name__}: {exc}")
 
@@ -277,16 +248,7 @@ def find_official_sources(candidate: GapCandidate, *, timeout: float = 10.0) -> 
     else:
         coverage = "adequate"
     status = "first_party_candidates" if urls else ("search_failed" if coverage == "failed" else "not_found")
-    return OfficialSourceLead(
-        candidate_id=candidate.id,
-        status=status,
-        query=queries[0] if queries else "",
-        candidate_urls=urls,
-        candidate_hosts=hosts,
-        search_coverage=coverage,
-        errors=errors,
-        queries=queries,
-    )
+    return OfficialSourceLead(candidate.id, status, queries[0] if queries else "", urls, hosts, coverage, errors, queries)
 
 
 def find_for_candidates(candidates: list[GapCandidate]) -> list[OfficialSourceLead]:
