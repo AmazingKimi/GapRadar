@@ -84,10 +84,6 @@ def score_supply(candidate: SupplyCandidate, event: MarketEvent, *, now: datetim
     vendor_hit = not vendor_tokens or _hits(vendor_tokens, combined) >= 1
     explicit_replacement = bool(REPLACEMENT_RE.search(combined))
 
-    # A generic package named after a concept ("script-tags") is not a Shopify
-    # substitute, and a Shopify ecosystem package is not a replacement merely
-    # because its README mentions theme/CLI. Require vendor relevance plus either
-    # explicit replacement language or two product concepts in the candidate title.
     if not vendor_hit:
         return 0
     if not explicit_replacement and title_hits < 2:
@@ -201,6 +197,17 @@ def search_npm(event: MarketEvent, *, timeout: float = 15.0) -> list[SupplyCandi
 
 
 def validate_event_supply(event: MarketEvent) -> MarketEvent:
+    # Supply is downstream of displaced demand. If demand validation found no
+    # qualifying signal, searching for substitutes adds cost and false confidence
+    # without changing the decision: there is no gap to investigate yet.
+    if event.demand_status not in {"early_signal", "repeated_signal"}:
+        event.supply_evidence = []
+        event.supply_candidate_count = 0
+        event.supply_sources_checked = []
+        event.supply_checked_at = None
+        event.verify()
+        return event
+
     candidates: list[SupplyCandidate] = []
     checked: list[str] = []
     failures: list[str] = []
