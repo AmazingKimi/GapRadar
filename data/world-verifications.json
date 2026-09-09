@@ -1,15 +1,5 @@
 [
   {
-    "candidate_id": "13395948a3493792",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
     "candidate_id": "a3328f38cb0cc06f",
     "status": "unverified",
     "event_id": null,
@@ -21,48 +11,18 @@
   },
   {
     "candidate_id": "bc658468240f8785",
-    "status": "unverified",
+    "status": "tier1_verified",
     "event_id": null,
-    "official_url": null,
-    "match_score": 1,
+    "official_url": "https://www.gov.uk/government/news/government-sets-out-plan-for-new-era-of-clean-electricity",
+    "match_score": 10,
     "reasons": [
-      "date_proximity"
+      "first_party_page",
+      "subject_overlap",
+      "hard_change_confirmed"
     ]
   },
   {
     "candidate_id": "52f1eb44691af255",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "9ca59f0103294ea8",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 4,
-    "reasons": [
-      "event_type",
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "9bfa78df8d49ae2a",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 4,
-    "reasons": [
-      "event_type",
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "cd6e87e93d6ec8e6",
     "status": "unverified",
     "event_id": null,
     "official_url": null,
@@ -92,47 +52,7 @@
     ]
   },
   {
-    "candidate_id": "39e773880bde1269",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "7f6f5639be057208",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "8200d9ed5089fe5f",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
     "candidate_id": "1a9ab0b99d425f58",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "4e68e4ecc7c00c43",
     "status": "unverified",
     "event_id": null,
     "official_url": null,
@@ -153,26 +73,6 @@
   },
   {
     "candidate_id": "33ef99e5fb709e44",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "92110bbf958b398e",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "64f6975ef71e8dce",
     "status": "unverified",
     "event_id": null,
     "official_url": null,
@@ -220,16 +120,6 @@
     "match_score": 4,
     "reasons": [
       "event_type",
-      "date_proximity"
-    ]
-  },
-  {
-    "candidate_id": "1825b169a66b7440",
-    "status": "unverified",
-    "event_id": null,
-    "official_url": null,
-    "match_score": 1,
-    "reasons": [
       "date_proximity"
     ]
   },

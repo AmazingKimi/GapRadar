@@ -1,1 +1,39 @@
-[]
+[
+  {
+    "candidate_id": "bc658468240f8785",
+    "ecosystem": "regulatory",
+    "supply_status": "no_supply_detected",
+    "supply_sources_checked": [
+      "google_news_supply"
+    ],
+    "supply_sources_missing": [
+      "web_search"
+    ],
+    "supply_candidate_count": 10,
+    "supply_evidence": [],
+    "supply_coverage": "partial",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Fallback news-index search returned results but no strongly relevant product-like supply evidence. News coverage alone is insufficient to promote this to a market gap.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results"
+    ],
+    "tier1_status": "tier1_verified",
+    "official_url": "https://www.gov.uk/government/news/government-sets-out-plan-for-new-era-of-clean-electricity",
+    "demand_hypothesis": {
+      "affected_users": "Organizations obligated by the new requirement described by: Labour promises new rules for data centre electricity use, coordinated AI policy across government.",
+      "job_to_be_done": "Comply with the new requirement with the least operational burden, evidence-collection cost and implementation risk.",
+      "disruption": "A regulatory or policy shift creates mandatory work, controls, reporting or migration.",
+      "official_successor": "unknown",
+      "basis": [
+        "https://www.gov.uk/government/news/government-sets-out-plan-for-new-era-of-clean-electricity"
+      ],
+      "confidence": "low",
+      "unknowns": [
+        "Exact obligated segments",
+        "Effective date and enforcement intensity",
+        "Existing compliance-tool coverage"
+      ]
+    }
+  }
+]
