@@ -79,20 +79,21 @@ def _hard_regulatory_language(text: str) -> bool:
 
 
 def _linked_regulatory_claim(target_pattern: str, outcome_pattern: str, text: str) -> bool:
-    """Require target, mandatory language and outcome to form one local claim.
-
-    Page-wide proximity is too weak: an official document can require utilities in one
-    paragraph and merely discuss data centers/clean energy elsewhere. These patterns
-    require the mandatory verb to actually connect the affected target and outcome.
-    """
-    normalized = _normalized(text)
+    """Require target, mandatory language and outcome to form one sentence/clause."""
     hard = r"(?:will\s+require|requires?|required|must|mandatory|shall)"
     patterns = (
         rf"{hard}.{{0,90}}{target_pattern}.{{0,110}}{outcome_pattern}",
         rf"{target_pattern}.{{0,90}}{hard}.{{0,110}}{outcome_pattern}",
         rf"{target_pattern}.{{0,110}}{outcome_pattern}.{{0,70}}{hard}",
     )
-    return any(re.search(pattern, normalized) for pattern in patterns)
+    # Do not let mandatory language in paragraph/sentence A verify a subject in B.
+    # This is deliberately precision-first: ambiguous cross-sentence evidence stays unverified.
+    clauses = [part for part in re.split(r"[.!?;:\n]+", text) if part.strip()]
+    for clause in clauses:
+        normalized = _normalized(clause)
+        if any(re.search(pattern, normalized) for pattern in patterns):
+            return True
+    return False
 
 
 def _claim_target_alignment(candidate: GapCandidate, text: str) -> bool:
@@ -108,17 +109,15 @@ def _claim_target_alignment(candidate: GapCandidate, text: str) -> bool:
             return False
         return _linked_regulatory_claim(_phrase_regex(target), _phrase_regex(outcome), text)
 
-    # Headlines without the explicit "will require X to Y" grammar still need
-    # multiple distinctive terms plus mandatory language in a tight local window.
     distinctive = _phrase_tokens(candidate.headline)
     if len(distinctive) < 2:
         return False
-    normalized = _normalized(text)
-    for token in distinctive[:6]:
-        for window in _windows(normalized, rf"\b{re.escape(token)}\b", radius=140):
-            hits = sum(bool(re.search(rf"\b{re.escape(other)}\b", window)) for other in distinctive[:6])
-            if hits >= min(3, len(distinctive)) and _hard_regulatory_language(window):
-                return True
+    # Fallback headlines also use sentence-local evidence; broad page-wide co-occurrence is rejected.
+    for clause in re.split(r"[.!?;:\n]+", text):
+        normalized = _normalized(clause)
+        hits = sum(bool(re.search(rf"\b{re.escape(token)}\b", normalized)) for token in distinctive[:6])
+        if hits >= min(3, len(distinctive)) and _hard_regulatory_language(normalized):
+            return True
     return False
 
 
@@ -153,7 +152,7 @@ def verify_official_lead(candidate: GapCandidate, lead: OfficialSourceLead, *, t
                 errors.append(f"redirected away from accepted first-party host: {final_url}")
                 continue
             title, body = _clean_page(response.text)
-            text = f"{title} {body}"
+            text = f"{title}. {body}"
             overlap = _overlap(candidate, text)
             host = (urlparse(final_url).hostname or "").lower()
             if overlap < 2:
