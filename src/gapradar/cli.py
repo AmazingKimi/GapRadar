@@ -10,12 +10,13 @@ from rich.table import Table
 
 from .config import load_sources
 from .detector import probe_source, scan_source
+from .dossier import export_dossiers
 from .reaction import validate_reactions
 from .render import render_dashboard
 from .store import load_events, merge_events, save_events
 from .supply import validate_supply
 
-app = typer.Typer(no_args_is_help=True, help="Evidence-first market change radar.")
+app = typer.Typer(no_args_is_help=True, help="Evidence-first market gap radar.")
 console = Console()
 
 
@@ -32,26 +33,18 @@ def scan(
         try:
             found = scan_source(source)
             incoming.extend(found)
-            console.print(
-                f"[green]✓[/green] {source.vendor}/{source.name}: "
-                f"{len(found)} verified event(s), lookback={source.lookback_days}d"
-            )
+            console.print(f"[green]✓[/green] {source.vendor}/{source.name}: {len(found)} verified event(s), lookback={source.lookback_days}d")
         except Exception as exc:
             failures += 1
             console.print(f"[yellow]![/yellow] {source.vendor}/{source.name}: {exc}")
 
     merged = merge_events(load_events(output), incoming)
     save_events(output, merged)
-    console.print(
-        f"\nSources: {len(configured)} · new matches: {len(incoming)} · "
-        f"stored: {len(merged)} · failures: {failures}"
-    )
+    console.print(f"\nSources: {len(configured)} · new matches: {len(incoming)} · stored: {len(merged)} · failures: {failures}")
 
 
 @app.command("validate-demand")
-def validate_demand(
-    events: Path = typer.Option(Path("data/events.json"), exists=True, readable=True),
-) -> None:
+def validate_demand(events: Path = typer.Option(Path("data/events.json"), exists=True, readable=True)) -> None:
     """Search public reaction sources and retain only migration-pain evidence."""
     rows = load_events(events)
     validated = validate_reactions(rows)
@@ -64,20 +57,12 @@ def validate_demand(
     table.add_column("Demand status")
     table.add_column("Sources")
     for event in validated:
-        table.add_row(
-            f"{event.vendor} / {event.product}",
-            str(event.reaction_candidate_count),
-            str(len(event.reaction_evidence)),
-            event.demand_status,
-            ", ".join(event.reaction_sources_checked) or "none",
-        )
+        table.add_row(f"{event.vendor} / {event.product}", str(event.reaction_candidate_count), str(len(event.reaction_evidence)), event.demand_status, ", ".join(event.reaction_sources_checked) or "none")
     console.print(table)
 
 
 @app.command("validate-supply")
-def validate_supply_command(
-    events: Path = typer.Option(Path("data/events.json"), exists=True, readable=True),
-) -> None:
+def validate_supply_command(events: Path = typer.Option(Path("data/events.json"), exists=True, readable=True)) -> None:
     """Search replacement supply and classify whether displaced demand appears served."""
     rows = load_events(events)
     validated = validate_supply(rows)
@@ -91,15 +76,27 @@ def validate_supply_command(
     table.add_column("Gap")
     table.add_column("Sources")
     for event in validated:
-        table.add_row(
-            f"{event.vendor} / {event.product}",
-            str(event.supply_candidate_count),
-            str(len(event.supply_evidence)),
-            event.supply_status,
-            event.gap_status,
-            ", ".join(event.supply_sources_checked) or "none",
-        )
+        table.add_row(f"{event.vendor} / {event.product}", str(event.supply_candidate_count), str(len(event.supply_evidence)), event.supply_status, event.gap_status, ", ".join(event.supply_sources_checked) or "none")
     console.print(table)
+
+
+@app.command("build-dossiers")
+def build_dossiers_command(
+    events: Path = typer.Option(Path("data/events.json"), exists=True, readable=True),
+    output_dir: Path = typer.Option(Path("docs/dossiers")),
+    index: Path = typer.Option(Path("data/dossiers.json")),
+) -> None:
+    """Build human-review opportunity dossiers from the verified evidence chain."""
+    rows = load_events(events)
+    dossiers = export_dossiers(rows, output_dir, index)
+    table = Table(title="GapRadar — Opportunity Dossiers")
+    table.add_column("Vendor / Product")
+    table.add_column("Verdict")
+    table.add_column("Next action")
+    for event, dossier in zip(rows, dossiers):
+        table.add_row(f"{event.vendor} / {event.product}", dossier.verdict, dossier.next_action)
+    console.print(table)
+    console.print(f"Dossiers: {len(dossiers)} · markdown/json: {output_dir} · index: {index}")
 
 
 @app.command()
@@ -120,40 +117,17 @@ def doctor(
     checked_at = datetime.now(timezone.utc).isoformat()
 
     for source in load_sources(sources):
-        row: dict[str, object] = {
-            "vendor": source.vendor,
-            "name": source.name,
-            "url": source.url,
-            "checked_at": checked_at,
-        }
+        row: dict[str, object] = {"vendor": source.vendor, "name": source.name, "url": source.url, "checked_at": checked_at}
         try:
             result = probe_source(source)
             healthy = result.entry_count > 0 and result.official_link_count > 0
             if not healthy:
                 failures += 1
-            row.update(
-                status="ok" if healthy else "bad_feed",
-                http_status=result.http_status,
-                entry_count=result.entry_count,
-                official_link_count=result.official_link_count,
-                error=None,
-            )
-            table.add_row(
-                f"{source.vendor}/{source.name}",
-                str(result.http_status),
-                str(result.entry_count),
-                str(result.official_link_count),
-                "OK" if healthy else "BAD FEED",
-            )
+            row.update(status="ok" if healthy else "bad_feed", http_status=result.http_status, entry_count=result.entry_count, official_link_count=result.official_link_count, error=None)
+            table.add_row(f"{source.vendor}/{source.name}", str(result.http_status), str(result.entry_count), str(result.official_link_count), "OK" if healthy else "BAD FEED")
         except Exception as exc:
             failures += 1
-            row.update(
-                status="error",
-                http_status=None,
-                entry_count=0,
-                official_link_count=0,
-                error=f"{type(exc).__name__}: {exc}",
-            )
+            row.update(status="error", http_status=None, entry_count=0, official_link_count=0, error=f"{type(exc).__name__}: {exc}")
             table.add_row(f"{source.vendor}/{source.name}", "—", "0", "0", f"ERROR: {exc}")
         rows.append(row)
 
@@ -166,9 +140,7 @@ def doctor(
 
 
 @app.command()
-def report(
-    events: Path = typer.Option(Path("data/events.json"), exists=True, readable=True),
-) -> None:
+def report(events: Path = typer.Option(Path("data/events.json"), exists=True, readable=True)) -> None:
     """Render a compact evidence-aware event report."""
     rows = load_events(events)
     table = Table(title="GapRadar — Verified Market Changes")
@@ -180,15 +152,7 @@ def report(
     table.add_column("Gap")
     table.add_column("Headline")
     for event in rows:
-        table.add_row(
-            event.event_type.value,
-            f"{event.vendor} / {event.product}",
-            event.confidence.value,
-            event.demand_status,
-            event.supply_status,
-            event.gap_status,
-            event.headline,
-        )
+        table.add_row(event.event_type.value, f"{event.vendor} / {event.product}", event.confidence.value, event.demand_status, event.supply_status, event.gap_status, event.headline)
     console.print(table)
 
 
