@@ -40,6 +40,7 @@ TECH_TERMS = re.compile(
 )
 STOPWORDS = {"the","a","an","and","or","to","of","for","in","on","with","from","after","before","will","is","are","its","new","this","that","as","at","by","up","down","service","platform"}
 
+
 @dataclass(frozen=True)
 class GapCandidate:
     id: str
@@ -57,15 +58,31 @@ class GapCandidate:
     validation_status: str
     validation_summary: str
 
+
+@dataclass(frozen=True)
+class WorldScanStats:
+    scanned_at: str
+    sources_configured: int
+    sources_ok: int
+    sources_failed: int
+    raw_entries: int
+    recent_entries: int
+    structural_matches: int
+    candidates: int
+
+
 def _clean(value: str) -> str:
     return " ".join(re.sub(r"<[^>]+>", " ", value or "").split())
+
 
 def _base_headline(headline: str) -> str:
     return re.sub(r"\s+-\s+[^-]{2,80}$", "", headline).strip()
 
+
 def _published(entry: object) -> datetime | None:
     parsed = getattr(entry, "published_parsed", None) or getattr(entry, "updated_parsed", None)
     return datetime(*parsed[:6], tzinfo=timezone.utc) if parsed else None
+
 
 def classify_change(text: str) -> tuple[str, str] | None:
     for change_type, patterns in CHANGE_PATTERNS.items():
@@ -74,6 +91,7 @@ def classify_change(text: str) -> tuple[str, str] | None:
             if match:
                 return change_type, _clean(match.group(0))[:120]
     return None
+
 
 def _forced_gate(change_type: str, text: str) -> bool:
     t = text.lower()
@@ -97,8 +115,10 @@ def _forced_gate(change_type: str, text: str) -> bool:
         return (hard_action or government_rules or ai_act_obligation) and bool(TECH_TERMS.search(t))
     return False
 
+
 def _candidate_gate(change_type: str, text: str) -> bool:
     return _forced_gate(change_type, text) if change_type in {"shutdown_eol", "api_terms_change", "regulatory_shift"} else True
+
 
 def _gap_hypothesis(change_type: str) -> tuple[str, str, str]:
     if change_type == "shutdown_eol":
@@ -109,21 +129,27 @@ def _gap_hypothesis(change_type: str) -> tuple[str, str, str]:
         return "REVIEW", "Developers and businesses may need to rewrite integrations, replace data access, or absorb new platform constraints.", "Look for compatibility layers, migration tooling, alternative data/API providers, or workflow products that reduce dependence on the changed platform."
     return "WATCH", "A rule or compliance change can create new mandatory work that did not exist before.", "Look for compliance automation, evidence collection, reporting, migration, or vertical workflow software created by the new requirement."
 
+
 def _fingerprint(headline: str, change_type: str) -> str:
     tokens = [t.lower() for t in re.findall(r"[A-Za-z0-9][A-Za-z0-9+.-]{2,}", _base_headline(headline)) if t.lower() not in STOPWORDS]
     return hashlib.sha1((change_type + "|" + " ".join(tokens[:8])).encode("utf-8")).hexdigest()[:16]
+
 
 def load_world_feeds(path: Path) -> list[dict[str, object]]:
     payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     return list(payload.get("feeds", []))
 
-def scan_world(config: Path = Path("config/world_sources.yml"), *, now: datetime | None = None, timeout: float = 15.0) -> list[GapCandidate]:
+
+def scan_world_with_stats(config: Path = Path("config/world_sources.yml"), *, now: datetime | None = None, timeout: float = 15.0) -> tuple[list[GapCandidate], WorldScanStats]:
     now = now or datetime.now(timezone.utc)
     rows: dict[str, GapCandidate] = {}
+    feeds = load_world_feeds(config)
     headers = {"User-Agent": "GapRadar/0.8 world-scan"}
-    for source in load_world_feeds(config):
+    sources_ok = sources_failed = raw_entries = recent_entries = structural_matches = 0
+    for source in feeds:
         name, url = str(source.get("name") or "World feed"), str(source.get("url") or "")
         if not url:
+            sources_failed += 1
             continue
         lookback_hours, max_entries = int(source.get("lookback_hours") or 72), int(source.get("max_entries") or 80)
         forced_type = str(source.get("change_type") or "").strip() or None
@@ -132,12 +158,17 @@ def scan_world(config: Path = Path("config/world_sources.yml"), *, now: datetime
             response = httpx.get(url, timeout=timeout, headers=headers, follow_redirects=True)
             response.raise_for_status()
             parsed = feedparser.parse(response.content)
+            sources_ok += 1
         except Exception:
+            sources_failed += 1
             continue
-        for entry in list(parsed.entries)[:max_entries]:
+        entries = list(parsed.entries)[:max_entries]
+        raw_entries += len(entries)
+        for entry in entries:
             published = _published(entry)
             if published and published < now - timedelta(hours=lookback_hours):
                 continue
+            recent_entries += 1
             headline = _clean(str(getattr(entry, "title", "")))
             summary = _clean(str(getattr(entry, "summary", "") or getattr(entry, "description", "")))
             link = str(getattr(entry, "link", "")).strip()
@@ -157,6 +188,7 @@ def scan_world(config: Path = Path("config/world_sources.yml"), *, now: datetime
                 continue
             if not prefiltered and not TECH_TERMS.search(text):
                 continue
+            structural_matches += 1
             recommendation, why_now, gap_hypothesis = _gap_hypothesis(change_type)
             status = "NEWS SIGNAL" if forced_type and not classified else "STRUCTURAL SIGNAL"
             candidate = GapCandidate(
@@ -169,13 +201,36 @@ def scan_world(config: Path = Path("config/world_sources.yml"), *, now: datetime
             previous = rows.get(candidate.id)
             if previous is None or (candidate.published_at or "") > (previous.published_at or ""):
                 rows[candidate.id] = candidate
-    return sorted(rows.values(), key=lambda row: row.published_at or row.discovered_at, reverse=True)
+    candidates = sorted(rows.values(), key=lambda row: row.published_at or row.discovered_at, reverse=True)
+    stats = WorldScanStats(
+        scanned_at=now.isoformat(), sources_configured=len(feeds), sources_ok=sources_ok, sources_failed=sources_failed,
+        raw_entries=raw_entries, recent_entries=recent_entries, structural_matches=structural_matches, candidates=len(candidates),
+    )
+    return candidates, stats
+
+
+def scan_world(config: Path = Path("config/world_sources.yml"), *, now: datetime | None = None, timeout: float = 15.0) -> list[GapCandidate]:
+    candidates, _ = scan_world_with_stats(config, now=now, timeout=timeout)
+    return candidates
+
 
 def save_candidates(path: Path, candidates: Iterable[GapCandidate]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps([asdict(row) for row in candidates], indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
+
 def load_candidates(path: Path) -> list[GapCandidate]:
     if not path.exists():
         return []
     return [GapCandidate(**row) for row in json.loads(path.read_text(encoding="utf-8"))]
+
+
+def save_scan_stats(path: Path, stats: WorldScanStats) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(asdict(stats), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def load_scan_stats(path: Path) -> WorldScanStats | None:
+    if not path.exists():
+        return None
+    return WorldScanStats(**json.loads(path.read_text(encoding="utf-8")))
