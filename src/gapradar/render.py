@@ -5,91 +5,123 @@ from pathlib import Path
 
 from .dossier import build_dossier
 from .models import MarketEvent
+from .worldscan import GapCandidate
 
 
 CSS = """
-:root { color-scheme: dark; --bg:#090b10; --panel:#11151d; --line:#232a36; --text:#eef2f7; --muted:#8d98a8; --accent:#7ce7c4; --warn:#ffcf70; --hot:#ff8f8f; }
+:root { color-scheme: dark; --bg:#081019; --panel:#0f1823; --panel2:#0b131c; --line:#223143; --text:#eef5fb; --muted:#94a3b5; --accent:#69d6ff; --green:#71e5b5; --yellow:#ffd36b; --red:#ff8585; --purple:#bba7ff; }
 * { box-sizing:border-box; }
-body { margin:0; background:radial-gradient(circle at 20% 0%, #132028 0, var(--bg) 38%); color:var(--text); font:15px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-main { max-width:1180px; margin:0 auto; padding:56px 24px 80px; }
-.eyebrow { color:var(--accent); font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
-h1 { font-size:clamp(42px,8vw,84px); line-height:.95; margin:14px 0 18px; letter-spacing:-.055em; }
-.lede { max-width:840px; color:#b8c1cf; font-size:18px; }
-.metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:34px 0; }
-.metric,.card,.empty { background:rgba(17,21,29,.78); border:1px solid var(--line); border-radius:18px; backdrop-filter:blur(14px); }
-.metric { padding:18px; }.metric strong { display:block; font-size:28px; }.metric span { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.08em; }
-.grid { display:grid; gap:14px; }.card { padding:22px; }.row { display:flex; align-items:center; justify-content:space-between; gap:16px; }
-.badges { display:flex; flex-wrap:wrap; gap:8px; }.badge { display:inline-flex; padding:5px 9px; border:1px solid #334052; border-radius:999px; color:#c7d0dd; font-size:11px; text-transform:uppercase; letter-spacing:.06em; }
-.badge.signal { border-color:#35594f; color:var(--accent); }.badge.none { color:var(--warn); border-color:#665733; }.badge.gap { color:var(--hot); border-color:#674141; }.badge.review { color:#fff; border-color:#7259a8; }
-.card h2 { margin:14px 0 8px; font-size:22px; }.meta,.summary { color:var(--muted); }.summary { margin:10px 0 0; }a { color:var(--accent); text-decoration:none; }
-.evidence { margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }.evidence-head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-.columns { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }.box { padding:12px; background:#0d1118; border:1px solid #1d2530; border-radius:12px; }.box h3 { font-size:12px; letter-spacing:.08em; text-transform:uppercase; margin:0 0 8px; color:#b8c1cf; }
-.item { padding:8px 0; border-top:1px solid #18202b; }.item:first-of-type { border-top:0; padding-top:0; }.item strong { font-size:13px; }.item .meta { font-size:12px; margin-top:3px; }
-.dossier { margin-top:14px; padding:14px; border:1px solid #2d3543; border-radius:14px; background:#0b0f15; }.dossier strong { display:block; margin-bottom:5px; }.dossier p { color:#aab4c2; margin:6px 0; }
-.empty { padding:32px; color:var(--muted); }footer { margin-top:34px; color:#657084; font-size:12px; }
-@media (max-width:760px) { .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } .row { align-items:flex-start; flex-direction:column; } .columns { grid-template-columns:1fr; } }
+body { margin:0; background:radial-gradient(circle at 20% 0%,#10283b 0,var(--bg) 36%); color:var(--text); font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+main { max-width:1280px; margin:0 auto; padding:44px 24px 80px; }
+.topbar { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; }
+.eyebrow { color:var(--accent); font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+h1 { font-size:clamp(42px,7vw,78px); line-height:.96; margin:12px 0 16px; letter-spacing:-.055em; }
+.lede { max-width:920px; color:#bdc8d6; font-size:18px; margin:0; }
+.pulse { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border:1px solid #294057; border-radius:999px; color:#cdefff; background:#0d1b27; white-space:nowrap; }
+.dot { width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 18px var(--green); }
+.metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:30px 0 26px; }
+.metric { padding:18px; background:rgba(15,24,35,.86); border:1px solid var(--line); border-radius:18px; }
+.metric strong { display:block; font-size:30px; }.metric span { color:var(--muted); font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+.section-head { display:flex; justify-content:space-between; align-items:end; gap:20px; margin:34px 0 14px; }
+.section-head h2 { margin:0; font-size:24px; }.section-head p { margin:0; color:var(--muted); max-width:720px; }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.card { background:linear-gradient(180deg,rgba(17,29,42,.95),rgba(11,19,28,.95)); border:1px solid var(--line); border-radius:20px; padding:22px; }
+.card.verified { border-color:#2d6353; box-shadow:0 0 0 1px rgba(113,229,181,.08) inset; }
+.card h3 { margin:12px 0 7px; font-size:21px; line-height:1.25; }.meta,.summary,.small { color:var(--muted); }.summary { margin:8px 0 0; }
+.badges { display:flex; flex-wrap:wrap; gap:7px; }.badge { display:inline-flex; padding:5px 9px; border:1px solid #33465c; border-radius:999px; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:#c8d6e5; }
+.badge.review { color:#09121a; background:var(--green); border-color:var(--green); font-weight:800; }.badge.watch { color:#1d1600; background:var(--yellow); border-color:var(--yellow); font-weight:800; }.badge.verified { color:var(--green); border-color:#326b59; }.badge.signal { color:var(--accent); border-color:#315b73; }
+.block { margin-top:16px; padding:14px; border:1px solid #233247; border-radius:14px; background:#0a121b; }.block h4 { margin:0 0 7px; color:#d8e5ef; font-size:12px; text-transform:uppercase; letter-spacing:.08em; }.block p { margin:0; color:#aebcca; }
+.block.reco { border-color:#315a4f; background:#0b1716; }.block.validate { border-color:#34445b; }
+a { color:var(--accent); text-decoration:none; }.evidence { margin-top:14px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; font-size:13px; }
+.empty { padding:28px; border:1px dashed #334153; border-radius:18px; color:var(--muted); }.footer { margin-top:38px; color:#6f8194; font-size:12px; }
+@media(max-width:820px){.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.topbar{flex-direction:column}.section-head{align-items:flex-start;flex-direction:column}}
 """
 
 
-def render_dashboard(events: list[MarketEvent], output: Path) -> None:
+def _verified_recommendation(event: MarketEvent) -> tuple[str, str, str]:
+    if event.event_type.value == "shutdown_eol":
+        return (
+            "REVIEW",
+            "The incumbent is removing a workflow or capability, so affected users must migrate.",
+            "Investigate replacement products, compatibility layers, migration services, and vertical substitutes. The best gap is usually not a clone; it is the part of the old workflow that alternatives handle badly.",
+        )
+    if event.event_type.value == "price_shock":
+        return (
+            "REVIEW",
+            "A pricing discontinuity can release budget-sensitive users from an incumbent.",
+            "Map lower-cost substitutes and identify which customer segment is now overpaying for features it does not need.",
+        )
+    return (
+        "REVIEW",
+        "A platform/API change can force businesses to rewrite integrations or replace dependencies.",
+        "Look for migration tooling, compatibility layers, alternate providers, and products that reduce dependence on the changed platform.",
+    )
+
+
+def _world_card(row: GapCandidate) -> str:
+    recommendation_class = "review" if row.recommendation == "REVIEW" else "watch"
+    summary = row.summary or "No feed summary supplied."
+    return f"""
+    <article class="card">
+      <div class="badges"><span class="badge {recommendation_class}">{escape(row.recommendation)}</span><span class="badge signal">{escape(row.change_type.replace('_',' '))}</span><span class="badge">{escape(row.validation_status)}</span></div>
+      <h3>{escape(row.headline)}</h3>
+      <div class="meta">{escape(row.source)} · {escape(row.published_at or 'time unavailable')}</div>
+      <p class="summary">{escape(summary[:650])}</p>
+      <div class="block reco"><h4>GapRadar recommendation</h4><p><b>Why now:</b> {escape(row.why_now)}<br><br><b>Potential gap:</b> {escape(row.gap_hypothesis)}</p></div>
+      <div class="block validate"><h4>Validation summary</h4><p>{escape(row.validation_summary)}</p></div>
+      <div class="evidence"><span class="small">Matched signal: “{escape(row.matched_signal)}”</span><a href="{escape(row.url)}" target="_blank" rel="noreferrer">open source ↗</a></div>
+    </article>"""
+
+
+def _verified_card(event: MarketEvent) -> str:
+    dossier = build_dossier(event)
+    official = event.official_evidence[0] if event.official_evidence else None
+    recommendation, why_now, hypothesis = _verified_recommendation(event)
+    evidence_link = f'<a href="{escape(str(official.url))}" target="_blank" rel="noreferrer">official source ↗</a>' if official else "no official source"
+    reaction_note = (
+        f"Supporting reaction evidence: {len(event.reaction_evidence)} qualifying signal(s); search quality {event.reaction_search_quality}."
+        if event.reaction_checked_at else "Supporting reaction search has not run yet."
+    )
+    supply_note = (
+        f"Replacement supply: {event.supply_status}; accepted supply evidence {len(event.supply_evidence)}."
+        if event.supply_checked_at else "Replacement supply has not yet been mapped."
+    )
+    validation = (
+        "Tier-1 official evidence verifies the market change. " + reaction_note + " " + supply_note +
+        " Reaction evidence is supporting context, not the discovery trigger."
+    )
+    when = event.event_date.date().isoformat() if event.event_date else "date unknown"
+    return f"""
+    <article class="card verified">
+      <div class="badges"><span class="badge review">{recommendation}</span><span class="badge verified">officially verified</span><span class="badge signal">{escape(event.event_type.value.replace('_',' '))}</span></div>
+      <h3>{escape(event.headline)}</h3>
+      <div class="meta">{escape(event.vendor)} · {escape(event.product)} · {when}</div>
+      <p class="summary">{escape(event.summary[:650])}</p>
+      <div class="block reco"><h4>GapRadar recommendation</h4><p><b>Why now:</b> {escape(why_now)}<br><br><b>Potential gap:</b> {escape(hypothesis)}</p></div>
+      <div class="block validate"><h4>Validation summary</h4><p>{escape(validation)}<br><br><b>Dossier:</b> {escape(dossier.verdict)} — {escape(dossier.rationale)}</p></div>
+      <div class="evidence"><span class="small">Tier 1: {len(event.official_evidence)} · Reaction: {len(event.reaction_evidence)} · Supply: {len(event.supply_evidence)}</span>{evidence_link}</div>
+    </article>"""
+
+
+def render_dashboard(events: list[MarketEvent], output: Path, world_candidates: list[GapCandidate] | None = None) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
-    cards = []
-    for event in events:
-        dossier = build_dossier(event)
-        official = event.official_evidence[0] if event.official_evidence else None
-        evidence_link = f'<a href="{escape(str(official.url))}" target="_blank" rel="noreferrer">official evidence ↗</a>' if official else "no official evidence"
-        dossier_link = f'dossiers/{escape(event.id)}.md'
-        when = event.event_date.date().isoformat() if event.event_date else "date unknown"
-        demand_class = "signal" if event.demand_status in {"early_signal", "repeated_signal"} else "none"
-        supply_class = "signal" if event.supply_status == "served" else "none"
-        gap_class = "gap" if event.gap_status == "potential_gap" else ("signal" if event.gap_status == "likely_served" else "none")
-        verdict_class = "review" if dossier.verdict == "REVIEW" else ("signal" if dossier.verdict in {"LIKELY SERVED"} else "none")
+    world_candidates = world_candidates or []
+    verified_cards = "\n".join(_verified_card(event) for event in events)
+    world_cards = "\n".join(_world_card(row) for row in world_candidates[:40])
+    if not verified_cards:
+        verified_cards = '<div class="empty">No new first-party verified market changes in the current window.</div>'
+    if not world_cards:
+        world_cards = '<div class="empty">No broad world-scan candidates matched the structural-change rules in this run.</div>'
 
-        reaction_rows = []
-        for reaction in event.reaction_evidence[:3]:
-            reaction_rows.append(f'<div class="item"><strong><a href="{escape(str(reaction.url))}" target="_blank" rel="noreferrer">{escape(reaction.title)}</a></strong><div class="meta">{escape(reaction.publisher)} · pain {reaction.signal_score} · engagement {reaction.engagement}</div></div>')
-        if not reaction_rows:
-            if event.reaction_search_quality == "failed":
-                message = "Reaction search failed; no demand conclusion is allowed."
-            elif event.reaction_checked_at:
-                message = f"No qualifying migration-pain signal detected · search {event.reaction_search_quality} · {event.reaction_candidate_count} unique candidates checked."
-            else:
-                message = "Demand validation has not run."
-            reaction_rows.append(f'<div class="item meta">{escape(message)}</div>')
-
-        supply_rows = []
-        for supply in event.supply_evidence[:3]:
-            supply_rows.append(f'<div class="item"><strong><a href="{escape(str(supply.url))}" target="_blank" rel="noreferrer">{escape(supply.title)}</a></strong><div class="meta">{escape(supply.publisher)} · relevance {supply.signal_score} · popularity {supply.engagement}</div></div>')
-        if not supply_rows:
-            message = "No qualifying replacement supply found." if event.supply_checked_at else "Supply validation not needed yet / not run."
-            supply_rows.append(f'<div class="item meta">{message}</div>')
-
-        cards.append(f"""
-        <article class="card">
-          <div class="row"><div class="badges">
-            <span class="badge">{escape(event.event_type.value.replace('_',' '))}</span>
-            <span class="badge {demand_class}">demand: {escape(event.demand_status.replace('_',' '))}</span>
-            <span class="badge none">search: {escape(event.reaction_search_quality.replace('_',' '))}</span>
-            <span class="badge {supply_class}">supply: {escape(event.supply_status.replace('_',' '))}</span>
-            <span class="badge {gap_class}">gap: {escape(event.gap_status.replace('_',' '))}</span>
-            <span class="badge {verdict_class}">dossier: {escape(dossier.verdict.lower())}</span>
-          </div></div>
-          <h2>{escape(event.headline)}</h2>
-          <div class="meta">{escape(event.vendor)} · {escape(event.product)} · {when}</div>
-          <p class="summary">{escape(event.summary[:700])}</p>
-          <div class="evidence"><div class="evidence-head">{evidence_link}<span class="meta">Tier 1: {len(event.official_evidence)} · Reaction: {len(event.reaction_evidence)} · Supply: {len(event.supply_evidence)}</span></div>
-            <div class="columns"><div class="box"><h3>Displaced demand</h3>{''.join(reaction_rows)}</div><div class="box"><h3>Replacement supply</h3>{''.join(supply_rows)}</div></div>
-          </div>
-          <div class="dossier"><strong>Opportunity dossier — {escape(dossier.verdict)}</strong><p>{escape(dossier.rationale)}</p><p><b>Next:</b> {escape(dossier.next_action)}</p><a href="{dossier_link}">open full evidence dossier →</a></div>
-        </article>""")
-
-    cards_html = "\n".join(cards) if cards else '<div class="empty">No verified market-change events in the current window. Silence is a valid result.</div>'
-    reviewed = sum(1 for event in events if build_dossier(event).verdict == "REVIEW")
-    undetected = sum(1 for event in events if build_dossier(event).verdict == "NO DETECTED SIGNAL")
-    gaps = sum(1 for event in events if event.gap_status == "potential_gap")
-    html = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GapRadar</title><style>{CSS}</style></head>
-<body><main><div class="eyebrow">Opportunity Intelligence · v0.6</div><h1>GapRadar</h1>
-<p class="lede">Verified market changes become auditable opportunity dossiers. V0.6 broadens demand recall, records every reaction query, and refuses to translate an undetected signal into proof of no demand.</p>
-<section class="metrics"><div class="metric"><strong>{len(events)}</strong><span>verified events</span></div><div class="metric"><strong>{reviewed}</strong><span>review dossiers</span></div><div class="metric"><strong>{gaps}</strong><span>potential gaps</span></div><div class="metric"><strong>{undetected}</strong><span>no detected signal</span></div></section>
-<section class="grid">{cards_html}</section><footer>Generated by GapRadar v0.6 · Search absence is not demand absence.</footer></main></body></html>"""
+    review_count = sum(1 for row in world_candidates if row.recommendation == "REVIEW") + len(events)
+    html = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GapRadar — Today Opportunity Board</title><style>{CSS}</style></head>
+<body><main>
+<div class="topbar"><div><div class="eyebrow">Market Gap Intelligence · Today</div><h1>Today’s Market Gaps</h1><p class="lede">GapRadar scans what changed in the market first — shutdowns, pricing shocks, API/platform changes and new rules — then turns those changes into opportunity hypotheses and validation summaries. Community complaints are supporting evidence, not the discovery engine.</p></div><div class="pulse"><span class="dot"></span> radar active</div></div>
+<section class="metrics"><div class="metric"><strong>{len(world_candidates)}</strong><span>world signals</span></div><div class="metric"><strong>{len(events)}</strong><span>officially verified</span></div><div class="metric"><strong>{review_count}</strong><span>review now</span></div><div class="metric"><strong>{max(0, len(world_candidates)-sum(1 for r in world_candidates if r.recommendation=='REVIEW'))}</strong><span>watch</span></div></section>
+<div class="section-head"><div><div class="eyebrow">Highest confidence</div><h2>Verified opportunity triggers</h2></div><p>These market changes are backed by first-party evidence. The recommendation comes from the structural change itself; reaction and supply evidence only refine confidence.</p></div>
+<section class="grid">{verified_cards}</section>
+<div class="section-head"><div><div class="eyebrow">Broad world scan</div><h2>New gap candidates found today</h2></div><p>These are fresh structural-change signals from news and industry feeds. They are recommendations for investigation, not claims of proven businesses. Each card shows exactly what was validated and what remains unknown.</p></div>
+<section class="grid">{world_cards}</section>
+<div class="footer">GapRadar · WORLD SCAN → CHANGE → GAP HYPOTHESIS → SUPPLY/REACTION VALIDATION → DOSSIER. No fake opportunity scores, revenue estimates, or forced daily winners.</div>
+</main></body></html>"""
     output.write_text(html, encoding="utf-8")
