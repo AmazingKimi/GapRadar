@@ -55,34 +55,54 @@ def test_no_official_source_never_verifies():
     event = make_event().verify()
     assert event.status == "candidate"
     assert event.confidence == Confidence.INSUFFICIENT
+    assert event.demand_hypothesis is None
 
 
-def test_official_only_is_verified_but_weak():
+def test_verified_event_creates_explicit_low_confidence_hypothesis():
     event = make_event(official_evidence=[official_evidence()]).verify()
     assert event.status == "verified"
     assert event.confidence == Confidence.WEAK
     assert event.gap_status == "unassessed"
+    assert event.demand_hypothesis is not None
+    assert event.demand_hypothesis.confidence == "low"
+    assert event.demand_hypothesis.basis
 
 
-def test_failed_reaction_search_stays_unassessed():
+def test_failed_reaction_search_does_not_delete_hypothesis():
     event = make_event(
         official_evidence=[official_evidence()],
         reaction_checked_at=NOW,
         reaction_search_quality="failed",
     ).verify()
     assert event.demand_status == "unassessed"
-    assert event.gap_status == "unassessed"
+    assert event.demand_hypothesis is not None
+    assert event.demand_hypothesis.confidence == "low"
 
 
-def test_no_detected_demand_is_not_promoted_to_gap_conclusion():
+def test_no_reaction_signal_can_still_be_watch_if_supply_is_thin():
     event = make_event(
         official_evidence=[official_evidence()],
         reaction_checked_at=NOW,
         reaction_search_quality="adequate",
+        supply_evidence=[supply()],
+        supply_checked_at=NOW,
     ).verify()
     assert event.demand_status == "no_signal"
-    assert event.supply_status == "unassessed"
-    assert event.gap_status == "unassessed"
+    assert event.demand_hypothesis is not None
+    assert event.demand_hypothesis.confidence == "low"
+    assert event.supply_status == "thin_supply"
+    assert event.gap_status == "watch"
+
+
+def test_reaction_increases_hypothesis_confidence():
+    event = make_event(
+        official_evidence=[official_evidence()],
+        reaction_evidence=[reaction("A")],
+        reaction_checked_at=NOW,
+        reaction_search_quality="adequate",
+    ).verify()
+    assert event.demand_hypothesis is not None
+    assert event.demand_hypothesis.confidence == "medium"
 
 
 def test_repeated_demand_plus_thin_supply_becomes_potential_gap():
@@ -95,20 +115,22 @@ def test_repeated_demand_plus_thin_supply_becomes_potential_gap():
         supply_checked_at=NOW,
     ).verify()
     assert event.demand_status == "repeated_signal"
+    assert event.demand_hypothesis is not None
+    assert event.demand_hypothesis.confidence == "high"
     assert event.supply_status == "thin_supply"
     assert event.gap_status == "potential_gap"
     assert event.confidence == Confidence.STRONG
 
 
-def test_strong_replacement_supply_marks_market_likely_served():
+def test_strong_replacement_supply_marks_market_likely_served_even_without_reaction():
     event = make_event(
         official_evidence=[official_evidence()],
-        reaction_evidence=[reaction("A"), reaction("B"), reaction("C")],
         reaction_checked_at=NOW,
         reaction_search_quality="adequate",
         supply_evidence=[supply(8)],
         supply_checked_at=NOW,
     ).verify()
+    assert event.demand_status == "no_signal"
     assert event.supply_status == "served"
     assert event.gap_status == "likely_served"
 
