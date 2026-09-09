@@ -14,10 +14,10 @@
     "tier_1_official": 1,
     "tier_2_reaction": 0,
     "tier_3_supply": 0,
-    "reaction_candidates_checked": 117,
+    "reaction_candidates_checked": 0,
     "supply_candidates_checked": 0
   },
-  "reaction_search_quality": "adequate",
+  "reaction_search_quality": "degraded",
   "reaction_queries": [
     {
       "source": "hacker_news",
@@ -58,38 +58,38 @@
     {
       "source": "github_issues",
       "query": "\"Script tags\" Shopify created:>=2026-05-12 is:issue",
-      "candidate_count": 26,
-      "ok": true
+      "candidate_count": 0,
+      "ok": false
     },
     {
       "source": "github_issues",
       "query": "\"Script tags\" created:>=2026-05-12 is:issue",
-      "candidate_count": 40,
-      "ok": true
+      "candidate_count": 0,
+      "ok": false
     },
     {
       "source": "github_issues",
       "query": "\"Script tags\" deprecated created:>=2026-05-12 is:issue",
-      "candidate_count": 40,
-      "ok": true
+      "candidate_count": 0,
+      "ok": false
     },
     {
       "source": "github_issues",
       "query": "\"Script tags\" sunset created:>=2026-05-12 is:issue",
-      "candidate_count": 15,
-      "ok": true
+      "candidate_count": 0,
+      "ok": false
     },
     {
       "source": "github_issues",
       "query": "\"Script tags\" migration created:>=2026-05-12 is:issue",
-      "candidate_count": 40,
-      "ok": true
+      "candidate_count": 0,
+      "ok": false
     },
     {
       "source": "github_issues",
       "query": "\"Script tags\" alternative created:>=2026-05-12 is:issue",
-      "candidate_count": 40,
-      "ok": true
+      "candidate_count": 0,
+      "ok": false
     }
   ]
 }
