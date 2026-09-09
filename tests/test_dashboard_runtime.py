@@ -1,0 +1,42 @@
+from pathlib import Path
+
+from gapradar.dashboard_runtime import SCRIPT, STYLE, patch_dashboard
+
+
+def test_runtime_covers_complete_bilingual_controls() -> None:
+    required = [
+        "View today’s opportunities",
+        "Browse sector radar",
+        "Important Global Changes",
+        "Items scanned today",
+        "Regulation",
+        "Consumer",
+        "Dark ✓  |  Light",
+        "中文  |  EN ✓",
+    ]
+    for token in required:
+        assert token in SCRIPT
+
+
+def test_runtime_has_mobile_breakpoints() -> None:
+    assert "@media(max-width:640px)" in STYLE
+    assert "grid-template-columns:1fr 1fr" in STYLE
+    assert ".actions{display:grid" in STYLE
+    assert ".stats{grid-template-columns:repeat(2" in STYLE
+    assert ".filters{width:100%" in STYLE
+    assert "@media(max-width:420px)" in STYLE
+
+
+def test_patch_removes_legacy_controller_and_injects_single_runtime(tmp_path: Path) -> None:
+    html = tmp_path / "index.html"
+    html.write_text(
+        '<!doctype html><html><body><button id="langToggle"></button>'
+        '<script>(function(){var r=document.documentElement,l=document.getElementById("langToggle");})();</script>'
+        '</body></html>',
+        encoding="utf-8",
+    )
+    patch_dashboard(html)
+    text = html.read_text(encoding="utf-8")
+    assert "gapradar-runtime-v5" in text
+    assert "var r=document.documentElement,l=document.getElementById" not in text
+    assert text.count("gapradar-runtime-v5") == 2  # CSS marker + HTML marker
