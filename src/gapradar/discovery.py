@@ -30,6 +30,10 @@ def _as_dt(day: date) -> datetime:
     return datetime.combine(day, time(23, 59, 59), tzinfo=timezone.utc)
 
 
+def _as_start_dt(day: date) -> datetime:
+    return datetime.combine(day, time(0, 0, 0), tzinfo=timezone.utc)
+
+
 def _parse_iso(value: str | None) -> datetime | None:
     if not value:
         return None
@@ -68,7 +72,7 @@ def _window_start(event: MarketEvent, as_of: date, days: int) -> date:
 
 def discover_hn(event: MarketEvent, *, as_of: date, days: int = 120, timeout: float = 12.0) -> tuple[list[ReactionCandidate], list[DiscoveryAudit]]:
     end = int(_as_dt(as_of).timestamp())
-    start = int(_as_dt(_window_start(event, as_of, days)).timestamp())
+    start = int(_as_start_dt(_window_start(event, as_of, days)).timestamp())
     rows: list[ReactionCandidate] = []
     audits: list[DiscoveryAudit] = []
     for query in _reaction_query_subset(event):
@@ -78,7 +82,7 @@ def discover_hn(event: MarketEvent, *, as_of: date, days: int = 120, timeout: fl
                 params={
                     "query": query,
                     "tags": "story,comment",
-                    "numericFilters": f"created_at_i>{start},created_at_i<={end}",
+                    "numericFilters": f"created_at_i>={start},created_at_i<={end}",
                     "hitsPerPage": 40,
                 },
                 timeout=timeout,
