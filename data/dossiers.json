@@ -4,8 +4,8 @@
     "vendor": "Shopify",
     "product": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older",
     "headline": "Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated",
-    "verdict": "LIKELY SERVED",
-    "rationale": "The demand hypothesis exists, but credible replacement supply already appears strong.",
+    "verdict": "WATCH",
+    "rationale": "The demand hypothesis survived supply analysis, but evidence is not strong enough for REVIEW. Repeated reaction evidence is not present, so confidence remains bounded. Checked: hacker_news, github_issues. Preferred-but-unchecked ecosystem sources: shopify_community.",
     "what_changed": "Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What's changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows",
     "demand_hypothesis": {
       "affected_users": "Users and organizations still relying on Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older.",
@@ -23,78 +23,13 @@
       ]
     },
     "displaced_demand": [],
-    "replacement_supply": [
-      {
-        "title": "@shopify/theme-check-common",
-        "url": "https://www.npmjs.com/package/@shopify/theme-check-common",
-        "publisher": "npm",
-        "excerpt": "<h1 align=\"center\" style=\"position: relative;\" > <br> <img src=\"https://github.com/Shopify/theme-check-vscode/blob/main/images/shopify_glyph.png?raw=true\" alt=\"logo\" width=\"141\" height=\"160\"> <br> Theme Check </h1>",
-        "signal_score": 7,
-        "engagement": 1000
-      },
-      {
-        "title": "@shopify/cli",
-        "url": "https://www.npmjs.com/package/@shopify/cli",
-        "publisher": "npm",
-        "excerpt": "A CLI tool to build for the Shopify platform",
-        "signal_score": 7,
-        "engagement": 1000
-      },
-      {
-        "title": "@shopify/theme-language-server-common",
-        "url": "https://www.npmjs.com/package/@shopify/theme-language-server-common",
-        "publisher": "npm",
-        "excerpt": "<h1 align=\"center\" style=\"position: relative;\" > <br> <img src=\"https://github.com/Shopify/theme-check-vscode/blob/main/images/shopify_glyph.png?raw=true\" alt=\"logo\" width=\"141\" height=\"160\"> <br> Theme Language Server </h1>",
-        "signal_score": 7,
-        "engagement": 1000
-      },
-      {
-        "title": "@shopify/theme-check-node",
-        "url": "https://www.npmjs.com/package/@shopify/theme-check-node",
-        "publisher": "npm",
-        "excerpt": "This is the Node.js wrapper of the runtime-agnostic [`@shopify/theme-check-common`](https://npm.im/@shopify/theme-check-common) package. It comes with batteries included.",
-        "signal_score": 7,
-        "engagement": 1000
-      },
-      {
-        "title": "@shopify/cli-kit",
-        "url": "https://www.npmjs.com/package/@shopify/cli-kit",
-        "publisher": "npm",
-        "excerpt": "A set of utilities, interfaces, and models that are common across all the platform features",
-        "signal_score": 7,
-        "engagement": 1000
-      },
-      {
-        "title": "@shopify/theme-language-server-node",
-        "url": "https://www.npmjs.com/package/@shopify/theme-language-server-node",
-        "publisher": "npm",
-        "excerpt": "This is the Node.js wrapper of the runtime-agnostic [`@shopify/theme-language-server-node`](https://npm.im/@shopify/theme-language-server-common) package. It comes with batteries included.",
-        "signal_score": 7,
-        "engagement": 1000
-      },
-      {
-        "title": "@shopify/theme-language-server-browser",
-        "url": "https://www.npmjs.com/package/@shopify/theme-language-server-browser",
-        "publisher": "npm",
-        "excerpt": "This is the Browser wrapper of the runtime-agnostic [`@shopify/theme-language-server-common`](https://npm.im/@shopify/theme-language-server-common) package. It does not come with batteries included and assumes you know what you're doing.",
-        "signal_score": 7,
-        "engagement": 1000
-      },
-      {
-        "title": "@shopify/theme-graph",
-        "url": "https://www.npmjs.com/package/@shopify/theme-graph",
-        "publisher": "npm",
-        "excerpt": "Shopify Theme Graph as a data structure",
-        "signal_score": 7,
-        "engagement": 1000
-      }
-    ],
-    "unresolved_gap": "No broad supply gap is established. Any opportunity would need to come from a narrower failure shared across existing substitutes.",
-    "next_action": "Do not clone the incumbent. Look only for a narrower job existing substitutes handle badly.",
+    "replacement_supply": [],
+    "unresolved_gap": "A plausible demand hypothesis remains after supply review, but confidence is still bounded. Missing reaction evidence does not invalidate the hypothesis.",
+    "next_action": "Keep the hypothesis alive, improve reaction coverage where useful, and inspect whether the remaining supply actually satisfies the affected job.",
     "evidence_counts": {
       "tier_1_official": 1,
       "tier_2_reaction": 0,
-      "tier_3_supply": 9,
+      "tier_3_supply": 0,
       "reaction_candidates_checked": 1,
       "supply_candidates_checked": 30
     },
