@@ -82,9 +82,15 @@ def score_supply(candidate: SupplyCandidate, event: MarketEvent, *, now: datetim
     title_hits = _hits(product_tokens, title)
     total_hits = _hits(product_tokens, combined)
     vendor_hit = not vendor_tokens or _hits(vendor_tokens, combined) >= 1
+    vendor_in_title = bool(vendor_tokens and _hits(vendor_tokens, title) >= 1)
     explicit_replacement = bool(REPLACEMENT_RE.search(combined))
 
     if not vendor_hit:
+        return 0
+    # Incumbent-owned ecosystem packages are not independent replacement supply.
+    # They may be an official successor, but that belongs in the hypothesis/official
+    # migration path rather than Tier-3 market supply.
+    if candidate.source_kind in {"npm_package", "github_repository"} and vendor_in_title and not explicit_replacement:
         return 0
     if not explicit_replacement and title_hits < 2:
         return 0
