@@ -20,6 +20,7 @@ permissions:
 jobs:
   replay:
     runs-on: ubuntu-latest
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
