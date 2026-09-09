@@ -11,17 +11,18 @@ h1 { font-size:clamp(42px,8vw,84px); line-height:.95; margin:14px 0 18px; letter
 .metric { padding:18px; }.metric strong { display:block; font-size:28px; }.metric span { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.08em; }
 .grid { display:grid; gap:14px; }.card { padding:22px; }.row { display:flex; align-items:center; justify-content:space-between; gap:16px; }
 .badges { display:flex; flex-wrap:wrap; gap:8px; }.badge { display:inline-flex; padding:5px 9px; border:1px solid #334052; border-radius:999px; color:#c7d0dd; font-size:11px; text-transform:uppercase; letter-spacing:.06em; }
-.badge.signal { border-color:#35594f; color:var(--accent); }.badge.none { color:var(--warn); border-color:#665733; }.badge.gap { color:var(--hot); border-color:#674141; }
+.badge.signal { border-color:#35594f; color:var(--accent); }.badge.none { color:var(--warn); border-color:#665733; }.badge.gap { color:var(--hot); border-color:#674141; }.badge.review { color:#fff; border-color:#7259a8; }
 .card h2 { margin:14px 0 8px; font-size:22px; }.meta,.summary { color:var(--muted); }.summary { margin:10px 0 0; }a { color:var(--accent); text-decoration:none; }
 .evidence { margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }.evidence-head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
 .columns { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }.box { padding:12px; background:#0d1118; border:1px solid #1d2530; border-radius:12px; }.box h3 { font-size:12px; letter-spacing:.08em; text-transform:uppercase; margin:0 0 8px; color:#b8c1cf; }
 .item { padding:8px 0; border-top:1px solid #18202b; }.item:first-of-type { border-top:0; padding-top:0; }.item strong { font-size:13px; }.item .meta { font-size:12px; margin-top:3px; }
+.dossier { margin-top:14px; padding:14px; border:1px solid #2d3543; border-radius:14px; background:#0b0f15; }.dossier strong { display:block; margin-bottom:5px; }.dossier p { color:#aab4c2; margin:6px 0; }
 .empty { padding:32px; color:var(--muted); }footer { margin-top:34px; color:#657084; font-size:12px; }
 @media (max-width:760px) { .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } .row { align-items:flex-start; flex-direction:column; } .columns { grid-template-columns:1fr; } }
 </style></head>
-<body><main><div class="eyebrow">Market Gap Intelligence · v0.4</div><h1>GapRadar</h1>
-<p class="lede">Verified market changes, displaced-demand evidence, and replacement-supply analysis. V0.4 does not call a change a gap until demand survives the supply check.</p>
-<section class="metrics"><div class="metric"><strong>2</strong><span>verified events</span></div><div class="metric"><strong>0</strong><span>supply checked</span></div><div class="metric"><strong>0</strong><span>potential gaps</span></div><div class="metric"><strong>0</strong><span>likely served</span></div></section>
+<body><main><div class="eyebrow">Opportunity Intelligence · v0.5</div><h1>GapRadar</h1>
+<p class="lede">Verified market changes become evidence-grounded opportunity dossiers. V0.5 explains what changed, who appears displaced, what substitutes exist, what remains unsolved, and whether the evidence says REVIEW, WATCH, PASS, or LIKELY SERVED.</p>
+<section class="metrics"><div class="metric"><strong>2</strong><span>verified events</span></div><div class="metric"><strong>0</strong><span>review dossiers</span></div><div class="metric"><strong>0</strong><span>potential gaps</span></div><div class="metric"><strong>2</strong><span>pass verdicts</span></div></section>
 <section class="grid">
         <article class="card">
           <div class="row"><div class="badges">
@@ -29,13 +30,15 @@ h1 { font-size:clamp(42px,8vw,84px); line-height:.95; margin:14px 0 18px; letter
             <span class="badge none">demand: no signal</span>
             <span class="badge none">supply: unassessed</span>
             <span class="badge none">gap: no demand</span>
+            <span class="badge none">dossier: pass</span>
           </div></div>
           <h2>Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older to be deprecated</h2>
           <div class="meta">Shopify · Password Protected Shop Dev flows on Shopify Theme CLI v3.83.x and older · 2026-08-27</div>
           <p class="summary">Starting October 1, 2026, Theme commands on Shopify CLI for password protected storefronts will require version 3.84.0 or later . Versions 3.83.x and earlier will no longer be supported for theme development workflows on password protected storefronts. If you use Theme commands on Shopify CLI to develop or preview themes, upgrade to the latest version before October 1, 2026. Alternatively, you can remove the password protection on your storefront to continue using your preferred CLI version. What&#x27;s changing Older Shopify CLI versions use a legacy storefront authentication. After October 1, 2026, this legacy authentication implementation will no longer be supported for theme development flows</p>
           <div class="evidence"><div class="evidence-head"><a href="https://shopify.dev/changelog/password-protected-shop-dev-flows-on-shopify-theme-cli-v3-83-x-and-older-to-be-deprecated" target="_blank" rel="noreferrer">official evidence ↗</a><span class="meta">Tier 1: 1 · Reaction: 0 · Supply: 0</span></div>
-            <div class="columns"><div class="box"><h3>Displaced demand</h3><div class="item meta">No qualifying migration-pain signal found.</div></div><div class="box"><h3>Replacement supply</h3><div class="item meta">Supply validation has not run.</div></div></div>
+            <div class="columns"><div class="box"><h3>Displaced demand</h3><div class="item meta">No qualifying migration-pain signal found.</div></div><div class="box"><h3>Replacement supply</h3><div class="item meta">Supply validation not needed yet / not run.</div></div></div>
           </div>
+          <div class="dossier"><strong>Opportunity dossier — PASS</strong><p>The market change is real, but checked public sources show no qualifying displaced-demand signal.</p><p><b>Next:</b> Do not build from this event now. Revisit only if migration pain appears later.</p><a href="dossiers/b54b1a8fc2b4ed89.md">open full evidence dossier →</a></div>
         </article>
 
         <article class="card">
@@ -44,11 +47,13 @@ h1 { font-size:clamp(42px,8vw,84px); line-height:.95; margin:14px 0 18px; letter
             <span class="badge none">demand: no signal</span>
             <span class="badge none">supply: unassessed</span>
             <span class="badge none">gap: no demand</span>
+            <span class="badge none">dossier: pass</span>
           </div></div>
           <h2>Script tags are deprecated and will stop running on March 1, 2027</h2>
           <div class="meta">Shopify · Script tags · 2026-08-24</div>
           <p class="summary">Starting October 1, 2026, the scriptTagCreate and scriptTagUpdate mutations will return an user error, and the ScriptTag REST Admin API resource will reject POST and PUT . The deprecation applies to all API versions, including older ones, so pinning won&#x27;t defer it. On March 1, 2027, Shopify will stop injecting script tags into storefronts. Storefronts are the last place script tags still run, since they already stopped working on the Order status page . If your app uses a script tag to load JavaScript onto a store, then you need to replace it before then. What&#x27;s changing A script tag loads JavaScript on a storefront without any changes to theme code. After March 1, 2027, Shopify won&#x27;t inject</p>
           <div class="evidence"><div class="evidence-head"><a href="https://shopify.dev/changelog/online-store-script-tags-deprecation" target="_blank" rel="noreferrer">official evidence ↗</a><span class="meta">Tier 1: 1 · Reaction: 0 · Supply: 0</span></div>
-            <div class="columns"><div class="box"><h3>Displaced demand</h3><div class="item meta">No qualifying migration-pain signal found.</div></div><div class="box"><h3>Replacement supply</h3><div class="item meta">Supply validation has not run.</div></div></div>
+            <div class="columns"><div class="box"><h3>Displaced demand</h3><div class="item meta">No qualifying migration-pain signal found.</div></div><div class="box"><h3>Replacement supply</h3><div class="item meta">Supply validation not needed yet / not run.</div></div></div>
           </div>
-        </article></section><footer>Generated by GapRadar v0.4 · Event ≠ demand ≠ gap. Evidence before opportunity.</footer></main></body></html>
+          <div class="dossier"><strong>Opportunity dossier — PASS</strong><p>The market change is real, but checked public sources show no qualifying displaced-demand signal.</p><p><b>Next:</b> Do not build from this event now. Revisit only if migration pain appears later.</p><a href="dossiers/b753744578cf3b4d.md">open full evidence dossier →</a></div>
+        </article></section><footer>Generated by GapRadar v0.5 · Dossiers summarize evidence; they do not invent market size or tell you to build.</footer></main></body></html>
