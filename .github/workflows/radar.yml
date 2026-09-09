@@ -17,7 +17,7 @@ permissions:
 
 concurrency:
   group: gapradar-live-scan
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   scan:
@@ -39,11 +39,7 @@ jobs:
         run: gapradar doctor
       - name: Scan live first-party sources
         run: gapradar scan
-      - name: Gather supporting demand evidence
-        run: gapradar validate-demand
-      - name: Validate replacement supply
-        run: gapradar validate-supply
-      - name: Build opportunity dossiers
+      - name: Build verified-event dossiers
         run: gapradar build-dossiers
       - name: Export Today Opportunity Board
         run: gapradar export
