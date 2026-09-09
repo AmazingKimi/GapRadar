@@ -14,20 +14,23 @@ DETECT → VERIFY → REACTION → SUPPLY → GAP → DOSSIER
 
 A vendor announcement proves a change happened. Community reaction can show whether users are actually displaced. Replacement supply can show whether that displaced demand is already served. The dossier summarizes only the evidence that survived those gates.
 
-## V0.5 — opportunity dossiers
+## V0.6 — auditable demand search
 
-V0.5 turns the V0.4 evidence chain into a human-review artifact for every verified event.
+V0.6 fixes the highest-leverage weakness in V0.5: reaction search could be too narrow, and `no_signal` was being presented too much like evidence of no demand.
 
-Each dossier answers:
+It now:
 
-- what changed and where the first-party evidence is;
-- whether real migration pain was found;
-- which replacement products or projects survived relevance filtering;
-- what, if anything, still appears unsolved;
-- whether the current evidence says `REVIEW`, `WATCH`, `PASS`, `LIKELY SERVED`, or `INSUFFICIENT EVIDENCE`;
-- the next evidence-gathering action without inventing market size, revenue, or arbitrary opportunity percentages.
-
-Dossiers are generated as both Markdown and JSON under `docs/dossiers/`, with a machine-readable index in `data/dossiers.json`. The dashboard surfaces the verdict and links to the full dossier.
+- runs multiple reaction queries per event instead of one narrow vendor+product query;
+- includes broad product queries plus event-language queries such as deprecation, migration and alternatives;
+- records every query, source, success/failure state and raw candidate count;
+- deduplicates candidates across query variants before scoring migration pain;
+- rejects generic keyword noise unless the affected product/vendor is actually present;
+- marks reaction-search quality as `adequate`, `degraded`, `failed` or `unassessed`;
+- refuses to convert a failed search into `no_signal`;
+- treats `no_signal` as **no detected signal**, not proof that demand is absent;
+- leaves the gap state `unassessed` when no demand signal was detected;
+- keeps the V0.5 demand gate, so supply search still runs only after displaced demand survives;
+- exposes the query audit in each opportunity dossier and the dashboard.
 
 ## Evidence hierarchy
 
@@ -39,26 +42,27 @@ Dossiers are generated as both Markdown and JSON under `docs/dossiers/`, with a 
 
 **No Tier-1 source = no verified event. Tier-2 and Tier-3 evidence can only evaluate a verified event.**
 
-## Decision gates
+## Demand states
 
-Demand states:
+- `unassessed` — demand search has not run or the search failed;
+- `no_signal` — the recorded queries completed but no qualifying migration-pain signal was detected;
+- `early_signal` — at least one qualifying displaced-demand reaction;
+- `repeated_signal` — at least three qualifying displaced-demand reactions.
 
-- `unassessed`
-- `no_signal`
-- `early_signal`
-- `repeated_signal`
+`no_signal` is a detection result, not a market truth.
 
-Supply states:
+## Supply states
 
 - `unassessed`
 - `no_supply`
 - `thin_supply`
 - `served`
 
-Gap states:
+Supply validation is skipped unless demand survives the reaction gate.
+
+## Gap states
 
 - `unassessed`
-- `no_demand`
 - `watch`
 - `potential_gap`
 - `likely_served`
@@ -67,13 +71,14 @@ A `potential_gap` is still not a command to build. It is the first state that ea
 
 ## Dossier verdicts
 
-- `PASS` — the market change is real, but no qualifying displaced-demand evidence was found;
+- `NO DETECTED SIGNAL` — the current audited search found no qualifying displaced-demand evidence; this does **not** mean demand is absent;
+- `SEARCH FAILED` — reaction search did not complete and no demand conclusion is allowed;
 - `WATCH` — some evidence exists, but the chain is incomplete or still early;
 - `REVIEW` — repeated displaced demand survived the supply check and deserves human opportunity review;
 - `LIKELY SERVED` — displaced demand exists, but credible replacement supply already looks strong;
 - `INSUFFICIENT EVIDENCE` — the event itself is not adequately verified.
 
-GapRadar is explicitly allowed to say **do not build this**.
+GapRadar is explicitly allowed to say **we did not detect demand yet** without pretending that means **there is no demand**.
 
 ## Current live sources
 
@@ -81,7 +86,7 @@ First-party events: GitHub, Shopify, Slack, Cloudflare.
 Reaction: Hacker News and GitHub Issues.  
 Supply: GitHub repositories and npm.
 
-The source set is intentionally narrow while precision is being hardened.
+The source set is intentionally narrow while precision and recall are being hardened.
 
 ## Quick start
 
@@ -109,28 +114,29 @@ The daily GitHub Action runs the full chain and commits refreshed events, source
 1. **No official source, no verified event.**
 2. Community reaction can never create a Tier-1 fact.
 3. Popular discussion is not displaced demand unless it contains migration pain tied to the affected product.
-4. Popular software is not replacement supply unless it is relevant to the affected product.
-5. Supply analysis is skipped when an event fails the demand gate.
-6. Silence, `PASS`, and `no_signal` are valid outcomes.
-7. `REVIEW` requires repeated demand that survives the supply check.
-8. Dossiers summarize evidence; they do not fabricate market size, revenue forecasts, opportunity scores, or build windows.
+4. A failed search cannot become `no_signal`.
+5. `no_signal` means "not detected by these queries", never "no demand exists".
+6. Popular software is not replacement supply unless it is relevant to the affected product.
+7. Supply analysis is skipped when an event fails the demand gate.
+8. `REVIEW` requires repeated demand that survives the supply check.
+9. Dossiers summarize evidence; they do not fabricate market size, revenue forecasts, opportunity scores, or build windows.
 
 ## Repository layout
 
 ```text
 config/sources.yml          first-party source registry
 src/gapradar/detector.py    hard-event detection and official-domain guardrails
-src/gapradar/reaction.py    displaced-demand search and filtering
+src/gapradar/reaction.py    multi-query displaced-demand search, audit and filtering
 src/gapradar/supply.py      replacement-supply search and filtering
 src/gapradar/dossier.py     evidence-grounded opportunity dossier builder
-src/gapradar/models.py      evidence, demand, supply and gap state model
+src/gapradar/models.py      evidence, search quality, demand, supply and gap state model
 src/gapradar/cli.py         radar commands
-data/events.json            verified event state
+data/events.json            verified event state + reaction query audit
 data/dossiers.json          generated dossier index
 docs/dossiers/              per-event Markdown + JSON dossiers
 docs/index.html             generated dashboard
 .github/workflows/          CI + daily live radar
-tests/                      precision and false-positive regression tests
+tests/                      precision, recall and false-positive regression tests
 ```
 
 ## Roadmap
@@ -139,9 +145,10 @@ tests/                      precision and false-positive regression tests
 **V0.2 — Precision-first live radar** ✅  
 **V0.3 — Displaced-demand validation** ✅  
 **V0.4 — Supply-gap analysis** ✅  
-**V0.5 — Opportunity dossier** ✅
+**V0.5 — Opportunity dossier** ✅  
+**V0.6 — Auditable demand search** ✅
 
-V0.6 should focus on broader source coverage and dossier-quality validation, not on adding fake intelligence scores.
+Next coverage work should add more reaction sources and validate recall against known historical displacement events. It should not add fake intelligence scores.
 
 ## License
 
