@@ -48,15 +48,28 @@ def _product_tokens(event: MarketEvent) -> list[str]:
     return _extract_tokens(event.product)[:8]
 
 
+def _vendor_tokens(event: MarketEvent) -> list[str]:
+    return _extract_tokens(event.vendor)[:4]
+
+
 def _query(event: MarketEvent) -> str:
     terms = _product_tokens(event)[:5]
     if not terms:
-        terms = _extract_tokens(event.vendor)[:2]
+        terms = _vendor_tokens(event)[:2]
     return " ".join(terms) or event.vendor
 
 
+def _token_matches(token: str, text: str) -> bool:
+    variants = {token}
+    if token.endswith("s") and len(token) > 4:
+        variants.add(token[:-1])
+    else:
+        variants.add(token + "s")
+    return any(re.search(rf"\b{re.escape(value)}\b", text, flags=re.I) for value in variants)
+
+
 def _hits(tokens: list[str], text: str) -> int:
-    return sum(1 for token in tokens if re.search(rf"\b{re.escape(token)}\b", text, flags=re.I))
+    return sum(1 for token in tokens if _token_matches(token, text))
 
 
 def score_supply(candidate: SupplyCandidate, event: MarketEvent, *, now: datetime | None = None) -> int:
@@ -64,15 +77,19 @@ def score_supply(candidate: SupplyCandidate, event: MarketEvent, *, now: datetim
     title = candidate.title.lower()
     body = candidate.description.lower()
     combined = f"{title} {body}"
-    tokens = _product_tokens(event)
-    title_hits = _hits(tokens, title)
-    total_hits = _hits(tokens, combined)
+    product_tokens = _product_tokens(event)
+    vendor_tokens = _vendor_tokens(event)
+    title_hits = _hits(product_tokens, title)
+    total_hits = _hits(product_tokens, combined)
+    vendor_hit = not vendor_tokens or _hits(vendor_tokens, combined) >= 1
     explicit_replacement = bool(REPLACEMENT_RE.search(combined))
 
-    # Generic ecosystem packages often repeat words such as "theme", "script",
-    # or "CLI" in their descriptions. They are not substitutes. A candidate must
-    # either self-identify as a replacement/migration path, or name at least two
-    # product-specific concepts in its own title.
+    # A generic package named after a concept ("script-tags") is not a Shopify
+    # substitute, and a Shopify ecosystem package is not a replacement merely
+    # because its README mentions theme/CLI. Require vendor relevance plus either
+    # explicit replacement language or two product concepts in the candidate title.
+    if not vendor_hit:
+        return 0
     if not explicit_replacement and title_hits < 2:
         return 0
     if explicit_replacement and total_hits < 1:
