@@ -11,6 +11,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 import httpx
 
 from .worldscan import GapCandidate
+from .worldverify import WorldVerification
 
 SOLUTION_WORDS = re.compile(r"\b(alternative|replacement|competitor|migration|migrate|compliance|platform|software|tool|service|solution)\b", re.I)
 NOISE_HOSTS = {"news.google.com", "youtube.com", "www.youtube.com", "facebook.com", "www.facebook.com", "x.com", "twitter.com"}
@@ -30,6 +31,9 @@ class WorldLeadAssessment:
     final_recommendation: str
     summary: str
     errors: list[str]
+    tier1_status: str = "unverified"
+    official_url: str | None = None
+    demand_hypothesis: dict[str, object] | None = None
 
 
 def _tokens(text: str) -> list[str]:
@@ -44,6 +48,40 @@ def _subject(candidate: GapCandidate) -> str:
     if candidate.change_type == "price_shock":
         headline = re.sub(r"\b(the latest )?price (hike|increase|change)s?\b[: ]*", "", headline, flags=re.I)
     return headline.strip()[:180]
+
+
+def _demand_hypothesis(candidate: GapCandidate, verification: WorldVerification) -> dict[str, object]:
+    subject = _subject(candidate)
+    if candidate.change_type == "shutdown_eol":
+        affected = f"Users and organizations still dependent on the product or workflow described by: {subject}."
+        job = "Preserve the abandoned job with acceptable migration cost, compatibility and continuity."
+        disruption = "A product, service or supported capability is being removed or ended."
+        unknowns = ["Active affected-user count", "Migration urgency by segment", "Quality of official migration path"]
+    elif candidate.change_type == "price_shock":
+        affected = f"Price-sensitive customers affected by the pricing change described by: {subject}."
+        job = "Keep the core outcome while reducing the new cost burden or changing the pricing model."
+        disruption = "A material price, fee or free-tier change may release previously locked-in demand."
+        unknowns = ["Share of customers materially affected", "Switching costs", "Whether lower-cost substitutes already serve the core job"]
+    elif candidate.change_type == "api_terms_change":
+        affected = f"Developers and businesses dependent on the API, platform, license or terms described by: {subject}."
+        job = "Keep integrations and dependent workflows functioning under the changed platform constraints."
+        disruption = "An API, licensing, access or terms change may force migration, rewrites or dependency replacement."
+        unknowns = ["Number of affected integrations", "Migration complexity", "Availability of compatible alternatives"]
+    else:
+        affected = f"Organizations obligated by the new requirement described by: {subject}."
+        job = "Comply with the new requirement with the least operational burden, evidence-collection cost and implementation risk."
+        disruption = "A regulatory or policy shift creates mandatory work, controls, reporting or migration."
+        unknowns = ["Exact obligated segments", "Effective date and enforcement intensity", "Existing compliance-tool coverage"]
+
+    return {
+        "affected_users": affected,
+        "job_to_be_done": job,
+        "disruption": disruption,
+        "official_successor": "unknown",
+        "basis": [verification.official_url] if verification.official_url else [],
+        "confidence": "low",
+        "unknowns": unknowns,
+    }
 
 
 def _route(candidate: GapCandidate) -> tuple[str, tuple[str, ...], str]:
@@ -92,23 +130,12 @@ def _ddg_search(query: str, *, timeout: float) -> list[dict[str, str]]:
         host = urlparse(url).netloc.lower()
         if not url.startswith("http") or host in NOISE_HOSTS:
             continue
-        rows.append({
-            "title": _clean_html(title_html)[:240],
-            "url": url,
-            "snippet": _clean_html(snippets[i] if i < len(snippets) else "")[:500],
-            "source": host or "web",
-        })
+        rows.append({"title": _clean_html(title_html)[:240], "url": url, "snippet": _clean_html(snippets[i] if i < len(snippets) else "")[:500], "source": host or "web"})
     return rows
 
 
 def _bing_search(query: str, *, timeout: float) -> list[dict[str, str]]:
-    response = httpx.get(
-        "https://www.bing.com/search",
-        params={"q": query, "count": 20},
-        headers={"User-Agent": "Mozilla/5.0 GapRadar/0.9"},
-        timeout=timeout,
-        follow_redirects=True,
-    )
+    response = httpx.get("https://www.bing.com/search", params={"q": query, "count": 20}, headers={"User-Agent": "Mozilla/5.0 GapRadar/0.9"}, timeout=timeout, follow_redirects=True)
     response.raise_for_status()
     blocks = re.findall(r'<li class="b_algo".*?</li>', response.text, flags=re.I | re.S)
     rows: list[dict[str, str]] = []
@@ -121,12 +148,7 @@ def _bing_search(query: str, *, timeout: float) -> list[dict[str, str]]:
         if not url.startswith("http") or host in NOISE_HOSTS:
             continue
         snippet_match = re.search(r'<p[^>]*>(.*?)</p>', block, flags=re.I | re.S)
-        rows.append({
-            "title": _clean_html(title_html)[:240],
-            "url": url,
-            "snippet": _clean_html(snippet_match.group(1) if snippet_match else "")[:500],
-            "source": host or "web",
-        })
+        rows.append({"title": _clean_html(title_html)[:240], "url": url, "snippet": _clean_html(snippet_match.group(1) if snippet_match else "")[:500], "source": host or "web"})
     return rows
 
 
@@ -151,9 +173,7 @@ def _github_search(query: str, *, timeout: float = 12.0) -> tuple[list[dict[str,
     try:
         response = httpx.get("https://api.github.com/search/repositories", params={"q": query + " in:name,description,topics archived:false", "sort": "stars", "per_page": 20}, headers=headers, timeout=timeout)
         response.raise_for_status()
-        rows = []
-        for item in response.json().get("items", []):
-            rows.append({"title": str(item.get("full_name") or item.get("name") or "")[:240], "url": str(item.get("html_url") or ""), "snippet": str(item.get("description") or "")[:500], "source": "github.com"})
+        rows = [{"title": str(item.get("full_name") or item.get("name") or "")[:240], "url": str(item.get("html_url") or ""), "snippet": str(item.get("description") or "")[:500], "source": "github.com"} for item in response.json().get("items", [])]
         return rows, True, None
     except Exception as exc:
         return [], False, f"{type(exc).__name__}: {exc}"
@@ -167,9 +187,8 @@ def _npm_search(query: str, *, timeout: float = 12.0) -> tuple[list[dict[str, st
         for obj in response.json().get("objects", []):
             package = obj.get("package") or {}
             name = str(package.get("name") or "").strip()
-            if not name:
-                continue
-            rows.append({"title": name[:240], "url": str((package.get("links") or {}).get("npm") or f"https://www.npmjs.com/package/{name}"), "snippet": str(package.get("description") or "")[:500], "source": "npmjs.com"})
+            if name:
+                rows.append({"title": name[:240], "url": str((package.get("links") or {}).get("npm") or f"https://www.npmjs.com/package/{name}"), "snippet": str(package.get("description") or "")[:500], "source": "npmjs.com"})
         return rows, True, None
     except Exception as exc:
         return [], False, f"{type(exc).__name__}: {exc}"
@@ -187,7 +206,28 @@ def _relevance(row: dict[str, str], candidate: GapCandidate) -> int:
     return score
 
 
-def analyze_candidate(candidate: GapCandidate) -> WorldLeadAssessment:
+def _unverified_assessment(candidate: GapCandidate) -> WorldLeadAssessment:
+    return WorldLeadAssessment(
+        candidate_id=candidate.id,
+        ecosystem=_route(candidate)[0],
+        supply_status="unassessed",
+        supply_sources_checked=[],
+        supply_sources_missing=list(_route(candidate)[1]),
+        supply_candidate_count=0,
+        supply_evidence=[],
+        supply_coverage="blocked_unverified",
+        gap_assessment="UNVERIFIED",
+        final_recommendation="WATCH",
+        summary="This world-change lead has no Tier-1 verification. Supply/gap analysis is blocked so a news signal cannot become an opportunity claim.",
+        errors=[],
+    )
+
+
+def analyze_candidate(candidate: GapCandidate, verification: WorldVerification | None = None) -> WorldLeadAssessment:
+    if verification is None or verification.status != "tier1_verified" or not verification.official_url:
+        return _unverified_assessment(candidate)
+
+    hypothesis = _demand_hypothesis(candidate, verification)
     ecosystem, planned_sources, intent = _route(candidate)
     subject = _subject(candidate)
     query = f"{subject} {intent}"
@@ -226,7 +266,7 @@ def analyze_candidate(candidate: GapCandidate) -> WorldLeadAssessment:
         summary = "Several relevant substitutes or solution providers were found in the checked supply sources. A broad gap is not established; only narrower unmet jobs remain worth investigating."
     elif len(evidence) >= 1:
         supply_status, assessment, recommendation = "thin_supply", "POTENTIAL GAP", "REVIEW"
-        summary = "Some relevant supply exists, but the checked market appears thin enough to justify human review of the exact unmet job."
+        summary = "Some relevant supply exists, but the checked market appears thin enough to justify human review of the explicit unmet job."
     else:
         supply_status = "no_supply_detected"
         assessment = "POTENTIAL GAP" if coverage == "adequate" and len(unique) >= 5 else "INSUFFICIENT COVERAGE"
@@ -246,11 +286,15 @@ def analyze_candidate(candidate: GapCandidate) -> WorldLeadAssessment:
         final_recommendation=recommendation,
         summary=summary,
         errors=errors,
+        tier1_status="tier1_verified",
+        official_url=verification.official_url,
+        demand_hypothesis=hypothesis,
     )
 
 
-def analyze_candidates(candidates: list[GapCandidate]) -> list[WorldLeadAssessment]:
-    return [analyze_candidate(candidate) for candidate in candidates]
+def analyze_candidates(candidates: list[GapCandidate], verifications: dict[str, WorldVerification] | None = None) -> list[WorldLeadAssessment]:
+    verification_map = verifications or {}
+    return [analyze_candidate(candidate, verification_map.get(candidate.id)) for candidate in candidates]
 
 
 def save_assessments(path: Path, assessments: list[WorldLeadAssessment]) -> None:
