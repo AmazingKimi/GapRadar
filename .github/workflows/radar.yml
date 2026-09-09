@@ -34,6 +34,8 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: python -m pip install -e .
+      - name: Compile dashboard renderer
+        run: python -m py_compile src/gapradar/render.py
       - name: Scan world news and industry changes
         run: python -m gapradar.cli world-scan
       - name: Deep-dive world leads into supply and gap assessments
