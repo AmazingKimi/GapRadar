@@ -111,10 +111,6 @@ def _relevant_to_event(text: str, event: MarketEvent) -> bool:
     vendor_hit = bool(vendor and vendor in text)
     hits = sum(1 for token in tokens if re.search(rf"\b{re.escape(token)}\b", text, flags=re.IGNORECASE))
 
-    # Very short/generic product names such as "Script tags" create huge amounts
-    # of unrelated developer noise. For those, require the vendor to appear in
-    # the title/body/URL as an anchor. Longer distinctive product names can stand
-    # on their own if enough product-specific terms match.
     if len(tokens) <= 2:
         return vendor_hit and (product in text or hits >= 1)
     if vendor_hit and hits >= 1:
@@ -151,6 +147,44 @@ def score_migration_pain(candidate: ReactionCandidate, event: MarketEvent) -> in
 
 def is_migration_pain(candidate: ReactionCandidate, event: MarketEvent) -> bool:
     return score_migration_pain(candidate, event) >= 3
+
+
+def archived_reaction_evidence(
+    event: MarketEvent,
+    *,
+    title: str,
+    body: str,
+    url: str,
+    publisher: str = "Archived community",
+    published_at: datetime | None = None,
+    engagement: int = 0,
+) -> SourceEvidence | None:
+    """Apply the live reaction scorer to an archived historical document."""
+    candidate = ReactionCandidate(
+        title=_normalize(title)[:240],
+        url=url,
+        publisher=publisher,
+        source_kind="archived_reaction",
+        published_at=published_at,
+        excerpt=_normalize(body)[:1200],
+        engagement=engagement,
+    )
+    score = score_migration_pain(candidate, event)
+    if score < 3:
+        return None
+    return SourceEvidence(
+        tier=EvidenceTier.TIER_2_REACTION,
+        title=candidate.title or "Archived reaction",
+        url=url,
+        publisher=publisher,
+        published_at=published_at,
+        excerpt=candidate.excerpt,
+        is_official=False,
+        source_kind="archived_reaction",
+        signal="migration_pain",
+        signal_score=score,
+        engagement=engagement,
+    )
 
 
 def canonical_url(url: str) -> str:
@@ -266,7 +300,7 @@ def _github_query(query: str, headers: dict[str, str], timeout: float) -> list[R
 
 def search_github_issues(event: MarketEvent, *, timeout: float = 15.0, days: int = 120) -> list[ReactionCandidate]:
     cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).date().isoformat()
-    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.6"}
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.7"}
     token = os.getenv("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
@@ -295,7 +329,7 @@ def validate_event_reaction(event: MarketEvent) -> MarketEvent:
             audits.append({"source": "hacker_news", "query": query, "candidate_count": 0, "ok": False})
 
     cutoff = (datetime.now(timezone.utc) - timedelta(days=120)).date().isoformat()
-    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.6"}
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "GapRadar/0.7"}
     token = os.getenv("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
