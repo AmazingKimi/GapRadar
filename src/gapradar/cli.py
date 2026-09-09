@@ -84,14 +84,20 @@ def validate_supply_command(events: Path = typer.Option(Path("data/events.json")
 @app.command("backtest")
 def backtest_command(
     fixture: Path = typer.Option(Path("data/backtest/events.json"), exists=True, readable=True),
-    as_of: date | None = typer.Option(None, "--as-of", formats=["%Y-%m-%d"], help="Replay only events known on or before YYYY-MM-DD."),
+    as_of: str | None = typer.Option(None, "--as-of", help="Replay only events known on or before YYYY-MM-DD."),
     mode: str = typer.Option("fixture", help="fixture = deterministic benchmark; wayback = fetch archived first-party snapshots."),
     output: Path = typer.Option(Path("data/backtest/report.json")),
 ) -> None:
     """Replay curated historical events and calculate detector precision/recall."""
     if mode not in {"fixture", "wayback"}:
         raise typer.BadParameter("mode must be 'fixture' or 'wayback'")
-    report = run_backtest(fixture, as_of=as_of, mode=mode)  # type: ignore[arg-type]
+    parsed_as_of: date | None = None
+    if as_of:
+        try:
+            parsed_as_of = date.fromisoformat(as_of)
+        except ValueError as exc:
+            raise typer.BadParameter("--as-of must be YYYY-MM-DD") from exc
+    report = run_backtest(fixture, as_of=parsed_as_of, mode=mode)  # type: ignore[arg-type]
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
