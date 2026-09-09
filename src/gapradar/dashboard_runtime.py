@@ -73,7 +73,15 @@ SCRIPT = r'''
  function world(){const g=$('.globe');if(!g)return;g.innerHTML='<svg viewBox="0 0 620 330" aria-hidden="true"><defs><pattern id="dots" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.35" fill="#3989c9"/></pattern><filter id="glow"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g fill="url(#dots)" opacity=".86" filter="url(#glow)"><path d="M84 99l31-32 48-19 55 8 35 30-11 23-30 5-18 24-33-5-14 18-36-15-31-8z"/><path d="M205 151l28 12 22 37-8 49-22 45-17-23 4-37-18-31z"/><path d="M281 72l47-25 75 6 35 18 45-2 54 26-14 22-45 8-26 23-32-6-19 18-32-6-16-27-34-9-22-22z"/><path d="M343 156l40 4 31 30-10 50-31 45-27-14-15-44-10-37z"/><path d="M470 205l31-15 38 13 19 25-20 19-48-5z"/></g><g fill="#72d0ff"><circle cx="147" cy="93" r="3"/><circle cx="365" cy="98" r="3"/><circle cx="433" cy="124" r="3"/><circle cx="501" cy="220" r="3"/></g></svg>'}
  function wire(){
   const l=$('#langToggle'),t=$('#themeToggle');if(l)l.onclick=()=>applyLanguage(root.dataset.lang==='en'?'zh':'en');if(t)t.onclick=()=>applyTheme(root.dataset.theme==='light'?'dark':'light');
-  $$('.nav a').forEach(a=>{a.onclick=(e)=>{if(a.getAttribute('href')==='#')e.preventDefault();$$('.nav a').forEach(x=>x.classList.remove('active'));a.classList.add('active')}});
+  $$('.nav a').forEach(a=>{a.onclick=(e)=>{
+    var href=a.getAttribute('href')||'';
+    $$('.nav a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    if(href==='#'){e.preventDefault();toast(root.dataset.lang==='en'?'Saved view coming soon.':'收藏夹即将上线，敬请期待。');return;}
+    var el=href?document.getElementById(href.slice(1)):null;
+    if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});}
+  }});
+  function toast(msg){var t=document.createElement('div');t.textContent=msg;t.style.cssText='position:fixed;left:50%;bottom:36px;transform:translateX(-50%);background:#0d3152;color:#cfe6ff;border:1px solid #2a5682;border-radius:10px;padding:9px 16px;font-size:12px;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.35);opacity:0;transition:opacity .2s;white-space:nowrap';document.body.appendChild(t);requestAnimationFrame(function(){t.style.opacity='1'});setTimeout(function(){t.style.opacity='0';setTimeout(function(){if(t.parentNode)t.remove()},250)},1800);}
   $$('.sector').forEach(s=>{s.onclick=()=>{const target=s.querySelector('.lang-en')?.textContent.trim()||s.querySelector('strong')?.textContent.trim()||'';$$('.sector').forEach(x=>x.classList.remove('selected'));s.classList.add('selected');$$('.row').forEach(r=>r.hidden=target&&!r.textContent.includes(target));$('#feed')?.scrollIntoView({behavior:'smooth'})}});
   $$('.more').forEach((m,i)=>{m.onclick=()=>{(i===0?$('#sectors'):i===1?$('#opps'):$('#feed'))?.scrollIntoView({behavior:'smooth'})}});
   $$('.arrow,.round').forEach(a=>a.setAttribute('rel','noopener noreferrer'));
