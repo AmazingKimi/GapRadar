@@ -50,7 +50,7 @@ EVENT_TERMS = (
 
 STOPWORDS = {
     "the", "and", "for", "with", "from", "into", "will", "are", "now", "been", "being",
-    "this", "that", "older", "support", "shopify", "github", "slack", "cloudflare", "deprecated",
+    "this", "that", "older", "support", "github", "slack", "cloudflare", "deprecated",
     "retired", "retiring", "deprecation", "stop", "stopping", "running", "version",
 }
 
@@ -75,11 +75,32 @@ def _has(patterns: Iterable[str], text: str) -> int:
 
 
 def _product_tokens(event: MarketEvent) -> list[str]:
+    vendor = _normalize(event.vendor).lower()
     return [
         token.lower()
         for token in re.findall(r"[A-Za-z0-9][A-Za-z0-9._+-]{2,}", event.product)
-        if token.lower() not in STOPWORDS
+        if token.lower() not in STOPWORDS and token.lower() != vendor
     ]
+
+
+def _product_aliases(event: MarketEvent) -> list[str]:
+    product = _normalize(event.product)
+    words = product.split()
+    aliases: list[str] = [product]
+    vendor_words = _normalize(event.vendor).split()
+    if vendor_words and len(words) > 5:
+        vendor = vendor_words[0].lower()
+        for index, word in enumerate(words):
+            if word.lower().strip(".,:;()") == vendor:
+                aliases.append(" ".join(words[index:index + 3]))
+                break
+    meaningful = [
+        word.strip(".,:;()") for word in words
+        if word.lower().strip(".,:;()") not in STOPWORDS and not re.match(r"^v?\d+(?:\.\d+)*x?$", word.lower().strip(".,:;()"))
+    ]
+    if len(meaningful) >= 3:
+        aliases.append(" ".join(meaningful[-3:]))
+    return list(dict.fromkeys(alias for alias in aliases if alias))
 
 
 def _relevant_to_event(text: str, event: MarketEvent) -> bool:
@@ -87,16 +108,24 @@ def _relevant_to_event(text: str, event: MarketEvent) -> bool:
     product = _normalize(event.product).lower()
     vendor = _normalize(event.vendor).lower()
     tokens = _product_tokens(event)
+    vendor_hit = bool(vendor and vendor in text)
     hits = sum(1 for token in tokens if re.search(rf"\b{re.escape(token)}\b", text, flags=re.IGNORECASE))
+
+    # Very short/generic product names such as "Script tags" create huge amounts
+    # of unrelated developer noise. For those, require the vendor to appear in
+    # the title/body/URL as an anchor. Longer distinctive product names can stand
+    # on their own if enough product-specific terms match.
+    if len(tokens) <= 2:
+        return vendor_hit and (product in text or hits >= 1)
+    if vendor_hit and hits >= 1:
+        return True
     if product and product in text:
         return True
-    if vendor and vendor in text and hits >= 1:
-        return True
-    return hits >= min(2, len(tokens)) if tokens else bool(vendor and vendor in text)
+    return hits >= min(3, len(tokens))
 
 
 def score_migration_pain(candidate: ReactionCandidate, event: MarketEvent) -> int:
-    text = _normalize(f"{candidate.title} {candidate.excerpt}")
+    text = _normalize(f"{candidate.title} {candidate.excerpt} {candidate.url}")
     if not _relevant_to_event(text, event):
         return 0
 
@@ -140,13 +169,6 @@ def dedupe_candidates(items: Iterable[ReactionCandidate]) -> list[ReactionCandid
     return list(best.values())
 
 
-def _product_phrase(event: MarketEvent) -> str:
-    product = re.sub(r"\s+", " ", event.product).strip()
-    if len(product) > 72:
-        product = " ".join(product.split()[:8])
-    return product
-
-
 def _event_query_words(event: MarketEvent) -> list[str]:
     if event.event_type.value == "price_shock":
         return ["pricing", "price increase", "alternative", "switch"]
@@ -156,20 +178,22 @@ def _event_query_words(event: MarketEvent) -> list[str]:
 
 
 def hacker_news_queries(event: MarketEvent) -> list[str]:
-    product = _product_phrase(event)
-    candidates = [product, f"{event.vendor} {product}"]
-    candidates.extend(f"{product} {word}" for word in _event_query_words(event))
+    candidates: list[str] = []
+    for alias in _product_aliases(event):
+        candidates.extend([alias, f"{event.vendor} {alias}"])
+        candidates.extend(f"{alias} {word}" for word in _event_query_words(event))
     return list(dict.fromkeys(q.strip() for q in candidates if q.strip()))
 
 
 def github_issue_queries(event: MarketEvent, cutoff: str) -> list[str]:
-    product = _product_phrase(event)
-    base = [
-        f'"{product}" {event.vendor} created:>={cutoff} is:issue',
-        f'"{product}" created:>={cutoff} is:issue',
-    ]
-    base.extend(f'"{product}" {word} created:>={cutoff} is:issue' for word in _event_query_words(event))
-    return list(dict.fromkeys(base))
+    queries: list[str] = []
+    for alias in _product_aliases(event):
+        queries.extend([
+            f'"{alias}" {event.vendor} created:>={cutoff} is:issue',
+            f'"{alias}" created:>={cutoff} is:issue',
+        ])
+        queries.extend(f'"{alias}" {word} created:>={cutoff} is:issue' for word in _event_query_words(event))
+    return list(dict.fromkeys(queries))
 
 
 def _parse_iso(value: str | None) -> datetime | None:
