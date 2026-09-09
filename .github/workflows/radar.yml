@@ -72,11 +72,14 @@ jobs:
           grep -q 'class="globe"' docs/index.html
           grep -q 'id="langToggle"' docs/index.html
           grep -q 'id="themeToggle"' docs/index.html
-          grep -q 'gapradar-runtime-v2' docs/index.html
+          grep -q 'gapradar-runtime-v3' docs/index.html
           grep -q 'Find the next opportunity' docs/index.html
+          grep -q 'Today’s Opportunities' docs/index.html
+          grep -q 'Items scanned today' docs/index.html
+          grep -q "中文 ✓  |  EN" docs/index.html
           grep -q 'localStorage.setItem' docs/index.html
-          grep -q 'width:calc(100% - 230px)' docs/index.html
-          grep -q 'M96 104l27-32' docs/index.html
+          grep -q 'width:calc(100vw - 230px)' docs/index.html
+          grep -q 'M84 99l31-32' docs/index.html
           if grep -q "Today's Market Gaps" docs/index.html; then
             echo 'Old dashboard detected after export.'
             exit 1
