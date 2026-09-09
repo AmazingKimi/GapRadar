@@ -41,9 +41,11 @@ jobs:
           from pathlib import Path
           from gapradar.worldscan import load_candidates
           from gapradar.worlddeep import analyze_candidates, save_assessments
+          from gapradar.newsupply import enrich_failed_assessments
 
           candidates = load_candidates(Path('data/world-gaps.json'))
           assessments = analyze_candidates(candidates)
+          assessments = enrich_failed_assessments(candidates, assessments)
           save_assessments(Path('data/world-assessments.json'), assessments)
           print(f'Deep-dived {len(assessments)} world lead(s).')
           PY
