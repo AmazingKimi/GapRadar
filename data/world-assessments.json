@@ -2,113 +2,127 @@
   {
     "candidate_id": "35f3623855c133e9",
     "ecosystem": "regulatory",
-    "supply_status": "no_supply_detected",
-    "supply_sources_checked": [
+    "supply_status": "unassessed",
+    "supply_sources_checked": [],
+    "supply_sources_missing": [
       "web_search"
     ],
-    "supply_sources_missing": [],
     "supply_candidate_count": 0,
     "supply_evidence": [],
-    "supply_coverage": "adequate",
-    "gap_assessment": "POTENTIAL GAP",
-    "final_recommendation": "REVIEW",
-    "summary": "No qualifying replacement supply was detected in the checked sources. This is coverage-bounded and is not proof that no alternatives exist.",
-    "errors": []
+    "supply_coverage": "failed",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results"
+    ]
   },
   {
     "candidate_id": "6ff8157b3810d5fd",
     "ecosystem": "regulatory",
-    "supply_status": "no_supply_detected",
-    "supply_sources_checked": [
+    "supply_status": "unassessed",
+    "supply_sources_checked": [],
+    "supply_sources_missing": [
       "web_search"
     ],
-    "supply_sources_missing": [],
     "supply_candidate_count": 0,
     "supply_evidence": [],
-    "supply_coverage": "adequate",
-    "gap_assessment": "POTENTIAL GAP",
-    "final_recommendation": "REVIEW",
-    "summary": "No qualifying replacement supply was detected in the checked sources. This is coverage-bounded and is not proof that no alternatives exist.",
-    "errors": []
+    "supply_coverage": "failed",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results"
+    ]
   },
   {
     "candidate_id": "bc658468240f8785",
     "ecosystem": "regulatory",
-    "supply_status": "no_supply_detected",
-    "supply_sources_checked": [
+    "supply_status": "unassessed",
+    "supply_sources_checked": [],
+    "supply_sources_missing": [
       "web_search"
     ],
-    "supply_sources_missing": [],
     "supply_candidate_count": 0,
     "supply_evidence": [],
-    "supply_coverage": "adequate",
-    "gap_assessment": "POTENTIAL GAP",
-    "final_recommendation": "REVIEW",
-    "summary": "No qualifying replacement supply was detected in the checked sources. This is coverage-bounded and is not proof that no alternatives exist.",
-    "errors": []
+    "supply_coverage": "failed",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results"
+    ]
   },
   {
     "candidate_id": "52f1eb44691af255",
     "ecosystem": "regulatory",
-    "supply_status": "no_supply_detected",
-    "supply_sources_checked": [
+    "supply_status": "unassessed",
+    "supply_sources_checked": [],
+    "supply_sources_missing": [
       "web_search"
     ],
-    "supply_sources_missing": [],
     "supply_candidate_count": 0,
     "supply_evidence": [],
-    "supply_coverage": "adequate",
-    "gap_assessment": "POTENTIAL GAP",
-    "final_recommendation": "REVIEW",
-    "summary": "No qualifying replacement supply was detected in the checked sources. This is coverage-bounded and is not proof that no alternatives exist.",
-    "errors": []
+    "supply_coverage": "failed",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results"
+    ]
   },
   {
     "candidate_id": "37ef208f3bd3c3bf",
     "ecosystem": "regulatory",
-    "supply_status": "no_supply_detected",
-    "supply_sources_checked": [
+    "supply_status": "unassessed",
+    "supply_sources_checked": [],
+    "supply_sources_missing": [
       "web_search"
     ],
-    "supply_sources_missing": [],
     "supply_candidate_count": 0,
     "supply_evidence": [],
-    "supply_coverage": "adequate",
-    "gap_assessment": "POTENTIAL GAP",
-    "final_recommendation": "REVIEW",
-    "summary": "No qualifying replacement supply was detected in the checked sources. This is coverage-bounded and is not proof that no alternatives exist.",
-    "errors": []
+    "supply_coverage": "failed",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results"
+    ]
   },
   {
     "candidate_id": "86a0955dccc4b9fd",
     "ecosystem": "commercial",
-    "supply_status": "no_supply_detected",
-    "supply_sources_checked": [
+    "supply_status": "unassessed",
+    "supply_sources_checked": [],
+    "supply_sources_missing": [
       "web_search"
     ],
-    "supply_sources_missing": [],
     "supply_candidate_count": 0,
     "supply_evidence": [],
-    "supply_coverage": "adequate",
-    "gap_assessment": "POTENTIAL GAP",
-    "final_recommendation": "REVIEW",
-    "summary": "No qualifying replacement supply was detected in the checked sources. This is coverage-bounded and is not proof that no alternatives exist.",
-    "errors": []
+    "supply_coverage": "failed",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results"
+    ]
   },
   {
     "candidate_id": "a4667ed73e330db1",
     "ecosystem": "replacement",
-    "supply_status": "no_supply_detected",
-    "supply_sources_checked": [
+    "supply_status": "unassessed",
+    "supply_sources_checked": [],
+    "supply_sources_missing": [
       "web_search"
     ],
-    "supply_sources_missing": [],
     "supply_candidate_count": 0,
     "supply_evidence": [],
-    "supply_coverage": "adequate",
-    "gap_assessment": "POTENTIAL GAP",
-    "final_recommendation": "REVIEW",
-    "summary": "No qualifying replacement supply was detected in the checked sources. This is coverage-bounded and is not proof that no alternatives exist.",
-    "errors": []
+    "supply_coverage": "failed",
+    "gap_assessment": "INSUFFICIENT COVERAGE",
+    "final_recommendation": "WATCH",
+    "summary": "Supply investigation did not return a usable result set from the planned sources; no market-gap conclusion is allowed.",
+    "errors": [
+      "web_search: duckduckgo: no parsable results; bing: no parsable results"
+    ]
   }
 ]
