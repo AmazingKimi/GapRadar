@@ -68,6 +68,10 @@ def _clean(value: str) -> str:
     return " ".join(re.sub(r"<[^>]+>", " ", value or "").split())
 
 
+def _base_headline(headline: str) -> str:
+    return re.sub(r"\s+-\s+[^-]{2,80}$", "", headline).strip()
+
+
 def _published(entry: object) -> datetime | None:
     parsed = getattr(entry, "published_parsed", None) or getattr(entry, "updated_parsed", None)
     if not parsed:
@@ -94,13 +98,15 @@ def _forced_gate(change_type: str, text: str) -> bool:
             and re.search(r"\b(increase|hike|raise|raised|rising|change|changes|higher|up|charge|charging)\b", t)
         ) or bool(re.search(r"\bfree tier\b.{0,80}\b(end|ending|remove|removed|cut|limit|limited)\b", t))
     if change_type == "api_terms_change":
-        return bool(
-            re.search(r"\b(api|developer|platform)\b", t)
-            and re.search(r"\b(deprecat|terms|policy|rate limit|pricing|license|licensing|access change|restriction)\b", t)
+        api_context = bool(re.search(r"\bapi\b", t)) or bool(
+            re.search(r"\bdeveloper\b", t) and re.search(r"\b(software|app|platform|cloud|integration|sdk)\b", t)
         )
+        return api_context and bool(re.search(r"\b(deprecat|terms|policy|rate limit|pricing|license|licensing|access change|restriction)\b", t))
     if change_type == "regulatory_shift":
+        if re.search(r"\b(launches?|unveils?|introduces?)\b.{0,40}\b(solution|product|tool)\b", t):
+            return False
         return bool(
-            re.search(r"\b(regulation|regulator|law|compliance|mandate|mandatory|require|required|requiring|government|policy)\b", t)
+            re.search(r"\b(regulation|regulator|law|mandate|mandatory|require|required|requiring|government|policy)\b", t)
             and TECH_TERMS.search(t)
         )
     return False
@@ -133,6 +139,7 @@ def _gap_hypothesis(change_type: str) -> tuple[str, str, str]:
 
 
 def _fingerprint(headline: str, change_type: str) -> str:
+    headline = _base_headline(headline)
     tokens = [t.lower() for t in re.findall(r"[A-Za-z0-9][A-Za-z0-9+.-]{2,}", headline) if t.lower() not in STOPWORDS]
     raw = change_type + "|" + " ".join(tokens[:8])
     return hashlib.sha1(raw.encode("utf-8")).hexdigest()[:16]
@@ -182,6 +189,8 @@ def scan_world(
             classified = classify_change(text)
             if classified:
                 change_type, matched_signal = classified
+                if forced_type and change_type != forced_type and not _forced_gate(forced_type, text):
+                    continue
             elif forced_type and _forced_gate(forced_type, text):
                 change_type, matched_signal = forced_type, "query-filtered structural change"
             else:
@@ -195,7 +204,7 @@ def scan_world(
                 discovered_at=now.isoformat(),
                 published_at=published.isoformat() if published else None,
                 source=name,
-                headline=headline[:300],
+                headline=_base_headline(headline)[:300],
                 url=link,
                 summary=summary[:900],
                 change_type=change_type,
@@ -210,7 +219,9 @@ def scan_world(
                     + "It is a market-gap lead, not proof that replacement supply is weak or that the opportunity is profitable."
                 ),
             )
-            rows.setdefault(candidate.id, candidate)
+            previous = rows.get(candidate.id)
+            if previous is None or (candidate.published_at or "") > (previous.published_at or ""):
+                rows[candidate.id] = candidate
 
     return sorted(rows.values(), key=lambda row: row.published_at or row.discovered_at, reverse=True)
 
