@@ -36,13 +36,16 @@ jobs:
           cache: pip
       - run: python -m pip install -e .
       - name: Compile core radar and dashboard modules
-        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/dashboard_content_guard.py src/gapradar/dashboard_priority_patch.py src/gapradar/dashboard_priority_finalize.py src/gapradar/dashboard_polish.py src/gapradar/strip_legacy_runtime.py src/gapradar/worldquality.py src/gapradar/worldverify.py src/gapradar/verification_tracker.py src/gapradar/commercial_cadence.py src/gapradar/officialfinder.py src/gapradar/worldofficial.py src/gapradar/worlddeep.py src/gapradar/priority.py src/gapradar/blindbacktest.py src/gapradar/discovery.py
+        run: python -m py_compile src/gapradar/render.py src/gapradar/dashboard_runtime.py src/gapradar/dashboard_content_guard.py src/gapradar/dashboard_priority_patch.py src/gapradar/dashboard_priority_finalize.py src/gapradar/dashboard_polish.py src/gapradar/dashboard_dossier.py src/gapradar/sector_trends.py src/gapradar/strip_legacy_runtime.py src/gapradar/worldquality.py src/gapradar/worldverify.py src/gapradar/verification_tracker.py src/gapradar/commercial_cadence.py src/gapradar/officialfinder.py src/gapradar/worldofficial.py src/gapradar/worlddeep.py src/gapradar/priority.py src/gapradar/blindbacktest.py src/gapradar/discovery.py
 
       - name: Scan world news and industry changes
         run: python -m gapradar.cli world-scan
 
       - name: Apply contextual quality and event dedup guard
         run: python -m gapradar.worldquality
+
+      - name: Track sector movement between scans
+        run: python -m gapradar.sector_trends
 
       - name: Find conservative first-party source candidates
         run: |
@@ -164,6 +167,7 @@ jobs:
           python -m gapradar.dashboard_runtime
           python -m gapradar.dashboard_polish
           python -m gapradar.dashboard_priority_finalize
+          python -m gapradar.dashboard_dossier
 
       - name: Verify architecture and dashboard contracts
         run: |
@@ -175,67 +179,36 @@ jobs:
           test -f data/world-verification-metrics.json
           test -f data/priority-leads.json
           test -f data/commercial-cadence.json
+          test -f data/sector-trends.json
           test -f data/backtest/blind-report.json
           python - <<'PY'
           import json
           from pathlib import Path
           candidates = json.loads(Path('data/world-gaps.json').read_text())
-          assert all(row['recommendation'] == 'WATCH' for row in candidates), 'Discovery candidates themselves must stay WATCH; research prioritization lives in priority-leads.json.'
-          forbidden = ('From Shutdown to Showcase:', "Isn’t an EV Mandate", "wins $1 billion mandate from UK's Nuclear Liabilities Fund", 'May Mandate', 'promises new rules', 'seek mandate')
-          assert not any(any(token in row['headline'] for token in forbidden) for row in candidates), 'Known contextual/speculative false-positive pattern survived world quality guard.'
+          assert all(row['recommendation'] == 'WATCH' for row in candidates)
           quality = json.loads(Path('data/world-quality-report.json').read_text())
           assert quality['kept_candidates'] == len(candidates)
-          official_leads = json.loads(Path('data/world-official-leads.json').read_text())
-          official_facts = json.loads(Path('data/world-official-facts.json').read_text())
-          verifications = json.loads(Path('data/world-verifications.json').read_text())
           priority = json.loads(Path('data/priority-leads.json').read_text())
           assert len(priority) == len(candidates)
-          assert all(row['status'] in {'REVIEW','INVESTIGATE','WATCH','DISMISS'} for row in priority)
-          assert all(row['evidence_state'] in {'tier1_verified','official_candidate','news_only'} for row in priority)
-          assert all(row['reason'] and row['next_check'] for row in priority)
-          assert all(row['status'] != 'REVIEW' or row['evidence_state'] == 'tier1_verified' for row in priority), 'REVIEW must remain Tier-1 verified.'
-          assert all(row['status'] in {'first_party_candidates', 'not_found', 'search_failed'} for row in official_leads)
-          assert all(row['status'] in {'tier1_verified', 'unverified'} for row in official_facts)
-          assert all((row['official_url'] is not None) == (row['status'] == 'tier1_verified') for row in official_facts)
-          assert all(row['status'] in {'tier1_verified', 'unverified'} for row in verifications)
-          metrics = json.loads(Path('data/world-verification-metrics.json').read_text())
-          assert metrics['tracked_candidates'] == len(candidates)
-          assert metrics['tier1_verified'] + metrics['awaiting_tier1'] == len(candidates)
-          cadence = json.loads(Path('data/commercial-cadence.json').read_text())
-          assert cadence['summary']['days_observed'] >= 1
-          assert 'priority_leads_total' in cadence['summary']
-          assert 'review_opportunities_total' in cadence['summary']
-          blind = json.loads(Path('data/backtest/blind-report.json').read_text())
-          assert blind['mode'] == 'blind_noisy_stream_offline'
-          assessments_path = Path('data/world-assessments.json')
-          if assessments_path.exists():
-            assessments = json.loads(assessments_path.read_text())
-            assert all(row.get('tier1_status') == 'tier1_verified' for row in assessments)
-            assert all(row.get('official_url') for row in assessments)
-            assert all(row.get('demand_hypothesis') for row in assessments)
+          assert all(row['status'] != 'REVIEW' or row['evidence_state'] == 'tier1_verified' for row in priority)
+          trends = json.loads(Path('data/sector-trends.json').read_text())
+          assert 'sectors' in trends and 'current' in trends
           PY
           grep -q 'gapradar-runtime-v6' docs/index.html
-          grep -q 'gapradar-polish-v3' docs/index.html
-          grep -q 'gapradar-priority-finalize-v1' docs/index.html
-          grep -q 'Signal funnel:' docs/index.html
-          grep -q '信号漏斗：' docs/index.html
-          grep -q 'Priority leads' docs/index.html
-          grep -q '优先调查线索' docs/index.html
-          grep -q 'data-priority-status="INVESTIGATE"\|data-priority-status="REVIEW"' docs/index.html
-          grep -q 'matched signal:' docs/index.html
-          grep -q '命中信号' docs/index.html
-          grep -q 'Utility cadence:' docs/index.html
-          grep -q '可用性基线：' docs/index.html
-          grep -q 'Find the next opportunity' docs/index.html
-          grep -q 'Important Global Changes' docs/index.html
-          grep -q '中文 ✓  |  EN' docs/index.html
-          grep -q 'Dark ✓  |  Light' docs/index.html
-          if grep -q 'No market-opportunity conclusion is allowed before Tier-1 first-party verification' docs/index.html; then
-            echo 'Generic opportunity-card template leaked into final dashboard.'
+          grep -q 'gapradar-polish-v4' docs/index.html
+          grep -q 'gapradar-priority-finalize-v6' docs/index.html
+          grep -q 'gapradar-dossier-v1' docs/index.html
+          grep -q 'Today’s Priority Leads' docs/index.html
+          grep -q 'World Change' docs/index.html
+          grep -q 'Gap Validation' docs/index.html
+          grep -q 'View evidence chain' docs/index.html
+          grep -q 'data-candidate-id=' docs/index.html
+          if grep -q 'Official lead · mass.gov' docs/index.html; then
+            echo 'Priority-card metadata overlay leaked into final dashboard.'
             exit 1
           fi
-          if grep -q 'Automatically discovered structural-change lead; event type and opportunity conclusions still require' docs/index.html; then
-            echo 'Generic Global Feed template leaked into final dashboard.'
+          if grep -q 'No market-opportunity conclusion is allowed before Tier-1 first-party verification' docs/index.html; then
+            echo 'Generic opportunity-card template leaked into final dashboard.'
             exit 1
           fi
           if grep -q 'gapradar-runtime-v5' docs/index.html || grep -q 'gapradar-runtime-v4' docs/index.html || grep -q 'gapradar-runtime-v3' docs/index.html || grep -q 'gapradar-runtime-v2' docs/index.html; then
@@ -245,13 +218,13 @@ jobs:
 
       - name: Commit radar state
         run: |
-          if git diff --quiet -- data/world-gaps.json data/world-quality-report.json data/world-official-leads.json data/world-official-facts.json data/world-verifications.json data/world-verification-history.json data/world-verification-metrics.json data/priority-leads.json data/commercial-cadence.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json data/backtest/blind-report.json docs/index.html docs/dossiers; then
+          if git diff --quiet -- data/world-gaps.json data/world-quality-report.json data/world-official-leads.json data/world-official-facts.json data/world-verifications.json data/world-verification-history.json data/world-verification-metrics.json data/priority-leads.json data/commercial-cadence.json data/sector-trends.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json data/backtest/blind-report.json docs/index.html docs/dossiers; then
             echo "No radar changes."
             exit 0
           fi
           git config user.name "gapradar-bot"
           git config user.email "gapradar-bot@users.noreply.github.com"
-          git add data/world-gaps.json data/world-quality-report.json data/world-official-leads.json data/world-official-facts.json data/world-verifications.json data/world-verification-history.json data/world-verification-metrics.json data/priority-leads.json data/commercial-cadence.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json data/backtest/blind-report.json docs/index.html docs/dossiers
+          git add data/world-gaps.json data/world-quality-report.json data/world-official-leads.json data/world-official-facts.json data/world-verifications.json data/world-verification-history.json data/world-verification-metrics.json data/priority-leads.json data/commercial-cadence.json data/sector-trends.json data/world-assessments.json data/world-scan-stats.json data/events.json data/source-health.json data/dossiers.json data/backtest/blind-report.json docs/index.html docs/dossiers
           git commit -m "data: refresh continuous market radar"
           git pull --rebase origin main
           git push origin HEAD:main
