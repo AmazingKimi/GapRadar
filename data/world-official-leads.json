@@ -8,7 +8,7 @@
       "https://www.mass.gov/news/governor-healey-no-data-centers-without-local-approval",
       "https://www.mass.gov/info-details/efsb-permitting-dashboard",
       "https://childcare.mass.gov/resource/1608087503000/EEC_InterimRegulations",
-      "https://www.mass.gov/info-details/statutes-regulations-and-guidelines"
+      "https://www.mass.gov/guides/clean-energy-standard-310-cmr-775"
     ],
     "candidate_hosts": [
       "www.mass.gov",
@@ -29,10 +29,14 @@
   },
   {
     "candidate_id": "14436a2a2ff1f7ea",
-    "status": "not_found",
+    "status": "first_party_candidates",
     "query": "\"EV BMS Cybersecurity Testing Now Mandatory in India\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
+    "candidate_urls": [
+      "https://heavyindustries.gov.in/sites/default/files/2026-07/lsauq_452.pdf"
+    ],
+    "candidate_hosts": [
+      "heavyindustries.gov.in"
+    ],
     "search_coverage": "adequate",
     "errors": [],
     "queries": [
@@ -72,35 +76,6 @@
       "\"Afriforum challenges Eskom’s 8.83% electricity price increase\" official",
       "afriforum challenges eskom electricity mybroadband pricing price fee subscription official",
       "afriforum challenges eskom electricity pricing price fee subscription official"
-    ]
-  },
-  {
-    "candidate_id": "5a6d31c87ca2276d",
-    "status": "not_found",
-    "query": "\"3 Red Line stations reopen Monday after 2-month shutdown for major construction\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": [],
-    "queries": [
-      "\"3 Red Line stations reopen Monday after 2-month shutdown for major construction\" official",
-      "red line stations reopen monday after shutdown sunset discontinued end support official",
-      "red line stations reopen shutdown sunset discontinued end support official"
-    ]
-  },
-  {
-    "candidate_id": "48452bf0d5a2a7c4",
-    "status": "not_found",
-    "query": "\"Trump's Trade Tactics Target Bombardier: Manufacturing Mandate\" official",
-    "candidate_urls": [],
-    "candidate_hosts": [],
-    "search_coverage": "adequate",
-    "errors": [],
-    "queries": [
-      "\"Trump's Trade Tactics Target Bombardier: Manufacturing Mandate\" official",
-      "trump trade tactics target bombardier manufacturing rule regulation requirement mandate official",
-      "trump trade tactics target rule regulation requirement mandate official",
-      "trump trade tactics target bombardier manufacturing government regulator requirement"
     ]
   },
   {

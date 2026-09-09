@@ -1,7 +1,7 @@
 [
   {
     "id": "52f1eb44691af255",
-    "discovered_at": "2026-09-09T10:28:34.550802+00:00",
+    "discovered_at": "2026-09-09T10:33:11.319765+00:00",
     "published_at": "2026-09-08T22:27:45+00:00",
     "source": "Google News · energy climate structural change",
     "headline": "Massachusetts Will Require New Data Centers to Use Clean Energy",
@@ -18,7 +18,7 @@
   },
   {
     "id": "14436a2a2ff1f7ea",
-    "discovered_at": "2026-09-09T10:28:34.550802+00:00",
+    "discovered_at": "2026-09-09T10:33:11.319765+00:00",
     "published_at": "2026-09-08T15:17:01+00:00",
     "source": "Google News · AI and data regulation",
     "headline": "EV BMS Cybersecurity Testing Now Mandatory in India",
@@ -35,7 +35,7 @@
   },
   {
     "id": "86a0955dccc4b9fd",
-    "discovered_at": "2026-09-09T10:28:34.550802+00:00",
+    "discovered_at": "2026-09-09T10:33:11.319765+00:00",
     "published_at": "2026-09-08T15:09:01+00:00",
     "source": "Google News · SaaS pricing shocks",
     "headline": "The latest Apple price hike: Apple TV streaming service",
@@ -52,7 +52,7 @@
   },
   {
     "id": "1a9ab0b99d425f58",
-    "discovered_at": "2026-09-09T10:28:34.550802+00:00",
+    "discovered_at": "2026-09-09T10:33:11.319765+00:00",
     "published_at": "2026-09-08T08:20:58+00:00",
     "source": "Google News · energy climate structural change",
     "headline": "Afriforum challenges Eskom’s 8.83% electricity price increase",
@@ -68,42 +68,8 @@
     "sector": "Energy & Climate"
   },
   {
-    "id": "5a6d31c87ca2276d",
-    "discovered_at": "2026-09-09T10:28:34.550802+00:00",
-    "published_at": "2026-09-07T21:13:14+00:00",
-    "source": "Google News · healthcare biotech structural change",
-    "headline": "3 Red Line stations reopen Monday after 2-month shutdown for major construction",
-    "url": "https://news.google.com/rss/articles/CBMipwJBVV95cUxQZTdBR3dBYmNRTnViSF94aGhMZDZtSzJ0TktNWnFjZWo4aXZVdklpYzVOQnFPUXRFSUlfZWdEbDNLSGFEaDZvSHgyOUJsZjcwQ1B4U1hlQloxam5SRWI5RlNManJUSDRlTXRaamFXVWFnZXRoQ19QaWF4ak02bjFtY050SHUtRFJ0NFJmMERXOER6TGgzeGtDU2dCWHVHUi02VFh3UXpUT2RwMjJLTnY2M1NBMDk0ZnZ3M19wVkI0c1pRdTROS3VTNTdLa3MwQnFlOXQ3SURYM3M2ZGV6c3V1UDA3WkRncFRpQWIwb3hIYTZ1SjBHT0NqQnp3X25ic3dpOWpLYkxtQmZRY3ZyUmZxSUwtLXYxbV9sLUxZQU9PUzBaOVhVRHVv?oc=5",
-    "summary": "3 Red Line stations reopen Monday after 2-month shutdown for major construction &nbsp;&nbsp; WJLA",
-    "change_type": "shutdown_eol",
-    "matched_signal": "shutdown",
-    "recommendation": "WATCH",
-    "why_now": "Automatically discovered structural-change lead; event type remains provisional until the evidence chain confirms context.",
-    "gap_hypothesis": "No market-opportunity conclusion is allowed before Tier-1 first-party verification and downstream demand/supply analysis.",
-    "validation_status": "STRUCTURAL SIGNAL",
-    "validation_summary": "GapRadar found this shutdown eol candidate in Google News · healthcare biotech structural change. An explicit structural-change phrase was present in the item and the context gate passed. It is a market-change lead, not proof that replacement supply is weak or that the opportunity is profitable. Context quality guard passed. This remains a discovery lead until Tier-1 first-party evidence verifies the underlying event.",
-    "sector": "Consumer & Society"
-  },
-  {
-    "id": "48452bf0d5a2a7c4",
-    "discovered_at": "2026-09-09T10:28:34.550802+00:00",
-    "published_at": "2026-09-07T18:49:23+00:00",
-    "source": "Google News · mobility robotics industry change",
-    "headline": "Trump's Trade Tactics Target Bombardier: Manufacturing Mandate",
-    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPRlBQX3NHUUIzUXc3enVadlo1V3FZVG9uR3EzaDRWUFBJXzFjeTEtaTU1cnBqNXR0blhtcTAyME1Xbk1acVZsU1Z5T1FKUFZwMDU5TnlzOUlJNUxzcXk0VHFOUjd0bzRmZTFyd3ZsY21uUkJGZlUxZmQ3Y2hPNFFFb1pYREtvclRBTzVHc2FvM05RSHJvZHBjd29vd3VxSEdZQzdMVXQzbThsLVozc0RkYV9rZkjSAboBQVVfeXFMT2U5VEo1ZF9lWjB2YkpJSmlmRXpsOWg1N3JzVFU2TXJjdjJTVWVZQVZYb3lGNUJkRWRNcXNyUUFIX1J3REx6UDk4NXFmUE9YU1FfbHVhbTVBb3hOLTF4Q0ZIWlBfeHhMNHkzclZldmhHajRGVE9Ja1VZT1RSXzI4OHprMjk4eXNtMFA1V2UtOGg5VGMwamVvd1BmeXd5Nmw1VUZtX3BYVmM4NnJ4YVlIOHh5VTlOZXV0N1pB?oc=5",
-    "summary": "Trump's Trade Tactics Target Bombardier: Manufacturing Mandate &nbsp;&nbsp; Devdiscourse",
-    "change_type": "regulatory_shift",
-    "matched_signal": "Mandate",
-    "recommendation": "WATCH",
-    "why_now": "Automatically discovered structural-change lead; event type remains provisional until the evidence chain confirms context.",
-    "gap_hypothesis": "No market-opportunity conclusion is allowed before Tier-1 first-party verification and downstream demand/supply analysis.",
-    "validation_status": "STRUCTURAL SIGNAL",
-    "validation_summary": "GapRadar found this regulatory shift candidate in Google News · mobility robotics industry change. An explicit structural-change phrase was present in the item and the context gate passed. It is a market-change lead, not proof that replacement supply is weak or that the opportunity is profitable. Context quality guard passed. This remains a discovery lead until Tier-1 first-party evidence verifies the underlying event.",
-    "sector": "Industry & Robotics"
-  },
-  {
     "id": "a4667ed73e330db1",
-    "discovered_at": "2026-09-09T10:28:34.550802+00:00",
+    "discovered_at": "2026-09-09T10:33:11.319765+00:00",
     "published_at": "2026-09-07T18:14:00+00:00",
     "source": "Google News · software shutdowns",
     "headline": "Samsung preps the shutdown of two more apps late in 2026",
@@ -120,7 +86,7 @@
   },
   {
     "id": "5b1d4ece4414b40f",
-    "discovered_at": "2026-09-09T10:28:34.550802+00:00",
+    "discovered_at": "2026-09-09T10:33:11.319765+00:00",
     "published_at": "2026-09-06T19:44:12+00:00",
     "source": "Google News · AI and data regulation",
     "headline": "Apple Music to make AI labels mandatory for music created with artificial intelligence",

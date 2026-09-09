@@ -17,7 +17,9 @@
     "official_title": null,
     "excerpt": null,
     "subject_overlap": 0,
-    "errors": []
+    "errors": [
+      "subject overlap too weak for heavyindustries.gov.in: 0 < 2"
+    ]
   },
   {
     "candidate_id": "86a0955dccc4b9fd",
@@ -33,26 +35,6 @@
   },
   {
     "candidate_id": "1a9ab0b99d425f58",
-    "status": "unverified",
-    "official_url": null,
-    "official_host": null,
-    "official_title": null,
-    "excerpt": null,
-    "subject_overlap": 0,
-    "errors": []
-  },
-  {
-    "candidate_id": "5a6d31c87ca2276d",
-    "status": "unverified",
-    "official_url": null,
-    "official_host": null,
-    "official_title": null,
-    "excerpt": null,
-    "subject_overlap": 0,
-    "errors": []
-  },
-  {
-    "candidate_id": "48452bf0d5a2a7c4",
     "status": "unverified",
     "official_url": null,
     "official_host": null,
