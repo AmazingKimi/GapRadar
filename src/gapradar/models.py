@@ -35,7 +35,7 @@ class SourceEvidence(BaseModel):
     excerpt: str = ""
     is_official: bool = False
     source_kind: str | None = None
-    signal: Literal["migration_pain", "discussion", "unknown"] | None = None
+    signal: Literal["migration_pain", "replacement_supply", "discussion", "unknown"] | None = None
     signal_score: int = 0
     engagement: int = 0
 
@@ -56,6 +56,11 @@ class MarketEvent(BaseModel):
     reaction_sources_checked: list[str] = Field(default_factory=list)
     reaction_candidate_count: int = 0
     demand_status: Literal["unassessed", "no_signal", "early_signal", "repeated_signal"] = "unassessed"
+    supply_checked_at: datetime | None = None
+    supply_sources_checked: list[str] = Field(default_factory=list)
+    supply_candidate_count: int = 0
+    supply_status: Literal["unassessed", "no_supply", "thin_supply", "served"] = "unassessed"
+    gap_status: Literal["unassessed", "no_demand", "watch", "potential_gap", "likely_served"] = "unassessed"
     confidence: Confidence = Confidence.INSUFFICIENT
     status: Literal["candidate", "verified", "rejected"] = "candidate"
     notes: list[str] = Field(default_factory=list)
@@ -76,10 +81,19 @@ class MarketEvent(BaseModel):
                 raise ValueError("reaction_evidence must contain only non-official tier-2 sources")
         return items
 
+    @field_validator("supply_evidence")
+    @classmethod
+    def supply_evidence_must_be_tier_3(cls, items: list[SourceEvidence]) -> list[SourceEvidence]:
+        for item in items:
+            if item.tier != EvidenceTier.TIER_3_SUPPLY or item.is_official:
+                raise ValueError("supply_evidence must contain only non-official tier-3 sources")
+        return items
+
     def verify(self) -> "MarketEvent":
         if not self.official_evidence:
             self.status = "candidate"
             self.confidence = Confidence.INSUFFICIENT
+            self.gap_status = "unassessed"
             if "No official first-party evidence." not in self.notes:
                 self.notes.append("No official first-party evidence.")
             return self
@@ -97,7 +111,29 @@ class MarketEvent(BaseModel):
         else:
             self.demand_status = "no_signal"
 
-        if reaction_count >= 3 and supply_count >= 1:
+        if self.supply_checked_at is None:
+            self.supply_status = "unassessed"
+        elif supply_count >= 3 or any(item.signal_score >= 7 for item in self.supply_evidence):
+            self.supply_status = "served"
+        elif supply_count >= 1:
+            self.supply_status = "thin_supply"
+        else:
+            self.supply_status = "no_supply"
+
+        if self.demand_status == "no_signal":
+            self.gap_status = "no_demand"
+        elif self.demand_status == "unassessed" or self.supply_status == "unassessed":
+            self.gap_status = "unassessed"
+        elif self.supply_status == "served":
+            self.gap_status = "likely_served"
+        elif self.demand_status == "repeated_signal" and self.supply_status in {"no_supply", "thin_supply"}:
+            self.gap_status = "potential_gap"
+        elif self.demand_status == "early_signal" and self.supply_status in {"no_supply", "thin_supply"}:
+            self.gap_status = "watch"
+        else:
+            self.gap_status = "watch"
+
+        if self.gap_status == "potential_gap":
             self.confidence = Confidence.STRONG
         elif reaction_count >= 1:
             self.confidence = Confidence.EMERGING
