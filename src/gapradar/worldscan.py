@@ -107,6 +107,7 @@ class GapCandidate:
     validation_status: str
     validation_summary: str
     sector: str = "Other"
+    image_url: str | None = None
 
 
 @dataclass(frozen=True)
@@ -132,6 +133,19 @@ def _base_headline(headline: str) -> str:
 def _published(entry: object) -> datetime | None:
     parsed = getattr(entry, "published_parsed", None) or getattr(entry, "updated_parsed", None)
     return datetime(*parsed[:6], tzinfo=timezone.utc) if parsed else None
+
+
+def _entry_image(entry: object) -> str | None:
+    for thumb in getattr(entry, "media_thumbnail", []) or []:
+        if isinstance(thumb, dict) and thumb.get("url"):
+            return str(thumb["url"])
+    for enc in getattr(entry, "enclosures", []) or []:
+        if isinstance(enc, dict) and str(enc.get("type", "")).startswith("image/") and enc.get("href"):
+            return str(enc["href"])
+    for link in getattr(entry, "links", []) or []:
+        if isinstance(link, dict) and str(link.get("type", "")).startswith("image/") and link.get("href"):
+            return str(link["href"])
+    return None
 
 
 def infer_sector(text: str) -> str:
@@ -293,6 +307,7 @@ def scan_world_with_stats(config: Path = Path("config/world_sources.yml"), *, no
                     + "It is a market-change lead, not proof that replacement supply is weak or that the opportunity is profitable."
                 ),
                 sector=infer_sector(text),
+                image_url=_entry_image(entry),
             )
             previous = rows.get(candidate.id)
             if previous is None or (candidate.published_at or "") > (previous.published_at or ""):

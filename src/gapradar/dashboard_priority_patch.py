@@ -33,7 +33,10 @@ CHANGE_ZH = {
 GRID_RE = re.compile(r'(<div class="opps">).*?(</div></section><section class="section" id="feed">)', re.S)
 
 
-def _art(kind: str) -> str:
+def _art(kind: str, image_url: str | None = None) -> str:
+    if image_url:
+        return ('<img class="oppImg" src="' + escape(image_url) + '" alt="" loading="lazy" '
+                'onerror="this.style.display=\'none\'">')
     if kind == "price_shock":
         return '<svg viewBox="0 0 500 260"><rect width="500" height="260" fill="#173148"/><path d="M0 205 92 171l83-47 84 35 96-84 145 56v129H0Z" fill="#214b6a"/></svg>'
     if kind == "shutdown_eol":
@@ -86,7 +89,7 @@ def _card(candidate: GapCandidate, row: PriorityLead) -> str:
     cls = "review" if row.status == "REVIEW" else "watch"
     return (
         '<article class="opp priority-card" tabindex="0" role="button" data-candidate-id="' + escape(candidate.id) + '" data-priority-status="' + escape(row.status) + '" data-url="' + escape(candidate.url) + '">'
-        '<div class="oppArt">' + _art(candidate.change_type) + '</div>'
+        '<div class="oppArt">' + _art(candidate.change_type, getattr(candidate, 'image_url', None)) + '</div>'
         '<span class="badge"><span class="lang-zh">' + escape(zh_sector) + '</span><span class="lang-en">' + escape(sector) + '</span></span>'
         '<span class="badge status ' + cls + '"><span class="lang-zh">' + escape(_status_zh(row.status)) + '</span><span class="lang-en">' + escape(row.status.title()) + '</span></span>'
         '<div class="priority-copy">'
