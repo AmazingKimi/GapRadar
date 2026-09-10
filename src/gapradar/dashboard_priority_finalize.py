@@ -11,7 +11,7 @@ STYLE = r'''
 .priority-card h3{position:static!important;margin:0!important;max-width:100%!important;font-size:20px!important;line-height:1.22!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
 .priority-card .news-intro{position:static!important;margin:0!important;max-width:100%!important;color:color-mix(in srgb,var(--text) 74%,var(--muted))!important;font-size:11.5px!important;line-height:1.42!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
 .priority-card .bottommeta{display:none!important}
-.priority-card .card-cta{left:18px!important;bottom:17px!important;font-size:10px!important;letter-spacing:.01em!important;color:var(--cyan)!important;opacity:.92!important}
+.priority-card .card-cta{position:static!important;display:block!important;margin-top:8px!important;font-size:11px!important;letter-spacing:.01em!important;color:var(--cyan)!important;opacity:.92!important}
 .priority-card .arrow{position:absolute!important;right:17px!important;bottom:14px!important;top:auto!important;left:auto!important;z-index:4!important}
 .priority-card:focus-visible{outline:2px solid var(--cyan)!important;outline-offset:2px!important}
 .priority-card[data-priority-status="INVESTIGATE"] .status{background:#5b4420!important;border-color:#a77a2d!important;color:#ffe0a2!important}

@@ -90,15 +90,9 @@ def patch(path: Path = Path("docs/index.html")) -> None:
         '<details><summary><span class="lang-zh">查看证据漏斗详情 ↓</span><span class="lang-en">Evidence funnel details ↓</span></summary>'
         '<div class="detail"><span class="lang-zh">'+details_zh+'</span><span class="lang-en">'+details_en+'</span></div></details></div>'
     )
-    flow = '''<div class="decision-flow">
-      <div class="decision-step"><strong><span class="lang-zh">世界变化</span><span class="lang-en">World Change</span></strong><span><span class="lang-zh">发现真实结构变化</span><span class="lang-en">Detect structural change</span></span></div><div class="decision-arrow">→</div>
-      <div class="decision-step"><strong><span class="lang-zh">优先线索</span><span class="lang-en">Priority Lead</span></strong><span><span class="lang-zh">决定今天先查什么</span><span class="lang-en">Allocate research attention</span></span></div><div class="decision-arrow">→</div>
-      <div class="decision-step"><strong><span class="lang-zh">缺口验证</span><span class="lang-en">Gap Validation</span></strong><span><span class="lang-zh">Tier-1 + Demand + Supply</span><span class="lang-en">Tier-1 + Demand + Supply</span></span></div>
-    </div>'''
-
     anchor = '</div></div></section><section class="section" id="sectors">'
     if anchor in html:
-        html = html.replace(anchor, f'</div>{funnel}</div></section>{flow}<section class="section" id="sectors">', 1)
+        html = html.replace(anchor, f'</div>{funnel}</div></section><section class="section" id="sectors">', 1)
 
     # Permanently disable historical filler-card code even if an old runtime survives export.
     html = html.replace('ensureOpportunityCards();', '/* no filler priority cards */')

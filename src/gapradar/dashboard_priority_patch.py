@@ -92,8 +92,8 @@ def _card(candidate: GapCandidate, row: PriorityLead) -> str:
         '<div class="priority-copy">'
         '<h3>' + escape(candidate.headline) + '</h3>'
         '<p class="news-intro"><span class="lang-zh">' + escape(_news_intro_zh(candidate)) + '</span><span class="lang-en">' + escape(_news_intro_en(candidate)) + '</span></p>'
+        '<div class="card-cta"><span class="lang-zh">查看证据链 →</span><span class="lang-en">View evidence chain →</span></div>'
         '</div>'
-        '<div class="card-cta"><span class="lang-zh">查看证据链</span><span class="lang-en">View evidence chain</span></div>'
         '<a class="arrow" href="' + escape(candidate.url) + '" target="_blank" rel="noopener noreferrer" aria-label="Open source">→</a>'
         '</article>'
     )
